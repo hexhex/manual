@@ -1,0 +1,81 @@
+\documentclass[14pt,a4paper, titlepage]{article}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+
+\begin{document}
+
+\setcounter{page}{3}
+\title{DVLHEX System-User Guide}
+\author{Christoph Redl}
+\date{\today}
+\maketitle
+
+
+% Abstract part
+\begin{abstract}
+This document provides a user guide for the Answer Set Programming(ASP) system called \textbf{dlvhex} developed at Vienna University of Technology. ASP is a declarative problem solving paradigm, rooted in Logic Programming and Nonmonotonic Reasoning, which has been gaining increasing attention during the last years. The \textbf{dlvhex} system   is a logic-programming reasoner for computing the models of so-called \textbf{HEX-programs}, which are an extension of \textbf{answer-set programs} towards integration of \textbf{external computation sources}. This guide, aims at enabling users of this system to interoperate with a broader set of external computation sources since there is no adequate support available for the meta-reasoning in the context of the Semantic Web up to date. Using this guide ASP novices will be able to exploit Answer Set Programming and some of its tools as \textbf{dlvhex}. The guide generally refers to the \textbf{dlvhex2} release. Please make sure that you are using corresponding(or later) versions available.     
+\end{abstract}
+
+
+% Generates table of contents
+\tableofcontents
+
+\newpage
+
+\section{Introduction} % Section No.1
+The \textbf{dlvhex} system is a logic-programming reasoner for computing the models of so-called \textbf{HEX-programs}, which are an extension of \textbf{answer-set programs} towards integration of \textbf{external computation sources}. To enable access to external information, HEX-programs extend programs with external atoms, which allow for a bidirectional communication between the logic program and external sources of computation (e.g., description logic reasoners and Web resources). \cite{extatoms} The system is developed motivated by the need to interoperate with a broader set of external computation sources and the observation, that for meta-reasoning in the context of the Semantic Web, no adequate support is available in ASP to date. As a fact of this HEX-programs are introduced, that is, higher-order logic programs (which accommodate meta-reasoning through higher-order atoms) with external atoms for software interoperability.
+
+This guide, helps ASP novices to make use of the system with all its features. It provides a reference of the tools' features that ASP might be tempted to exploit. The language of HEX-programs is an extension of disjunctive datalog. It largely implements the ASP-Core-2 Standard \cite{ref} and extends it with external atoms. 
+
+In this guide we'll try to explain the fundamentals of using \textbf{dlvhex} so that reader will be able to benefit from them by significantly reducing the time to solution on difficult computational problems. 
+
+
+ 
+\subsection{Download and Installation}
+Dvlhex is the name of prototype application for computing the models of so-called HEX-programs. It is written in C++ programming-language and it is published under GNU Lesser General Public License \cite{licnc}.\bigskip \\For a quick overview, some example and the possibility to evaluate HEX-programs directly in your browser, you can check out the online demo at \cite{onlinedemo}. However the system can also be installed locally. The source code of dlvhex is hosted using git at \cite{git}. Packages (tarballs) of dlvhex can be downloaded from the \cite{sourceforge} project page. The latest release of the software runs on Linux-based systems, (Mac) OS X, and Microsoft Windows. For some systems we provide pre-built packages \cite{prebuilt}  for others you may build the software from source. Since building the software from the source is not easy task we will explain all details which are necessary to make system working. You can find last stable release version of the dlvhex at the \cite{sourceforge}. Installation instructions are given in the INSTALL and README files of the dlvhex and plugin source directories. Changes between versions can be found in the NEWS files and in detail in the ChangeLog files.\bigskip \\If you want to build software from the source dvlhex uses the standard ./configure, make and make install commands from the shell. Download software from the repository to your working directory to the new directory. To complete installation successfully you have to install all dependencies which are required. If you have the most recent Linux distribution almost all packages will be already available. Here we will list some packages required: git, gcc-4.8(or later version), g++-4.8(or later version), libbz2-dev, python2.7-dev and etc. While installing the system you can notice if some package except these is missing and simply install it by using sudo apt-get install command. You need also \textbf{libboost} in version 1.55 or later. You can find latest boost version at \cite{boost}. After downloading it to the new folder you can install it. Before executing configure, make and make install you will run bootstrap.sh script from the boost directory to have all dependencies necessary required. Now when all dependencies are satisfied you can simply git clone (--recursive) system from the \cite{hexhex}. After cloning you will execute again bootsrap.sh script and at the end invoke configure, make and make install.\bigskip \\We have written script which should install dvlhex automatically on your system. You can find script at \cite{script}. If script is not working for you, you can at least see the commands and adopt them as needed for system which you are using. When installation is completed you can run system from the terminal as: 
+\textbf{shell\$ dlvhex2 --strongnegation-enable=true --liberalsafety --pythonplugin=extsource.py program.hex}
+where program.hex and extsource.py refer to the program and plugin entered above, respectively    
+
+          
+
+    
+\subsection{Outline}
+
+
+\section{Quickstart} % Section No.2
+\subsection{Problem Instance}
+\subsection{Problem Encoding}
+\subsection{Problem Solution}
+\subsection{Summary}
+
+\section{References}
+\begin{thebibliography}{1}
+\bibitem{extatoms} Thomas Eiter, Micheal Fink, Thomas Krennwallner, Christoph Redl {\em Conflict-driven ASP Solving with External Sources} 2003   
+  
+\bibitem{ref} Francesco Calimeri, Wolfgang Faber, Martin Gebser, Giovambattista Ianni, Roland Kaminski, Thomas Krennwallner, Nicola leone, Francesco Ricca, Torsten Schaub {\em ASP-Core-2 Input Language} 2013.
+
+\bibitem{licnc} GNU Lesser General Public License. Free Software Foundation, Inc. https://www.gnu.org/copyleft/lesser.html 
+
+\bibitem{onlinedemo}dlvhex. Vienna University of Technology. http://www.kr.tuwien.ac.at/research/systems/dlvhex/demo.php 
+
+\bibitem{git}Software for HEX-Programs. GitHub. https://github.com/hexhex/ 
+
+\bibitem{sourceforge}DLVHEX solver for HEX-programs-  Browse Files at SourceForge.net. Sourceforge.net. http://sourceforge.net/projects/dlvhex/files/
+
+\bibitem{prebuilt}KBS-ASP systems. Thomas Krenwallner. http://www.kr.tuwien.ac.at/staff/tkren/deb.html
+
+\bibitem{boost}Boost C++ Libraries. Boost.org. http://www.boost.org/
+
+\bibitem{hexhex}dlvhex. GitHub. https://github.com/hexhex/core
+
+\bibitem{script}Web location for script
+      
+ 
+ \end{thebibliography} 
+
+
+
+\end{document}
+
