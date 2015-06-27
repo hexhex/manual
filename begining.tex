@@ -3,6 +3,9 @@
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{setspace}
+\usepackage{listings}
+
+
 
 \begin{document}
 
@@ -68,6 +71,9 @@ Simple terms are:
 \subsection{Normal Programs and Integrity constraints}
 \dlvhex{} is a declarative (programming) language. This means that programmer does not write a program that solves some problem but instead specifies what the solution should look like, and then it tries to solve the problem and find solution itself. There is wide agreement that both syntax and semantics of the language of \dlvhex{} are very simple and intuitive.\\ Each normal logic program is constructed using \textbf{facts, rules and integrity constraints}. 
 
+
+
+
 \begin{quote} 
 \centering 
 \textbf{Fact:} $ A_0. $ 
@@ -76,7 +82,10 @@ Simple terms are:
 \end{quote}
 The first line is called a \textit{fact}. It is always true. More common name that we will use for it is \textit{atom}.The sign $":-"$ is meant to be an arrow to the left, the logic programming version of the implication. 
 The second line is called a rule. The left side of the rule is called its \textit{head}, and right side is called \textit{body}.
-We say that literal \textit{L} is positive if it is an atom , and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive literals in the rule's body are true and negative literals are satisfied, then $A_0$ must be true. On the other hand, an integrity constraint is a rule that filters solution candidates, meaning that the literals in its body must not jointly be satisfied. A result of \dlvhex{} computation is called a \textit{model}. The meaning of this is clear: it is a consistent explanation(model) of the world, as far as it system can derive it. If \dlvhex{} cannot find solution then there is no model for the given problem. \\ \textbf{Example 2:} Consider the following logic program:         
+We say that literal \textit{L} is positive if it is an atom , and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive literals in the rule's body are true and negative literals are satisfied, then $A_0$ must be true. On the other hand, an integrity constraint is a rule that filters solution candidates, meaning that the literals in its body must not jointly be satisfied. A result of \dlvhex{} computation is called a \textit{model}. The meaning of this is clear: it is a consistent explanation(model) of the world, as far as it system can derive it. If \dlvhex{} cannot find solution then there is no model for the given problem. \\ \textbf{Example 3.1.} \medskip \\Consider the following logic program:\lstinputlisting{example_3.1.hex} The first line here represents an atom and it is always true. The second line is a rule and it goes as "If joke is true, laugh must also be true". Also we can read this as "from joke follows laugh". Model of above program is $\{joke, laugh\}$ since they are the atoms which are true in the program. To explain concept of \textbf{integrity constraints} we will consider following example:\medskip \\ \textbf{Example 3.2.}
+\lstinputlisting{example_3.2.hex}This program explains basic syntax and logic of the program very well. In the first three lines one can see node declarations with variables X and Y. We concluded that X and Y are variables since they begin with uppercase letter. It says that: "If edge(X,Y) is true then node(X) is also true". Next line follows same logic just with different variable name. In the \textit{guessing part} \dlvhex{} will list all possible models for the node(X). Each node may be coloured with either red, green or black. We did not see construction as in checking part before. It is called as \textbf{integrity constraint.} Integrity constraints in our framework specify conditions which must not become true in any model. In other words, constraints are formulations of possible inconsistencies. This mechanism is very useful in connection with disjunctive rules. The disjunctive rules serve as generators for different models and the constraints are used to select only the desired ones. Integrity constraint for this particular case will delete all those atoms from the model which does not satisfy our requirement(that there may be no edge between two nodes of equal color).
+
+
 
 
 
