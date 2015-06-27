@@ -107,15 +107,22 @@ can_write :- left_arm_broken.
 be_angry :- can_write
 \end{lstlisting}
 Suppose you have met a friend recently and you know that he had one of his arms broken, but you do not know which one. Now you did not receive a greeting card for your birthday and wonder if you should be angry on him or he just could not write because his right hand is broken. In example like this \dlvhex{} will generate two possible explanations. The first rule is called a disjunctive rule; The v is read as "or" and the whole rule is read as "For sure, either the left or the right arm is broken." Without being sure wich arm is broken \dlvhex{} will evaluate the program and produce two models. The rsulting models are \textit{$\{left\_arm\_broken, can\_write, be\_angry$\}} and \textit{$\{right\_arm\_broken$\}}  
-In general, the use of disjunction may increase computational complexity since it evaluates more possible models.    
-
-    
+In general, the use of disjunction may increase computational complexity since it evaluates more possible models.        
 \subsection{Built-in Arithmetic Functions}
+Beside 
 \subsection{Built-in Comparison Predicates}
+
 \subsection{Conditions and Conditional Literals}
+
 \subsection{Aggregates}
+
 \subsection{Optimization}
+
 \subsection{External Atoms}
+Till now we did not show any property which makes \dlvhex{} different than other ASP solvers. Now we are introducing new property which makes \dlvhex{} very powerful computation tool for any kind of problem in ASP. When introducing \dlvhex{} we introduced also \hex{} programs. \hex{} programs are nonmonotonic logic programs admitting \textit{high-order atoms} as well as \textit{external atoms}, and we extend the well known answer-set semantics to this class of programs. Through external atoms, \hex{} programs can model some important extensions to ASP, and are useful KR tools for expressing various applications \cite{extatoms}. 
+
+
+
 
 \section{References}
 \begin{thebibliography}{1}
@@ -138,6 +145,8 @@ In general, the use of disjunction may increase computational complexity since i
 \bibitem{hexhex}dlvhex. GitHub. https://github.com/hexhex/core
 
 \bibitem{script}Web location for script
+
+\bibitem{extatoms}Thomas Eiter, Giovamattista Ianni, Roman Schindlauer and hans Tompits {\em A Uniform Integration of Higher-Order Reasoning and External Evaluations in Answer-Set Programmin} 
       
  
  \end{thebibliography} 
