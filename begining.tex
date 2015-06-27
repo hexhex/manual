@@ -119,9 +119,10 @@ Beside
 \subsection{Optimization}
 
 \subsection{External Atoms}
-Till now we did not show any property which makes \dlvhex{} different than other ASP solvers. Now we are introducing new property which makes \dlvhex{} very powerful computation tool for any kind of problem in ASP. When introducing \dlvhex{} we introduced also \hex{} programs. \hex{} programs are nonmonotonic logic programs admitting \textit{high-order atoms} as well as \textit{external atoms}, and we extend the well known answer-set semantics to this class of programs. Through external atoms, \hex{} programs can model some important extensions to ASP, and are useful KR tools for expressing various applications \cite{extatoms}. 
-
-
+Till now we did not show any property which makes \dlvhex{} different than other ASP solvers. Now we are introducing new property which makes \dlvhex{} very powerful computation tool for any kind of problem in ASP. When introducing \dlvhex{} we introduced also \hex{} programs. \hex{} programs are nonmonotonic logic programs admitting \textit{high-order atoms} as well as \textit{external atoms}, and we extend the well known answer-set semantics to this class of programs. Through external atoms, \hex{} programs can model some important extensions to ASP, and are useful KR tools for expressing various applications \cite{extatoms}. Advantage of using external atoms is increasing software interoperability. A high-order atom allows to quantify values over predicate names, and to freely exchange predicate symbols with constant symbols, like in the rule \centerline{\\$C(X) \leftarrow \textit{subclassOf(D,C),D(X)}$}
+An \textit{external atom} facilitates to determine the truth value of an atom through an external source of computation. For instance, the rule \\ \centerline{ \textit{$reached(X) \leftarrow \#reach[edge,a](X)$}}
+\\computes the predicate \textit{reached} taking values from the predicate $\#reach$, which computes via \textit{$\#reach[edge,a](X)$} all the reachable nodes in the graph in the graph \textit{edge} from node \textit{a}, delegating this task to an external computational source (e.g., an external deduction system, an execution library, etc.). From the text above you every one can see why \hex{} programs are so powerful and useful today. To understand concept better we are providing example which show how we can get use of external atoms in ordinary ASP.
+\\ \textbf{Example X.X.}     
 
 
 \section{References}
@@ -146,7 +147,7 @@ Till now we did not show any property which makes \dlvhex{} different than other
 
 \bibitem{script}Web location for script
 
-\bibitem{extatoms}Thomas Eiter, Giovamattista Ianni, Roman Schindlauer and hans Tompits {\em A Uniform Integration of Higher-Order Reasoning and External Evaluations in Answer-Set Programmin} 
+\bibitem{extatoms}Thomas Eiter, Giovamattista Ianni, Roman Schindlauer and hans Tompits {\em A Uniform Integration of Higher-Order Reasoning and External Evaluations in Answer-Set Programming} 
       
  
  \end{thebibliography} 
