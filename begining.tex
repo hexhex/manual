@@ -4,21 +4,29 @@
 \usepackage{url}
 \usepackage{setspace}
 \usepackage{listings}
-
+\usepackage{amsmath}
 
 
 \begin{document}
-
 \setcounter{page}{3}
-\title{HEX-programs solver (DLVHEX)}
-\author{Christoph Redl}
-\date{\today}
-\maketitle
-
 \newcommand{\dlvhex}{{\sc DLVHEX}}
 \newcommand{\hex}{{\sc HEX}}
 
 
+
+\begin{titlepage}
+    \centering
+    \vfill
+    {\bfseries\Large
+        User Guide
+        \vskip2cm
+        Christoph Redl\\
+    }    
+    \vfill
+    \includegraphics{biglogo_whitebg}
+    \vfill
+    \vfill
+\end{titlepage}
 
 % Abstract part
 \begin{abstract}
@@ -100,7 +108,7 @@ The difference between the two kinds of negation is quite important: In the firs
 Disjunctive logic programs permit connective 'v' between atoms in rule heads.\\ \textbf{Fact:} $A_0$v ...v$A_m$
 \\ \textbf{Rule:} $A_0$v...v$A_m :- L_1,...,L_n. $
 \\ A disjunctive head holds if at least one of its atomes is true. In a simple disjunctive program \texttt{a v b.} we have two answer sets. One containing a and another containing b, while both atoms don't jointly belong to an answer set. Let us analyze explain concept on the example:
-\\ \textbf{Example 4.4.}
+\\ \textbf{Example 3.4.}
 \begin{lstlisting}
 left_arm_broken v right_arm_broken.
 can_write :- left_arm_broken.
@@ -109,28 +117,52 @@ be_angry :- can_write
 Suppose you have met a friend recently and you know that he had one of his arms broken, but you do not know which one. Now you did not receive a greeting card for your birthday and wonder if you should be angry on him or he just could not write because his right hand is broken. In example like this \dlvhex{} will generate two possible explanations. The first rule is called a disjunctive rule; The v is read as "or" and the whole rule is read as "For sure, either the left or the right arm is broken." Without being sure wich arm is broken \dlvhex{} will evaluate the program and produce two models. The rsulting models are \textit{$\{left\_arm\_broken, can\_write, be\_angry$\}} and \textit{$\{right\_arm\_broken$\}}  
 In general, the use of disjunction may increase computational complexity since it evaluates more possible models.        
 \subsection{Built-in Arithmetic Functions}
-Beside 
+Beside integers (constant arithmetic functions), written as sequence of digits 0...9 possibly preceded by '-', \dlvhex{} supports other types of arithmetic functions that can be evaluated. We are using following syntax for those functions: +(addition), -(subtraction), *(multiplication), /(integer division). Each of these functions usage is given in the example bellow:
+\\ \textbf{Example 3.5.}
+
+\begin{align*}
+&left    &  (7).&\\
+&right   &  & (2).\\
+&plus    &  example(x, y)  :-  +(x1, x2, xx). &\\
+&minus   &  example(x, y)  :-  -(x1, x2, xx). &\\
+&times   &  example(x, y)  :-  *(x1, x2, xx). &\\
+&divide  &  example(x, y)  :-  /(x1, x2, xx). &
+\end{align*}
+     
 \subsection{Built-in Comparison Predicates}
+\dlvhex{} feature a total order among variable-free terms. The built-in predicates to compare terms are =(equal), !=(not equal), $<$(less than), $\leq$(less than or equal), $>$(greater than) and $\geq$(greater than or equal). The application of comparison literals to integers is illustrated by the following example.
+\\ \textbf{Example 3.6.}
 
 \subsection{Conditions and Conditional Literals}
 
+
 \subsection{Aggregates}
+
 
 \subsection{Optimization}
 
+
+
 \subsection{External Atoms}
 Till now we did not show any property which makes \dlvhex{} different than other ASP solvers. Now we are introducing new property which makes \dlvhex{} very powerful computation tool for any kind of problem in ASP. When introducing \dlvhex{} we introduced also \hex{} programs. \hex{} programs are nonmonotonic logic programs admitting \textit{high-order atoms} as well as \textit{external atoms}, and we extend the well known answer-set semantics to this class of programs. Through external atoms, \hex{} programs can model some important extensions to ASP, and are useful KR tools for expressing various applications \cite{extatoms2}. Advantage of using external atoms is increasing software interoperability. A high-order atom allows to quantify values over predicate names, and to freely exchange predicate symbols with constant symbols, like in the rule \centerline{\\$C(X) \leftarrow \textit{subclassOf(D,C),D(X)}$}
-An \textit{external atom} facilitates to determine the truth value of an atom through an external source of computation. For instance, the rule \\ \centerline{ \textit{$reached(X) \leftarrow \#reach[edge,a](X)$}}
-\\computes the predicate \textit{reached} taking values from the predicate $\#reach$, which computes via \textit{$\#reach[edge,a](X)$} all the reachable nodes in the graph in the graph \textit{edge} from node \textit{a}, delegating this task to an external computational source (e.g., an external deduction system, an execution library, etc.). From the text above everyone can see why \hex{} programs are so powerful and useful today.  Before going on with examples let us explain syntax of \hex{} programs. 
+An \textit{external atom} facilitates to determine the truth value of an atom through an external source of computation. For instance, the rule \\ \centerline{ \textit{$reached(X) \leftarrow \&reach[edge,a](X)$}}
+\\computes the predicate \textit{reached} taking values from the predicate $\&reach$, which computes via \textit{$\&reach[edge,a](X)$} all the reachable nodes in the graph in the graph \textit{edge} from node \textit{a}, delegating this task to an external computational source (e.g., an external deduction system, an execution library, etc.). From the text above everyone can see why \hex{} programs are so powerful and useful today.  Before going on with examples let us explain syntax of \hex{} programs. 
 \subsubsection{\hex{} programs-Syntax}
-Let $\textit{C,X, and G}$ be mutually disjoint sets whose elements are called \textit{constant names, variable names,} and \textit{external predicate names,} respectively. Unless explicitly specified, elements from \textit{X} are denoted with first letter in upper case, while elements from \textit{G} are prefixe with '\#'. We note that the constant names serve both as individual and predicate names.
+Let $\textit{C,X, and G}$ be mutually disjoint sets whose elements are called \textit{constant names, variable names,} and \textit{external predicate names,} respectively. Unless explicitly specified, elements from \textit{X} are denoted with first letter in upper case, while elements from \textit{G} are prefixe with '\&'. We note that the constant names serve both as individual and predicate names.
 
-Elements from \textit{C} $\cup$ \textit{X} are called \textit{terms}. A \textit{high-order atom} is a tuple ($Y_0, Y_1,...,Y_n$), where $Y_0, Y_1,...,Y_n$ are terms; $ n \ge 0$ is the \textit{arity} of the atom. Intuiitively, $Y_0$ is the predicate name, and we thus also use the more familiar notation $Y_0(Y_1,...,Y_n)$. The atom is \textit{ordinary}, if $Y_0$ is a constant. For example, \textit{(x,rdf:type,c),node(X), and D(a,b),} are atoms;the first two are ordinary atoms. An \textit{external atom} is of the form \\ \centerline{ \#g[$Y_1,...,Y_n$]($X_1,...,X_m$),} \\where $Y_1,...,Y_n$ and $X_1,...,X_m$ are the two lists of terms(called \textit{input} and \textit{output} lists, respectively), and \#g $\in$ \textit{G} is an external predicate name. We assume that \#g has fixed lengths \textit{in(\#g)} = n and \textit{out(\#g)} = m for input and output lists, respectively. Intuitively, an external atom provides a way for deciding the truth value of an output tuple depending on the extension of a set of input predicates.       
+Elements from \textit{C} $\cup$ \textit{X} are called \textit{terms}. A \textit{high-order atom} is a tuple ($Y_0, Y_1,...,Y_n$), where $Y_0, Y_1,...,Y_n$ are terms; $ n \ge 0$ is the \textit{arity} of the atom. Intuiitively, $Y_0$ is the predicate name, and we thus also use the more familiar notation $Y_0(Y_1,...,Y_n)$. The atom is \textit{ordinary}, if $Y_0$ is a constant. For example, \textit{(x,rdf:type,c),node(X), and D(a,b),} are atoms;the first two are ordinary atoms. An \textit{external atom} is of the form \\ \centerline{ \&g[$Y_1,...,Y_n$]($X_1,...,X_m$),} \\where $Y_1,...,Y_n$ and $X_1,...,X_m$ are the two lists of terms(called \textit{input} and \textit{output} lists, respectively), and \&g $\in$ \textit{G} is an external predicate name. We assume that \&g has fixed lengths \textit{in(\&g)} = n and \textit{out(\&g)} = m for input and output lists, respectively. Intuitively, an external atom provides a way for deciding the truth value of an output tuple depending on the extension of a set of input predicates.       
 \\To understand concept better we are providing example which show how we can get use of external atoms in ordinary ASP.
-\\ \textbf{Example X.X.}
-\\      
+\\ \textbf{\\Example X.X.}
+\\ \lstinputlisting{introductiontohex.hex}     
+Above is \hex{} program  which works with constant input parameters  to external sources. For each system, it concatenates string "hello" and system name using \textbf{concat} external source. At the output we have something like: \textit{sayhello(hellodlvhex), sayhello(helloclasp)}. Last part of the program works with predicate input parameters. It first define two different sets and then computes set1 minus set2 using \textbf{setdiff} external source. External source definition is given below:
+\lstinputlisting{extsource.py}
+After this short example one can see how system is working and what are the advantages of \dlvhex{} over ordinary ASP solvers.  
 
 
+
+
+
+\newpage
 \section{References}
 \begin{thebibliography}{1}
 \bibitem{extatoms} Thomas Eiter, Micheal Fink, Thomas Krennwallner, Christoph Redl {\em Conflict-driven ASP Solving with External Sources} 2003   
