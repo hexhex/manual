@@ -119,19 +119,36 @@ In general, the use of disjunction may increase computational complexity since i
 \subsection{Built-in Arithmetic Functions}
 Beside integers (constant arithmetic functions), written as sequence of digits 0...9 possibly preceded by '-', \dlvhex{} supports other types of arithmetic functions that can be evaluated. We are using following syntax for those functions: +(addition), -(subtraction), *(multiplication), /(integer division). Each of these functions usage is given in the example bellow:
 \\ \textbf{Example 3.5.}
+\begin{lstlisting}
+% This example demonstrates usage of built-in arithmetic functions
+a(6).
+b(2).
 
-\begin{align*}
-&left    &  (7).&\\
-&right   &  & (2).\\
-&plus    &  example(x, y)  :-  +(x1, x2, xx). &\\
-&minus   &  example(x, y)  :-  -(x1, x2, xx). &\\
-&times   &  example(x, y)  :-  *(x1, x2, xx). &\\
-&divide  &  example(x, y)  :-  /(x1, x2, xx). &
-\end{align*}
+c(X,Y,XX) :- a(X), b(Y),+(X, Y, XX).
+d(X,Y,XX) :- a(X), b(Y),-(X, Y, XX).
+e(X,Y,XX) :- a(X), b(Y),*(X, Y, XX).
+f(X,Y,XX) :- a(X), b(Y),/(X, Y, XX).
+\end{lstlisting}
+Answer set for the example above is: \\$\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}$
      
 \subsection{Built-in Comparison Predicates}
-\dlvhex{} feature a total order among variable-free terms. The built-in predicates to compare terms are =(equal), !=(not equal), $<$(less than), $\leq$(less than or equal), $>$(greater than) and $\geq$(greater than or equal). The application of comparison literals to integers is illustrated by the following example.
+\dlvhex{} feature a total order among variable-free terms. The built-in predicates to compare terms are ==(equal), !=(not equal), $<$(less than), $\leq$(less than or equal), $>$(greater than) and $\geq$(greater than or equal). All kinds of constants (symbols and integers) may be compared against each other freely. If two integers are compared, the semantics are as expected. All other comparisons are just guaranteed to impose a fixed ordering over all constants. The application of comparison literals to integers is illustrated by the following example.
 \\ \textbf{Example 3.6.}
+\begin{lstlisting}
+% This example demonstrates usage of built-in comparison predicates
+a(1).
+a(2).
+b(1).
+
+c(X,Y) :- a(X), b(Y), X <> Y.
+d(X,Y) :- a(X), b(Y), X != Y.
+e(X,Y) :- a(X), b(Y), X < Y.
+f(X,Y) :- a(X), b(Y), X > Y.
+g(X,Y) :- a(X), b(Y), X <= Y.
+h(X,Y) :- a(X), b(Y), X >= Y.
+i(X,Y) :- a(X), b(Y), Y == 1.
+\end{lstlisting}
+Answer set for the example above is:\\$\{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1),h(2,1)\}$
 
 \subsection{Conditions and Conditional Literals}
 
