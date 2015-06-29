@@ -149,17 +149,33 @@ h(X,Y) :- a(X), b(Y), X >= Y.
 i(X,Y) :- a(X), b(Y), Y == 1.
 \end{lstlisting}
 Answer set for the example above is:\\$\{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1),h(2,1)\}$
-
 \subsection{Conditions and Conditional Literals}
+A \textit{conditional literal} is of the form \\ \centerline{$L_0:L_1,...,L_n$} where every \textit{$L_j$ for 0$\leq$j$\leq$n} is a literal, $L_1,...,L_n$ is called \textit{condition}, and ":" resembles mathematical set notation. Whenever \textit{n = 0}, we het a regular literal and denote it usual by $L_0$.
 
+For example, the rule \\$a :- b : c. $ \\yields \textit{a} whenever either \textit{c} is false(and thus no matter whether \textit{b} holds or not) or both b and c are true \cite{pott}. \\Together  with variables, conditions allow for specifying collections of expressions within a single rule or aggregate. This is particularly useful for encoding conjunctions(or disjunctions) over arbitrarily many ground atoms as well as for the compact representation of aggregates. 
+\\ \textbf{Example 3.7.}
+\begin{lstlisting}
+% This example demonstrates usage of conditions in rule's head and body
 
+person(jane). person(john).
+day(mon). day(tue). day(wed). day(thu). day(fri).
+available(jane) :- not on(fri).
+available(john) :- not on(mon), not on(wed).
+meet :- available(X) : person(X).
+on(X) : day(X) :- meet.
+\end{lstlisting}  
+We have used conditions in last two lines of the code. The conjunction in the body of line 5 is obtained by replacing X in \textit{available(X)} with all ground terms \textit{t} such that \textit{person(t)} holds, namely, with t=jane and t=john. The condition for the last line is contained in the head of rule. It turns into disjunction over all ground instances of \textit{on(X)} such that X is substituted by terms t for which \textit{day(t)} holds. Any variable occurring within a condition does not count as a positive occurrence outside the condition in the sense of safety. variables occurring in atoms not subject to any conditions are global. Each variable within an atom in front of a condition mist be global or have a positive occurrence on the right hand-side of the condition. During grounding, the instantiation of global variables take precedence over non-global ones, that is, the former are instantiated before the latter.As a consequence, variables that occur globally are substituted by terms before a condition is further evaluated \cite{pott}.    
 \subsection{Aggregates}
 
 
+
+
+
+
+
+
+
 \subsection{Optimization}
-
-
-
 \subsection{External Atoms}
 Till now we did not show any property which makes \dlvhex{} different than other ASP solvers. Now we are introducing new property which makes \dlvhex{} very powerful computation tool for any kind of problem in ASP. When introducing \dlvhex{} we introduced also \hex{} programs. \hex{} programs are nonmonotonic logic programs admitting \textit{high-order atoms} as well as \textit{external atoms}, and we extend the well known answer-set semantics to this class of programs. Through external atoms, \hex{} programs can model some important extensions to ASP, and are useful KR tools for expressing various applications \cite{extatoms2}. Advantage of using external atoms is increasing software interoperability. A high-order atom allows to quantify values over predicate names, and to freely exchange predicate symbols with constant symbols, like in the rule \centerline{\\$C(X) \leftarrow \textit{subclassOf(D,C),D(X)}$}
 An \textit{external atom} facilitates to determine the truth value of an atom through an external source of computation. For instance, the rule \\ \centerline{ \textit{$reached(X) \leftarrow \&reach[edge,a](X)$}}
@@ -203,6 +219,9 @@ After this short example one can see how system is working and what are the adva
 \bibitem{script}Web location for script
 
 \bibitem{extatoms2}Thomas Eiter, Giovamattista Ianni, Roman Schindlauer and hans Tompits {\em A Uniform Integration of Higher-Order Reasoning and External Evaluations in Answer-Set Programming} 
+
+
+\bibitem{pott}Martin Gebser, Roland Kaminski, Benjamin Kaufmann, Marius Lindauer, Max Ostrowski, Javier Romero, Trosten Schaub and Sven Thiele {\em Pottasco User Guide} 
       
  
  \end{thebibliography} 
