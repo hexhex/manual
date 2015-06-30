@@ -2,10 +2,11 @@
 
 \usepackage{graphicx}
 \usepackage{url}
-\usepackage{setspace}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{amsmath}
+\usepackage{csquotes}
+
 
 \begin{document}
 \setcounter{page}{3}
@@ -86,32 +87,23 @@ This guide is organized as follows: Section 2 provides an introductory example w
 
 \newpage
 \section{Input Language}% Section No. 3
-This section provides an overview of the input language of \dlvhex{}. We will explain all inputs which are accepted by \dlvhex{} and provide some examples so that users will be able to understand concept better. If we know what are the inputs accepted by \dlvhex{} we can use it more efficiently and then we are using all features of the software.  
+This section provides an overview of the input language of \dlvhex{} and provide some examples to illustrate concept. Vocabulary: terms, predicates, constants, variables and external predicates.   
 \subsection{Terms}
-Every (non-propositional) logic program includes terms, mainly to specify arguments of atoms. \\Terms may be: integers, constants, strings and variables as well as the '\_' tokens. An integer is represented by means of an arithmetic expression. Constant names begin with lowercase leters and variable names begin with uppercase letters. \\ While a constant or string represent itself, a variable is placeholder for all variable-free terms in the language of a logic program. There is a special feature, which is called anonymous variable. The anonymous variable is denoted by "\_" (the underscore) and is different from a usual variable. Each occurrence of \_ represents a new and unique variable, which does not occur anywhere else in the same rule. The purpose of this feature is to specify that an argument can be ignored or does not matter in the current rule constraint without having to invent new and unique variable names.  It has also external atoms as input but its syntax is explained in the last subsection of the Section 3. Finally there are tuples which are also accepted. Examples for tuples are: the empty tuple () and the tuple (peter, at, X, Y) with four elements.\bigskip%
+Terms may be integers, constants, strings and variables as well as the \enquote{\_} tokens. Constant names begin with lowercase leters and variable names begin with uppercase letters. \\ While a constant or string represent itself, a variable is placeholder for all variable-free terms in the language of a logic program. There is a special feature, which is called anonymous variable. The anonymous variable is denoted by "\_" (the underscore) and is different from a usual variable. Each occurrence of \enquote{\_} represents a new and unique variable, which does not occur anywhere else in the same rule. this might be used to specify that an argument can be ignored or does not matter.
 \\ \textbf{Example 3.1.} 
-Simple terms are:
-\\ \textit{Constants:} a, 1, a1, 9862, c1
-\\ \textit{Variables:} X, Y, Z, V2f
-\\ \textit{Atoms:} a, b, deaf, smart
-\\ \textit{Predicates:} parent(X,Y), employee(name, salary, ID, location)
+Terms are:
+\\ \texttt{Constants:} a, 1, a1, 9862, c1
+\\ \texttt{Variables:} X, Y, Z, V2f
+\\ \texttt{Atoms:} a, b, deaf, smart
+\\ \texttt{Predicates:} parent(X,Y), employee(name, salary, ID, location)
        
 
 \subsection{Normal Programs and Integrity constraints}
-\dlvhex{} is a declarative (programming) language. This means that programmer does not write a program that solves some problem but instead specifies what the solution should look like, and then it tries to solve the problem and find solution itself. There is wide agreement that both syntax and semantics of the language of \dlvhex{} are very simple and intuitive.\\ Each normal logic program is constructed using \textbf{facts, rules and integrity constraints}. 
-
-
-
-
-\begin{quote} 
-\centering 
-\textbf{Fact:} $ A_0. $ 
-\\ \textbf{Rule:} $ A_0  :-  L_1,......,L_n.$
-\\ \textbf{Constraint:} $  :-  L_1,.....,L_n.$
-\end{quote}
-The first line is called a \textit{fact}. It is always true. More common name that we will use for it is \textit{atom}.The sign $":-"$ is meant to be an arrow to the left, the logic programming version of the implication. 
-The second line is called a rule. The left side of the rule is called its \textit{head}, and right side is called \textit{body}.
-We say that literal \textit{L} is positive if it is an atom , and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive literals in the rule's body are true and negative literals are satisfied, then $A_0$ must be true. On the other hand, an integrity constraint is a rule that filters solution candidates, meaning that the literals in its body must not jointly be satisfied. A result of \dlvhex{} computation is called a \textit{model}. The meaning of this is clear: it is a consistent explanation(model) of the world, as far as it system can derive it. If \dlvhex{} cannot find solution then there is no model for the given problem. \\ \textbf{Example 3.1.} \medskip \\Consider the following logic program:\lstinputlisting{example_3.1.hex} The first line here represents an atom and it is always true. The second line is a rule and it goes as "If joke is true, laugh must also be true". Also we can read this as "from joke follows laugh". Model of above program is $\{joke, laugh\}$ since they are the atoms which are true in the program. To explain concept of \textbf{integrity constraints} we will consider following example:\medskip \\ \textbf{Example 3.2.}
+\dlvhex{} is a declarative (programming) language. This means that programmer does not write an algorithm that solves some problem but instead specifies what the solution should look like, and then solves the problem and finds solution itself. Each normal logic program is constructed using \textbf{facts, rules and integrity constraints}. 
+\\ \\ \texttt{Fact:} $ A_0. $ 
+\\ \texttt{Rule:} $ A_0 $ :-  $L_1$,\dots,$L_n$.
+\\ \texttt{Constraint:}   :- $ L_1$,\dots,$L_n$.
+\\ \\Facts are always true. The sign \enquote{:-} is meant to be an implication to the left. The left side of a rule is called its \texttt{head}, and right side is called its \texttt{body}. The \texttt{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \texttt{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or \texttt{not} A, where A is an atom and the connective \texttt{not} denotes default negation. We say that literal L is positive if it is an atom and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive atoms in the rule body are true and negated atoms are false, then $A_0$ must be true. On the other hand, an integrity constraint is a rule that filters solution candidates, meaning that the literals in its body must not jointly be satisfied. A result of \dlvhex{} computation is called a \textit{model}. The meaning of this is clear: it is a consistent explanation(model) of the world, as far as it system can derive it. If \dlvhex{} cannot find solution then there is no model for the given problem. \\ \textbf{Example 3.1.} \medskip \\Consider the following logic program:\lstinputlisting{example_3.1.hex} The first line here represents an atom which is always true. The second line is a rule and reads as \enquote{If joke is true, laugh must also be true}. Also we can read this as \enquote{from joke follows laugh}. The single model of above program is $\{joke, laugh\}$ since they are the atoms which are true in the program. \\To explain the concept of \texttt{integrity constraints} we will consider following example:\medskip \\ \textbf{Example 3.2.}
 \lstinputlisting{example_3.2.hex}This program explains basic syntax and logic of the program very well. In the first three lines one can see node declarations with variables X and Y. We concluded that X and Y are variables since they begin with uppercase letter. It says that: "If edge(X,Y) is true then node(X) is also true". Next line follows same logic just with different variable name. In the \textit{guessing part} \dlvhex{} will list all possible models for the node(X). Each node may be coloured with either red, green or black. We did not see construction as in checking part before. It is called as \textbf{integrity constraint.} Integrity constraints in our framework specify conditions which must not become true in any model. In other words, constraints are formulations of possible inconsistencies. This mechanism is very useful in connection with disjunctive rules. The disjunctive rules serve as generators for different models and the constraints are used to select only the desired ones. Integrity constraint for this particular case will delete all those atoms from the model which does not satisfy our requirement(that there may be no edge between two nodes of equal color).
 \subsection{Classical Negation}
 \dlvhex{} supports two kinds of negation. Here we will emphasize difference between explicitly expressing falseness of an atom and having it done by \textbf{Complete World Assumption}. The connective \textit{not} expresses default negation, i.e. a literal \textit{not A} is assumed to hold unless atom A is derived to be true. In contrast, the classical (or strong) negation of an atom holds only if it can be derived. In other words if there is no evidence that an atom is true, it is considered to be false. Classical negation, indicated by symbol '-', is permitted in from of an atoms. The semantic relationship between A and -A is simply that they must not jointly hold. 
