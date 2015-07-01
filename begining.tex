@@ -7,6 +7,10 @@
 \usepackage{amsmath}
 \usepackage{csquotes}
 
+\lstset{
+    literate={~} {$\sim$}{1}
+}
+
 
 \begin{document}
 \setcounter{page}{3}
@@ -156,10 +160,12 @@ The single answer set for the example above is: \\ \texttt{\{a(6),b(2),e(6,2,12)
 \\Except \texttt{prefix notation} we can also use \texttt{infix notation} to use built-in arithmetic functions in \dlvhex{}. Instead of writing +(X, Y, XX) alternatively we can write it as XX=X+Y. 
      
 \subsection{Built-in Comparison Predicates}
-\dlvhex{} feature a total order among variable-free terms. The built-in predicates to compare terms are ==(equal), !=(not equal), $<$(less than), $\leq$(less than or equal), $>$(greater than) and $\geq$(greater than or equal). All kinds of constants (symbols and integers) may be compared against each other freely. If two integers are compared, the semantics are as expected. All other comparisons are just guaranteed to impose a fixed ordering over all constants. The application of comparison literals to integers is illustrated by the following example.
+\dlvhex{} feature a total order among variable-free terms using built-in predicates == (equal), != (not equal), $<$ (less than), $\leq$ (less than or equal), $>$ (greater than) and $\geq$ (greater than or equal). All kinds of constants (symbols and integers) may be compared against each other freely. If two integers are compared, the semantics are as expected. All other comparisons are just guaranteed to impose a fixed ordering over all constants. The application of comparison literals to integers is illustrated by the following example.
 \\ \textbf{Example 3.6.}
 \begin{lstlisting}
-% This example demonstrates usage of built-in comparison predicates
+% This example demonstrates usage of built-in 
+% comparison predicates
+
 a(1).
 a(2).
 b(1).
@@ -172,14 +178,16 @@ g(X,Y) :- a(X), b(Y), X <= Y.
 h(X,Y) :- a(X), b(Y), X >= Y.
 i(X,Y) :- a(X), b(Y), Y == 1.
 \end{lstlisting}
-Answer set for the example above is:\\$\{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1),h(2,1)\}$
-\subsection{Conditions and Conditional Literals}
-A \textit{conditional literal} is of the form \\ \centerline{$L_0:L_1,...,L_n$} where every \textit{$L_j$ for 0$\leq$j$\leq$n} is a literal, $L_1,...,L_n$ is called \textit{condition}, and ":" resembles mathematical set notation. Whenever \textit{n = 0}, we het a regular literal and denote it usual by $L_0$.
+The single answer set for the example above is:\\ \texttt{\{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1),h(2,1)\}}
 
-For example, the rule \\$a :- b : c. $ \\yields \textit{a} whenever either \textit{c} is false(and thus no matter whether \textit{b} holds or not) or both b and c are true \cite{pott}. \\Together  with variables, conditions allow for specifying collections of expressions within a single rule or aggregate. This is particularly useful for encoding conjunctions(or disjunctions) over arbitrarily many ground atoms as well as for the compact representation of aggregates. 
+
+\subsection{Conditions and Conditional Literals}
+A \textit{conditional literal} is of the form \\ \centerline{$L_0:L_1,\dots,L_n$} where every \textit{$L_j$ for 0 $\leq$ j $\leq$ n} is a literal, $L_1,\dots,L_n$ is called \textit{condition}, and \enquote{:} resembles mathematical set notation. Whenever \texttt{n = 0}, it is a regular literal and we denote it usually by $L_0$.
+\\For example, the rule \\ \texttt{a :- b : c.} \\yields \texttt{a} whenever either \texttt{c} is false (whether \texttt{b} holds or not) or both \texttt{b} and \texttt{c} are true \cite{pott}. \\Together  with variables, conditions allow for specifying collections of expressions within a single rule or aggregate. This is particularly useful for encoding conjunctions(or disjunctions) over arbitrarily many ground atoms as well as for the compact representation of aggregates. 
 \\ \textbf{Example 3.7.}
 \begin{lstlisting}
-% This example demonstrates usage of conditions in rule's head and body
+% This example demonstrates usage of conditions in rule's 
+% head and body
 
 person(jane). person(john).
 day(mon). day(tue). day(wed). day(thu). day(fri).
@@ -188,39 +196,16 @@ available(john) :- not on(mon), not on(wed).
 meet :- available(X) : person(X).
 on(X) : day(X) :- meet.
 \end{lstlisting}  
-We have used conditions in last two lines of the code. The conjunction in the body of line 5 is obtained by replacing X in \textit{available(X)} with all ground terms \textit{t} such that \textit{person(t)} holds, namely, with t=jane and t=john. The condition for the last line is contained in the head of rule. It turns into disjunction over all ground instances of \textit{on(X)} such that X is substituted by terms t for which \textit{day(t)} holds. Any variable occurring within a condition does not count as a positive occurrence outside the condition in the sense of safety. variables occurring in atoms not subject to any conditions are global. Each variable within an atom in front of a condition mist be global or have a positive occurrence on the right hand-side of the condition. During grounding, the instantiation of global variables take precedence over non-global ones, that is, the former are instantiated before the latter.As a consequence, variables that occur globally are substituted by terms before a condition is further evaluated \cite{pott}.    
+We have used conditions in last two lines of the code. The conjunction in the body of line 5 is obtained by replacing X in \texttt{available(X)} with all ground terms \texttt{t} such that \texttt{person(t)} holds, namely, with t=jane and t=john. The condition for the last line is contained in the head of rule. It turns into disjunction over all ground instances of \texttt{on(X)} such that X is substituted by terms t for which \texttt{day(t)} holds. Any variable occurring within a condition does not count as a positive occurrence outside the condition in the sense of safety. A variable X in an aggregate-free rule is safe if at least one of the following conditions is satisfied:\\-X occurs in a positive standard predicate in the body of the rule;\\-X occurs in a true negated standard predicate in the body of the rule;\\-X occurs in the last argument of an arithmetic predicate A and all other arguments of A are safe. \\ \\A rule is safe if all its variables are safe. Variables occurring in atoms not subject to any conditions are global. Each variable within an atom in front of a condition must be global or have a positive occurrence on the right hand-side of the condition. During grounding, the instantiation of global variables take precedence over non-global ones, that is, the former are instantiated before the latter.As a consequence, variables that occur globally are substituted by terms before a condition is further evaluated \cite{pott}.    
 \subsection{Aggregates}
-Aggregates allow to express properties over set of elements. DLV and \hex{} programs with aggregates often allow clean and concise problem encodings by minimizing the use of auxiliary predicates and recursive programs, and help the programmers to depict problems in a more natural way. For instance, we may state that the sum of a semester's course credits must be at least 20, or that the sum of shopping items must not exceed 30 Euros. We can say that an aggregate is a function on a set of tuples that are normally subject to conditions. By comparing an aggregated value with given values, we can extract a truth value from an aggregate's evaluation, thus obtaining an aggregate atom 
-They can occur in the bodies of rule and constraints, possibly negated using negation-as-failure. \\ \textbf{Body Aggregates} The form of an \textit{aggregate atom} occuring in a rule body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ t_1:L_1;...;t_n:L_n\} \prec_2 s_2$} 
-\\ Here, all \textit{$t_i$} and \textit{$L_i$}, forming \textit{aggregate elements}, are non-empty tuples of terms and literals, respectively. $\alpha$ is the name of some function that is applied to the term tupples \textit{$t_i$} that remain after evaluating the conditions expressed by $L_i$. Finally,  the result of applying $\alpha$ is compared by means of the comparison predicates $\prec_1 or \prec_2$ to the terms $s_1$ and $s_2$ respectively. \#count, \#sum, \#times, \#min, and \#max are called aggregate functions, and \dlvhex{} currently supports exactly these five. An aggregate function is applied over a set and returns a numeric value. Unlike other aggregates, count aggregate does not require weights.    
+Aggregates allow to express properties over set of elements. DLV and \hex{}-programs with aggregates often allow clean and concise problem encodings by minimizing the use of auxiliary predicates and recursive programs, and help the programmers to depict problems in a more natural way. For instance, we may state that the sum of a semester's course credits must be at least 20, or that the sum of shopping items must not exceed 30 Euros. We can say that an aggregate is a function on a set of tuples that are normally subject to conditions. By comparing an aggregated value with given values, we can extract a truth value from an aggregate's evaluation, thus obtaining an aggregate atom 
+They can occur in the bodies of rule and constraints, possibly negated using negation-as-failure. \\ \texttt{Body Aggregates} The form of an \texttt{aggregate atom} occuring in a rule body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ t_1:L_1;...;t_n:L_n\} \prec_2 s_2$} 
+\\ Here, all \texttt{$t_i$} and \texttt{$L_i$}, forming \texttt{aggregate elements}, are non-empty tuples of terms and literals, respectively. $\alpha$ is the name of some function that is applied to the term tupples \texttt{$t_i$} that remain after evaluating the conditions expressed by $L_i$. Finally,  the result of applying $\alpha$ is compared by means of the comparison predicates $\prec_1 or \prec_2$ to the terms $s_1$ and $s_2$ respectively. \#count, \#sum, \#times, \#min, and \#max are called aggregate functions, and \dlvhex{} currently supports exactly these five. An aggregate function is applied over a set and returns a numeric value.
 \\ \textbf{Example 3.8.}
 \begin{lstlisting}
-% This example demonstrates usage of aggregates:
-
-#maxint=6.
-c(2).
-c(3).
-c(6).
-
-a(f,g,k).
-a(u,h,k).
-b(e,g,s).
-b(e,h,x).
-b(e,h,q).
-on v off.
-
-b(e,h,r) :- on.
-p(W) :- #min{S : c(S)} = W, #int(W).
-ok(C) :- #count{X,Y : a(X,Z,k),b(e,Z,Y)} = 3, p(C).
-\end{lstlisting}
-Answer sets for this example are:
-\\ 1. {c(2),c(3),c(6),a(f,g,k),a(u,h,k),b(e,g,s),b(e,h,x),b(e,h,q),off,p(2),ok(2)}
-\\ 2. {c(2),c(3),c(6),a(f,g,k),a(u,h,k),b(e,g,s),b(e,h,x),b(e,h,q),on,b(e,h,r),p(2)}
-\\After this example we can show all aggregate functions currently supported in \dlvhex{} in one example:
-\\ \textbf{Example 3.9.}
-\begin{lstlisting}
 % This example demonstrates usage of aggregate functions:
-% Each employee is is represented by a fact of the form emp(ID,NAME,SALARY)
+% Each employee is is represented by a fact of the form 
+% emp(ID,NAME,SALARY)
 
 emp(1,goofie,1250).
 emp(2,willy,700).
@@ -228,15 +213,15 @@ emp(3,woody,750).
 emp(4,jerry,900).
 emp(5,tom,1050).
 \end{lstlisting}
-Aggregate function \textbf{\#count} returns the cardinality of the symbolic set to which it is applied. We want to count how many employees of the company earn more than 1000. 
+Intuitively the symbolic set appearing in the aggregate predicate consists of two ground predicates: \\ \centerline{$\{<1,over1000(1,1250)>,<5,over1000(5,1050)>\}$}
+\\which are both true w.r.t. the unique model of the whole program, hence \\ \centerline{$ \#count\{over1000(1,1250),over1000(5,1050)\}$} \\returns 2 as output of aggregate function and outputs:\\ \texttt{(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),\\emp(5,tom,1050),over1000(1,1250),over1000(5,1050),over1000nr(2)}
+\\as a result of the program.
+The aggregate function \texttt{\#count} returns the cardinality of the symbolic set to which it is applied. We want to count how many employees of the company earn more than 1000. 
 \begin{lstlisting}
 over1000(I,S) :- emp(I,N,S), S > 1000.
 over1000nr(X) :- #count{I : over1000(I,W)} = X, #int(X).
 \end{lstlisting}
-Intuitively the symbolic set appearing in the aggregate predicate consists of two ground predicates: \\ \centerline{$\{<1,over1000(1,1250)>,<5,over1000(5,1050)>\}$}
-\\which are both true w.r.t. the unique model of the whole program, hence \\ \centerline{$ \#count\{over1000(1,1250),over1000(5,1050)\}$} \\returns 2 as output of aggregate function and outputs:\\ {emp(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),\\emp(5,tom,1050),over1000(1,1250),over1000(5,1050),over1000nr(2)}
-as a result of the program.
-\bigskip \\Aggregate function \textbf{\#sum} returns the sum of the first local variable to be aggregated over in the symbolic set. Suppose we want to know how much Cartoon Co. spends on salaries.
+\bigskip Let $f(S)$ be an aggregate function. A variable, X, is a \texttt{local variable} to $f(S)$ if and only if X appears in S and X does not appear in any aggregate function that is outer to $f(S)$. Aggregate function \texttt{\#sum} returns the sum of the first local variable to be aggregated over in the symbolic set. Suppose we want to know how much the Cartoon Co. spends on salaries.
 \begin{lstlisting}
 salaryTotal(X) :- #sum{S,I : emp(I,N,S)} = X.
 \end{lstlisting}
@@ -255,13 +240,14 @@ highest(X) :- #max{S : emp(I,N,S)} = X.
 and it outputs $\{highest(1250)\}$ as a highest income in the company.
 
 \subsection{Optimization}
-Introducing \textbf{weak constraints} into \hex programs allows us to formulate several optimization problems in an easy and natural way. These weak constraints are adopted from \textit{dlv}. While standard constraints (integrity constraints, strong constraints) always have to be satisfied, weak constraints should be satisfied if it is possible, but their violation does not "kill" the models.//The answer sets of a program P with a set W of weak constraints are those answer sets of P which minimize the number of violated weak constraints. They are called Best Models of (P,W). Note that a program may have several best models (violating the same number of weak constraints).\\ Weak constraints can be weighted according to their importance (the higher the weight, the more important the constraint). In the presence of weights, best models minimize the sum of the weights of the violated weak constraints. Weak constraints can also be prioritized. Under prioritization, the semantics minimizes the violation of the constraints of the highest priority level first; then the lower priority levels are considered one after the other in descending order. Syntactically, weak constraints are specified as follows. \\ \centerline{$:~ Conj. [Weight:Level]$} \\ where Conj is a conjunction of (possibly negated) literals, and both Weight and Level are positive integers. Weights and priority levels are allowed to be variables, provided that these variables also appear in a positive literal in Conj. The user can omit the weight or the priority or both, but all weak constraints must have the same syntactic form (i.e., the user is free to specify only weights or only priorities, or both, but all constraints of the program must have the same syntactic form)\cite{dlvum}.
+Introducing \texttt{weak constraints} into \hex-programs allows us to formulate several optimization problems in an easy and natural way. These weak constraints are adopted from \texttt{DLV}. While standard constraints (integrity constraints, strong constraints) always have to be satisfied, weak constraints should be satisfied if it is possible, but their violation does not \enquote{local variable} the models.\\The answer sets of a program P with a set W of weak constraints are those answer sets of P which minimize the violation of weak constraints respecting their weights and levels. They are called best models of (P,W). Note that a program may have several best models.\\ Weak constraints can be weighted according to their importance (the higher the weight, the more important the constraint). In the presence of weights, best models minimize the sum of the weights of the violated weak constraints. Weak constraints can also be prioritized. Under prioritization, the semantics minimizes the violation of the constraints of the highest priority level first; then the lower priority levels are considered one after the other in descending order. Syntactically, weak constraints are specified as follows. \\ \centerline{$:~ Conj. [Weight:Level]$} \\ where Conj is a conjunction of (possibly negated) literals, and both Weight and Level are positive integers. Weights and priority levels are allowed to be variables, provided that these variables also appear in a positive literal in Conj.
 The following program, computes the minimum spanning trees of a weighed directed graph.
 \\ \textbf{Example 3.9.}
 \begin{lstlisting}
 root(a).
 node(a). node(b). node(c). node(d). node(e).
-edge(a,b,4). edge(a,c,3). edge(c,b,2). edge(c,d,3). edge(b,e,4). edge(d,e,5).
+edge(a,b,4). edge(a,c,3). edge(c,b,2). edge(c,d,3). 
+edge(b,e,4). edge(d,e,5).
 
 in_tree(X,Y,C) v out_tree(X,Y) :- edge(X,Y,C), reached(X).
 :- root(X), in_tree(_,X,C).
@@ -271,12 +257,11 @@ reached(X):- root(X).
 reached(Y):- reached(X), in_tree(X,Y,C).
 :- node(X), not reached(X).
 
-:~ in_tree(X,Y,C). [C:1]
+: in_tree(X,Y,C). [C:1]
 \end{lstlisting}
-Best model: {reached(a), out\_tree(a,b), in\_tree(a,c,3), reached(b), reached(c), in\_tree(b,e,4), in\_tree(c,b,2), in\_tree(c,d,3), reached(e), reached(d), out\_tree(d,e)}
+Best model: \texttt{\{reached(a), out\_tree(a,b), in\_tree(a,c,3), reached(b), reached(c), in\_tree(b,e,4), in\_tree(c,b,2), in\_tree(c,d,3), reached(e), reached(d), out\_tree(d,e)\}}
 \\Cost ([Weight:Level]): $<[12:1]>$
-\\Finally, we show an example where both weights and priorities are specified. Example is taken from the DLV-User Manual\cite{dlvum}. Consider the problem of assigning a given set of employees to two projects. As a minor desideratum, we wish that members of the same group already know each other. Higher level constraints ask each group to be heterogeneous as far as skills are concerned, and require that people married with one another do not work in the same group.
-\newpage 
+\\Finally, we show an example where both weights and priorities are specified. This example and some others are taken from the DLV-User Manual \cite{dlvum}. Consider the problem of assigning a given set of employees to two projects. As a minor desideratum, we wish that members of the same group already know each other. Higher level constraints ask each group to be heterogeneous as far as skills are concerned, and require that people married with one another do not work in the same group.
 \textbf{Example 3.10.}
 \begin{lstlisting}
 % This example specify both weights and priorities
@@ -291,9 +276,9 @@ member(X,p1) v member(X,p2) :- employee(X).
 :~ member(X,P), member(Y,P), X != Y, same_skill(X,Y). [1:2] 
 \end{lstlisting}
 This program has two best models:
-\\ \textbf{Best model: }{member(a,p2), member(b,p1), member(c,p1), member(d,p2), member(e,p2)}
+\\ \texttt{Best model:}\{member(a,p2), member(b,p1), member(c,p1), member(d,p2), member(e,p2)\}
 \\Cost ([Weight:Level]): $<[6:1],[0:2]>$
-\\ \textbf{Best model: }{member(a,p1), member(b,p2), member(c,p2), member(d,p1), member(e,p1)}
+\\ \\ \texttt{Best model:}\{member(a,p1), member(b,p2), member(c,p2), member(d,p1), member(e,p1)\}
 \\Cost ([Weight:Level]): $<[6:1],[0:2]>$
 
 
