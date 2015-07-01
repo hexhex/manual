@@ -107,11 +107,11 @@ Terms are:
 \dlvhex{} is a declarative (programming) language. This means that programmer does not write an algorithm that solves some problem but instead specifies what the solution should look like, and then solves the problem and finds solution itself. Each normal logic program is constructed using \textbf{facts, rules and integrity constraints}. 
 
 
-\begin{tabular}{ c c c c c c r l }
+\begin{tabular}{ c c c c c c r l l }
 
  & & & & & & \texttt{Fact:} & $ A_0. $ \\
- & & & & & & \texttt{Rule:} & $ A_0 $ :-  $L_1$,\dots,$L_n$. \\
- & & & & & & \texttt{Constraint:} & :- $ L_1$,\dots,$L_n$.   \\
+ & & & & & & \texttt{Rule:} & $ A_0 $ :- &  $L_1$,\dots,$L_n$. \\
+ & & & & & & \texttt{Constraint:} & :- & $ L_1$,\dots,$L_n$.   \\
 
 \end{tabular}
 \\Facts are always true. The sign \enquote{:-} is meant to be an implication to the left. The left side of a rule is called its \texttt{head}, and right side is called its \texttt{body}. The \texttt{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \texttt{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or \texttt{not} A, where A is an atom and the connective \texttt{not} denotes default negation. We say that literal L is positive if it is an atom and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive atoms in the rule body are true and negated atoms are false, then $A_0$ must be true. On the other hand, an integrity constraint is a rule that filters solution candidates, meaning that the literals in its body must not jointly be satisfied. A result of \dlvhex{} computation is called a \textit{model}. The meaning of this is clear: it is a consistent explanation(model) of the world, as far as it system can derive it. If \dlvhex{} cannot find solution then there is no model for the given problem. \\ \textbf{Example 3.1.} \medskip \\Consider the following logic program:\lstinputlisting{example_3.1.hex} The first line here represents an atom which is always true. The second line is a rule and reads as \enquote{If joke is true, laugh must also be true}. Also we can read this as \enquote{from joke follows laugh}. The single model of above program is $\{joke, laugh\}$ since they are the atoms which are true in the program. \\To explain the concept of \texttt{integrity constraints} we will consider following example:\medskip \\ \textbf{Example 3.2.}
@@ -140,7 +140,7 @@ The difference between the two kinds of negation is quite important: In the firs
 
 \subsection{Disjunction}
 Disjunctive logic programs permit the connective 'v' between atoms in rule heads. \\
-\begin{tabular}{ c c c c c c r l }
+\begin{tabular}{ c c c c c c r l l}
  & & & & & & \texttt{Fact:} & $A_0$ v \dots v $A_m$ \\
  & & & & & & \texttt{Rule:} & $A_0$ v \dots v $A_m$ :- $L_1,\dots,L_n. $ \\
  \end{tabular}
