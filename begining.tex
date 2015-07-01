@@ -55,19 +55,18 @@ In this guide we try explain the fundamentals of using \dlvhex{} to make that re
 \subsubsection{Building from source}
 There are two possibilities to install \dlvhex{} system from source. One possibility is to install latest stable release of the system or to install latest development version which may not be stable. Both ways are described in following section.  
 \paragraph{Latest release version (tarball)}
-Packages (tarballs) of \dlvhex{} can be downloaded from the project page\cite{sourceforge}. The latest release of the software runs on Linux-based systems,Mac OS X and Microsoft Windows. The latest stable release version of the \dlvhex{} can be found at \url{http://sourceforge.net/projects/dlvhex/files/}. Installation instructions are given in the {\tt INSTALL} and {\tt README} files of the \dlvhex{} and plugin source directories. Changes between versions can be found in the {\tt NEWS} files and in detail in the {\tt ChangeLog} file.
+Packages (tarballs) of \dlvhex{} can be downloaded from the project page\cite{sourceforge}. The latest release of the software runs on Linux-based systems,Mac OS X and Microsoft Windows. The latest stable release version of the \dlvhex{} can be found at \url{http://sourceforge.net/projects/dlvhex/files/}. Installation instructions are given in the {\tt INSTALL} and {\tt README} files of the \dlvhex{} and plugin source directories. Changes between versions can be found in the {\tt NEWS} files and in detail in the {\tt ChangeLog} file. \\ \\The system requires the following packages: git, gcc (version 4.8 or later), g++ (version 4.8 or later), libbz2-dev, Python (version 2.7 or later), bison, scons, cmake, automake, autoconf, libstdc++ (version 4.8 or later), libcurl4 and libool. Also Boost Library (version 1.55 or later) is required. Latest Boost Library version is available at \url{http://www.boost.org/}. After downloading it to the new folder the following steps should be followed in order to properly install Boost Library. Downloaded file should be moved to the folder where Boost Library will be installed. Extract it there and execute following commands:
+%\\ \\sudo ./bootstrap.sh $\&\&$ $./b2$ --python-enable --layout=tagged --build-type=complete\\ --threading=multi --prefix=\$ %boostdir install -j4 \\ 
+\\ \centerline{\texttt{./bootstrap.sh}}
+Running bootstrap script will download and install all dependencies required.
+\centerline{\texttt{./b2 install --prefix=PREFIX}} After running bootstrap script we will execute this command. In this command PREFIX is a directory where you want Boost.Build to be installed.
 \\ After downloading latest release version by executing following sequence of commands \dlvhex{} will be successfully installed on your system.
-\\ \centerline{\texttt{./configure}} After successful download one have to run configure script in order to check and install all missing libraries. It will prepare system for the building. If you want to use python features in \dlvhex you can enable it by typing \texttt{-enable-python \$dlvhexoptions} as option for configure.
+\\ \centerline{\texttt{./configure}} After successful download one have to run configure script in order to check and install all missing libraries. It will prepare system for the building. If you want to use python features in \dlvhex you can enable it by typing \texttt{--enable-python} as option for configure.
 \\ \centerline{\texttt{make}} When system is ready for building we will execute make command which will do it. To allow using of multiple cores one should specify -j option to make as well as number of cores which can be used.
 \\ \centerline{\texttt{make install}} This installs the package in the place specified with configure.  
    
 \paragraph{Development version (git clone)}
-The source code of \dlvhex{} is hosted on github at \url{https://github.com/hexhex/}. If you want to build software from the source \dlvhex{} uses the standard \\ \centerline{./configure, make and make install} commands from the shell once all dependencies are resolved. The system requires the following packages: git, gcc (version 4.8 or later), g++ (version 4.8 or later), libbz2-dev, Python (version 2.7 or later), bison, scons, cmake, automake, autoconf, libstdc++ (version 4.8 or later), libcurl4 and libool. Also Boost Library (version 1.55 or later) is required. Latest Boost Library version is available at \url{http://www.boost.org/}. After downloading it to the new folder the following steps should be followed in order to properly install Boost Library. Downloaded file should be moved to the folder where Boost Library will be installed. Extract it there and execute following commands:
-%\\ \\sudo ./bootstrap.sh $\&\&$ $./b2$ --python-enable --layout=tagged --build-type=complete\\ --threading=multi --prefix=\$ %boostdir install -j4 \\ 
-\\ \centerline{\texttt{./bootstrap.sh}}
-Running bootstrap script will download and install all dependencies required.
-\centerline{\texttt{./b2 install --prefix=PREFIX}} After running bootstrap script we will execute this command. In this command PREFIX is a directory where you want Boost.Build to be installed.  
-\\ \\Now when all dependencies are satisfied we can simply git clone system from the \url{https://github.com/hexhex/core --recursive} to get most recent developed version. Shell command to do this
+The source code of \dlvhex{} is hosted on github at \url{https://github.com/hexhex/}. To get latest development version it is necessary to git clone system from the \url{https://github.com/hexhex/core --recursive}. Shell command to do this
 \\ \\ \centerline{\texttt{git clone https://github.com/hexhex/core --recursive}} 
 \\ \\After cloning to the desired directory it is necessary to execute bootstrap.sh script from there invoking \\ \centerline{\texttt{./bootstrap.sh}}. 
 \\ \\After cloning and bootstrapping latest release version, same steps as in Section 1.1.1.1 (configure, make and make install) will be followed in order to complete installation.  \\ \\We provide a script which should install \dlvhex{} automatically on your system. You can find script at \url{https://github.com/hexhex/core/blob/master/scripts/setupdlvhex.sh}.\\ \\Once installation is completed,the system can be used from the terminal as follows:\\ 
@@ -94,12 +93,12 @@ This guide is organized as follows: Section 2 provides an introductory example w
 This section provides an overview of the input language of \dlvhex{} and provide some examples to illustrate concept. Vocabulary: terms, predicates, constants, variables and external predicates.   
 \subsection{Terms and Atoms}
 Terms may be integers, constants, strings and variables as well as the \enquote{\_} tokens. Constant names begin with lowercase leters and variable names begin with uppercase letters. \\ While a constant or string represent itself, a variable is placeholder for all variable-free terms in the language of a logic program. There is a special feature, which is called anonymous variable. The anonymous variable is denoted by "\_" (the underscore) and is different from a usual variable. Each occurrence of \enquote{\_} represents a new and unique variable, which does not occur anywhere else in the same rule. this might be used to specify that an argument can be ignored or does not matter.
-\\A \texttt{predicate atom} has form \texttt{$p(t_1,\dots,t_n)$} where \texttt{p} is a predicate name, $t_1,\dots,t_n$ are terms and n $\geq$ 0 is the arity of the predicate atom; a predicate atom $p()$ of arity 0 is likewise represented by its predicate name \texttt{p} without parentheses. Given a predicate atom \texttt{q, q and $\neg$ q} are \texttt{classical atoms}.   
+\\A \texttt{atom} has form \texttt{$p(t_1,\dots,t_n)$} where \texttt{p} is a predicate name, $t_1,\dots,t_n$ are terms and n $\geq$ 0 is the arity of the predicate atom; a predicate atom $p()$ of arity 0 is likewise represented by its predicate name \texttt{p} without parentheses. Classical atoms are: \texttt{q, q and $\neg$ q}.   
 \\ \textbf{Example 3.1.} 
 Terms are:
 \\ \texttt{Constants:} a, 1, a1, 9862, c1
 \\ \texttt{Variables:} X, Y, Z, V2f
-\\ \texttt{Atoms:} a, b, deaf, smart
+\\ \texttt{Atoms:} a, b, deaf, smart, a$\leq$1, $\neg$a
 \\ \texttt{Predicates:} parent(X,Y), employee(name, salary, ID, location)
        
 
@@ -271,7 +270,7 @@ reached(Y):- reached(X), in_tree(X,Y,C).
 Best model: \texttt{\{reached(a), out\_tree(a,b), in\_tree(a,c,3), reached(b), reached(c), in\_tree(b,e,4), in\_tree(c,b,2), in\_tree(c,d,3), reached(e), reached(d), out\_tree(d,e)\}}
 \\Cost ([Weight:Level]): $<[12:1]>$
 \\Finally, we show an example where both weights and priorities are specified. This example and some others are taken from the DLV-User Manual \cite{dlvum}. Consider the problem of assigning a given set of employees to two projects. As a minor desideratum, we wish that members of the same group already know each other. Higher level constraints ask each group to be heterogeneous as far as skills are concerned, and require that people married with one another do not work in the same group.
-\textbf{Example 3.10.}
+\\ \textbf{Example 3.10.}
 \begin{lstlisting}
 % This example specify both weights and priorities
 employee(a). employee(b). employee(c). employee(d). employee(e).
@@ -293,16 +292,15 @@ This program has two best models:
 \subsection{High-order}
 Now we introduce the most specific feature of \dlvhex{} compared to other ASP solvers. \hex{}-programs are nonmonotonic logic programs admitting \texttt{high-order atoms} as well as \texttt{external atoms}, and we extend the well known answer-set semantics to this class of programs. Advantage of using external atoms is increasing software interoperability. \\Let $C$,$X$, and $G$ be mutually disjoint sets whose elements are called \texttt{constant names, variable names,} and \texttt{external predicate names,} respectively. Unless explicitly specified, elements from \texttt{$X$} are denoted with first letter in upper case, while elements from \texttt{$G$} are prefixe with \enquote{\&}. 
 We note that the constant names serve both as individual and predicate names. Elements from \texttt{$C$} $\cup$ \texttt{$X$} are called \texttt{terms}. \\ \\A high-order atom allows to quantify values over predicate names, and to freely exchange predicate symbols with constant symbols, like in the rule\\ \centerline{\\$C(X) \leftarrow \textit{subclassOf(D,C),D(X)}$}
+A \textit{high-order atom} is a tuple ($Y_0, Y_1,\dots,Y_n$), where $Y_0, Y_1,\dots,Y_n$ are terms; $ n \ge 0$ is the \textit{arity} of the atom. Intuiitively, $Y_0$ is the predicate name, and we thus also use the more familiar notation $Y_0(Y_1,\dots,Y_n)$. The atom is \textit{ordinary}, if $Y_0$ is a constant. For example, \textit{(x,rdf:type,c),node(X), and D(a,b),} are atoms;the first two are ordinary atoms. An \textit{external atom} is of the form \\ \centerline{ \&g[$Y_1,\dots,Y_n$]($X_1,\dots,X_m$),} \\where $Y_1,\dots,Y_n$ and $X_1,\dots,X_m$ are the two lists of terms (called \textit{input} and \textit{output} lists, respectively), and \&g $\in$ \textit{G} is an external predicate name. We assume that \&g has fixed lengths \texttt{in($\&g$)} = n and \texttt{out($\&g$)} = m for input and output lists, respectively. Intuitively, an external atom provides a way for deciding the truth value of an output tuple depending on the extension of a set of input predicates.       
+\\To understand concept better we are providing example which show how we can get use of external atoms in ordinary ASP.
 
 \subsection{External Atoms}
 Through external atoms, \hex{}-programs can communicate with other sources of computation; this can be used to model extensions of ASP.  
 An \texttt{external atom} facilitates to determine the truth value of an atom through an external source of computation. For instance, the rule \\ \centerline{ \textit{$reached(X) \leftarrow \&reach[edge,a](X)$}}
 \\computes the predicate \textit{reached} taking values from the predicate $\&reach$, which computes via \textit{$\&reach[edge,a](X)$} all the reachable nodes in the graph in the graph \textit{edge} from node \textit{a}, delegating this task to an external computational source (e.g., an external deduction system, an execution library, etc.). 
 
-\subsubsection{\hex{} programs-Syntax}
-A \textit{high-order atom} is a tuple ($Y_0, Y_1,\dots,Y_n$), where $Y_0, Y_1,\dots,Y_n$ are terms; $ n \ge 0$ is the \textit{arity} of the atom. Intuiitively, $Y_0$ is the predicate name, and we thus also use the more familiar notation $Y_0(Y_1,\dots,Y_n)$. The atom is \textit{ordinary}, if $Y_0$ is a constant. For example, \textit{(x,rdf:type,c),node(X), and D(a,b),} are atoms;the first two are ordinary atoms. An \textit{external atom} is of the form \\ \centerline{ \&g[$Y_1,\dots,Y_n$]($X_1,\dots,X_m$),} \\where $Y_1,\dots,Y_n$ and $X_1,\dots,X_m$ are the two lists of terms (called \textit{input} and \textit{output} lists, respectively), and \&g $\in$ \textit{G} is an external predicate name. We assume that \&g has fixed lengths \texttt{in($\&g$)} = n and \texttt{out($\&g$)} = m for input and output lists, respectively. Intuitively, an external atom provides a way for deciding the truth value of an output tuple depending on the extension of a set of input predicates.       
-\\To understand concept better we are providing example which show how we can get use of external atoms in ordinary ASP.
-\\ \textbf{\\Example 3.11.}
+\textbf{\\Example 3.11.}
 \\ \lstinputlisting{introductiontohex.hex}     
 This \hex{}-program  which works with constant input parameters  to external sources. For each system, it concatenates the string \enquote{hello} and a system name using \texttt{$\&$concat} external source. At output we have the answer set like:\\ \{ \texttt{sayhello(hellodlvhex), sayhello(helloclasp)} \}. 
 \\Second part of the program works with predicate input parameters. It first define two different sets and then computes \texttt{set1} minus \texttt{set2} using \texttt{$\&$setdiff} external source.
