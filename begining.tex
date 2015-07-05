@@ -77,12 +77,11 @@ Once installation is completed,the system can be used from the terminal as follo
 \subsubsection{Pre-built binaries}
 We provide pre-built binaries of \dlvhex{} for some systems. For details see our website \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/index.html}. 
 
-
 \subsection{Outline}
-This guide is organized as follows: Section 2 provides an introductory example which will be used to explain problem instance, encoding and its solution. Section 3 is focused on input language of the \dlvhex{}. In Section 4 we introduced three real life problems which can be solved using our system. Section 5 is focused on description of external interfaces which are written in C++ and Python. Input-related warnings and errors are described into more details in Section 6. And finally in Section 7 we describe possible future work that may be considered.
+This guide is organized as follows: \emph{Section 2.} provides an introductory example which will be used to explain problem instance, encoding and its solution. \emph{Section 3.} is focused on input language of the \dlvhex{}. In \emph{Section 4.} we introduced three real life problems which can be solved using our system. \emph{Section 5.} is focused on description of external interfaces which are written in C++ and Python. Input-related warnings and errors are described into more details in \emph{Section 6}. And finally in \emph{Section 7.} we describe possible future work that may be considered.
 
 \section{Quickstart} % Section No.2
-As an introductory example, we consider a social graph example. Example is simple to understand  but still good enough to present logic and syntax of \hex{}-programs in a good manner. Basic subsections are Problem instance, Problem encoding and Problem solution.  
+As an introductory example, we consider a \emph{social graph} example. Example is simple to understand  but still good enough to present logic and syntax of \hex{}-programs in a good manner. Basic subsections are Problem instance, Problem encoding and Problem solution.  
 
 \subsection{Problem Instance}
 A \emph{Social graph} is a diagram that illustrates interconnections among people, groups 
@@ -99,7 +98,6 @@ with online. For this particular example we consider simulation of Facebook soci
 Since we do not have access to the real Facebook database we created our source file which is 
 used to load nodes and edges to the graph. Node represents one person on the Facebook and if 
 there is edge between one or more persons then it means there is friendship between them.  
-
 
 Consider situation where birthday party should be organized and specific number of friends will
  be invited. The \emph{Person X} which organize event wants just to call its friends and additionally
@@ -228,38 +226,60 @@ $\mathit{invites}$ set. It is specified by using aggregates that answer set must
 In single answer set we have four $\mathit{invites}$ atoms which are $\mathit{invite(john), 
 invite(mike), invite(david), invite(charly)}$. Note that this is only answer set possible 
 from this program since aggregate constraint is 4 and there are only 4 distinct person that are discovered with depth level 1. If we just allow depth level to be larger there will be so many answer sets at the output since more friends will be discovered. One can just play with \emph{Depth constraint} and \emph{Aggregate constraint} to see how real output and answer sets will be affected.    
+
 \subsection{Summary}
 To conclude our quickstart, let us summarize what we did before. To solve our \emph{Social graph} problem we first provided set of facts representing instance. Second, we provided an encoding of the problem applying to any instance. With the encoding at hand, we could use \dlvhex{} to find an answer sets for the our problem. 
 
-
-
-\newpage
 \section{Input Language}% Section No. 3
 This section provides an overview of the input language of \dlvhex{} and provide some examples to illustrate concept. Vocabulary: terms, predicates, constants, variables and external predicates.   
+
 \subsection{Terms and Atoms}
-Terms may be integers, constants, strings and variables as well as the \enquote{\_} tokens. Constant names begin with lowercase leters and variable names begin with uppercase letters. \\ While a constant or string represent itself, a variable is placeholder for all variable-free terms in the language of a logic program. There is a special feature, which is called anonymous variable. The anonymous variable is denoted by "\_" (the underscore) and is different from a usual variable. Each occurrence of \enquote{\_} represents a new and unique variable, which does not occur anywhere else in the same rule. this might be used to specify that an argument can be ignored or does not matter.
-\\A \texttt{atom} has form \texttt{$p(t_1,\dots,t_n)$} where \texttt{p} is a predicate name, $t_1,\dots,t_n$ are terms and n $\geq$ 0 is the arity of the predicate atom; a predicate atom $p()$ of arity 0 is likewise represented by its predicate name \texttt{p} without parentheses. Classical atoms are: \texttt{q, q and $\neg$ q}.   
-\\ \textbf{Example 3.1.} 
+Terms may be integers, constants, strings and variables as well as the \enquote{\_} tokens. Constant names begin with lowercase leters and variable names begin with uppercase letters.
+
+While a constant or string represent itself, a variable is placeholder for all variable-free terms in the language of a logic program. There is a special feature, which is called anonymous variable. The anonymous variable is denoted by ``\_" (the underscore) and is different from a usual variable. Each occurrence of \enquote{\_} represents a new and unique variable, which does not occur anywhere else in the same rule. This might be used to specify that an argument can be ignored or does not matter.
+
+An \emph{atom} has form $\mathit{p(t_1,\dots,t_n)}$ where $p$ is a predicate name, $t_1,\dots,t_n$ are terms and $n$ $\geq$ $0$ is the arity of the predicate atom; a predicate atom $p()$ of arity 0 is likewise represented by its predicate name $p$ without parentheses. Classical atoms are: $q$, $q$ and $\neg$ $q$.
+
+\textbf{Example 3.1.} 
 Terms are:
-\\ \texttt{Constants:} a, 1, a1, 9862, c1
-\\ \texttt{Variables:} X, Y, Z, V2f
-\\ \texttt{Atoms:} a, b, deaf, smart, a$\leq$1, $\neg$a
-\\ \texttt{Predicates:} parent(X,Y), employee(name, salary, ID, location)
+\\ \text{Constants:} $a$, $1$, $\mathit{a1}$, $\mathit{9862}$, $\mathit{c1}$
+\\ \text{Variables:} $X$, $Y$, $Z$, $\mathit{V2f}$
+\\ \text{Atoms:} $a$, $b$, $\mathit{deaf}$, $\mathit{smart}$, $a$ $\leq$ $1$, $\neg$ $a$
+\\ \text{Predicates:} $\mathit{parent}(X,Y)$, $\mathit{employee}(name, salary, ID, location)$
        
-
 \subsection{Normal Programs and Integrity constraints}
-\dlvhex{} is a declarative (programming) language. This means that programmer does not write an algorithm that solves some problem but instead specifies what the solution should look like, and then solves the problem and finds solution itself. Each normal logic program is constructed using \textbf{facts, rules and integrity constraints}. 
-
+\dlvhex{} is a declarative (programming) language. This means that programmer does not write an algorithm that solves some problem but instead specifies what the solution should look like, and then solves the problem and finds solution itself. Each normal logic program is constructed using \emph{facts, rules and integrity constraints}. 
 
 \begin{tabular}{ c c c c c c r l l }
 
- & & & & & & \texttt{Fact:} & $ A_0. $ \\
- & & & & & & \texttt{Rule:} & $ A_0 $ :- &  $L_1$,\dots,$L_n$. \\
- & & & & & & \texttt{Constraint:} & :- & $ L_1$,\dots,$L_n$.   \\
+ & & & & & & \text{Fact:} & $ A_0. $ \\
+ & & & & & & \text{Rule:} & $ A_0 $ :- &  $L_1$,\dots,$L_n$. \\
+ & & & & & & \text{Constraint:} & :- & $ L_1$,\dots,$L_n$.   \\
 
 \end{tabular}
-\\Facts are always true. The sign \enquote{:-} is meant to be an implication to the left. The left side of a rule is called its \texttt{head}, and right side is called its \texttt{body}. The \texttt{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \texttt{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or \texttt{not} A, where A is an atom and the connective \texttt{not} denotes default negation. We say that literal L is positive if it is an atom and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive atoms in the rule body are true and negated atoms are false, then $A_0$ must be true. On the other hand, an integrity constraint is a rule that filters solution candidates, meaning that the literals in its body must not jointly be satisfied. A result of \dlvhex{} computation is called a \textit{model}. The meaning of this is clear: it is a consistent explanation(model) of the world, as far as it system can derive it. If \dlvhex{} cannot find solution then there is no model for the given problem. \\ \textbf{Example 3.1.} \medskip \\Consider the following logic program:\lstinputlisting{example_3.1.hex} The first line here represents an atom which is always true. The second line is a rule and reads as \enquote{If joke is true, laugh must also be true}. Also we can read this as \enquote{from joke follows laugh}. The single model of above program is $\{joke, laugh\}$ since they are the atoms which are true in the program. \\To explain the concept of \texttt{integrity constraints} we will consider following example:\medskip \\ \textbf{Example 3.2.}
-\lstinputlisting{example_3.2.hex}
+\\Facts are always true. The sign \enquote{$\leftimpl$} is meant to be an implication to the left. The left side of a rule is called its \emph{head}, and right side is called its \emph{body}. The \emph{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \emph{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or \emph{not} A, where A is an atom and the connective \emph{not} denotes default negation. We say that literal L is positive if it is an atom and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive atoms in the rule body are true and negated atoms are false, then $A_0$ must be true. On the other hand, an integrity constraint is a rule that filters solution candidates, meaning that the literals in its body must not jointly be satisfied. A result of \dlvhex{} computation is called a \emph{model}. The meaning of this is clear: it is a consistent explanation(model) of the world, as far as it system can derive it. If \dlvhex{} cannot find solution then there is no model for the given problem.
+
+\textbf{Example 3.1.} Consider the following logic program:
+\begin{align*}
+\mathit{ joke }.& \\
+\mathit{ laugh } & \leftimpl \mathit{ joke }.
+\end{align*} 
+The first line here represents an \emph{atom} which is always true. The second line is a \emph{rule} and reads as \enquote{If joke is true, laugh must also be true}. Also we can read this as \enquote{from joke follows laugh}. The single \emph{model} of above program is $\{joke, laugh\}$ since they are the atoms which are true in the program. \\To explain the concept of \texttt{integrity constraints} we will consider following example:
+
+\textbf{Example 3.2.}
+\begin{align*}
+&\% \text{Use edges to identify the nodes.}\\
+&\mathit{node}(X) \leftimpl \mathit{edge}(X, Y). &\\
+&\mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). & \\
+&\% \text{Guessing part.} \\
+&\mathit{colored}(X, r) \text{ v } \mathit{colored}(X, g) \text{ v } \mathit{X, b} \leftimpl \mathit{node}(X). & \\
+&\% \text{Checking part.} \\
+&\leftimpl \mathit{edge}(X, Y), \mathit(colored)(X, C), \mathit{colored}(Y, C) & \\
+&\% \text{(internal) edge definition.} \\
+&\mathit{edge}(2, 4). \mathit{edge}(2, 3). \mathit{edge}(5, 5). & \\
+&\mathit{edge}(4, 6). \mathit{edge}(4, 5). \mathit{edge}(5, 7). & \\
+&\mathit{edge}(6, 7). &
+\end{align*} 
 In the first three lines one can see node declarations with variables X and Y. We concluded that X and Y are variables since they begin with uppercase letter. It says that: \enquote{If edge(X,Y) is true then node(X) is also true}. That is, it extracts the nodes from a graph specified by its edges. In the \texttt{guessing part} \dlvhex{} will list all possible models for the node(X). Each node may be coloured with either red, green or black. We did not see construction as in checking part before. It is called as \texttt{integrity constraint.} Integrity constraints in our framework specify conditions which must not become true in any model. In other words, constraints are formulations of possible inconsistencies. This mechanism is very useful in connection with disjunctive rules. The disjunctive rules serve as generators for different models and the constraints are used to select only the desired ones. Integrity constraint for this particular case will delete all those atoms from the model which does not satisfy our requirement(that there may be no edge between two nodes of equal color). Another important feature of \dlvhex{} is \texttt{default negation}. Negation is treated as "negation as failure". In other words: If an atom is not true in some model, then its negation should be considered to be true in that model. With this mechanism we can, for example, define the complementary graph of a given graph. This is the graph which has the same nodes, but of all possible edges, it has exactly those edges which do not exist in the original graph. \newpage
 \begin{lstlisting}
 node(X) :- edge(X,_).
