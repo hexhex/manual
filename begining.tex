@@ -86,57 +86,153 @@ This guide is organized as follows: Section 2 provides an introductory example w
 As an introductory example, we consider a social graph example. Example is simple to understand  but still good enough to present logic and syntax of \hex{}-programs in a good manner. Basic subsections are Problem instance, Problem encoding and Problem solution.  
 
 \subsection{Problem Instance}
-A \emph{Social graph} is a diagram that illustrates interconnections among people, groups and organizations in a social network. Services such as Facebook facilitate the exchange of information, news, photographs, literary works, music, art, software, opinions or even money among users. In this environment, the social graph or for a particular user consists of the set of nodes and ties connected, directly or indirectly, to that actor. Individuals and organizations, called actors, are nodes on the graph. Interdependencies, called ties, can be multiple and diverse, including such characteristics or concepts as age, gender, race, genealogy, chain of command, ideas, financial transactions, trade relationships, political affiliations, club memberships, occupation, education and economic status. Social graph draws an edge between one person and the people, places, and things they interact with online. For this particular example we consider simulation of Facebook social graph. Since we do not have access to the real Facebook database we created our source file which is used to load nodes and edges to the graph. Node represents one person on the Facebook and if there is edge between one or more persons then it means there is friendship between them.  
-\\ \\ Consider situation where birthday party should be organized and specific number of friends will be invited. The \emph{Person X} which organize event wants just to call its friends and additionally friends of these friends which are already invited up to some distance from head node. When we say head node we mean on person which initiates an event. If we know relations between friends on Facebook we can do this using \hex{}-program. We need graph which contains nodes and edges together with depth constraint. \emph{Depth constraint} specify how many edges we can go far from  the head of the graph. This task can be done by using an external sources efficiently. In order to iterate all friends for which we are interested we have to load all graph at one shot. It is not possible to do this for logic programs since graph is huge and loading it will cause program to crash. Also it might be impossible because of some security issues. \dlvhex{} advantage appears here. We can load all graph using the plugin and then from \hex{}-program iteratively visit all nodes following constraints which are predefined. Consider we are interested for Person X. Python plugin will find node for the Person X in the graph and get all successor nodes of it. Successor nodes of node X are the nodes which are coming right after it. If there is outgoing edge from X to Y, then Y is successor of X. In next iteration we will process successors of Person X and it goes like that until stopping criterion is reached. More details about plugin implementation is addressed in Section 4. It is important to notice that external atom is used in each iteration. Output of current iteration is used as an input for the next iteration. 
+A \emph{Social graph} is a diagram that illustrates interconnections among people, groups 
+and organizations in a social network. Services such as Facebook facilitate the exchange 
+of information, news, photographs, literary works, music, art, software, opinions or even 
+money among users. In this environment, the social graph or for a particular user consists 
+of the set of nodes and ties connected, directly or indirectly, to that actor. 
+Individuals and organizations, called actors, are nodes on the graph. Interdependencies, 
+called ties, can be multiple and diverse, including such characteristics or concepts as age, 
+gender, race, genealogy, chain of command, ideas, financial transactions, trade relationships, 
+political affiliations, club memberships, occupation, education and economic status. 
+Social graph draws an edge between one person and the people, places, and things they interact 
+with online. For this particular example we consider simulation of Facebook social graph. 
+Since we do not have access to the real Facebook database we created our source file which is 
+used to load nodes and edges to the graph. Node represents one person on the Facebook and if 
+there is edge between one or more persons then it means there is friendship between them.  
+
+
+Consider situation where birthday party should be organized and specific number of friends will
+ be invited. The \emph{Person X} which organize event wants just to call its friends and additionally
+  friends of these friends which are already invited up to some distance from head node. When we say head 
+  node we mean on person which initiates an event. If we know relations between friends on Facebook 
+  we can do this using \hex{}-program. We need graph which contains nodes and edges together with depth 
+  constraint. \emph{Depth constraint} specify how many edges we can go far from  the head of the graph. 
+  This task can be done by using an external sources efficiently. In order to iterate all friends for 
+  which we are interested we have to load all graph at one shot. It is not possible to do this for logic 
+  programs since graph is huge and loading it will cause program to crash. Also it might be impossible because 
+  of some security issues. \dlvhex{} advantage appears here. We can load all graph using the plugin and 
+  then from \hex{}-program iteratively visit all nodes following constraints which are predefined. 
+  Consider we are interested for Person X. Python plugin will find node for the Person X in the graph 
+  and get all successor nodes of it. Successor nodes of node X are the nodes which are coming right after it. 
+  If there is outgoing edge from X to Y, then Y is successor of X. In next iteration we will process successors 
+  of Person X and it goes like that until stopping criterion is reached. More details about plugin implementation 
+  is addressed in Section 4. It is important to notice that external atom is used in each iteration. Output of 
+  current iteration is used as an input for the next iteration. 
                
 
 \subsection{Problem Encoding}
-In this section we provide extensive explanation of the social graph problem which we explained in Section 2.1. To provide better understanding of the problem every single line is explained. Line 3 of the program 
+In this section we provide extensive explanation of the social graph problem which we explained in Section 2.1. 
+To provide better understanding of the problem every single line is explained. Line 3 of the program 
 \begin{align*}
-r_3\colon& \mathit{personOfInterest}(\text{john}).
+r_3\colon& \mathit{personOfInterest}(\mathit{john}).
 \end{align*} 
-describes the \emph{fact}. Since it is fact it is always true. $\mathit{personOfInterest(\text{john}).}$ represents fact over the predicate. Name for the $personOfInterest$ could be anything but we used ``\text{john}" since it exists in input graph and we are interested what are the friends which could be invited to his party starting from him in the graph and going up to some depth level. This fact specify initial node, head of the graph, from where successors will be searched. In the Line     8
+describes the \emph{fact}. Since it is fact it is always true. $\mathit{personOfInterest(\mathit{john}).}$ represents 
+fact over the predicate. Name for the $\mathit{personOfInterest}$ could be anything but we used ``$\mathit{john}$" since 
+it exists in input graph and we are interested what are the friends which could be invited to his party starting 
+from him in the graph and going up to some depth level. This fact specify initial node, head of the graph, 
+from where successors will be searched. In the Line 8.
 \begin{align*}
-r_8\colon& \mathit{friendOfDegree(\text{P, 0, P}) \leftimpl personOfInterest(\text{P})}.
+r_8\colon& \mathit{friendOfDegree}(\mathit{P, 0, P}) \leftimpl \mathit{personOfInterest}(P).
 \end{align*} 
- we have a rule which introduces new predicate $\text{friendOfDegree(P,0,P)}$ which is true since $personOfInterest$ is true from the first fact. Note that uppercase letter $P$ is variable and it means that there could be different persons of interest from who we could start and invite people. Consider inviting friends of one person and its girlfriend friends for instance. The main computational part of the program is the following rule   
+ we have a rule which introduces new predicate $\mathit{friendOfDegree(P,0,P)}$ which is true since $\mathit{personOfInterest}$ is true from the first fact. Note that uppercase letter $P$ is variable and it means that there could be different persons of interest from who we could start and invite people. Consider inviting friends of one person and its girlfriend friends for instance. The main computational part of the program is the following rule   
 \begin{align*}
-r_{14}\colon& \mathit{friendOfDegree(\text{P, DegPlus, F2})} \leftimpl friendsOfDegree(\text{P,Deg,F1)},\\
-& \ext{friendsOf}{F1}{F2}, DegPlus = DegPlus + 1, DegPlus < 2,\\
-& \#int(DegPlus), \#int(Deg).
+r_{14}\colon& \mathit{friendOfDegree}(\mathit{P, DegPlus, F2}) \leftimpl \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
+& \ext{friendsOf}{F1}{F2}, \mathit{DegPlus = DegPlus + 1}, \mathit{DegPlus < 2},\\
+& \mathit{\#int(DegPlus)}, \mathit{\#int(Deg)}.
 \end{align*} 
  Since it contains many statements it is good to explain them one by one. While executing this rule we are using results from the previous iteration and preparing inputs for the next iteration. Variables used in these predicates are
- \\ \\F1 represents person for which we are looking the successors. \\F2 is variable which holds successor nodes of F1. \\P represent person of interest, in our case ``john".  
-\\\\Deg and DegPlus are variables used to keep distance from head node \\ \\External atom \ext{friendsOf}{F1}{F2} has one input and one output parameter. For input F1, it finds all successor nodes of it and return them in F2. More details about plugin are discussed in Section 5. 
+
+
+F1 represents person for which we are looking the successors.
+
+F2 is variable which holds successor nodes of F1. 
+
+P represent person of interest, in our case ``john".  
+
+
+Deg and DegPlus are variables used to keep distance from head node.
+\\External atom \ext{friendsOf}{F1}{F2} has one input and one output parameter. For input $\mathit{F1}$, 
+it finds all successor nodes of it and return them in $\mathit{F2}$. More details about plugin are discussed
+ in Section 5. 
 The fact
 \begin{align*}
-& \mathit{friendOfDegree(\text{P, Deg, F1})}
+& \mathit{friendOfDegree(P, Deg, F1)}
 \end{align*}
-is responsible for preparing F1 or node of interest for which we will find successor nodes. It will take always variable F1 from last iteration and that variable will be used as input to external source \ext{friendsOf}{F1}{F2}.
+is responsible for preparing $\mathit{F1}$ or node of interest for which we will find successor nodes. 
+It will take always variable $\mathit{F1}$ from last iteration and that variable will be used as input to 
+external source \ext{friendsOf}{F1}{F2}.
 Result of current iteration is saved to 
 \begin{align*}
-& \mathit{friendOfDegree(\text{P, DegPlus, F2})}
+& \mathit{friendOfDegree(P, DegPlus, F2)}
 \end{align*} 
-where F2 contains all friends which should be processed in the following iterations if constraints allow it. There is one constraints which should be considered
+where $\mathit{F2}$ contains all friends which should be processed in the following iterations if constraints allow it. 
+There is one constraints which should be considered
 \begin{align*}
-& DegPlus < 2
+& \mathit{DegPlus < 2}
 \end{align*}
 This means that our program will be able to travel only two edges far from the head of the graph. This of course can be modified according to user needs. After introducing facts and basic rules we can move to more interesting part where we will handle persons to invite or not and number of them. Following rule guesses all possible persons to be invited or not and form set of them.
 \begin{align*}
-& \mathit{invite(\text{P})} \text{ v } \mathit{ninvite(\text{P}) \leftimpl friendOfDegree(\text{john,X,P}), \#int(\text{X}).}
+& \mathit{invite(P)} \text{ v } \mathit{ninvite(P) \leftimpl friendOfDegree(john,X,P), \#int(X).}
 \end{align*}     
 We can limit number of invited persons by using \emph{Integrity constraint} of the following type.
 \begin{align*}
-& \leftimpl \mathit{not} \text{ 4 } = \mathit{\#count} \{ \text{P} : \mathit{invite(\text{P})} \}.
+& \leftimpl \mathit{not} \text{ 4 } = \mathit{\#count} \{ P : \mathit{invite(P)} \}.
 \end{align*} 
-It gives 4 different sets of people which might me invited to the party. It is possible to replace last two statements with the following rule
+It gives 4 different sets of people which might me invited to the party. It is possible to replace 
+last two statements with the following rule
 \begin{align*}
-& \text{ 4 } \leq \{ invite(\text{P}) : friendOfDegree(\text{john,X,P}) \} \leq \text{ 4 }. 
+& \text{ 4 } \leq \{ invite(P) : friendOfDegree(john,X,P) \} \leq \text{ 4 }. 
 \end{align*}
-It is doing exactly same thing as two statements above. However it is more powerful since it is possible to specify lower and upper bound on number of persons to invite and these numbers do not have to be same.  
+It is doing exactly same thing as two statements above. However it is more powerful since it is 
+possible to specify lower and upper bound on number of persons to invite and these numbers do not 
+have to be same. Below is given complete example so that everyone is able to see it in more compact way.
+\begin{align*}
+r_3\colon& \mathit{personOfInterest}(\mathit{john}).\\
+r_8\colon& \mathit{friendOfDegree}(\mathit{P, 0, P}) \leftimpl \mathit{personOfInterest}(P).\\
+r_{14}\colon& \mathit{friendOfDegree}(\mathit{P, DegPlus, F2}) \leftimpl \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
+& \ext{friendsOf}{F1}{F2}, \mathit{DegPlus = DegPlus + 1}, \mathit{DegPlus < 2},\\
+& \mathit{\#int(DegPlus)}, \mathit{\#int(Deg)}.\\
+r_{15}\colon& \mathit{invite(P)} \text{ v } \mathit{ninvite(P) \leftimpl friendOfDegree(john,X,P), \#int(X).}\\
+r_{19}\colon& \leftimpl \mathit{not} \text{ 4 } = \mathit{\#count} \{ P : \mathit{invite(P)} \}.
+\end{align*}  
 
 \subsection{Problem Solution}
+Now we are ready to solve our \emph{social graph} problem. Consider that we load following set of nodes and edges from the from the file:\\
+\includegraphics[width=12.5cm,height=9cm]{graph}
+\\ \\To compute an \emph{answer set} representing 
+a solution, invoke following command:
+\\ \centerline{\texttt{shell\$ dlvhex2 --pythonplugin=extsource.py program.hex}}
+where \texttt{program.hex} is \hex-program and \texttt{extsource.py} represents Python file with 
+external source implementation. The output of the \dlvhex{} after solving looks as follows:
+
+
+\begin{tabular}{ l r }
+   \texttt{DLVHEX  2.4.0 [build Jun 23 2015   gcc 4.8.2]}& \\  
+   &\\   
+   \texttt{\{personOfInterest(john), friendOfDegree(john,0,john),}& \\
+   \texttt{invite(john), friendOfDegree(john,1,mike),} & \\
+   \texttt{friendOfDegree(john,1,david), friendOfDegree(john,1,charly),} & \\
+   \texttt{invite(mike),invite(david),invite(charly)\}}
+ \end{tabular}
+\\ \\The first line shows the \dlvhex{} version, compiler version and date. The following lines
+are solution of the program. Note that order in which atoms are printed does not bear any meaning. 
+Same is applied to the order of sets founded. Single \emph{answer set} for this problem contain 
+atoms given above. As it is expected, first atom is \texttt{personOfInterest(john)} 
+since \texttt{john} is organizing party and program should generate set/sets of the friends 
+who should be invited to the party by him. As we specified in the previous section,
+we can travel at most 1 edge far from the head node. You can see from the graph that program 
+can discover \texttt{John, Mike, Charly and David} only since they are one edge far from the 
+head node. Next three atoms are saying who are the new friends discovered and at which depth 
+level. When program stop iteration through nodes due to depth constraint it starts with generating 
+\texttt{invites} set. It is specified by using aggregates that answer set must have four distinct \texttt{invites} atoms.
+In single answer set we have four \texttt{invites} atoms which are \texttt{invite(john), 
+invite(mike), invite(david), invite(charly)}. Note that this is only answer set possible 
+from this program since aggregate constraint is 4 and there are only 4 distinct person that are discovered with depth level 1. If we just allow depth level to be larger there will be so many answer sets at the output since more friends will be discovered. One can just play with \emph{Depth constraint} and \emph{Aggregate constraint} to see how real output and answer sets will be affected.    
 \subsection{Summary}
+To conclude our quickstart, let us summarize what did before. To solve our \emph{Social graph} problem we first provided set of facts representing instance. Second, we provided an encoding of the problem applying to any instance. With the encoding at hand, we could use \dlvhex{} to find an answer sets for the our problem. 
+
+
 
 \newpage
 \section{Input Language}% Section No. 3
