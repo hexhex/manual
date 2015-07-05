@@ -214,19 +214,20 @@ external source implementation. The output of the \dlvhex{} after solving looks 
    $\mathit{friendOfDegree(john,1,david), friendOfDegree(john,1,charly),}$ & \\
    $\mathit{invite(mike),invite(david),invite(charly)\}}$
  \end{tabular}
-\\ \\The first line shows the \dlvhex{} version, compiler version and date. The following lines
+\\ \\
+The first line shows the \dlvhex{} version, compiler version and date. The following lines
 are solution of the program. Note that order in which atoms are printed does not bear any meaning. 
 Same is applied to the order of sets founded. Single \emph{answer set} for this problem contain 
-atoms given above. As it is expected, first atom is \texttt{personOfInterest(john)} 
-since \texttt{john} is organizing party and program should generate set/sets of the friends 
+atoms given above. As it is expected, first atom is $\mathit{personOfInterest(john)}$ 
+since $\mathit{john}$ is organizing party and program should generate set/sets of the friends 
 who should be invited to the party by him. As we specified in the previous section,
 we can travel at most 1 edge far from the head node. You can see from the graph that program 
-can discover \texttt{John, Mike, Charly and David} only since they are one edge far from the 
+can discover $\mathit{John, Mike, Charly and David}$ only since they are one edge far from the 
 head node. Next three atoms are saying who are the new friends discovered and at which depth 
 level. When program stop iteration through nodes due to depth constraint it starts with generating 
-\texttt{invites} set. It is specified by using aggregates that answer set must have four distinct \texttt{invites} atoms.
-In single answer set we have four \texttt{invites} atoms which are \texttt{invite(john), 
-invite(mike), invite(david), invite(charly)}. Note that this is only answer set possible 
+$\mathit{invites}$ set. It is specified by using aggregates that answer set must have four distinct $\mathit{invites}$ atoms.
+In single answer set we have four $\mathit{invites}$ atoms which are $\mathit{invite(john), 
+invite(mike), invite(david), invite(charly)}$. Note that this is only answer set possible 
 from this program since aggregate constraint is 4 and there are only 4 distinct person that are discovered with depth level 1. If we just allow depth level to be larger there will be so many answer sets at the output since more friends will be discovered. One can just play with \emph{Depth constraint} and \emph{Aggregate constraint} to see how real output and answer sets will be affected.    
 \subsection{Summary}
 To conclude our quickstart, let us summarize what we did before. To solve our \emph{Social graph} problem we first provided set of facts representing instance. Second, we provided an encoding of the problem applying to any instance. With the encoding at hand, we could use \dlvhex{} to find an answer sets for the our problem. 
