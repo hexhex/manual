@@ -1,15 +1,12 @@
 \documentclass[14pt,a4paper, titlepage]{article}
-
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage{csquotes}
-
 \newcommand{\ext}[3]{\ensuremath{\&{#1}[#2](#3)}}
 \DeclareMathOperator{\leftimpl}{:-}
-
 \lstset{
     literate={~} {$\sim$}{1}
 }
@@ -37,43 +34,45 @@
 
 % Abstract part
 \begin{abstract}
-This document provides a user guide for the Answer Set Programming(ASP) system called \dlvhex{} developed at Vienna University of Technology. ASP is a declarative problem solving paradigm, rooted in Logic Programming and Nonmonotonic Reasoning, which has been gaining increasing attention during the last years. The \dlvhex{} system is a logic-programming reasoner for computing the models of so-called \hex{}-programs, which are an extension of \textbf{answer-set programs} towards integration of \textbf{external computation sources}. This guide aims at enabling users of this system to interoperate with a broader set of external computation sources. The guide refers to release 2.4.     
+This document provides a user guide for the Answer Set Programming(ASP) system called \dlvhex{} developed at Vienna University of Technology. ASP is a declarative problem solving paradigm, rooted in Logic Programming and Nonmonotonic Reasoning, which has been gaining increasing attention during the last years. The \dlvhex{} system is a logic-programming reasoner for computing the models of so-called \hex{}-programs, which are an extension of \emph{answer-set programs} towards integration of \emph{external computation sources}. This guide aims at enabling users of this system to interoperate with a broader set of external computation sources. The guide refers to release 2.4.     
 \end{abstract}
 
 % Generates table of contents
 \tableofcontents
-
 \newpage
 
 \section{Introduction} % Section No.1
-The \dlvhex{} system is a logic-programming reasoner for computing the models of so-called \hex{}-programs, which are an extension of \textbf{answer-set programs} towards integration of \textbf{external computation sources}. To enable access to external information, \hex{}-programs extend programs with external atoms, which allow for a bidirectional communication between the logic program and external sources of computation (e.g., description logic reasoners and Web resources)\cite{extatoms}. The system is developed motivated by the need to interoperate with a broader set of external computation sources and the observation, that for meta-reasoning in the context of the Semantic Web, no adequate support is available in ASP to date. To overcome this,\hex{}-programs have been introduced, which support higher-order logic programs (which accommodate meta-reasoning through higher-order atoms) with external atoms for software interoperability.
+The \dlvhex{} system is a logic-programming reasoner for computing the models of so-called \hex{}-programs, which are an extension of \emph{answer-set programs} towards integration of \emph{external computation sources}. To enable access to external information, \hex{}-programs extend programs with external atoms, which allow for a bidirectional communication between the logic program and external sources of computation (e.g. description logic reasoners and Web resources) \cite{extatoms}. The system is developed motivated by the need to interoperate with a broader set of external computation sources and the observation, that for meta-reasoning in the context of the Semantic Web, no adequate support is available in ASP to date. To overcome this, \hex{}-programs have been introduced, which support higher-order logic programs (which accommodate meta-reasoning through higher-order atoms) with external atoms for software interoperability.
 
 This guide helps ASP novices to make use of the system with all its features. It provides a reference of the features of the tool that ASP might be tempted to exploit. The language of \hex{}-programs is an extension of disjunctive datalog. It largely implements the ASP-Core-2 Standard \cite{ref} and extends it with external atoms. 
 
 In this guide we try explain the fundamentals of using \dlvhex{} to make that reader benefit from them by significantly reducing the time to solve difficult computational problems. 
 
-
 \subsection{Download and Installation}
 \dlvhex{} is written in C++ programming-language and it is published under GNU Lesser General Public License \cite{licnc}. In this section we provide overview of the download and installation process. For a quick overview, some examples and the possibility to evaluate \hex{}-programs directly in the browser, the online demo at \cite{onlinedemo} is provided. However the system can also be installed locally. 
+
 \subsubsection{Building from source}
-There are two possibilities to install \dlvhex{} system from source. One possibility is to install latest stable release of the system or to install latest development version which may not be stable. Both ways are described in following section.  
+There are two possibilities to install \dlvhex{} system from source. One possibility is to install latest stable release of the system or to install latest development version which may not be stable. Both ways are described in following sections.  
+
 \paragraph{Latest release version (tarball)}
-Packages (tarballs) of \dlvhex{} can be downloaded from the project page\cite{sourceforge}. The latest release of the software runs on Linux-based systems,Mac OS X and Microsoft Windows. The latest stable release version of the \dlvhex{} can be found at \url{http://sourceforge.net/projects/dlvhex/files/}. Installation instructions are given in the {\tt INSTALL} and {\tt README} files of the \dlvhex{} and plugin source directories. Changes between versions can be found in the {\tt NEWS} files and in detail in the {\tt ChangeLog} file. \\ \\The system requires the following packages: git, gcc (version 4.8 or later), g++ (version 4.8 or later), libbz2-dev, Python (version 2.7 or later), bison, scons, cmake, automake, autoconf, libstdc++ (version 4.8 or later), libcurl4 and libool. Also Boost Library (version 1.55 or later) is required. Latest Boost Library version is available at \url{http://www.boost.org/}. After downloading it to the new folder the following steps should be followed in order to properly install Boost Library. Downloaded file should be moved to the folder where Boost Library will be installed. Extract it there and execute following commands:
-%\\ \\sudo ./bootstrap.sh $\&\&$ $./b2$ --python-enable --layout=tagged --build-type=complete\\ --threading=multi --prefix=\$ %boostdir install -j4 \\ 
+Packages (tarballs) of \dlvhex{} can be downloaded from the project page \cite{sourceforge}. The latest release of the software runs on Linux-based systems, Mac OS X and Microsoft Windows. The latest stable release version of the \dlvhex{} can be found at: \url{http://sourceforge.net/projects/dlvhex/files/}. Installation instructions are given in the {\tt INSTALL} and {\tt README} files of the \dlvhex{} and plugin source directories. Changes between versions can be found in the {\tt NEWS} files and in detail in the {\tt ChangeLog} file. 
+
+The system requires the following packages: git, gcc (version 4.8 or later), g++ (version 4.8 or later), libbz2-dev, Python (version 2.7 or later), bison, scons, cmake, automake, autoconf, libstdc++ (version 4.8 or later), libcurl4 and libool. Also Boost Library (version 1.55 or later) is required. Latest Boost Library version is available at \url{http://www.boost.org/}. After downloading it to the new folder the following steps should be followed in order to properly install Boost Library. Downloaded file should be moved to the folder where Boost Library will be installed. File should be extracted and following command executed:
 \\ \centerline{\texttt{./bootstrap.sh}}
 Running bootstrap script will download and install all dependencies required.
-\centerline{\texttt{./b2 install --prefix=PREFIX}} After running bootstrap script we will execute this command. In this command PREFIX is a directory where you want Boost.Build to be installed.
-\\ After downloading latest release version by executing following sequence of commands \dlvhex{} will be successfully installed on your system.
+\centerline{\texttt{./b2 install --prefix=PREFIX}} After running bootstrap script we will execute this command. In this command PREFIX is a directory where you want Boost.Build to be installed. After downloading latest release version by executing following sequence of commands \dlvhex{} will be successfully installed on your system.
 \\ \centerline{\texttt{./configure}} After successful download one have to run configure script in order to check and install all missing libraries. It will prepare system for the building. If you want to use python features in \dlvhex you can enable it by typing \texttt{--enable-python} as option for configure.
 \\ \centerline{\texttt{make}} When system is ready for building we will execute make command which will do it. To allow using of multiple cores one should specify -j option to make as well as number of cores which can be used.
 \\ \centerline{\texttt{make install}} This installs the package in the place specified with configure.  
    
 \paragraph{Development version (git clone)}
 The source code of \dlvhex{} is hosted on github at \url{https://github.com/hexhex/}. To get latest development version it is necessary to git clone system from the \url{https://github.com/hexhex/core --recursive}. Shell command to do this
-\\ \\ \centerline{\texttt{git clone https://github.com/hexhex/core --recursive}} 
-\\ \\After cloning to the desired directory it is necessary to execute bootstrap.sh script from there invoking \\ \centerline{\texttt{./bootstrap.sh}}. 
-\\ \\After cloning and bootstrapping latest release version, same steps as in Section 1.1.1.1 (configure, make and make install) will be followed in order to complete installation.  \\ \\We provide a script which should install \dlvhex{} automatically on your system. You can find script at \url{https://github.com/hexhex/core/blob/master/scripts/setupdlvhex.sh}.\\ \\Once installation is completed,the system can be used from the terminal as follows:\\ 
-\centerline{\textbf{shell\$ dlvhex2 program.hex}} where program.hex refers to the input program. Various additional options are available and explained in following sections.    
+\\ \centerline{\texttt{git clone https://github.com/hexhex/core --recursive}} 
+After cloning to the desired directory it is necessary to execute bootstrap.sh script from there invoking \\ \centerline{\texttt{./bootstrap.sh}}. 
+After cloning and bootstrapping latest release version, same steps as in Section 1.1.1.1 (configure, make and make install) will be followed in order to complete installation.
+We provide a script which should install \dlvhex{} automatically on your system. You can find script at \url{https://github.com/hexhex/core/blob/master/scripts/setupdlvhex.sh}.
+Once installation is completed,the system can be used from the terminal as follows:\\ 
+\centerline{\texttt{shell\$ dlvhex2 program.hex}} where program.hex refers to the input program. Various additional options are available and explained in following sections.    
 
 \subsubsection{Pre-built binaries}
 We provide pre-built binaries of \dlvhex{} for some systems. For details see our website \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/index.html}. 
