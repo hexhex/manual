@@ -208,12 +208,11 @@ external source implementation. The output of the \dlvhex{} after solving looks 
 
 
 \begin{tabular}{ l r }
-   \texttt{DLVHEX  2.4.0 [build Jun 23 2015   gcc 4.8.2]}& \\  
-   &\\   
-   \texttt{\{personOfInterest(john), friendOfDegree(john,0,john),}& \\
-   \texttt{invite(john), friendOfDegree(john,1,mike),} & \\
-   \texttt{friendOfDegree(john,1,david), friendOfDegree(john,1,charly),} & \\
-   \texttt{invite(mike),invite(david),invite(charly)\}}
+   $\mathit{ DLVHEX }  \mathit{ 2.4.0 } [ \mathit{ build } \mathit{ Jun } \mathit{ 23 } \mathit{ 2015 }   \mathit{ gcc } \mathit{4.8.2}]$& \\    
+   $\mathit{\{personOfInterest(john), friendOfDegree(john,0,john), }$& \\
+   $\mathit{invite(john), friendOfDegree(john,1,mike),}$& \\
+   $\mathit{friendOfDegree(john,1,david), friendOfDegree(john,1,charly),}$ & \\
+   $\mathit{invite(mike),invite(david),invite(charly)\}}$
  \end{tabular}
 \\ \\The first line shows the \dlvhex{} version, compiler version and date. The following lines
 are solution of the program. Note that order in which atoms are printed does not bear any meaning. 
@@ -230,7 +229,7 @@ In single answer set we have four \texttt{invites} atoms which are \texttt{invit
 invite(mike), invite(david), invite(charly)}. Note that this is only answer set possible 
 from this program since aggregate constraint is 4 and there are only 4 distinct person that are discovered with depth level 1. If we just allow depth level to be larger there will be so many answer sets at the output since more friends will be discovered. One can just play with \emph{Depth constraint} and \emph{Aggregate constraint} to see how real output and answer sets will be affected.    
 \subsection{Summary}
-To conclude our quickstart, let us summarize what did before. To solve our \emph{Social graph} problem we first provided set of facts representing instance. Second, we provided an encoding of the problem applying to any instance. With the encoding at hand, we could use \dlvhex{} to find an answer sets for the our problem. 
+To conclude our quickstart, let us summarize what we did before. To solve our \emph{Social graph} problem we first provided set of facts representing instance. Second, we provided an encoding of the problem applying to any instance. With the encoding at hand, we could use \dlvhex{} to find an answer sets for the our problem. 
 
 
 
