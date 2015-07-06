@@ -463,21 +463,37 @@ This program has two best models:
 \\$\mathit{Cost}$ ($[ \mathit{Weight:Level]}$): $ \langle [6:1],[0:2] \rangle $ '\\
 \{$\mathit{member}(a,p1), \mathit{member}(b,p2), \mathit{member}(c,p2), \mathit{member}(d,p1), \mathit{member}(e,p1)$\}
 
-\subsection{High-order}
-Now we introduce the most specific feature of \dlvhex{} compared to other ASP solvers. \hex{}-programs are nonmonotonic logic programs admitting \texttt{high-order atoms} as well as \texttt{external atoms}, and we extend the well known answer-set semantics to this class of programs. Advantage of using external atoms is increasing software interoperability. \\Let $C$,$X$, and $G$ be mutually disjoint sets whose elements are called \texttt{constant names, variable names,} and \texttt{external predicate names,} respectively. Unless explicitly specified, elements from \texttt{$X$} are denoted with first letter in upper case, while elements from \texttt{$G$} are prefixe with \enquote{\&}. 
+\subsection{Higher-order Atoms}
+Now we introduce the most specific feature of \dlvhex{} compared to other ASP solvers. \hex{}-programs are nonmonotonic logic programs admitting \emph{high-order atoms}, and we extend the well known answer-set semantics to this class of programs.
+
+Let $C$,$X$, and $G$ be mutually disjoint sets whose elements are called \texttt{constant names, variable names,} and \texttt{external predicate names,} respectively. Unless explicitly specified, elements from \texttt{$X$} are denoted with first letter in upper case, while elements from \texttt{$G$} are prefixe with \enquote{\&}. 
 We note that the constant names serve both as individual and predicate names. Elements from \texttt{$C$} $\cup$ \texttt{$X$} are called \texttt{terms}. \\ \\A high-order atom allows to quantify values over predicate names, and to freely exchange predicate symbols with constant symbols, like in the rule\\ \centerline{\\$C(X) \leftarrow \textit{subclassOf(D,C),D(X)}$}
-A \textit{high-order atom} is a tuple ($Y_0, Y_1,\dots,Y_n$), where $Y_0, Y_1,\dots,Y_n$ are terms; $ n \ge 0$ is the \textit{arity} of the atom. Intuiitively, $Y_0$ is the predicate name, and we thus also use the more familiar notation $Y_0(Y_1,\dots,Y_n)$. The atom is \textit{ordinary}, if $Y_0$ is a constant. For example, \textit{(x,rdf:type,c),node(X), and D(a,b),} are atoms;the first two are ordinary atoms. An \textit{external atom} is of the form \\ \centerline{ \&g[$Y_1,\dots,Y_n$]($X_1,\dots,X_m$),} \\where $Y_1,\dots,Y_n$ and $X_1,\dots,X_m$ are the two lists of terms (called \textit{input} and \textit{output} lists, respectively), and \&g $\in$ \textit{G} is an external predicate name. We assume that \&g has fixed lengths \texttt{in($\&g$)} = n and \texttt{out($\&g$)} = m for input and output lists, respectively. Intuitively, an external atom provides a way for deciding the truth value of an output tuple depending on the extension of a set of input predicates.       
-\\To understand concept better we are providing example which show how we can get use of external atoms in ordinary ASP.
+A \textit{high-order atom} is a tuple ($Y_0, Y_1,\dots,Y_n$), where $Y_0, Y_1,\dots,Y_n$ are terms; $ n \ge 0$ is the \textit{arity} of the atom. Intuiitively, $Y_0$ is the predicate name, and we thus also use the more familiar notation $Y_0(Y_1,\dots,Y_n)$. The atom is \textit{ordinary}, if $Y_0$ is a constant. For example, \textit{(x,rdf:type,c),node(X), and D(a,b),} are atoms;the first two are ordinary atoms. To understand concept better we are providing example which show how we can get use of external atoms in ordinary ASP.
 
 \subsection{External Atoms}
 Through external atoms, \hex{}-programs can communicate with other sources of computation; this can be used to model extensions of ASP.  
-An \texttt{external atom} facilitates to determine the truth value of an atom through an external source of computation. For instance, the rule \\ \centerline{ \textit{$reached(X) \leftarrow \&reach[edge,a](X)$}}
-\\computes the predicate \textit{reached} taking values from the predicate $\&reach$, which computes via \textit{$\&reach[edge,a](X)$} all the reachable nodes in the graph in the graph \textit{edge} from node \textit{a}, delegating this task to an external computational source (e.g., an external deduction system, an execution library, etc.). 
+An \emph{external atom} facilitates to determine the truth value of an atom through an external source of computation.
+An \emph{external atom} is of the form \\ \centerline{ \&g[$Y_1,\dots,Y_n$]($X_1,\dots,X_m$),} \\where $Y_1,\dots,Y_n$ and $X_1,\dots,X_m$ are the two lists of terms (called \textit{input} and \textit{output} lists, respectively), and \&g $\in$ \textit{G} is an external predicate name. We assume that \&g has fixed lengths \texttt{in($\&g$)} = n and \texttt{out($\&g$)} = m for input and output lists, respectively. Intuitively, an external atom provides a way for deciding the truth value of an output tuple depending on the extension of a set of input predicates.
+For instance, the rule \\ \centerline{ \textit{$reached(X) \leftarrow \&reach[edge,a](X)$}}
+\\computes the predicate \textit{reached} taking values from the predicate $\&reach$, which computes via \textit{$\&reach[edge,a](X)$} all the reachable nodes in the graph in the graph \textit{edge} from node \textit{a}, delegating this task to an external computational source.
 
 \textbf{\\Example 3.11.}
-\\ \lstinputlisting{introductiontohex.hex}     
-This \hex{}-program  which works with constant input parameters  to external sources. For each system, it concatenates the string \enquote{hello} and a system name using \texttt{$\&$concat} external source. At output we have the answer set like:\\ \{ \texttt{sayhello(hellodlvhex), sayhello(helloclasp)} \}. 
-\\Second part of the program works with predicate input parameters. It first define two different sets and then computes \texttt{set1} minus \texttt{set2} using \texttt{$\&$setdiff} external source.
+
+\begin{align*}
+& \mathit{systems}(\mathit{dlvhex}). \mathit{systems}(\mathit{clasp}). \\  
+& \mathit{sayhello(X)} \leftimpl \ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, \mathit{systems(Y).}  \\ 
+& \mathit{set1}(a). \text{ } \mathit{set1}(b). \text{ } \mathit{set1}(c).\\
+& \mathit{set2}(b). \text{ } \mathit{set2}(c). \text{ } \mathit{set2}(d).\\
+& \mathit{set3}(X) \leftimpl \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
+&
+\end{align*}
+
+There are two different external sources in this program, first one is $\mathit{\&concatenate}$ and second one is $\mathit{\&setdiff}$. First part of the program for each system concatenates the string \enquote{hello} and a system name using $\mathit{\&concat}$ external source. At output we have the answer set like:\\ 
+\centerline{ \{ $\mathit{sayhello}(\mathit{hellodlvhex}), \mathit{sayhello}(\mathit{helloclasp})$ \}}
+\\In this case $\mathit{concat}$ external source receives constant input parameters and passes them as a \emph{tuple}. It starts with an empty string and concatenate all constants from input sequence to the one string. The final string is returned as output of the external source.   
+
+
+Second part of the program works with externals source which has predicate input parameters. $\mathit{setdiff}$ has two predicate input parameters. It is important to notice that there is difference between inputs for the $\mathit{concat}$ and $\mathit{setdiff}$ external sources. $\mathit{concat}$ have constant inputs stored in tuple while $\mathit{setdiff}$ has predicates. Second part of the program first defines two different sets and then computes $\mathit{set1}$ minus $\mathit{set2}$ using $\mathit{\&setdiff}$ external source. At the output we have: $\mathit{set3}(a)$ 
 
 
 
