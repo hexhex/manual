@@ -268,54 +268,59 @@ The first line here represents an \emph{atom} which is always true. The second l
 
 \textbf{Example 3.2.}
 \begin{align*}
-&\% \text{Use edges to identify the nodes.}\\
+&\%  \text{ Use edges to identify the nodes.}\\
 &\mathit{node}(X) \leftimpl \mathit{edge}(X, Y). &\\
 &\mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). & \\
-&\% \text{Guessing part.} \\
+&\%  \text{ Guessing part.} \\
 &\mathit{colored}(X, r) \text{ v } \mathit{colored}(X, g) \text{ v } \mathit{X, b} \leftimpl \mathit{node}(X). & \\
-&\% \text{Checking part.} \\
+&\%  \text{ Checking part.} \\
 &\leftimpl \mathit{edge}(X, Y), \mathit(colored)(X, C), \mathit{colored}(Y, C) & \\
-&\% \text{(internal) edge definition.} \\
+&\% \text{ (internal) edge definition.} \\
 &\mathit{edge}(2, 4). \mathit{edge}(2, 3). \mathit{edge}(5, 5). & \\
 &\mathit{edge}(4, 6). \mathit{edge}(4, 5). \mathit{edge}(5, 7). & \\
 &\mathit{edge}(6, 7). &
 \end{align*} 
-In the first three lines one can see node declarations with variables X and Y. We concluded that X and Y are variables since they begin with uppercase letter. It says that: \enquote{If edge(X,Y) is true then node(X) is also true}. That is, it extracts the nodes from a graph specified by its edges. In the \texttt{guessing part} \dlvhex{} will list all possible models for the node(X). Each node may be coloured with either red, green or black. We did not see construction as in checking part before. It is called as \texttt{integrity constraint.} Integrity constraints in our framework specify conditions which must not become true in any model. In other words, constraints are formulations of possible inconsistencies. This mechanism is very useful in connection with disjunctive rules. The disjunctive rules serve as generators for different models and the constraints are used to select only the desired ones. Integrity constraint for this particular case will delete all those atoms from the model which does not satisfy our requirement(that there may be no edge between two nodes of equal color). Another important feature of \dlvhex{} is \texttt{default negation}. Negation is treated as "negation as failure". In other words: If an atom is not true in some model, then its negation should be considered to be true in that model. With this mechanism we can, for example, define the complementary graph of a given graph. This is the graph which has the same nodes, but of all possible edges, it has exactly those edges which do not exist in the original graph. \newpage
-\begin{lstlisting}
-node(X) :- edge(X,_).
-node(Y) :- edge(_,Y).
+In the first three lines one can see node declarations with variables $X$ and $Y$. We concluded that $X$ and $Y$ are variables since they begin with uppercase letter. It says that: \enquote{If $\mathit{edge}(X,Y)$ is true then $\mathit{node(X)}$ is also true}. That is, it extracts the nodes from a graph specified by its edges. In the \emph{guessing part} \dlvhex{} will list all possible models for the $\mathit{node}(X)$. Each node may be coloured with either red, green or black. We did not see construction as in checking part before. It is called as \emph{integrity constraint.} Integrity constraints in our framework specify conditions which must not become true in any model. In other words, constraints are formulations of possible inconsistencies. This mechanism is very useful in connection with disjunctive rules. The disjunctive rules serve as generators for different models and the constraints are used to select only the desired ones. Integrity constraint for this particular case will delete all those atoms from the model which does not satisfy our requirement(that there may be no edge between two nodes of equal color). Another important feature of \dlvhex{} is \emph{default negation}. Negation is treated as ``negation as failure". In other words: If an atom is not true in some model, then its negation should be considered to be true in that model. With this mechanism we can, for example, define the complementary graph of a given graph. This is the graph which has the same nodes, but of all possible edges, it has exactly those edges which do not exist in the original graph.  \newpage
 
-comp_edge(X,Y) :- node(X), node(Y), not edge(X,Y).
-\end{lstlisting}
-Here \texttt{comp\_edge} describes the set of edges in the complementary graph. Such an edge must go from one node to another node (possibly the same one), and this edge must not be contained in the original edge set. Note that node(X) and node(Y) need to be included in the body in order to satisfy the following safety requirement for rules: Variables, which occur in a negated literal, must also occur in a positive literal in the body.
+
+\textbf{Example 3.3.}
+\begin{align*}
+& \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).\\
+& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). \\
+& \\
+& \mathit{comp\_edge}(X, Y) \leftimpl \mathit{node}(X), \mathit{node}(Y), \mathit{not} \mathit{edge}(X, Y). 
+\end{align*}
+Here $\mathit{comp\_edge}$ describes the set of edges in the complementary graph. Such an edge must go from one node to another node (possibly the same one), and this edge must not be contained in the original edge set. Note that $\mathit{node}(X)$ and $\mathit{node}(Y)$ need to be included in the body in order to satisfy the following safety requirement for rules: \emph{Variables}, which occur in a negated literal, must also occur in a positive literal in the body.
 
 \subsection{Classical Negation}
-\dlvhex{} supports two kinds of negation. Here we will emphasize difference between explicitly expressing falseness of an atom and having it done by \texttt{Complete World Assumption}. The connective \texttt{not} expresses default negation, i.e. a literal \texttt{not A} is assumed to hold unless atom A is derived to be true. In contrast, the classical (or strong) negation of an atom holds only if it can be derived. In other words if there is no evidence that an atom is true, it is considered to be false. Classical negation, indicated by symbol \enquote{-}, is permitted in from of an atoms. The semantic relationship between A and -A is simply that they must not jointly hold. 
-\\ \textbf{Example 3.3.}
-\\ Imagine a simple situation, in which and agent has to cross a railroad. The agent should cross it if there is no train approaching. With this description, one might specify the following program:
-\begin{lstlisting}
- cross_railroad :- not train_approaches.
-\end{lstlisting}
-The following program has the model \textit{cross} because $train\_approaches$ is assumed to be false(as it being true is not stated anywhere). This kind of negation is called negation as failure.\\The next program uses so-called true or classical negation. Since \textit{$-train\_approaches$} is not known to be true, the following program has only an empty model.
-\begin{lstlisting}
- cross_railroad :- -train_approaches.
-\end{lstlisting}
-The difference between the two kinds of negation is quite important: In the first example, we cross the railroad track if we have no information on any trains approaching, which is quite dangerous, while in the second example, we only cross if we know for sure that no train comes. It is important to note that classical negation is stronger than negation as finite failure. If something is true via true negation, it is always also true if negated by negation as failure.
+\dlvhex{} supports two kinds of negation. Here we will emphasize difference between explicitly expressing falseness of an atom and having it done by \emph{Complete World Assumption}. The connective $\mathit{not}$ expresses default negation, i.e. a literal $\mathit{not}$\text{ }$A$ is assumed to hold unless atom $A$ is derived to be true. In contrast, the classical (or strong) negation of an atom holds only if it can be derived. In other words if there is no evidence that an atom is true, it is considered to be false. Classical negation, indicated by symbol \enquote{-}, is permitted in from of an atoms. The semantic relationship between $A$ and $-A$ is simply that they must not jointly hold.
+
+\textbf{Example 3.3.} Imagine a simple situation, in which and agent has to cross a railroad. The agent should cross it if there is no train approaching. With this description, one might specify the following program:
+\begin{align*}
+ & \mathit{cross\_railroad} \leftimpl \mathit{not} \text{ } \mathit{train\_approaches}.
+\end{align*}
+The following program has the model $\mathit{cross}$ because $\mathit{train\_approaches}$ is assumed to be false (as it being true is not stated anywhere). This kind of negation is called \emph{negation as failure}.
+The next program uses so-called true or classical negation. Since $\mathit{\neg train\_approaches}$ is not known to be true, the following program has only an empty model.
+\begin{align*}
+\mathit{cross\_railroad} \leftimpl \mathit{\neg train\_approaches}.
+\end{align*}
+The difference between the two kinds of negation is quite important: In the first example, we cross the railroad track if we have no information on any trains approaching, which is quite dangerous, while in the second example, we only cross if we know for sure that no train comes. It is important to note that classical negation is stronger than negation as finite failure. If something is true via \emph{true negation}, it is always also true if negated by \emph{negation as failure}.
 
 \subsection{Disjunction}
 Disjunctive logic programs permit the connective 'v' between atoms in rule heads. \\
 \begin{tabular}{ c c c c c c r l l}
- & & & & & & \texttt{Fact:} & $A_0$ v \dots v $A_m$ \\
- & & & & & & \texttt{Rule:} & $A_0$ v \dots v $A_m$ :- $L_1,\dots,L_n. $ \\
+ & & & & & & \text{Fact:} & $A_0$ \text{ v } \dots \text{ v } $A_m$ \\
+ & & & & & & \text{Rule:} & $A_0$ \text{ v } \dots v $A_m$ $\leftimpl$ $L_1,\dots,L_n. $ \\
  \end{tabular}
-\\ The \texttt{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \texttt{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or \texttt{not} A, where A is an atom and the connective \texttt{not} denotes default negation. We say that literal L is positive if it is an atom and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive atoms in the rule body are true and negated atoms are false, then $A_0$ must be true. A \texttt{disjunctive head} holds if at least one of its atomes is true. In a simple disjunctive program \texttt{a v b.} we have the two answer sets \{a\} and \{b\}.
-\\ \textbf{Example 3.4.}
-\begin{lstlisting}
-left_arm_broken v right_arm_broken.
-can_write :- left_arm_broken.
-be_angry :- can_write
-\end{lstlisting}
-Suppose you have met a friend recently and know that he had one of his arms broken, but do not know which one. Now suppose we did not receive a greeting card for your birthday and wonder if you should be angry on him or he just could not write because his right hand is broken. In example, \dlvhex{} will generate two possible explanations. The first rule is called a disjunctive rule; the v is read as \enquote{or} and the whole rule is read as \enquote{For sure, either the left or the right arm is broken.} Without being sure which arm is broken \dlvhex{} will evaluate the program and produce the two models \texttt{$\{left\_arm\_broken, can\_write, be\_angry$\}} and \texttt{$\{right\_arm\_broken$\}}.  
+\\ The \emph{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \emph{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or $\mathit{not}$ \text{}$A$, where $A$ is an atom and the connective $\mathit{not}$ denotes default negation. We say that literal $L$ is positive if it is an atom and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive atoms in the rule body are true and negated atoms are false, then $A_0$ must be true. A \emph{disjunctive head} holds if at least one of its atoms is true. In a simple disjunctive program $\mathit{a}\text{ v }\mathit{b.}$ we have the two answer sets \{$a$\} and \{$b$\}.
+
+\textbf{Example 3.4.}
+\begin{align*}
+& \mathit{left\_arm\_broken} \text{ v } \mathit{right\_arm\_broken}.\\
+& \mathit{can\_write} \leftimpl \mathit{left\_arm\_broken}.\\
+& \mathit{be\_angry} \leftimpl \mathit{can\_write}.
+\end{align*}
+Suppose you have met a friend recently and know that he had one of his arms broken, but do not know which one. Now suppose we did not receive a greeting card for your birthday and wonder if you should be angry on him or he just could not write because his right hand is broken. In example, \dlvhex{} will generate two possible explanations. The first rule is called a disjunctive rule; the v is read as \enquote{or} and the whole rule is read as \enquote{For sure, either the left or the right arm is broken.} Without being sure which arm is broken \dlvhex{} will evaluate the program and produce the two models $\mathit{\{left\_arm\_broken, can\_write, be\_angry\}}$ and $\mathit{\{right\_arm\_broken\}}$.  
 
 \subsection{Built-in Arithmetic Functions}
 Beside integers (constant arithmetic functions), written as sequence of digits 0 \dots 9, \dlvhex{} supports other types of arithmetic functions. We are using the following operators for those functions: + (addition), - (subtraction), * (multiplication), / (integer division). \\ \textbf{Example 3.5.}
