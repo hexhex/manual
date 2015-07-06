@@ -11,7 +11,6 @@
     literate={~} {$\sim$}{1}
 }
 
-
 \begin{document}
 \setcounter{page}{3}
 \newcommand{\dlvhex}{{\sc dlvhex}}
@@ -323,92 +322,95 @@ Disjunctive logic programs permit the connective 'v' between atoms in rule heads
 Suppose you have met a friend recently and know that he had one of his arms broken, but do not know which one. Now suppose we did not receive a greeting card for your birthday and wonder if you should be angry on him or he just could not write because his right hand is broken. In example, \dlvhex{} will generate two possible explanations. The first rule is called a disjunctive rule; the v is read as \enquote{or} and the whole rule is read as \enquote{For sure, either the left or the right arm is broken.} Without being sure which arm is broken \dlvhex{} will evaluate the program and produce the two models $\mathit{\{left\_arm\_broken, can\_write, be\_angry\}}$ and $\mathit{\{right\_arm\_broken\}}$.  
 
 \subsection{Built-in Arithmetic Functions}
-Beside integers (constant arithmetic functions), written as sequence of digits 0 \dots 9, \dlvhex{} supports other types of arithmetic functions. We are using the following operators for those functions: + (addition), - (subtraction), * (multiplication), / (integer division). \\ \textbf{Example 3.5.}
-\begin{lstlisting}
-% This example demonstrates usage of built-in arithmetic functions
-a(6).
-b(2).
+Beside integers (constant arithmetic functions), written as sequence of digits $0$ \dots $9$, \dlvhex{} supports other types of arithmetic functions. We are using the following operators for those functions: + (addition), - (subtraction), * (multiplication), / (integer division). 
 
-c(X,Y,XX) :- a(X), b(Y),+(X, Y, XX).
-d(X,Y,XX) :- a(X), b(Y),-(X, Y, XX).
-e(X,Y,XX) :- a(X), b(Y),*(X, Y, XX).
-f(X,Y,XX) :- a(X), b(Y),/(X, Y, XX).
-\end{lstlisting}
-The single answer set for the example above is: \\ \texttt{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}
-\\Except \texttt{prefix notation} we can also use \texttt{infix notation} to use built-in arithmetic functions in \dlvhex{}. Instead of writing +(X, Y, XX) alternatively we can write it as XX=X+Y. 
-     
+\textbf{Example 3.5.}
+\begin{align*}
+& \text{\% This example demonstrates usage of built-in arithmetic functions} \\
+& \mathit{a}(6). \\
+& \mathit{b}(2). \\
+& c(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),+(X, Y, XX). \\
+& d(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),-(X, Y, XX). \\
+& e(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),*(X, Y, XX). \\
+& f(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),/(X, Y, XX).
+\end{align*}
+The single answer set for the example above is:\\ \centerline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
+\\Except \emph{prefix notation} we can also use \emph{infix notation} to use built-in arithmetic functions in \dlvhex{}. Instead of writing $\mathit{+(X, Y, XX)}$ alternatively we can write it as $\mathit{XX=X+Y}$. 
+
 \subsection{Built-in Comparison Predicates}
 \dlvhex{} feature a total order among variable-free terms using built-in predicates == (equal), != (not equal), $<$ (less than), $\leq$ (less than or equal), $>$ (greater than) and $\geq$ (greater than or equal). All kinds of constants (symbols and integers) may be compared against each other freely. If two integers are compared, the semantics are as expected. All other comparisons are just guaranteed to impose a fixed ordering over all constants. The application of comparison literals to integers is illustrated by the following example.
-\\ \textbf{Example 3.6.}
-\begin{lstlisting}
-% This example demonstrates usage of built-in 
-% comparison predicates
 
-a(1).
-a(2).
-b(1).
-
-c(X,Y) :- a(X), b(Y), X <> Y.
-d(X,Y) :- a(X), b(Y), X != Y.
-e(X,Y) :- a(X), b(Y), X < Y.
-f(X,Y) :- a(X), b(Y), X > Y.
-g(X,Y) :- a(X), b(Y), X <= Y.
-h(X,Y) :- a(X), b(Y), X >= Y.
-i(X,Y) :- a(X), b(Y), Y == 1.
-\end{lstlisting}
-The single answer set for the example above is:\\ \texttt{\{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1),h(2,1)\}}
-
+\textbf{Example 3.6.}
+\begin{align*}
+& a(1). \\
+& a(2). \\
+& b(1). \\
+& \\
+& c(X,Y) \text{ } \leftimpl \text{ } a(X), b(Y), X <> Y. \\
+& d(X,Y) :- a(X), b(Y), X \neq Y. \\
+& e(X,Y) :- a(X), b(Y), X < Y. \\
+& f(X,Y) :- a(X), b(Y), X > Y. \\
+& g(X,Y) :- a(X), b(Y), X \leq Y. \\
+& h(X,Y) :- a(X), b(Y), X \geq Y. \\
+& i(X,Y) :- a(X), b(Y), Y == 1. 
+\end{align*}
+The single answer set for the example above is:\\ \centerline{ $\mathit{\{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1),h(2,1)\}}
+$}
 
 \subsection{Conditions and Conditional Literals}
-A \textit{conditional literal} is of the form \\ \centerline{$L_0:L_1,\dots,L_n$} where every \textit{$L_j$ for 0 $\leq$ j $\leq$ n} is a literal, $L_1,\dots,L_n$ is called \textit{condition}, and \enquote{:} resembles mathematical set notation. Whenever \texttt{n = 0}, it is a regular literal and we denote it usually by $L_0$.
-\\For example, the rule \\ \texttt{a :- b : c.} \\yields \texttt{a} whenever either \texttt{c} is false (whether \texttt{b} holds or not) or both \texttt{b} and \texttt{c} are true \cite{pott}. \\Together  with variables, conditions allow for specifying collections of expressions within a single rule or aggregate. This is particularly useful for encoding conjunctions(or disjunctions) over arbitrarily many ground atoms as well as for the compact representation of aggregates. 
-\\ \textbf{Example 3.7.}
-\begin{lstlisting}
-% This example demonstrates usage of conditions in rule's 
-% head and body
+A \emph{conditional literal} is of the form \\ \centerline{$L_0:L_1,\dots,L_n$} where every $\mathit{L_j \text{ } for \text{ } 0 \leq j \leq n}$ is a literal, $L_1,\dots,L_n$ is called \emph{condition}, and \enquote{:} resembles mathematical set notation. Whenever $\mathit{n = 0}$, it is a regular literal and we denote it usually by $L_0$.
 
-person(jane). person(john).
-day(mon). day(tue). day(wed). day(thu). day(fri).
-available(jane) :- not on(fri).
-available(john) :- not on(mon), not on(wed).
-meet :- available(X) : person(X).
-on(X) : day(X) :- meet.
-\end{lstlisting}  
-We have used conditions in last two lines of the code. The conjunction in the body of line 5 is obtained by replacing X in \texttt{available(X)} with all ground terms \texttt{t} such that \texttt{person(t)} holds, namely, with t=jane and t=john. The condition for the last line is contained in the head of rule. It turns into disjunction over all ground instances of \texttt{on(X)} such that X is substituted by terms t for which \texttt{day(t)} holds. Any variable occurring within a condition does not count as a positive occurrence outside the condition in the sense of safety. A variable X in an aggregate-free rule is safe if at least one of the following conditions is satisfied:\\-X occurs in a positive standard predicate in the body of the rule;\\-X occurs in a true negated standard predicate in the body of the rule;\\-X occurs in the last argument of an arithmetic predicate A and all other arguments of A are safe. \\ \\A rule is safe if all its variables are safe. Variables occurring in atoms not subject to any conditions are global. Each variable within an atom in front of a condition must be global or have a positive occurrence on the right hand-side of the condition. During grounding, the instantiation of global variables take precedence over non-global ones, that is, the former are instantiated before the latter.As a consequence, variables that occur globally are substituted by terms before a condition is further evaluated \cite{pott}.    
+For example, the rule $\mathit{a \leftimpl b : c.}$ yields $a$ whenever either $c$ is false (whether $b$ holds or not) or both $b$ and $c$ are true \cite{pott}.
+
+Together  with variables, conditions allow for specifying collections of expressions within a single rule or aggregate. This is particularly useful for encoding conjunctions(or disjunctions) over arbitrarily many ground atoms as well as for the compact representation of aggregates. 
+
+\textbf{Example 3.7.}
+\begin{align*}
+& \mathit{person}(\mathit{jane}). \text{ } \mathit{person}(\mathit{john}).\\
+& \mathit{day}(\mathit{mon}). \text{ } \mathit{day}(\mathit{tue}). \text{ } \mathit{day}(\mathit{wed}). \text{ } \mathit{day}(\mathit{thu}). \text{ } \mathit{day}(\mathit{fri}). \text{ }\\
+& \mathit{available}(\mathit{jane}) \text{ } \leftimpl \text{ } not \text{ } \mathit{on}(\mathit{fri}).\\
+& \mathit{available}(\mathit{john})\text{ } \leftimpl \text{ } \mathit{not} \text{ } \mathit{on}(\mathit{mon}), \mathit{not}  \text{ } \mathit{on}(\mathit{wed}).\\
+& \mathit{meet} \text{ } \leftimpl \text{ } \mathit{available}(X) : \mathit{person}(X).\\
+& \mathit{on}(X) : \mathit{day}(X) \text{ } \leftimpl \text{ } \mathit{meet}.
+\end{align*}  
+We have used conditions in last two lines of the code. The conjunction in the body of line 5 is obtained by replacing $X$ in $\mathit{available(X)}$ with all ground terms $t$ such that $\mathit{person(t)}$ holds, namely, with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition for the last line is contained in the head of rule. It turns into disjunction over all ground instances of $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ for which $\mathit{day(t)}$ holds. Any variable occurring within a condition does not count as a positive occurrence outside the condition in the sense of safety. A variable $X$ in an aggregate-free rule is safe if at least one of the following conditions is satisfied:\\- $X$ occurs in a positive standard predicate in the body of the rule;\\- $X$ occurs in a true negated standard predicate in the body of the rule;\\- $X$ occurs in the last argument of an arithmetic predicate $A$ and all other arguments of $A$ are safe.
+
+A rule is safe if all its variables are safe. Variables occurring in atoms not subject to any conditions are global. Each variable within an atom in front of a condition must be global or have a positive occurrence on the right hand-side of the condition. During grounding, the instantiation of global variables take precedence over non-global ones, that is, the former are instantiated before the latter.As a consequence, variables that occur globally are substituted by terms before a condition is further evaluated \cite{pott}.    
+
 \subsection{Aggregates}
 Aggregates allow to express properties over set of elements. DLV and \hex{}-programs with aggregates often allow clean and concise problem encodings by minimizing the use of auxiliary predicates and recursive programs, and help the programmers to depict problems in a more natural way. For instance, we may state that the sum of a semester's course credits must be at least 20, or that the sum of shopping items must not exceed 30 Euros. We can say that an aggregate is a function on a set of tuples that are normally subject to conditions. By comparing an aggregated value with given values, we can extract a truth value from an aggregate's evaluation, thus obtaining an aggregate atom 
-They can occur in the bodies of rule and constraints, possibly negated using negation-as-failure. \\ \texttt{Body Aggregates} The form of an \texttt{aggregate atom} occuring in a rule body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ t_1:L_1;...;t_n:L_n\} \prec_2 s_2$} 
-\\ Here, all \texttt{$t_i$} and \texttt{$L_i$}, forming \texttt{aggregate elements}, are non-empty tuples of terms and literals, respectively. $\alpha$ is the name of some function that is applied to the term tupples \texttt{$t_i$} that remain after evaluating the conditions expressed by $L_i$. Finally,  the result of applying $\alpha$ is compared by means of the comparison predicates $\prec_1 or \prec_2$ to the terms $s_1$ and $s_2$ respectively. \#count, \#sum, \#times, \#min, and \#max are called aggregate functions, and \dlvhex{} currently supports exactly these five. An aggregate function is applied over a set and returns a numeric value.
-\\ \textbf{Example 3.8.}
-\begin{lstlisting}
-% This example demonstrates usage of aggregate functions:
-% Each employee is is represented by a fact of the form 
-% emp(ID,NAME,SALARY)
+They can occur in the bodies of rule and constraints, possibly negated using negation-as-failure.
 
-emp(1,goofie,1250).
-emp(2,willy,700).
-emp(3,woody,750).
-emp(4,jerry,900).
-emp(5,tom,1050).
-\end{lstlisting}
-Intuitively the symbolic set appearing in the aggregate predicate consists of two ground predicates: \\ \centerline{$\{<1,over1000(1,1250)>,<5,over1000(5,1050)>\}$}
-\\which are both true w.r.t. the unique model of the whole program, hence \\ \centerline{$ \#count\{over1000(1,1250),over1000(5,1050)\}$} \\returns 2 as output of aggregate function and outputs:\\ \texttt{(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),\\emp(5,tom,1050),over1000(1,1250),over1000(5,1050),over1000nr(2)}
+\emph{Body Aggregates} The form of an \emph{aggregate atom} occuring in a rule body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ t_1:L_1;...;t_n:L_n\} \prec_2 s_2$} 
+\\ Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming \emph{aggregate elements}, are non-empty tuples of terms and literals, respectively. $\alpha$ is the name of some function that is applied to the term tupples \texttt{$t_i$} that remain after evaluating the conditions expressed by $L_i$. Finally,  the result of applying $\alpha$ is compared by means of the comparison predicates $\prec_1 or \prec_2$ to the terms $s_1$ and $s_2$ respectively. \#count, \#sum, \#times, \#min, and \#max are called aggregate functions, and \dlvhex{} currently supports exactly these five. An aggregate function is applied over a set and returns a numeric value.
+
+
+\textbf{Example 3.8.}
+\begin{align*}
+& emp(1,goofie,1250).\\
+& emp(2,willy,700).\\
+& emp(3,woody,750).\\
+& emp(4,jerry,900).\\
+& emp(5,tom,1050). \\
+& over1000(I,S) \leftimpl emp(I,N,S), S > 1000.\\
+& over1000nr(X) \leftimpl \#count\{I : over1000(I,W)\} = X, \#int(X).
+\end{align*}
+Intuitively the symbolic set appearing in the aggregate predicate consists of two ground predicates: \\ \centerline{$\{\langle 1 \rangle,\langle 5 \rangle\}$}
+\\which are both true w.r.t. the unique model of the whole program, hence \\ \centerline{$ \#count\{over1000(1,1250),over1000(5,1050)\}$} \\returns 2 as output of aggregate function and outputs:\\ \centerline{ $\mathit{emph(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),}$}
+\\ \centerline{ $\mathit{emp(5,tom,1050),over1000(1,1250),over1000(5,1050),over1000nr(2)}$}
 \\as a result of the program.
-The aggregate function \texttt{\#count} returns the cardinality of the symbolic set to which it is applied. We want to count how many employees of the company earn more than 1000. 
-\begin{lstlisting}
-over1000(I,S) :- emp(I,N,S), S > 1000.
-over1000nr(X) :- #count{I : over1000(I,W)} = X, #int(X).
-\end{lstlisting}
-\bigskip Let $f(S)$ be an aggregate function. A variable, X, is a \texttt{local variable} to $f(S)$ if and only if X appears in S and X does not appear in any aggregate function that is outer to $f(S)$. Aggregate function \texttt{\#sum} returns the sum of the first local variable to be aggregated over in the symbolic set. Suppose we want to know how much the Cartoon Co. spends on salaries.
-\begin{lstlisting}
-salaryTotal(X) :- #sum{S,I : emp(I,N,S)} = X.
-\end{lstlisting}
-The symbolic set here consists of 5 elements, namely all of the facts stored in the database of the employees. The aggregate function applied to the given set returns the sum of the salaries of all the employees, the output thus is:
-{salaryTotal(4650)}. \textbf{\#times} is similar to \#sum, but computes the product of the first local variable to be aggregated over in the symbolic set. When applied over the empty set, \#times returns 1.
-\bigskip \\The aggregate function \textbf{\#min} returns the minimum value of the first local variable to be aggregated over in the symbolic set. The following simple program then returns the lowest income among all employees.
-\begin{lstlisting}
-lowest(X) :- #min{S : emp(I,N,S)} = X.
-\end{lstlisting}
+The aggregate function $\mathit{\#count}$ returns the cardinality of the symbolic set to which it is applied. We want to count how many employees of the company earn more than 1000. 
+
+\bigskip Let $f(S)$ be an aggregate function. A variable, X, is a \emph{local variable} to $f(S)$ if and only if $X$ appears in $S$ and $X$ does not appear in any aggregate function that is outer to $f(S)$. Aggregate function $\mathit{\#sum}$ returns the sum of the first local variable to be aggregated over in the symbolic set. Suppose we want to know how much the Cartoon Co. spends on salaries.
+\begin{align*}
+\mathit{salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : \mathit{emp(I,N,S)}\} = X.
+\end{align*}
+The symbolic set here consists of 5 elements, namely all of the facts stored in the database of the employees. The aggregate function applied to the given set returns the sum of the salaries of all the employees, the output thus is: \\ \centerline{
+\{$\mathit{salaryTotal(4650)}$\}}. $\mathit{\#times}$ is similar to $\mathit{\#sum}$, but computes the product of the first local variable to be aggregated over in the symbolic set. When applied over the empty set, $\mathit{\#times}$ returns 1.
+\bigskip \\The aggregate function $\mathit{\#min}$ returns the minimum value of the first local variable to be aggregated over in the symbolic set. The following simple program then returns the lowest income among all employees.
+\begin{align*}
+& lowest(X) \leftimpl \#min\{S : emp(I,N,S)\} = X.
+\end{align*}
 The aggregate function applied to the given set returns the minimum salary among of all the employees, the output thus is:
 {lowest(700)}
 \bigskip \\ The aggregate function \textbf{\#max} returns the maximum value of the first local variable to be aggregated over in the symbolic set. The following program computes the maximum income earned in the company
