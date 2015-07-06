@@ -21,19 +21,19 @@
 \begin{titlepage}
     \centering
     \vfill
-    \includegraphics[width=15cm,height=6cm]{biglogo_whitebg}
+    \includegraphics[width=16cm,height=3.5cm]{biglogo_whitebg}
     \vfill
     {\bfseries\Large
         User Guide
         \vskip4cm
-        Christoph Redl\vskip1cm Mustafa Mehuljic
+        Mustafa Mehuljic \vskip1cm Christoph Redl
     }    
     
 \end{titlepage}
 
 % Abstract part
 \begin{abstract}
-This document provides a user guide for the Answer Set Programming(ASP) system called \dlvhex{} developed at Vienna University of Technology. ASP is a declarative problem solving paradigm, rooted in Logic Programming and Nonmonotonic Reasoning, which has been gaining increasing attention during the last years. The \dlvhex{} system is a logic-programming reasoner for computing the models of so-called \hex{}-programs, which are an extension of \emph{answer-set programs} towards integration of \emph{external computation sources}. This guide aims at enabling users of this system to interoperate with a broader set of external computation sources. The guide refers to release 2.4.     
+This document provides a user guide for the Answer Set Programming (ASP) system called \dlvhex{} developed at Vienna University of Technology. ASP is a declarative problem solving paradigm, rooted in Logic programming and nonmonotonic reasoning, which has been gaining increasing attention during the last years. The \dlvhex{} system is a reasoner for computing the models of so-called \hex{}-programs, which are an extension of \emph{answer-set programs} towards integration of \emph{external computation sources}. This guide aims at enabling users of this system to interoperate with a broader set of external computation sources. The guide refers to release 2.4.     
 \end{abstract}
 
 % Generates table of contents
@@ -45,22 +45,20 @@ The \dlvhex{} system is a logic-programming reasoner for computing the models of
 
 This guide helps ASP novices to make use of the system with all its features. It provides a reference of the features of the tool that ASP might be tempted to exploit. The language of \hex{}-programs is an extension of disjunctive datalog. It largely implements the ASP-Core-2 Standard \cite{ref} and extends it with external atoms. 
 
-In this guide we try explain the fundamentals of using \dlvhex{} to make that reader benefit from them by significantly reducing the time to solve difficult computational problems. 
 
 \subsection{Download and Installation}
-\dlvhex{} is written in C++ programming-language and it is published under GNU Lesser General Public License \cite{licnc}. In this section we provide overview of the download and installation process. For a quick overview, some examples and the possibility to evaluate \hex{}-programs directly in the browser, the online demo at \cite{onlinedemo} is provided. However the system can also be installed locally. 
+\dlvhex{} is written in the C++ programming-language and published under the GNU Lesser General Public License \cite{licnc}. In this section we provide overview of the download and installation process. For a quick overview, some examples and the possibility to evaluate \hex{}-programs directly in the browser, the online demo at \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/demo.php} is provided. However the system can also be installed locally. 
 
 \subsubsection{Building from source}
-There are two possibilities to install \dlvhex{} system from source. One possibility is to install latest stable release of the system or to install latest development version which may not be stable. Both ways are described in following sections.  
+There are two possibilities to install \dlvhex{} system from source: install the latest stable release of the system or install the latest development version which may not be stable. Both ways are described in following sections.  
 
 \paragraph{Latest release version (tarball)}
-Packages (tarballs) of \dlvhex{} can be downloaded from the project page \cite{sourceforge}. The latest release of the software runs on Linux-based systems, Mac OS X and Microsoft Windows. The latest stable release version of the \dlvhex{} can be found at: \url{http://sourceforge.net/projects/dlvhex/files/}. Installation instructions are given in the {\tt INSTALL} and {\tt README} files of the \dlvhex{} and plugin source directories. Changes between versions can be found in the {\tt NEWS} files and in detail in the {\tt ChangeLog} file. 
+Packages (tarballs) of \dlvhex{} can be downloaded from the project page \url{http://sourceforge.net/projects/dlvhex/files/dlvhex/2.4.0/dlvhex-2.4.0.tar.gz/download}. The latest release of the software runs on Linux-based systems, Mac OS X and Microsoft Windows. Installation instructions are given in the {\tt INSTALL} and {\tt README} files of the \dlvhex{} and plugin source directories. Changes between versions can be found in the {\tt NEWS} files and in detail in the {\tt ChangeLog} file. 
 
-The system requires the following packages: git, gcc (version 4.8 or later), g++ (version 4.8 or later), libbz2-dev, Python (version 2.7 or later), bison, scons, cmake, automake, autoconf, libstdc++ (version 4.8 or later), libcurl4 and libool. Also Boost Library (version 1.55 or later) is required. Latest Boost Library version is available at \url{http://www.boost.org/}. After downloading it to the new folder the following steps should be followed in order to properly install Boost Library. Downloaded file should be moved to the folder where Boost Library will be installed. File should be extracted and following command executed:
+The system requires the following packages: git, gcc (version 4.8 or later), g++ (version 4.8 or later), BZ2 library, Python (version 2.7 or later), bison, scons, cmake, automake, autoconf, libstdc++ (version 4.8 or later), Curl Library (version 4 or later) and libool. Also Boost Library (version 1.55 or later) is required. The latest Boost Library version is available at \url{http://www.boost.org/}. After downloading it to the new folder the following steps should be followed in order to properly install it. After extraction, the folwing commands need to be executed:
 \\ \centerline{\texttt{./bootstrap.sh}}
-Running bootstrap script will download and install all dependencies required.
-\centerline{\texttt{./b2 install --prefix=PREFIX}} After running bootstrap script we will execute this command. In this command PREFIX is a directory where you want Boost.Build to be installed. After downloading latest release version by executing following sequence of commands \dlvhex{} will be successfully installed on your system.
-\\ \centerline{\texttt{./configure}} After successful download one have to run configure script in order to check and install all missing libraries. It will prepare system for the building. If you want to use python features in \dlvhex you can enable it by typing \texttt{--enable-python} as option for configure.
+\centerline{\texttt{./b2 install --prefix=PREFIX}} In this command PREFIX is a directory where Boost should be installed. After downloading latest release version by executing following sequence of commands \dlvhex{} will be successfully installed.
+\\ \centerline{\texttt{./configure}} To enable Python features of \dlvhex{}, \texttt{--enable-python} is to be added as option of configure.
 \\ \centerline{\texttt{make}} When system is ready for building we will execute make command which will do it. To allow using of multiple cores one should specify -j option to make as well as number of cores which can be used.
 \\ \centerline{\texttt{make install}} This installs the package in the place specified with configure.  
    
