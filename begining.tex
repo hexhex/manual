@@ -303,7 +303,7 @@ The \emph{head} $A_0$ of a rule or a fact is an atom of the same syntatic form a
 Suppose we met a friend recently and know that he had one of his arms broken, but do not know which one. Now suppose we did not receive a greeting card for your birthday and wonder if you should be angry on him or he just could not write because his right hand is broken. In the example, \dlvhex{} will generate two possible explanations. The first rule is called a disjunctive rule which is read as \enquote{For sure, either the left or the right arm is broken.} Without being sure which arm is broken \dlvhex{} will evaluate the program and produce the two models $\mathit{\{left\_arm\_broken, can\_write, be\_angry\}}$ and $\mathit{\{right\_arm\_broken\}}$.  
 
 \subsection{Built-in Arithmetic Functions}
-Beside integers (constant arithmetic functions), written as sequence of digits $0$ \dots $9$, \dlvhex{} supports other types of arithmetic functions. We are using the following operators for those functions: $+$ (addition), $-$ (subtraction), $*$ (multiplication), $/$ (integer division). 
+Besides integers (constant arithmetic functions), written as sequence of digits $0$,\dots,$9$, \dlvhex{} supports other types of arithmetic functions. We are using the following operators for those functions: $+$ (addition), $-$ (subtraction), $*$ (multiplication), $/$ (integer division). 
 
 \textbf{Example 3.5.}
 \begin{align*}
@@ -363,10 +363,10 @@ We have used the conditions in last two lines of the code. The \emph{conjunction
 Variables occurring in atoms not subject to any conditions are global. Each variable within an atom in front of a condition must be global or have a positive occurrence on the right hand-side of the condition. During grounding, the instantiation of global variables take precedence over non-global ones, that is, the former are instantiated before the latter. As a consequence, variables that occur globally are substituted by terms before a condition is further evaluated \cite{pott}.    
 
 \subsection{Aggregates}
-Aggregates allow to express properties over set of elements. DLV and \hex{}-programs with aggregates often allow clean and concise problem encodings by minimizing the use of auxiliary predicates and recursive programs, and help the programmers to depict problems in a more natural way. For instance, we may state that the sum of a semester's course credits must be at least 20, or that the sum of shopping items must not exceed 30 Euros. We can say that an aggregate is a function on a set of tuples that are normally subject to conditions. By comparing an aggregated value with given values, we can extract a truth value from an aggregate's evaluation, thus obtaining an aggregate atom. They can occur in the bodies of rule and constraints, possibly negated using negation-as-failure \cite{pott}.
+Aggregates allow to express properties over set of elements. \hex{}-programs with aggregates often allow clean and concise problem encodings by minimizing the use of auxiliary predicates and recursive programs, and help the programmers to depict problems in a more natural way. For instance, we may state that the sum of a semester's course credits must be at least 20, or that the sum of shopping items must not exceed 30 Euros. We can say that an aggregate is a function on a set of tuples that are normally subject to conditions. By comparing an aggregated value with given values, we can extract a truth value from an aggregate's evaluation, thus obtaining an aggregate atom. They can occur in the bodies of rule and constraints, possibly negated using negation-as-failure \cite{pott}.
 
 The form of an \emph{aggregate atom} occuring in a rule body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ t_1:L_1;...;t_n:L_n\} \prec_2 s_2$} 
-\\ Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming \emph{aggregate elements}, are non-empty tuples of terms and literals, respectively. $\alpha$ is the name of some function that is applied to the term tupples \texttt{$t_i$} that remain after evaluating the conditions expressed by $L_i$. Finally,  the result of applying $\alpha$ is compared by means of the comparison predicates $\prec_1 or \prec_2$ to the terms $s_1$ and $s_2$ respectively. $\mathit{\#count}$, $\mathit{\#sum}$, $\mathit{\#times}$, $\mathit{\#min}$, and $\mathit{\#max}$ are called aggregate functions, and \dlvhex{} currently supports exactly these five. An aggregate function is applied over a set and returns a numeric value.
+\\ Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming \emph{aggregate elements}, are non-empty tuples of terms and literals, respectively. $\alpha$ is the name of some function that is applied to the term tupples \texttt{$t_i$} that remain after evaluating the conditions expressed by $L_i$. Finally,  the result of applying $\alpha$ is compared by means of the comparison predicates $\prec_1 or \prec_2$ to the terms $s_1$ and $s_2$ respectively. $\mathit{\#count}$, $\mathit{\#sum}$, $\mathit{\#times}$, $\mathit{\#min}$, and $\mathit{\#max}$ are called aggregate functions, and \dlvhex{} currently supports exactly these five. An aggregate function is applied over a set and returns a numeric value. Let $f(S)$ be an aggregate function. A variable, X, is a \emph{local variable} to $f(S)$ if and only if $X$ appears in $S$ and $X$ does not appear in any aggregate function that is outer to $f(S)$.
 
 
 \textbf{Example 3.8.}
@@ -385,7 +385,7 @@ Intuitively the symbolic set appearing in the aggregate predicate consists of tw
 \\as a result of the program.
 The aggregate function $\mathit{\#count}$ returns the cardinality of the symbolic set to which it is applied. We want to count how many employees of the company earn more than 1000. 
 
-\bigskip Let $f(S)$ be an aggregate function. A variable, X, is a \emph{local variable} to $f(S)$ if and only if $X$ appears in $S$ and $X$ does not appear in any aggregate function that is outer to $f(S)$. Aggregate function $\mathit{\#sum}$ returns the sum of the first local variable to be aggregated over in the symbolic set. Suppose we want to know how much the Cartoon Co. spends on salaries.
+\bigskip Aggregate function $\mathit{\#sum}$ returns the sum of the first local variable to be aggregated over in the symbolic set. Suppose we want to know how much the Cartoon Co. spends on salaries.
 \begin{align*}
 \mathit{salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : \mathit{emp(I,N,S)}\} = X.
 \end{align*}
@@ -396,7 +396,7 @@ The symbolic set here consists of 5 elements, namely all of the facts stored in 
 & lowest(X) \leftimpl \#min\{S : emp(I,N,S)\} = X.
 \end{align*}
 The aggregate function applied to the given set returns the minimum salary among of all the employees, the output thus is:
-{$\mathit{lowest(700)}$}
+{$\mathit{lowest(700)}$}.
 \bigskip \\The aggregate function $\mathit{\#max}$ returns the maximum value of the first local variable to be aggregated over in the symbolic set. The following program computes the maximum income earned in the company
 \begin{align*}
 & \mathit{highest}(X) \leftimpl \mathit{\#max}\{S : \mathit{emp}(I,N,S)\} = X.
@@ -404,29 +404,39 @@ The aggregate function applied to the given set returns the minimum salary among
 and it outputs $\{highest(1250)\}$ as a highest income in the company.
 
 \subsection{Optimization}
-Introducing \emph{weak constraints} into \hex-programs allows us to formulate several optimization problems in an easy and natural way. These weak constraints are adopted from \emph{DLV}. While standard constraints (integrity constraints, strong constraints) always have to be satisfied, weak constraints should be satisfied if it is possible, but their violation does not \enquote{local variable} the models.\\The answer sets of a program P with a set W of weak constraints are those answer sets of P which minimize the violation of weak constraints respecting their weights and levels. They are called best models of (P,W). Note that a program may have several best models.\\ Weak constraints can be weighted according to their importance (the higher the weight, the more important the constraint). In the presence of weights, best models minimize the sum of the weights of the violated weak constraints. Weak constraints can also be prioritized. Under prioritization, the semantics minimizes the violation of the constraints of the highest priority level first; then the lower priority levels are considered one after the other in descending order. Syntactically, weak constraints are specified as follows. \\ \centerline{$:~ \mathit{Conj}. [\mathit{Weight}:\mathit{Level}]$} \\ where $\mathit{Conj}$ is a conjunction of (possibly negated) literals, and both $\mathit{Weight}$ and $\mathit{Level}$ are positive integers. Weights and priority levels are allowed to be variables, provided that these variables also appear in a positive literal in $\mathit{Conj}$.
+Introducing \emph{weak constraints} into \hex-programs allows us to formulate several optimization problems in an easy and natural way. These weak constraints are adopted from \emph{DLV}. While standard constraints (integrity constraints, strong constraints) always have to be satisfied, weak constraints should be satisfied if it is possible.
+
+
+The answer sets of a program P with a set W of weak constraints are those answer sets of P which minimize the violation of weak constraints respecting their weights and levels. They are called best models of (P,W). Note that a program may have several best models.
+
+
+Weak constraints can be weighted according to their importance (the higher the weight, the more important the constraint). In the presence of weights, best models minimize the sum of the weights of the violated weak constraints. Weak constraints can also be prioritized. Under prioritization, the semantics minimizes the violation of the constraints of the highest priority level first; then the lower priority levels are considered one after the other in descending order. Syntactically, weak constraints are specified as follows. \\ \centerline{:$\mathit{Conj}. [\mathit{Weight}:\mathit{Level}]$} \\ where $\mathit{Conj}$ is a conjunction of (possibly negated) literals, and both $\mathit{Weight}$ and $\mathit{Level}$ are positive integers. Weights and priority levels are allowed to be variables, provided that these variables also appear in a positive literal in $\mathit{Conj}$.
 The following program, computes the minimum spanning trees of a weighed directed graph.
 
 \textbf{Example 3.9.}
 \begin{align*}
-& \mathit{root}(a). \\
-& \mathit{node}(a). \mathit{node}(b). \mathit{node}(c). \mathit{node}(d). \mathit{node}(e). \\
-& \mathit{edge}(a,b,4). \mathit{edge}(a,c,3). \mathit{edge}(c,b,2). \mathit{edge}(c,d,3). \\
-& \mathit{edge}(b,e,4). \mathit{edge}(d,e,5). \\
-& \\
-& \mathit{in\_tree}(X,Y,C) \vee \mathit{out\_tree}(X,Y) \leftimpl \mathit{edge}(X,Y,C), \mathit{reached}(X). \\
-& \leftimpl \mathit{root}(X), \mathit{in\_tree}(\_,X,C).\\
-& \leftimpl \mathit{in\_tree}(X,Y,C), \mathit{in\_tree}(Z,Y,C), X \neq Z. \\
-&  \\
-& \mathit{reached}(X) \leftimpl \mathit{root}(X). \\
-& \mathit{reached}(Y) \leftimpl \mathit{reached}(X), \mathit{in\_tree}(X,Y,C). \\
-& \leftimpl \mathit{node}(X), \mathit{not} \mathit{reached}(X). \\
-&   \\
-& : \mathit{in\_tree}(X,Y,C). [C:1]
+r_1\colon& \mathit{root}(a). \\
+r_2\colon& \mathit{node}(a). \mathit{node}(b). \mathit{node}(c). \mathit{node}(d). \mathit{node}(e). \\
+r_3\colon& \mathit{edge}(a,b,4). \mathit{edge}(a,c,3). \mathit{edge}(c,b,2). \mathit{edge}(c,d,3). \\
+r_4\colon& \mathit{edge}(b,e,4). \mathit{edge}(d,e,5). \\
+r_5\colon& \\
+r_6 \colon & \mathit{in\_tree}(X,Y,C) \vee \mathit{out\_tree}(X,Y) \leftimpl \mathit{edge}(X,Y,C), \mathit{reached}(X). \\
+r_7\colon& \leftimpl \mathit{root}(X), \mathit{in\_tree}(\_,X,C).\\
+r_8\colon& \leftimpl \mathit{in\_tree}(X,Y,C), \mathit{in\_tree}(Z,Y,C), X \neq Z. \\
+r_9\colon&  \\
+r_{10}\colon& \mathit{reached}(X) \leftimpl \mathit{root}(X). \\
+r_{11}\colon& \mathit{reached}(Y) \leftimpl \mathit{reached}(X), \mathit{in\_tree}(X,Y,C). \\
+r_{12}\colon& \leftimpl \mathit{node}(X), \mathit{not} \text{ } \mathit{reached}(X). \\
+r_{13}\colon&   \\
+r_{14}\colon&\mathit{ \sim in\_tree}(X,Y,C). [C:1]
 \end{align*}
 Best model: $\mathit{\{reached(a), out\_tree(a,b), in\_tree(a,c,3), reached(b), reached(c),}\\ \mathit{ in\_tree(b,e,4), in\_tree(c,b,2), in\_tree(c,d,3), reached(e), reached(d),} \\ \mathit{  out\_tree(d,e)\}}$
 \\Cost ([Weight:Level]): $<[12:1]>$
-\\Finally, we show an example where both weights and priorities are specified. This example and some others are taken from the DLV-User Manual \cite{dlvum}. Consider the problem of assigning a given set of employees to two projects. As a minor desideratum, we wish that members of the same group already know each other. Higher level constraints ask each group to be heterogeneous as far as skills are concerned, and require that people married with one another do not work in the same group.
+
+Fact from the $r_1$ of the example above defines root node of a tree. Nodes and edges are defined in $r_2$ and $r_3$. Rule from the $r_6$ determines is an edge going from node $X$ (node $X$ is already reached) in the minimum spanning tree or not. Integrity constraint from $r_7$ ensures that there is no incoming edges to the root node. $r_8$ eliminates all answer sets where there are two outgoing edges going to same node $Y$. In the $r_{10}$ and $r_{11}$ we have rules that are deciding is node reached or not. $r_{11}$ removes all answer sets where there is any node which is not discovered. Last line of the program is weak constraint with weight $C$ and level 1. Weak constraint should be satisfied, but their violation does not kill the model. Aim is to minimize number of violated weak constraints. In our best model there is no weak constraint which is not satisfied and cost is 12.  
+
+
+Finally, we show an example where both weights and priorities are specified. This example and some others are taken from the DLV-User Manual \cite{dlvum}. Consider the problem of assigning a given set of employees to two projects. As a minor desideratum, we wish that members of the same group already know each other. Higher level constraints ask each group to be heterogeneous as far as skills are concerned, and require that people married with one another do not work in the same group.
 
 \textbf{Example 3.10.}
 \begin{align*}
