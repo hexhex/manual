@@ -433,29 +433,32 @@ r_{14}\colon&\mathit{ \sim in\_tree}(X,Y,C). [C:1]
 Best model: $\mathit{\{reached(a), out\_tree(a,b), in\_tree(a,c,3), reached(b), reached(c),}\\ \mathit{ in\_tree(b,e,4), in\_tree(c,b,2), in\_tree(c,d,3), reached(e), reached(d),} \\ \mathit{  out\_tree(d,e)\}}$
 \\Cost ([Weight:Level]): $<[12:1]>$
 
-Fact from the $r_1$ of the example above defines root node of a tree. Nodes and edges are defined in $r_2$ and $r_3$. Rule from the $r_6$ determines is an edge going from node $X$ (node $X$ is already reached) in the minimum spanning tree or not. Integrity constraint from $r_7$ ensures that there is no incoming edges to the root node. $r_8$ eliminates all answer sets where there are two outgoing edges going to same node $Y$. In the $r_{10}$ and $r_{11}$ we have rules that are deciding is node reached or not. $r_{11}$ removes all answer sets where there is any node which is not discovered. Last line of the program is weak constraint with weight $C$ and level 1. Weak constraint should be satisfied, but their violation does not kill the model. Aim is to minimize number of violated weak constraints. In our best model there is no weak constraint which is not satisfied and cost is 12.  
+Fact from the $r_1$ of the example above defines root node of a tree. Nodes and edges are defined in $r_2$ and $r_3$. Rule from the $r_6$ determines is an edge going from node $X$ (node $X$ is already reached) in the minimum spanning tree or out of it. Integrity constraint from $r_7$ ensures that there is no incoming edges to the root node. $r_8$ eliminates all answer sets where there are two outgoing edges going to same node $Y$. In the $r_{10}$ and $r_{11}$ we have rules that are deciding is node reached or not. $r_{11}$ removes all answer sets where there is any node which is not discovered. Last line of the program is weak constraint with weight $C$ and level 1. Weak constraint should be satisfied, but their violation does not kill the model. Aim is to minimize number of violated weak constraints. In our best model there is no weak constraint which is not satisfied and cost is 12.  
 
 
 Finally, we show an example where both weights and priorities are specified. This example and some others are taken from the DLV-User Manual \cite{dlvum}. Consider the problem of assigning a given set of employees to two projects. As a minor desideratum, we wish that members of the same group already know each other. Higher level constraints ask each group to be heterogeneous as far as skills are concerned, and require that people married with one another do not work in the same group.
 
 \textbf{Example 3.10.}
 \begin{align*}
-& \mathit{employee}(a). \mathit{employee}(b).   \mathit{employee}(c). \mathit{employee(d)}. \\
-& \mathit{employee}(e). \\
-& \mathit{know}(a,b). \mathit{know}(b,c). \mathit{know}(c,d). \mathit{know}(d,e). \\
-& \mathit{same\_skill}(a,b). \\
-& \mathit{married(c,d)}. \\
-&  \\ 
-& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) \leftimpl \mathit{employee}(X).\\
-& : \sim \mathit{member}(X,P), \mathit{member}(Y,P), X \neq Y, \mathit{not} \text{ } \mathit{know(X,Y)}. & [1:1] \\
-& : \sim  \mathit{member}(X,P), \mathit{member}(Y,P), X \neq Y, \mathit{marrie}d(X,Y). & [1:2]\\
-& : \sim member(X,P), member(Y,P), X \neq Y, same\_skill(X,Y). & [1:2] 
+r_1\colon& \mathit{employee}(a). \text{ } \mathit{employee}(b). \text{ }  \mathit{employee}(c). \text{ } \mathit{employee(d)}. \\
+r_2\colon& \mathit{employee}(e). \\
+r_3\colon& \mathit{know}(a,b). \text{ } \mathit{know}(b,c). \text{ } \mathit{know}(c,d). \text{ } \mathit{know}(d,e). \\
+r_4\colon& \mathit{same\_skill}(a,b). \\
+r_5\colon& \mathit{married(c,d)}. \\
+r_6\colon&  \\ 
+r_7\colon& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) \leftimpl \mathit{employee}(X).\\
+r_8\colon& : \sim \mathit{member}(X,P), \mathit{member}(Y,P), X \neq Y, \mathit{not} \text{ } \mathit{know(X,Y)}. \colon& [1:1] \\
+r_{9}\colon& : \sim  \mathit{member}(X,P), \mathit{member}(Y,P), X \neq Y, \mathit{marrie}d(X,Y). & [1:2]\\
+r_{10}\colon& : \sim member(X,P), member(Y,P), X \neq Y, same\_skill(X,Y). & [1:2] 
 \end{align*}
 This program has two best models:
 \\ \{$\mathit{member}(a,p2), \mathit{member}(b,p1), \mathit{member}(c,p1), \mathit{member}(d,p2), \mathit{member}(e,p2)$\}
 \\$\mathit{Cost}$ ($[ \mathit{Weight:Level]}$): $ \langle [6:1],[0:2] \rangle $
+\\ \{$\mathit{member}(a,p1), \mathit{member}(b,p2), \mathit{member}(c,p2), \mathit{member}(d,p1), \mathit{member}(e,p1)$\}
 \\$\mathit{Cost}$ ($[ \mathit{Weight:Level]}$): $ \langle [6:1],[0:2] \rangle $ '\\
-\{$\mathit{member}(a,p1), \mathit{member}(b,p2), \mathit{member}(c,p2), \mathit{member}(d,p1), \mathit{member}(e,p1)$\}
+
+In the $r_1$ and $r_2$ we defined employees as a set of the facts. Rows $r_3$, $r_4$ and $r_5$ specify $\mathit{know}$, $\mathit{same\_skill}$ and $\mathit{married}$ relations between some of employees. Since $\mathit{employee}(X)$ is true, each $\mathit{employee}$ will be assigned either to the project 1 or project 2.    
+
 
 \subsection{Higher-order Atoms}
 Now we introduce the most specific feature of \dlvhex{} compared to other ASP solvers. \hex{}-programs are nonmonotonic logic programs admitting \emph{high-order atoms}, and we extend the well known answer-set semantics to this class of programs.
