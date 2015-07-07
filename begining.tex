@@ -7,6 +7,7 @@
 \usepackage{csquotes}
 \newcommand{\ext}[3]{\ensuremath{\&{#1}[#2](#3)}}
 \DeclareMathOperator{\leftimpl}{:-}
+\setlength{\tabcolsep}{1.5pt}
 \lstset{
     literate={~} {$\sim$}{1}
 }
@@ -103,13 +104,13 @@ Consider the situation where a birthday party should be organized and a specific
 In this section we provide extensive explanation of the social graph problem which we explained in Section 2.1. 
 To provide better understanding of the problem every single line is explained.
 \begin{align*}
-r_1\colon& \mathit{personOfInterest}(\mathit{john}).\\
-r_2\colon& \mathit{friendOfDegree}(\mathit{P, 0, P}) \leftimpl \mathit{personOfInterest}(P).\\
-r_{3}\colon& \mathit{friendOfDegree}(\mathit{P, DegPlus, F2}) \leftimpl \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
+r_1\colon \mathit{personOfInterest}(\mathit{john}).&\\
+r_2\colon \mathit{friendOfDegree}(\mathit{P, 0, P}) \leftimpl & \mathit{personOfInterest}(P).\\
+r_{3}\colon \mathit{friendOfDegree}(\mathit{P, DegPlus, F2}) \leftimpl & \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
 & \ext{friendsOf}{F1}{F2}, \mathit{DegPlus = DegPlus + 1}, \mathit{DegPlus < 2},\\
 & \mathit{\#int(DegPlus)}, \mathit{\#int(Deg)}.\\
-r_{4}\colon& \mathit{invite(P)} \text{ v } \mathit{ninvite(P) \leftimpl friendOfDegree(john,X,P), \#int(X).}\\
-r_{5}\colon& \leftimpl \mathit{not} \text{ 4 } = \mathit{\#count} \{ P : \mathit{invite(P)} \}.
+r_{4}\colon & \mathit{invite(P)} \text{ v } \mathit{ninvite(P) \leftimpl  friendOfDegree(john,X,P), \#int(X).}\\
+r_{5}\colon & \leftimpl   \mathit{not} \text{ 4 } = \mathit{\#count} \{ P : \mathit{invite(P)} \}.
 \end{align*}
 Line 1 of the program 
 \begin{align*}
@@ -207,88 +208,91 @@ from this program since aggregate constraint is 4 and there are only 4 distinct 
 To conclude our quickstart, let us summarize what we did before. To solve our \emph{Social graph} problem we first provided set of facts representing instance. Second, we provided an encoding of the problem applying to any instance. With the encoding at hand, we could use \dlvhex{} to find an answer sets for the our problem. 
 
 \section{Input Language}% Section No. 3
-This section provides an overview of the input language of \dlvhex{} and provide some examples to illustrate concept. Vocabulary: terms, predicates, constants, variables and external predicates.   
+This section provides an overview of the input language of \dlvhex{} and provide some examples to illustrate the concepts. 
 
 \subsection{Terms and Atoms}
-Terms may be integers, constants, strings and variables as well as the \enquote{\_} tokens. Constant names begin with lowercase leters and variable names begin with uppercase letters.
+The vocabulary consists of: terms, constants, variables and external predicates. Terms may be integers, constants, strings and variables as well as the \enquote{\_} tokens. Constant names begin with lowercase letters or are strings enclosed in quotation marks and variable names begin with uppercase letters.
 
 While a constant or string represent itself, a variable is placeholder for all variable-free terms in the language of a logic program. There is a special feature, which is called anonymous variable. The anonymous variable is denoted by ``\_" (the underscore) and is different from a usual variable. Each occurrence of \enquote{\_} represents a new and unique variable, which does not occur anywhere else in the same rule. This might be used to specify that an argument can be ignored or does not matter.
 
-An \emph{atom} has form $\mathit{p(t_1,\dots,t_n)}$ where $p$ is a predicate name, $t_1,\dots,t_n$ are terms and $n$ $\geq$ $0$ is the arity of the predicate atom; a predicate atom $p()$ of arity 0 is likewise represented by its predicate name $p$ without parentheses. Classical atoms are: $q$, $q$ and $\neg$ $q$.
+An \emph{atom} has form $\mathit{p(t_1,\dots,t_n)}$ where $p$ is a predicate name, $t_1,\dots,t_n$ are terms and $n$ $\geq$ $0$ is the arity of the predicate atom; a predicate atom $p()$ of arity 0 is likewise represented by its predicate name $p$ without parentheses. Classical atoms are: $q$, $q$ and $-$ $q$.
 
 \textbf{Example 3.1.} 
 Terms are:
 \\ \text{Constants:} $a$, $1$, $\mathit{a1}$, $\mathit{9862}$, $\mathit{c1}$
-\\ \text{Variables:} $X$, $Y$, $Z$, $\mathit{V2f}$
-\\ \text{Atoms:} $a$, $b$, $\mathit{deaf}$, $\mathit{smart}$, $a$ $\leq$ $1$, $\neg$ $a$
-\\ \text{Predicates:} $\mathit{parent}(X,Y)$, $\mathit{employee}(name, salary, ID, location)$
+\\ \text{Variables:} $X$, $Y$, $Z$
+\\ \text{Atoms:} $\mathit{parent}(X,Y)$, $\mathit{employee}(name, salary, ID, location)$
+\\ \text{Predicates:} $\mathit{parent}$ $\mathit{employee}$
        
-\subsection{Normal Programs and Integrity constraints}
-\dlvhex{} is a declarative (programming) language. This means that programmer does not write an algorithm that solves some problem but instead specifies what the solution should look like, and then solves the problem and finds solution itself. Each normal logic program is constructed using \emph{facts, rules and integrity constraints}. 
+\subsection{Normal Programs and Integrity Constraints}
+A \hex{}-program is constructed using \emph{facts, rules and integrity constraints}. 
 
-\begin{tabular}{ c c c c c c r l l }
-
- & & & & & & \text{Fact:} & $ A_0. $ \\
- & & & & & & \text{Rule:} & $ A_0 $ :- &  $L_1$,\dots,$L_n$. \\
- & & & & & & \text{Constraint:} & :- & $ L_1$,\dots,$L_n$.   \\
-
+\begin{center}
+\begin{tabular}{ r l r }
+\text{Fact:} & \texttt{$A_0$}. & \\
+\text{Rule:} & \texttt{$A_0$}& $\leftimpl$  \texttt{$L_1$},\dots, \texttt{$L_n$}. \\
+\text{Constraint:}&& $\leftimpl$  \texttt{$L_1$},\dots,\texttt{$L_n$}. 
 \end{tabular}
-\\Facts are always true. The sign \enquote{$\leftimpl$} is meant to be an implication to the left. The left side of a rule is called its \emph{head}, and right side is called its \emph{body}. The \emph{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \emph{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or \emph{not} A, where A is an atom and the connective \emph{not} denotes default negation. We say that literal L is positive if it is an atom and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive atoms in the rule body are true and negated atoms are false, then $A_0$ must be true. On the other hand, an integrity constraint is a rule that filters solution candidates, meaning that the literals in its body must not jointly be satisfied. A result of \dlvhex{} computation is called a \emph{model}. The meaning of this is clear: it is a consistent explanation(model) of the world, as far as it system can derive it. If \dlvhex{} cannot find solution then there is no model for the given problem.
+\end{center}
+The sign \enquote{$\leftimpl$} is meant to be an implication to the left. The left side of a rule is called its head, and right side is called its body. The head \texttt{$A_0$} of a rule or a fact is an atom of the same syntatic form as a constant or function. In the body of a rule or an integrity constraint, every \texttt{$L_j$} for 1 $\leq$ j $\leq$ n is a literal of the form \texttt{A} or \texttt{not A}, where \texttt{A} is an atom and the connective \texttt{not} denotes default negation. We say that literal L is positive if it is an atom and negative otherwise. While the head atom \texttt{$A_0$} of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive atoms in the rule body are true and negated atoms are false, then $A_0$ must be true. On the other hand, an integrity constraint is a rule that filters solution candidates, meaning that the literals in its body must not jointly be satisfied. A result of \dlvhex{} computation is called an \emph{answer set} which is a consistent explanation(model) of the world.
 
 \textbf{Example 3.1.} Consider the following logic program:
 \begin{align*}
 \mathit{ joke }.& \\
 \mathit{ laugh } & \leftimpl \mathit{ joke }.
 \end{align*} 
-The first line here represents an \emph{atom} which is always true. The second line is a \emph{rule} and reads as \enquote{If joke is true, laugh must also be true}. Also we can read this as \enquote{from joke follows laugh}. The single \emph{model} of above program is $\{joke, laugh\}$ since they are the atoms which are true in the program. \\To explain the concept of \texttt{integrity constraints} we will consider following example:
+The first line here represents an \emph{atom} which is always true. The second line is a \emph{rule} and reads as \enquote{If $\mathit{joke}$ is true, $\mathit{laugh}$ must also be true}. Also we can read this as \enquote{from $\mathit{joke}$ follows $\mathit{laugh}$}. The single \emph{model} of above program is $\{\mathit{joke}, \mathit{laugh}\}$ since they are the atoms which are true in the program. To explain the concept of \emph{integrity constraints} we will consider following example:
 
 \textbf{Example 3.2.}
 \begin{align*}
-&\%  \text{ Use edges to identify the nodes.}\\
 &\mathit{node}(X) \leftimpl \mathit{edge}(X, Y). &\\
 &\mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). & \\
-&\%  \text{ Guessing part.} \\
-&\mathit{colored}(X, r) \text{ v } \mathit{colored}(X, g) \text{ v } \mathit{X, b} \leftimpl \mathit{node}(X). & \\
-&\%  \text{ Checking part.} \\
+&\mathit{colored}(X, r) \vee \mathit{colored}(X, g) \vee \mathit{X, b} \leftimpl \mathit{node}(X). & \\
 &\leftimpl \mathit{edge}(X, Y), \mathit(colored)(X, C), \mathit{colored}(Y, C) & \\
-&\% \text{ (internal) edge definition.} \\
 &\mathit{edge}(2, 4). \mathit{edge}(2, 3). \mathit{edge}(5, 5). & \\
 &\mathit{edge}(4, 6). \mathit{edge}(4, 5). \mathit{edge}(5, 7). & \\
 &\mathit{edge}(6, 7). &
 \end{align*} 
-In the first three lines one can see node declarations with variables $X$ and $Y$. We concluded that $X$ and $Y$ are variables since they begin with uppercase letter. It says that: \enquote{If $\mathit{edge}(X,Y)$ is true then $\mathit{node(X)}$ is also true}. That is, it extracts the nodes from a graph specified by its edges. In the \emph{guessing part} \dlvhex{} will list all possible models for the $\mathit{node}(X)$. Each node may be coloured with either red, green or black. We did not see construction as in checking part before. It is called as \emph{integrity constraint.} Integrity constraints in our framework specify conditions which must not become true in any model. In other words, constraints are formulations of possible inconsistencies. This mechanism is very useful in connection with disjunctive rules. The disjunctive rules serve as generators for different models and the constraints are used to select only the desired ones. Integrity constraint for this particular case will delete all those atoms from the model which does not satisfy our requirement(that there may be no edge between two nodes of equal color). Another important feature of \dlvhex{} is \emph{default negation}. Negation is treated as ``negation as failure". In other words: If an atom is not true in some model, then its negation should be considered to be true in that model. With this mechanism we can, for example, define the complementary graph of a given graph. This is the graph which has the same nodes, but of all possible edges, it has exactly those edges which do not exist in the original graph.  \newpage
+In the first three lines one can see node declarations with variables $X$ and $Y$. We concluded that $X$ and $Y$ are variables since they begin with uppercase letter. It says that: \enquote{If $\mathit{edge}(X,Y)$ is true then $\mathit{node(X)}$ is also true}. That is, it extracts the nodes from a graph specified by its edges. In the \emph{guessing part} all possible node color combinations are generated. Each node may be coloured with either red, green or black. In the checking part, integrity constraint delete all color combinations which does not satisfy the requirement that there may be no edge between two nodes of equal color. 
 
+Another important feature of \dlvhex{} is \emph{default negation}. Negation is treated as ``negation as failure". In other words: if an atom is not true in some model, then its negation should be considered to be true in that model. With this mechanism we can, for example, define the complementary graph of a given graph. This is the graph which has the same nodes, but of all possible edges, it has exactly those edges which do not exist in the original graph.
+
+Note that $\mathit{node}(X)$ and $\mathit{node}(Y)$ need to be included in the body in order to satisfy the following safety requirement for rules: \emph{Variables}, which occur in a negated literal, must also occur in a positive literal in the body.
 
 \textbf{Example 3.3.}
 \begin{align*}
 & \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).\\
 & \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). \\
 & \\
-& \mathit{comp\_edge}(X, Y) \leftimpl \mathit{node}(X), \mathit{node}(Y), \mathit{not} \mathit{edge}(X, Y). 
+& \mathit{comp\_edge}(X, Y) \leftimpl \mathit{node}(X), \mathit{node}(Y), \mathit{not} \text{ } \mathit{edge}(X, Y). 
 \end{align*}
-Here $\mathit{comp\_edge}$ describes the set of edges in the complementary graph. Such an edge must go from one node to another node (possibly the same one), and this edge must not be contained in the original edge set. Note that $\mathit{node}(X)$ and $\mathit{node}(Y)$ need to be included in the body in order to satisfy the following safety requirement for rules: \emph{Variables}, which occur in a negated literal, must also occur in a positive literal in the body.
+Here $\mathit{comp\_edge}$ describes the set of edges in the complementary graph. Such an edge must go from one node to another node (possibly the same one), and this edge must not be contained in the original edge set. 
 
 \subsection{Classical Negation}
-\dlvhex{} supports two kinds of negation. Here we will emphasize difference between explicitly expressing falseness of an atom and having it done by \emph{Complete World Assumption}. The connective $\mathit{not}$ expresses default negation, i.e. a literal $\mathit{not}$\text{ }$A$ is assumed to hold unless atom $A$ is derived to be true. In contrast, the classical (or strong) negation of an atom holds only if it can be derived. In other words if there is no evidence that an atom is true, it is considered to be false. Classical negation, indicated by symbol \enquote{-}, is permitted in from of an atoms. The semantic relationship between $A$ and $-A$ is simply that they must not jointly hold.
+\dlvhex{} supports two kinds of negation. Here we will emphasize difference between explicitly expressing falseness of an atom and having it done by \emph{Closed World Assumption}. The connective $\mathit{not}$ expresses default negation, i.e. a literal $\mathit{not}$\text{ }$A$ is assumed to hold unless atom $A$ is derived to be true. In contrast, the classical (or strong) negation of an atom holds only if it can be derived. In other words if there is no evidence that an atom is true, it is considered to be false. Classical negation, indicated by symbol \enquote{-}, is permitted in from of an atoms. The semantic relationship between $A$ and $-A$ is simply that they must not jointly hold.
 
-\textbf{Example 3.3.} Imagine a simple situation, in which and agent has to cross a railroad. The agent should cross it if there is no train approaching. With this description, one might specify the following program:
+\textbf{Example 3.3.} Imagine a situation where agent has to cross a railroad. The agent should cross it if there is no train approaching. With this description, one might specify the following program:
 \begin{align*}
  & \mathit{cross\_railroad} \leftimpl \mathit{not} \text{ } \mathit{train\_approaches}.
 \end{align*}
-The following program has the model $\mathit{cross}$ because $\mathit{train\_approaches}$ is assumed to be false (as it being true is not stated anywhere). This kind of negation is called \emph{negation as failure}.
-The next program uses so-called true or classical negation. Since $\mathit{\neg train\_approaches}$ is not known to be true, the following program has only an empty model.
+The following program has the model \{$\mathit{cross\_railroad}$\} because $\mathit{train\_approaches}$ is assumed to be false (as it being true is not stated anywhere). This kind of negation is called \emph{negation as failure}.
+The next program uses so-called true or classical negation. Since $\mathit{- train\_approaches}$ is not known to be true, the following program has only an empty model.
 \begin{align*}
-\mathit{cross\_railroad} \leftimpl \mathit{\neg train\_approaches}.
+\mathit{cross\_railroad} \leftimpl \mathit{- train\_approaches}.
 \end{align*}
-The difference between the two kinds of negation is quite important: In the first example, we cross the railroad track if we have no information on any trains approaching, which is quite dangerous, while in the second example, we only cross if we know for sure that no train comes. It is important to note that classical negation is stronger than negation as finite failure. If something is true via \emph{true negation}, it is always also true if negated by \emph{negation as failure}.
+The difference between the two kinds of negation is important: in the first example, the railroad track is crossed if there is no information on any trains approaching, which is quite dangerous, while in the second example, it is only crossed if is is known for sure that no train comes. It is important to note that classical negation is stronger than negation as finite failure.
 
 \subsection{Disjunction}
-Disjunctive logic programs permit the connective 'v' between atoms in rule heads. \\
-\begin{tabular}{ c c c c c c r l l}
- & & & & & & \text{Fact:} & $A_0$ \text{ v } \dots \text{ v } $A_m$ \\
- & & & & & & \text{Rule:} & $A_0$ \text{ v } \dots v $A_m$ $\leftimpl$ $L_1,\dots,L_n. $ \\
+Disjunctive logic programs permit the connective ``$\vee$" between atoms in rule heads. \\
+\begin{center}
+\begin{tabular}{ r l l}
+  \text{Fact:} & $A_0$ $\vee$ \dots $\vee$ $A_m$ \\
+  \text{Rule:} & $A_0$ $\vee$ \dots $\vee$ $A_m$ $\leftimpl$ $L_1,\dots,L_n. $ \\
  \end{tabular}
-\\ The \emph{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \emph{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or $\mathit{not}$ \text{}$A$, where $A$ is an atom and the connective $\mathit{not}$ denotes default negation. We say that literal $L$ is positive if it is an atom and negative otherwise. While the head atom $A_0$ of the fact must unconditionally be true, the intuitive reading of a rule corresponds to an implication: if all positive atoms in the rule body are true and negated atoms are false, then $A_0$ must be true. A \emph{disjunctive head} holds if at least one of its atoms is true. In a simple disjunctive program $\mathit{a}\text{ v }\mathit{b.}$ we have the two answer sets \{$a$\} and \{$b$\}.
+\end{center}
+A \emph{disjunctive head} holds if at least one of its atoms is true. In a simple disjunctive program $\mathit{a} \vee \mathit{b.}$ we have the two answer sets \{$a$\} and \{$b$\}. 
+
+The \emph{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \emph{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or $\mathit{not}$ \text{}$A$, where $A$ is an atom and the connective $\mathit{not}$ denotes default negation. We say that literal $L$ is positive if it is an atom and negative otherwise. 
 
 \textbf{Example 3.4.}
 \begin{align*}
@@ -296,14 +300,13 @@ Disjunctive logic programs permit the connective 'v' between atoms in rule heads
 & \mathit{can\_write} \leftimpl \mathit{left\_arm\_broken}.\\
 & \mathit{be\_angry} \leftimpl \mathit{can\_write}.
 \end{align*}
-Suppose you have met a friend recently and know that he had one of his arms broken, but do not know which one. Now suppose we did not receive a greeting card for your birthday and wonder if you should be angry on him or he just could not write because his right hand is broken. In example, \dlvhex{} will generate two possible explanations. The first rule is called a disjunctive rule; the v is read as \enquote{or} and the whole rule is read as \enquote{For sure, either the left or the right arm is broken.} Without being sure which arm is broken \dlvhex{} will evaluate the program and produce the two models $\mathit{\{left\_arm\_broken, can\_write, be\_angry\}}$ and $\mathit{\{right\_arm\_broken\}}$.  
+Suppose we met a friend recently and know that he had one of his arms broken, but do not know which one. Now suppose we did not receive a greeting card for your birthday and wonder if you should be angry on him or he just could not write because his right hand is broken. In the example, \dlvhex{} will generate two possible explanations. The first rule is called a disjunctive rule which is read as \enquote{For sure, either the left or the right arm is broken.} Without being sure which arm is broken \dlvhex{} will evaluate the program and produce the two models $\mathit{\{left\_arm\_broken, can\_write, be\_angry\}}$ and $\mathit{\{right\_arm\_broken\}}$.  
 
 \subsection{Built-in Arithmetic Functions}
-Beside integers (constant arithmetic functions), written as sequence of digits $0$ \dots $9$, \dlvhex{} supports other types of arithmetic functions. We are using the following operators for those functions: + (addition), - (subtraction), * (multiplication), / (integer division). 
+Beside integers (constant arithmetic functions), written as sequence of digits $0$ \dots $9$, \dlvhex{} supports other types of arithmetic functions. We are using the following operators for those functions: $+$ (addition), $-$ (subtraction), $*$ (multiplication), $/$ (integer division). 
 
 \textbf{Example 3.5.}
 \begin{align*}
-& \text{\% This example demonstrates usage of built-in arithmetic functions} \\
 & \mathit{a}(6). \\
 & \mathit{b}(2). \\
 & c(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),+(X, Y, XX). \\
@@ -311,11 +314,12 @@ Beside integers (constant arithmetic functions), written as sequence of digits $
 & e(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),*(X, Y, XX). \\
 & f(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),/(X, Y, XX).
 \end{align*}
+
 The single answer set for the example above is:\\ \centerline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
-\\Except \emph{prefix notation} we can also use \emph{infix notation} to use built-in arithmetic functions in \dlvhex{}. Instead of writing $\mathit{+(X, Y, XX)}$ alternatively we can write it as $\mathit{XX=X+Y}$. 
+\\Alternatively to \emph{prefix notation} one can also use \emph{infix notation} to use built-in arithmetic functions in \dlvhex{}. For instance $\mathit{+(X, Y, XX)}$ alternatively can be written as $\mathit{XX=X+Y}$. 
 
 \subsection{Built-in Comparison Predicates}
-\dlvhex{} feature a total order among variable-free terms using built-in predicates == (equal), != (not equal), $<$ (less than), $\leq$ (less than or equal), $>$ (greater than) and $\geq$ (greater than or equal). All kinds of constants (symbols and integers) may be compared against each other freely. If two integers are compared, the semantics are as expected. All other comparisons are just guaranteed to impose a fixed ordering over all constants. The application of comparison literals to integers is illustrated by the following example.
+\dlvhex{} feature a total order among variable-free terms using built-in predicates $==$ (equal), $\neq$ (not equal), $<$ (less than), $\leq$ (less than or equal), $>$ (greater than) and $\geq$ (greater than or equal). All kinds of constants (symbols and integers) may be compared against each other freely. If two integers are compared, the semantics is according to numeric values. All other comparisons are just guaranteed to impose a fixed ordering over all constants. The application of comparison literals to integers is illustrated by the following example.
 
 \textbf{Example 3.6.}
 \begin{align*}
@@ -331,15 +335,15 @@ The single answer set for the example above is:\\ \centerline{$\mathit{\{a(6),b(
 & h(X,Y) :- a(X), b(Y), X \geq Y. \\
 & i(X,Y) :- a(X), b(Y), Y == 1. 
 \end{align*}
-The single answer set for the example above is:\\ \centerline{ $\mathit{\{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1),h(2,1)\}}
-$}
+The single answer set for the example above is:\\ $\mathit{\{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1)},$\\
+$\mathit{h(2,1)}\}$
 
 \subsection{Conditions and Conditional Literals}
 A \emph{conditional literal} is of the form \\ \centerline{$L_0:L_1,\dots,L_n$} where every $\mathit{L_j \text{ } for \text{ } 0 \leq j \leq n}$ is a literal, $L_1,\dots,L_n$ is called \emph{condition}, and \enquote{:} resembles mathematical set notation. Whenever $\mathit{n = 0}$, it is a regular literal and we denote it usually by $L_0$.
 
 For example, the rule $\mathit{a \leftimpl b : c.}$ yields $a$ whenever either $c$ is false (whether $b$ holds or not) or both $b$ and $c$ are true \cite{pott}.
 
-Together  with variables, conditions allow for specifying collections of expressions within a single rule or aggregate. This is particularly useful for encoding conjunctions(or disjunctions) over arbitrarily many ground atoms as well as for the compact representation of aggregates. 
+Together  with variables, conditions allow for specifying collections of expressions within a single rule or aggregate. This is particularly useful for encoding conjunctions (or disjunctions) over arbitrarily many ground atoms as well as for the compact representation of aggregates. 
 
 \textbf{Example 3.7.}
 \begin{align*}
@@ -350,16 +354,19 @@ Together  with variables, conditions allow for specifying collections of express
 & \mathit{meet} \text{ } \leftimpl \text{ } \mathit{available}(X) : \mathit{person}(X).\\
 & \mathit{on}(X) : \mathit{day}(X) \text{ } \leftimpl \text{ } \mathit{meet}.
 \end{align*}  
-We have used conditions in last two lines of the code. The conjunction in the body of line 5 is obtained by replacing $X$ in $\mathit{available(X)}$ with all ground terms $t$ such that $\mathit{person(t)}$ holds, namely, with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition for the last line is contained in the head of rule. It turns into disjunction over all ground instances of $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ for which $\mathit{day(t)}$ holds. Any variable occurring within a condition does not count as a positive occurrence outside the condition in the sense of safety. A variable $X$ in an aggregate-free rule is safe if at least one of the following conditions is satisfied:\\- $X$ occurs in a positive standard predicate in the body of the rule;\\- $X$ occurs in a true negated standard predicate in the body of the rule;\\- $X$ occurs in the last argument of an arithmetic predicate $A$ and all other arguments of $A$ are safe.
-
-A rule is safe if all its variables are safe. Variables occurring in atoms not subject to any conditions are global. Each variable within an atom in front of a condition must be global or have a positive occurrence on the right hand-side of the condition. During grounding, the instantiation of global variables take precedence over non-global ones, that is, the former are instantiated before the latter.As a consequence, variables that occur globally are substituted by terms before a condition is further evaluated \cite{pott}.    
+We have used the conditions in last two lines of the code. The \emph{conjunction} in the body of line 5 is obtained by replacing $X$ in $\mathit{available(X)}$ with all ground terms $t$ such that $\mathit{person(t)}$ holds, namely, with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition for the last line is contained in the head of the rule. It turns into \emph{disjunction} over all ground instances of $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ for which $\mathit{day(t)}$ holds. Any variable occurring within a condition does not count as a positive occurrence outside the condition in the sense of safety. A variable $X$ in an aggregate-free rule is safe if at least one of the following conditions is satisfied:
+\begin{itemize}
+\item $X$ occurs in a positive standard predicate in the body of the rule;
+\item $X$ occurs in a true negated standard predicate in the body of the rule;
+\item $X$ occurs in the last argument of an arithmetic predicate $A$ and all other arguments of $A$ are safe.
+\end{itemize}
+Variables occurring in atoms not subject to any conditions are global. Each variable within an atom in front of a condition must be global or have a positive occurrence on the right hand-side of the condition. During grounding, the instantiation of global variables take precedence over non-global ones, that is, the former are instantiated before the latter. As a consequence, variables that occur globally are substituted by terms before a condition is further evaluated \cite{pott}.    
 
 \subsection{Aggregates}
-Aggregates allow to express properties over set of elements. DLV and \hex{}-programs with aggregates often allow clean and concise problem encodings by minimizing the use of auxiliary predicates and recursive programs, and help the programmers to depict problems in a more natural way. For instance, we may state that the sum of a semester's course credits must be at least 20, or that the sum of shopping items must not exceed 30 Euros. We can say that an aggregate is a function on a set of tuples that are normally subject to conditions. By comparing an aggregated value with given values, we can extract a truth value from an aggregate's evaluation, thus obtaining an aggregate atom 
-They can occur in the bodies of rule and constraints, possibly negated using negation-as-failure.
+Aggregates allow to express properties over set of elements. DLV and \hex{}-programs with aggregates often allow clean and concise problem encodings by minimizing the use of auxiliary predicates and recursive programs, and help the programmers to depict problems in a more natural way. For instance, we may state that the sum of a semester's course credits must be at least 20, or that the sum of shopping items must not exceed 30 Euros. We can say that an aggregate is a function on a set of tuples that are normally subject to conditions. By comparing an aggregated value with given values, we can extract a truth value from an aggregate's evaluation, thus obtaining an aggregate atom. They can occur in the bodies of rule and constraints, possibly negated using negation-as-failure \cite{pott}.
 
-\emph{Body Aggregates} The form of an \emph{aggregate atom} occuring in a rule body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ t_1:L_1;...;t_n:L_n\} \prec_2 s_2$} 
-\\ Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming \emph{aggregate elements}, are non-empty tuples of terms and literals, respectively. $\alpha$ is the name of some function that is applied to the term tupples \texttt{$t_i$} that remain after evaluating the conditions expressed by $L_i$. Finally,  the result of applying $\alpha$ is compared by means of the comparison predicates $\prec_1 or \prec_2$ to the terms $s_1$ and $s_2$ respectively. \#count, \#sum, \#times, \#min, and \#max are called aggregate functions, and \dlvhex{} currently supports exactly these five. An aggregate function is applied over a set and returns a numeric value.
+The form of an \emph{aggregate atom} occuring in a rule body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ t_1:L_1;...;t_n:L_n\} \prec_2 s_2$} 
+\\ Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming \emph{aggregate elements}, are non-empty tuples of terms and literals, respectively. $\alpha$ is the name of some function that is applied to the term tupples \texttt{$t_i$} that remain after evaluating the conditions expressed by $L_i$. Finally,  the result of applying $\alpha$ is compared by means of the comparison predicates $\prec_1 or \prec_2$ to the terms $s_1$ and $s_2$ respectively. $\mathit{\#count}$, $\mathit{\#sum}$, $\mathit{\#times}$, $\mathit{\#min}$, and $\mathit{\#max}$ are called aggregate functions, and \dlvhex{} currently supports exactly these five. An aggregate function is applied over a set and returns a numeric value.
 
 
 \textbf{Example 3.8.}
