@@ -457,7 +457,7 @@ This program has two best models:
 \\ \{$\mathit{member}(a,p1), \mathit{member}(b,p2), \mathit{member}(c,p2), \mathit{member}(d,p1), \mathit{member}(e,p1)$\}
 \\$\mathit{Cost}$ ($[ \mathit{Weight:Level]}$): $ \langle [6:1],[0:2] \rangle $ '\\
 
-In the $r_1$ and $r_2$ we defined employees as a set of the facts. Rows $r_3$, $r_4$ and $r_5$ specify $\mathit{know}$, $\mathit{same\_skill}$ and $\mathit{married}$ relations between some of employees. Since $\mathit{employee}(X)$ is true, each $\mathit{employee}$ will be assigned either to the project 1 or project 2.    
+In the $r_1$ and $r_2$ we defined employees as a set of the facts. Rows $r_3$, $r_4$ and $r_5$ specify $\mathit{know}$, $\mathit{same\_skill}$ and $\mathit{married}$ relations between some of employees. Since $\mathit{employee}(X)$ is true, each $\mathit{employee}$ will be assigned either to the project 1 or project 2 what is given in $r_7$. Last three lines of program are weak constraints, this time with same weights but different levels of priority. Under prioritization, the \dlvhex{} minimizes the violation of the constraints of the highest priority level first; then the lower priority levels are considered one after the other in descending order. This time we have two best models in our solution.     
 
 
 \subsection{Higher-order Atoms}
