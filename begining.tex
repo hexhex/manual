@@ -114,10 +114,9 @@ r_{5}\colon & \leftimpl   \mathit{not} \text{ 4 } = \mathit{\#count} \{ P : \mat
 \end{align*}
 
 
-The $r_1$ specifies that the person who organizes the event and initializes the search. 
+The rule $r_1$ specifies that the person who organizes the event and initializes the search. 
 
-The rule $r_2$ specifies that initiating person has distance 0 from itself. The main computational part of the program is the rule $r_3$.  
- we have a rule which introduces new predicate $\mathit{friendOfDegree(P,0,P)}$ which is true since $\mathit{personOfInterest}$ is true from the first fact. Note that uppercase letter $P$ is variable and it means that there could be different persons of interest from who we could start and invite people. Consider inviting friends of one person and its girlfriend friends for instance. The main computational part of the program is the following rule   
+The rule $r_2$ specifies that initiating person has distance 0 from him or her. The main computational part of the program is the rule $r_3$. The main computational part of the program is the following rule   
 \begin{align*}
 r_{3}\colon& \mathit{friendOfDegree}(\mathit{P, DegPlus, F2}) \leftimpl \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
 & \ext{friendsOf}{F1}{F2}, \mathit{DegPlus = DegPlus + 1}, \mathit{DegPlus < 2},\\
@@ -141,7 +140,7 @@ it finds all successor nodes of it and returns them in $\mathit{F2}$. The implem
 \begin{align*}
 & \mathit{friendOfDegree(P, Deg, F1)}
 \end{align*}
-Binds to the variable $\mathit{F1}$ to a person for which we will find successor nodes. This value is sent as input to the external source $mathit{Deg}$ and $\mathit{DegPlus}$ are variables used to keep distance from head node \ext{friendsOf}{$F1$}{$F2$}, which returns all friends $F2$ of $F1$. For each such $F2$, we derive:
+binds to the variable $\mathit{F1}$ to a person for which we will find successor nodes. This value is sent as input to the external source \ext{friendsOf}{$F1$}{$F2$}, which returns all friends $F2$ of $F1$. For each such $F2$, we derive:
 \begin{align*}
 & \mathit{friendOfDegree(P, DegPlus, F2)}
 \end{align*} 
@@ -170,11 +169,11 @@ which is doing the same as $r_5$ but allows for specifying lower and upper bound
 \subsection{Problem Solution}
 Now we are ready to solve our \emph{social graph} problem. Consider that we load following set of nodes and edges from the from the file:\\
 \includegraphics[width=12.5cm,height=9cm]{graph}
-\\ \\To compute an \emph{answer set} representing 
-a solution, invoke following command:
+\\ \\To compute the answer sets representing 
+the solution, the following command is to be invoked:
 \\ \centerline{\texttt{shell\$ dlvhex2 --pythonplugin=extsource.py program.hex}}
-where \texttt{program.hex} is \hex-program and \texttt{extsource.py} represents Python file with 
-external source implementation. The output of the \dlvhex{} after solving looks as follows:
+where \texttt{program.hex} is \hex-program and \texttt{extsource.py} represents the Python file with 
+external source implementation (see Section 5). The output of the \dlvhex{} is as follows:
 
 
 \begin{tabular}{ l r }
@@ -184,20 +183,29 @@ external source implementation. The output of the \dlvhex{} after solving looks 
    $\mathit{invite(mike),invite(david),invite(charly)\}}$
  \end{tabular}
 \\ \\
-The first line shows the \dlvhex{} version, compiler version and date. The following lines
-are solution of the program. Note that order in which atoms are printed does not bear any meaning. 
-Same is applied to the order of sets founded. Single \emph{answer set} for this problem contain 
-atoms given above. As it is expected, first atom is $\mathit{personOfInterest(john)}$ 
-since $\mathit{john}$ is organizing party and program should generate set/sets of the friends 
-who should be invited to the party by him. As we specified in the previous section,
-we can travel at most 1 edge far from the head node. You can see from the graph that program 
-can discover $\mathit{John, Mike, Charly and David}$ only since they are one edge far from the 
-head node. Next three atoms are saying who are the new friends discovered and at which depth 
-level. When program stop iteration through nodes due to depth constraint it starts with generating 
-$\mathit{invites}$ set. It is specified by using aggregates that answer set must have four distinct $\mathit{invites}$ atoms.
+Note that order of the atoms and the order of answer sets does not bear any meaning. Single answer set for this problem contain atoms given above. As it is expected, the first atom is $\mathit{personOfInterest(john)}$ 
+since $\mathit{john}$ is organizing the party and program should generate sets of the friends who should be invited to the party by him. As we specified in the previous section, we can travel at most 1 edge far from the root node. Considering the graph given above only $\mathit{John, Mike, Charly and David}$ are found since they are one edge far from the root node. The next three atoms express who are the new friends discovered and at which depth 
+level. For the invitations, it is specified by using aggregates that answer set must have four distinct $\mathit{invites}$ atoms.
 In single answer set we have four $\mathit{invites}$ atoms which are $\mathit{invite(john), 
 invite(mike), invite(david), invite(charly)}$. Note that this is only answer set possible 
-from this program since aggregate constraint is 4 and there are only 4 distinct person that are discovered with depth level 1. If we just allow depth level to be larger there will be so many answer sets at the output since more friends will be discovered. One can just play with \emph{Depth constraint} and \emph{Aggregate constraint} to see how real output and answer sets will be affected.    
+from this program since aggregate constraint is 4 and there are only 4 distinct person that are discovered with depth level 1. 
+
+If we just allow depth level to be larger there may be more answer sets founded due to the fact that more nodes will be discovered. If we decrease minimum number of friends to be invited to the party there may be more than one answer set. Consider that instead of 4 persons we want to invite only 3 persons to the our party. This time we have more than one answer set. Since depth level is still 2 there will be 4 persons discovered again, however out of these 4 persons we have to invite only three of them and one of them will not be invited. According to this we have 4 answer sets in the output of the program. Two of them are showed bellow:\\
+\textbf{Answer set 1:}\\
+\begin{tabular}{ l r }
+   $\mathit{\{personOfInterest(john), friendOfDegree(john,0,john),}$& \\
+   $\mathit{invite(john), friendOfDegree(john,1,mike), \mathit{ninvite(charly)},}$& \\
+   $\mathit{friendOfDegree(john,1,david), friendOfDegree(john,1,charly),}$ & \\
+   $\mathit{invite(mike),invite(david)\}}$
+ \end{tabular}
+\\ \textbf{Answer set 2:}\\
+ \begin{tabular}{ l r }
+   $\mathit{\{personOfInterest(john), friendOfDegree(john,0,john),}$& \\
+   $\mathit{invite(john), friendOfDegree(john,1,mike), \mathit{ninvite(mike)},}$& \\
+   $\mathit{friendOfDegree(john,1,david), friendOfDegree(john,1,charly),}$ & \\
+   $\mathit{invite(david),invite(charly)\}}$
+ \end{tabular}
+\\ \\ This time in answer set we $\mathit{ninvite(charly)} and \mathit{mike}$ since one friend must be discarded and only three will be invited. One can just play with \emph{Depth constraint} and \emph{Aggregate constraint} to see how real output and answer sets will be affected.    
 
 \subsection{Summary}
 To conclude our quickstart, let us summarize what we did before. To solve our \emph{Social graph} problem we first provided set of facts representing instance. Second, we provided an encoding of the problem applying to any instance. With the encoding at hand, we could use \dlvhex{} to find an answer sets for the our problem. 
