@@ -76,7 +76,7 @@ Once installation is completed, the system can be used from the terminal as foll
 We provide pre-built binaries of \dlvhex{} for some systems. For details see our website \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/index.html}. 
 
 \subsection{Outline}
-This guide is organized as follows: Section 2. provides an introductory example which will be used to explain the problem instance, the encoding and its solution. Section 3. is focused on input language of the \dlvhex{}. In Section 4. we introduced three real life problems which can be solved using our system. Section 5. is focused on description of external interfaces which are written in C++ and Python. Input-related warnings and errors are described into more details in Section 6. And finally in Section 7. we describe possible future work that may be considered.
+This guide is organized as follows: Section 2 provides an introductory example which will be used to explain the problem instance, the encoding and its solution. Section 3 is focused on input language of the \dlvhex{}. In Section 4 we introduced three real life problems which can be solved using our system. Section 5 is focused on description of external interfaces which are written in C++ or Python. Input-related warnings and errors are described into more details in Section 6 and finally in Section 7 we describe possible future work that may be considered.
 
 \section{Quickstart} % Section No.2
 As an introductory example, we consider a \emph{social graph} as used in social networks. Beginning from a simplified scenario, we stepwise extend it to present various features of \dlvhex{}.
@@ -85,91 +85,86 @@ As an introductory example, we consider a \emph{social graph} as used in social 
 A \emph{social graph} is a graph that represents interconnections among people, groups 
 and organizations in a social network. Services such as Facebook facilitate the exchange 
 of information, news, photographs, literary works, music, art, software, opinions or even 
-money among users. In this environment, the social graph or for a particular user consists 
+money among users. In this environment, the social graph for a particular user consists 
 of the set of nodes and edges which model other users that are directly connected, to that actor. 
 Individuals and organizations, called actors, are nodes on the graph. Interdependencies, 
 called ties, can be multiple and diverse, including such characteristics or concepts as age, 
 gender, race, genealogy, chain of command, ideas, financial transactions, trade relationships, 
 political affiliations, club memberships, occupation, education and economic status. 
-Social graph draws an edge between one person and the people, places, and things they interact 
-with online. For this particular example we consider simulation of Facebook social graph. 
+Social graphs contain edges between one person and related people, places, and things they interact 
+with online. For this particular example, we consider a simulation of Facebook social graph. 
 
 Consider the situation where a birthday party should be organized and a specific number of friends will
- be invited. The \emph{person X} which organizes the event wants just to call his or her friends and friends of these friends up to some distance from the root node $x$. A \emph{depth constraint} specifies how many edges we can go away from the root node $x$.
+ be invited. The \emph{person $X$} which organizes the event wants to call his or her friends and friends of these friends up to some distance from the root node $X$. A \emph{depth constraint} specifies how many edges we can go away from the root node $X$.
  
- We make use of an external source which returns for a given person all direct friends, while a direct acess to the full graph is not available due to privacy issues imposed by social networks. Also, due to the large amount of data, importing the whole graph would be infeasible (billions of users), while only a small fraction is relevant for the application. Consider we are interested for Person X. Python plugin will find node for the Person X in the graph and get all successor nodes of it. Successor nodes of node X are the nodes which are coming right after it. If there is outgoing edge from X to Y, then Y is successor of X. In next iteration we will process successors of Person X and it goes like that until stopping criterion is reached. More details about plugin implementation is addressed in Section 4. It is important to notice that external atom is used in each iteration. Output of current iteration is used as an input for the next iteration. 
+
+We make use of an external source which returns for a given person all direct friends, while a direct access to the full graph is not available due to privacy issues imposed by social networks. Also, due to the large amount of data, importing the whole graph would be infeasible (billions of users), while only a small fraction is relevant for the application. The external source finds for a person $X$ all neighbour nodes (successor nodes). More details about the external source implementation are given in Section 5. 
                
 
 \subsection{Problem Encoding}
-In this section we provide extensive explanation of the social graph problem which we explained in Section 2.1. 
-To provide better understanding of the problem every single line is explained.
+The problem can be modeled as a \hex{}-program as follows:
 \begin{align*}
-r_1\colon \mathit{personOfInterest}(\mathit{john}).&\\
-r_2\colon \mathit{friendOfDegree}(\mathit{P, 0, P}) \leftimpl & \mathit{personOfInterest}(P).\\
+r_1\colon & \mathit{personOfInterest}(\mathit{john}).\\
+r_2\colon & \mathit{friendOfDegree}(\mathit{P, 0, P}) \leftimpl  \mathit{personOfInterest}(P).\\
 r_{3}\colon \mathit{friendOfDegree}(\mathit{P, DegPlus, F2}) \leftimpl & \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
-& \ext{friendsOf}{F1}{F2}, \mathit{DegPlus = DegPlus + 1}, \mathit{DegPlus < 2},\\
+& \ext{friendsOf}{F1}{F2}, \mathit{DegPlus = Deg + 1}, \mathit{DegPlus < 2},\\
 & \mathit{\#int(DegPlus)}, \mathit{\#int(Deg)}.\\
 r_{4}\colon & \mathit{invite(P)} \text{ v } \mathit{ninvite(P) \leftimpl  friendOfDegree(john,X,P), \#int(X).}\\
 r_{5}\colon & \leftimpl   \mathit{not} \text{ 4 } = \mathit{\#count} \{ P : \mathit{invite(P)} \}.
 \end{align*}
-Line 1 of the program 
-\begin{align*}
-r_1\colon& \mathit{personOfInterest}(\mathit{john}).
-\end{align*} 
-describes the the person who organizes the event and initializes the search. In the Line 2.
-\begin{align*}
-r_2\colon& \mathit{friendOfDegree}(\mathit{P, 0, P}) \leftimpl \mathit{personOfInterest}(P).
-\end{align*} 
+
+
+The $r_1$ specifies that the person who organizes the event and initializes the search. 
+
+The rule $r_2$ specifies that initiating person has distance 0 from itself. The main computational part of the program is the rule $r_3$.  
  we have a rule which introduces new predicate $\mathit{friendOfDegree(P,0,P)}$ which is true since $\mathit{personOfInterest}$ is true from the first fact. Note that uppercase letter $P$ is variable and it means that there could be different persons of interest from who we could start and invite people. Consider inviting friends of one person and its girlfriend friends for instance. The main computational part of the program is the following rule   
 \begin{align*}
 r_{3}\colon& \mathit{friendOfDegree}(\mathit{P, DegPlus, F2}) \leftimpl \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
 & \ext{friendsOf}{F1}{F2}, \mathit{DegPlus = DegPlus + 1}, \mathit{DegPlus < 2},\\
 & \mathit{\#int(DegPlus)}, \mathit{\#int(Deg)}.
 \end{align*} 
-While executing this rule we are using results from the previous iteration and preparing inputs for the next iteration. Variables used in these predicates are
+It cyclically queries all  friends of already known persons and increments the distance with each iteration. Variables used in these predicates are: 
+
+\begin{itemize}
+\item $F$1 represents the person for which we are looking for the successors.
+
+\item $F2$ is variable which holds successor nodes of $F1$. 
+
+\item $P$ represent person of the interest.
+
+\item $Deg$ and $DegPlus$ are variables used to keep distance from the root node.
+\end{itemize}
 
 
-F1 represents person for which we are looking the successors.
-
-F2 is variable which holds successor nodes of F1. 
-
-P represent person of interest, in our case ``john".  
-
-
-Deg and DegPlus are variables used to keep distance from head node.
-\\External atom \ext{friendsOf}{F1}{F2} has one input and one output parameter. For input $\mathit{F1}$, 
-it finds all successor nodes of it and return them in $\mathit{F2}$. The implementation of the plugin is discussed in Section 5. The fact
+The external atom \ext{friendsOf}{F1}{F2} has one input and one output parameter. For input $\mathit{F1}$, 
+it finds all successor nodes of it and returns them in $\mathit{F2}$. The implementation of the plugin is discussed in Section 5. The atom
 \begin{align*}
 & \mathit{friendOfDegree(P, Deg, F1)}
 \end{align*}
-is responsible for preparing $\mathit{F1}$ or node of interest for which we will find successor nodes. 
-It will take always variable $\mathit{F1}$ from last iteration and that variable will be used as input to 
-external source \ext{\mathit{friendsOf}}{F1}{F2}.
-Result of current iteration is saved to 
+Binds to the variable $\mathit{F1}$ to a person for which we will find successor nodes. This value is sent as input to the external source $mathit{Deg}$ and $\mathit{DegPlus}$ are variables used to keep distance from head node \ext{friendsOf}{$F1$}{$F2$}, which returns all friends $F2$ of $F1$. For each such $F2$, we derive:
 \begin{align*}
 & \mathit{friendOfDegree(P, DegPlus, F2)}
 \end{align*} 
-where $\mathit{F2}$ contains all friends which should be processed in the following iterations if constraints allow it. 
-There is one constraints which should be considered
+where $\mathit{DegPlus}$ is $\mathit{Deg}$ incremented by $1$ to represent that the distance to $F2$ is by $1$ greater than to $F1$.
+
+
+The condition
 \begin{align*}
 & \mathit{DegPlus < 2}
 \end{align*}
-This means that our program will be able to travel only two edges far from the root of the graph. This of course can be modified according to user needs. After introducing facts and basic rules we can move to more interesting part where we will handle persons to invite or not and number of them. Following rule guesses all possible persons to be invited or not and form set of them.
+ensures the distance is limited to 2. We now move to the more interesting part where we will handle invitations. The following rule guesses all possible persons to be invited or not:
 \begin{align*}
-& r_4: \mathit{invite(P)} \text{ v } \mathit{ninvite(P) \leftimpl friendOfDegree(john,X,P), \#int(X).}
+& r_4: \mathit{invite(P)} \vee \mathit{ninvite(P) \leftimpl friendOfDegree(john,X,P), \#int(X).}
 \end{align*}     
-We can limit number of invited persons by using \emph{Integrity constraint} of the following type.
+We limit the number of invited persons by using an \emph{integrity constraint} of the following type:
 \begin{align*}
-& r_5: \leftimpl \mathit{not} \text{ 4 } = \mathit{\#count} \{ P : \mathit{invite(P)} \}.
+& r_5 \colon \leftimpl \mathit{not} \text{ 4 } = \mathit{\#count} \{ P : \mathit{invite(P)} \}.
 \end{align*} 
-It ensures that exactly 4 persons are invited to the party. It is possible to replace 
-last two statements with the following rule
+It ensures that exactly 4 persons are invited to the party. It is possible to replace $r_5$ statement by the following rule
 \begin{align*}
-& \text{ 4 } \leq \{ invite(P) : friendOfDegree(john,X,P) \} \leq \text{ 4 }. 
+& r_5' \text{ 4 } \leq \{ invite(P) : friendOfDegree(john,X,P) \} \leq \text{ 4 }. 
 \end{align*}
-It is doing exactly same thing as two statements above. However it is more powerful since it is 
-possible to specify lower and upper bound on number of persons to invite and these numbers do not 
-have to be same. Below is given complete example so that everyone is able to see it in more compact way.
+which is doing the same as $r_5$ but allows for specifying lower and upper bound on the number of persons.
   
 
 \subsection{Problem Solution}
