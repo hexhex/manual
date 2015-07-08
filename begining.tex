@@ -66,7 +66,7 @@ This guide helps ASP novices to make use of the system. It provides a reference 
 There are two possibilities to install \dlvhex{} system from source: install the latest stable release of the system or install the latest development version which may not be stable. Both ways are described in following sections.  
 
 \paragraph{Latest release version (tarball)}
-Packages (tarballs) of \dlvhex{} can be downloaded from the project page \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex} The latest release of the software runs on Linux-based systems, Mac OS X and Microsoft Windows. Installation instructions are given in the {\tt INSTALL} and {\tt README} files of the \dlvhex{} and plugin source directories. Changes between versions can be found in the {\tt NEWS} files and in detail in the {\tt ChangeLog} file. 
+Packages (tarballs) of \dlvhex{} can be downloaded from the project page \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex}. The latest release of the software runs on Linux-based systems, Mac OS X and Microsoft Windows. Installation instructions are given in the {\tt INSTALL} and {\tt README} files of the \dlvhex{} and plugin source directories. Changes between versions can be found in the {\tt NEWS} files and in detail in the {\tt ChangeLog} file. 
 
 The system requires the following packages: git, gcc (version 4.8 or later), g++ (version 4.8 or later), BZ2 library, Python (version 2.7 or later), bison, scons, cmake, automake, autoconf, standard C++ library (version 4.8 or later), Curl library (version 4 or later) and libool. Also the Boost library (version 1.55 or later) is required. The latest Boost library version is available at \url{http://www.boost.org/}. After downloading it to the new folder the following steps should be followed in order to properly install it. After extraction, the folwing commands need to be executed:
 \\ \centerline{\texttt{./bootstrap.sh}}
@@ -78,17 +78,17 @@ The system requires the following packages: git, gcc (version 4.8 or later), g++
 \paragraph{Development version (git clone)}
 The source code of \dlvhex{} is hosted on github at \url{https://github.com/hexhex/}. To get the latest development version it is necessary to git clone system as follows:
 \\ \centerline{\texttt{git clone https://github.com/hexhex/core --recursive}} 
-After cloning to the desired directory it is necessary to execute bootstrap.sh script from there invoking \\ \centerline{\texttt{./bootstrap.sh}}. 
-After cloning and bootstrapping, the steps from Section 1.1.1.1 (\texttt{configure, make} and \texttt{make install}) are to be followed in order to complete installation.
-We provide a script which should install \dlvhex{} automatically on your system, which can be found at \url{https://github.com/hexhex/core/blob/master/scripts/setupdlvhex.sh}.
+After cloning to the desired directory it is necessary to execute bootstrap.sh script from there by invoking: \\ \centerline{\texttt{./bootstrap.sh}}. 
+After cloning and bootstrapping, the steps from Section 1.1.1.1 (\texttt{configure, make} and \texttt{make install}) are to be followed in order to complete the installation.
+We provide a script which should install \dlvhex{} automatically on your system and can be found at \url{https://github.com/hexhex/core/blob/master/scripts/setupdlvhex.sh}.
 Once installation is completed, the system can be used from the terminal as follows:\\ 
 \centerline{\texttt{shell\$ dlvhex2 program.hex}} where \texttt{program.hex} refers to the input program. Various additional options are available and explained in following sections.    
 
 \subsubsection{Pre-built binaries}
-We provide pre-built binaries of \dlvhex{} for some systems. For details see our website \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/index.html}. 
+We provide pre-built binaries of \dlvhex{} for some systems. For details see our website \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/}. 
 
 \subsection{Outline}
-This guide is organized as follows: Section 2 provides an introductory example which will be used to explain the problem instance, the encoding and its solution. Section 3 is focused on input language of the \dlvhex{}. In Section 4 we introduced three real life problems which can be solved using our system. Section 5 is focused on description of external interfaces which are written in C++ or Python. Input-related warnings and errors are described into more details in Section 6 and finally in Section 7 we describe possible future work that may be considered.
+This guide is organized as follows: Section 2 provides an introductory example which will be used to explain the problem instance, the encoding and its solution. Section 3 is focused on input language of the \dlvhex{}. In Section 4 we introduced three real life problems which can be solved using our system. Section 5 is focused on description of external interfaces which are written in C++ or Python. Input-related warnings and errors are described into more details in Section 6. And finally, in Section 7 we describe possible future work that may be considered.
 
 \section{Quickstart} % Section No.2
 As an introductory example, we consider a \emph{social graph} as used in social networks. Beginning from a simplified scenario, we stepwise extend it to present various features of \dlvhex{}.
@@ -115,52 +115,53 @@ We make use of an external source which returns for a given person all direct fr
 
 \subsection{Problem Encoding}
 The problem can be modeled as a \hex{}-program as follows:
-
 \begin{exmp}
 \begin{align*}
-r_1\colon & \mathit{personOfInterest}(\mathit{john}).\\
+r_1\colon & \mathit{personOfInterest}(\mathit{john}). \\
 r_2\colon & \mathit{friendOfDegree}(\mathit{P, 0, P}) \leftimpl  \mathit{personOfInterest}(P).\\
-r_{3}\colon \mathit{friendOfDegree}(\mathit{P, DegPlus, F2}) \leftimpl & \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
-& \ext{friendsOf}{F1}{F2}, \mathit{DegPlus = Deg + 1}, \mathit{DegPlus < 2},\\
+\end{align*}
+\begin{align*}
+r_{3}\colon \mathit{friendOfDegree}(\mathit{P, DegPlus, F2}) \leftimpl & \\  
+& \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
+& \ext{friendsOf}{F1}{F2},\\ 
+& \mathit{DegPlus = Deg + 1}, \\
+& \mathit{DegPlus < 2},\\
 & \mathit{\#int(DegPlus)}, \mathit{\#int(Deg)}.\\
+\end{align*}
+\begin{align*}
 r_{4}\colon & \mathit{invite(P)} \text{ v } \mathit{ninvite(P) \leftimpl  friendOfDegree(john,X,P), \#int(X).}\\
 r_{5}\colon & \leftimpl   \mathit{not} \text{ 4 } = \mathit{\#count} \{ P : \mathit{invite(P)} \}.
 \end{align*}
 \end{exmp}
-The rule $r_1$ specifies that the person who organizes the event and initializes the search. 
+The rule $r_1$ specifies the person who organizes the event and initializes the search. 
 
-The rule $r_2$ specifies that initiating person has distance 0 from him or her. The main computational part of the program is the rule $r_3$. The main computational part of the program is the following rule   
+The rule $r_2$ specifies that the initiating person has distance 0 from him or herself. The main computational part of the program is the following rule   
 \begin{align*}
 r_{3}\colon& \mathit{friendOfDegree}(\mathit{P, DegPlus, F2}) \leftimpl \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
 & \ext{friendsOf}{F1}{F2}, \mathit{DegPlus = DegPlus + 1}, \mathit{DegPlus < 2},\\
 & \mathit{\#int(DegPlus)}, \mathit{\#int(Deg)}.
 \end{align*} 
-It cyclically queries all  friends of already known persons and increments the distance with each iteration. Variables used in these predicates are: 
+It cyclically queries all  friends of already known persons and increments the distance with each derivation. Variables used in these predicates are: 
 
 \begin{itemize}
-\item $F$1 represents the person for which we are looking for the successors.
+\item $\mathit{F1}$ represents person for which we are looking for the successors.
 
-\item $F2$ is variable which holds successor nodes of $F1$. 
+\item $\mathit{F2}$ is the variable which holds successor nodes of $F1$. 
 
-\item $P$ represent person of the interest.
+\item $P$ represents the person of the interest.
 
-\item $Deg$ and $DegPlus$ are variables used to keep distance from the root node.
+\item $\mathit{Deg}$ and $DegPlus$ are variables used to compute distance from the root node.
 \end{itemize}
-
-
 The external atom \ext{friendsOf}{F1}{F2} has one input and one output parameter. For input $\mathit{F1}$, 
 it finds all successor nodes of it and returns them in $\mathit{F2}$. The implementation of the plugin is discussed in Section 5. The atom
 \begin{align*}
 & \mathit{friendOfDegree(P, Deg, F1)}
 \end{align*}
-binds to the variable $\mathit{F1}$ to a person for which we will find successor nodes. This value is sent as input to the external source \ext{friendsOf}{$F1$}{$F2$}, which returns all friends $F2$ of $F1$. For each such $F2$, we derive:
+binds the variable $\mathit{F1}$ to a person for which we will find successor nodes. This value is sent as input to the external source \ext{\mathit{friendsOf}}{$F1$}{$F2$}, which returns all friends $F2$ of $F1$. For each such $F2$, we derive:
 \begin{align*}
 & \mathit{friendOfDegree(P, DegPlus, F2)}
 \end{align*} 
-where $\mathit{DegPlus}$ is $\mathit{Deg}$ incremented by $1$ to represent that the distance to $F2$ is by $1$ greater than to $F1$.
-
-
-The condition
+where $\mathit{DegPlus}$ is $\mathit{Deg}$ incremented by $1$ to represent that the distance to $F2$ is by $1$ greater than to $F1$. The condition
 \begin{align*}
 & \mathit{DegPlus < 2}
 \end{align*}
@@ -174,7 +175,7 @@ We limit the number of invited persons by using an \emph{integrity constraint} o
 \end{align*} 
 It ensures that exactly 4 persons are invited to the party. It is possible to replace $r_5$ statement by the following rule
 \begin{align*}
-& r_5' \text{ 4 } \leq \{ invite(P) : friendOfDegree(john,X,P) \} \leq \text{ 4 }. 
+& r_{5}\prime \colon \text{ 4 } \leq \{ invite(P) : friendOfDegree(john,X,P) \} \leq \text{ 4 }. 
 \end{align*}
 which is doing the same as $r_5$ but allows for specifying lower and upper bound on the number of persons.
   
@@ -197,13 +198,17 @@ external source implementation (see Section 5). The output of the \dlvhex{} is a
  \end{tabular}
 \\ \\
 Note that order of the atoms and the order of answer sets does not bear any meaning. Single answer set for this problem contain atoms given above. As it is expected, the first atom is $\mathit{personOfInterest(john)}$ 
-since $\mathit{john}$ is organizing the party and program should generate sets of the friends who should be invited to the party by him. As we specified in the previous section, we can travel at most 1 edge far from the root node. Considering the graph given above only $\mathit{John, Mike, Charly and David}$ are found since they are one edge far from the root node. The next three atoms express who are the new friends discovered and at which depth 
+since $\mathit{john}$ is organizing the party and program should generate sets of the friends who should be invited to the party by him. As we specified in the previous section, we can travel at most 1 edge far from the root node. Considering the graph given above only $\mathit{John, Mike, Charly} \text{ and } \mathit{David}$ are found since they are one edge far from the root node. The next three atoms express who are the new friends discovered and at which depth 
 level. For the invitations, it is specified by using aggregates that answer set must have four distinct $\mathit{invites}$ atoms.
 In single answer set we have four $\mathit{invites}$ atoms which are $\mathit{invite(john), 
 invite(mike), invite(david), invite(charly)}$. Note that this is only answer set possible 
 from this program since aggregate constraint is 4 and there are only 4 distinct person that are discovered with depth level 1. 
 
-If we just allow depth level to be larger there may be more answer sets founded due to the fact that more nodes will be discovered. If we decrease minimum number of friends to be invited to the party there may be more than one answer set. Consider that instead of 4 persons we want to invite only 3 persons to the our party. This time we have more than one answer set. Since depth level is still 2 there will be 4 persons discovered again, however out of these 4 persons we have to invite only three of them and one of them will not be invited. According to this we have 4 answer sets in the output of the program. Two of them are showed bellow:\\
+If we just allow depth level to be larger there may be more answer sets founded due to the fact that more nodes will be discovered. If we decrease minimum number of friends to be invited to the party there may be more than one answer set. Consider the different example where we instead of 4 persons want to invite only 3 persons to the party. Integrity constraint at $r_5$ will be modified as:
+\begin{align*}
+& r_5 \colon \leftimpl \mathit{not} \text{ 3 } = \mathit{\#count} \{ P : \mathit{invite(P)} \}.
+\end{align*} 
+ This time we have more than one answer set. Since depth level is still 2 there will be 4 persons discovered again, however out of these 4 persons we have to invite only three of them and one of them will not be invited. According to this we have 4 answer sets. Two of them are showed bellow:\\
 \textbf{Answer set 1:}\\
 \begin{tabular}{ l r }
    $\mathit{\{personOfInterest(john), friendOfDegree(john,0,john),}$& \\
@@ -218,7 +223,7 @@ If we just allow depth level to be larger there may be more answer sets founded 
    $\mathit{friendOfDegree(john,1,david), friendOfDegree(john,1,charly),}$ & \\
    $\mathit{invite(david),invite(charly)\}}$
  \end{tabular}
-\\ \\ This time in answer set we $\mathit{ninvite(charly)} and \mathit{mike}$ since one friend must be discarded and only three will be invited. One can just play with \emph{Depth constraint} and \emph{Aggregate constraint} to see how real output and answer sets will be affected.    
+\\ \\ This time in answer set we have $\mathit{ninvite(charly)} \text{ and } \mathit{ninvite(mike)}$ since one friend must be discarded and only three will be invited. One can just play with \emph{Depth constraint} and \emph{Aggregate constraint} to see how real output and answer sets will be affected.    
 
 
 \section{Input Language}% Section No. 3
@@ -232,7 +237,7 @@ While a constant or string represent itself, a variable is placeholder for all v
 An \emph{atom} has form $\mathit{p(t_1,\dots,t_n)}$ where $p$ is a predicate name, $t_1,\dots,t_n$ are terms and $n$ $\geq$ $0$ is the arity of the predicate atom; a predicate atom $p()$ of arity 0 is likewise represented by its predicate name $p$ without parentheses. Classical atoms are: $q$, $q$ and $-$ $q$.
 
 \begin{exmp}
-Terms are:
+\text{   }
 \\ \text{Constants:} $a$, $1$, $\mathit{a1}$, $\mathit{9862}$, $\mathit{c1}$
 \\ \text{Variables:} $X$, $Y$, $Z$
 \\ \text{Atoms:} $\mathit{parent}(X,Y)$, $\mathit{employee}(name, salary, ID, location)$
@@ -253,20 +258,20 @@ The sign \enquote{$\leftimpl$} is meant to be an implication to the left. The le
 \begin{exmp} 
 Consider the following logic program:
 \begin{align*}
-\mathit{ joke }.& \\
-\mathit{ laugh } & \leftimpl \mathit{ joke }.
+r_1\colon\mathit{ joke }.& \\
+r_2\colon\mathit{ laugh } & \leftimpl \mathit{ joke }.
 \end{align*} 
 \end{exmp}
 The first line here represents an \emph{atom} which is always true. The second line is a \emph{rule} and reads as \enquote{If $\mathit{joke}$ is true, $\mathit{laugh}$ must also be true}. Also we can read this as \enquote{from $\mathit{joke}$ follows $\mathit{laugh}$}. The single \emph{model} of above program is $\{\mathit{joke}, \mathit{laugh}\}$ since they are the atoms which are true in the program. To explain the concept of \emph{integrity constraints} we will consider following example:
 \begin{exmp}
 \begin{align*}
-&\mathit{node}(X) \leftimpl \mathit{edge}(X, Y). &\\
-&\mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). & \\
-&\mathit{colored}(X, r) \vee \mathit{colored}(X, g) \vee \mathit{X, b} \leftimpl \mathit{node}(X). & \\
-&\leftimpl \mathit{edge}(X, Y), \mathit(colored)(X, C), \mathit{colored}(Y, C) & \\
-&\mathit{edge}(2, 4). \mathit{edge}(2, 3). \mathit{edge}(5, 5). & \\
-&\mathit{edge}(4, 6). \mathit{edge}(4, 5). \mathit{edge}(5, 7). & \\
-&\mathit{edge}(6, 7). &
+r_1\colon&\mathit{node}(X) \leftimpl \mathit{edge}(X, Y). &\\
+r_2\colon&\mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). & \\
+r_3\colon&\mathit{colored}(X, r) \vee \mathit{colored}(X, g) \vee \mathit{X, b} \leftimpl \mathit{node}(X). & \\
+r_4\colon&\leftimpl \mathit{edge}(X, Y), \mathit(colored)(X, C), \mathit{colored}(Y, C) & \\
+r_5\colon&\mathit{edge}(2, 4). \mathit{edge}(2, 3). \mathit{edge}(5, 5). & \\
+r_6\colon&\mathit{edge}(4, 6). \mathit{edge}(4, 5). \mathit{edge}(5, 7). & \\
+r_7\colon&\mathit{edge}(6, 7). &
 \end{align*} 
 \end{exmp}
 In the first three lines one can see node declarations with variables $X$ and $Y$. We concluded that $X$ and $Y$ are variables since they begin with uppercase letter. It says that: \enquote{If $\mathit{edge}(X,Y)$ is true then $\mathit{node(X)}$ is also true}. That is, it extracts the nodes from a graph specified by its edges. In the \emph{guessing part} all possible node color combinations are generated. Each node may be coloured with either red, green or black. In the checking part, integrity constraint delete all color combinations which does not satisfy the requirement that there may be no edge between two nodes of equal color. 
@@ -276,10 +281,10 @@ Another important feature of \dlvhex{} is \emph{default negation}. Negation is t
 Note that $\mathit{node}(X)$ and $\mathit{node}(Y)$ need to be included in the body in order to satisfy the following safety requirement for rules: \emph{Variables}, which occur in a negated literal, must also occur in a positive literal in the body.
 \begin{exmp}
 \begin{align*}
-& \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).\\
-& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). \\
-& \\
-& \mathit{comp\_edge}(X, Y) \leftimpl \mathit{node}(X), \mathit{node}(Y), \mathit{not} \text{ } \mathit{edge}(X, Y). 
+r_1\colon& \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).\\
+r_2\colon& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). \\
+r_3\colon& \\
+r_4\colon& \mathit{comp\_edge}(X, Y) \leftimpl \mathit{node}(X), \mathit{node}(Y), \mathit{not} \text{ } \mathit{edge}(X, Y). 
 \end{align*}
 \end{exmp}
 Here $\mathit{comp\_edge}$ describes the set of edges in the complementary graph. Such an edge must go from one node to another node (possibly the same one), and this edge must not be contained in the original edge set. 
@@ -290,14 +295,14 @@ Here $\mathit{comp\_edge}$ describes the set of edges in the complementary graph
 \begin{exmp} 
 Imagine a situation where agent has to cross a railroad. The agent should cross it if there is no train approaching. With this description, one might specify the following program:
 \begin{align*}
- & \mathit{cross\_railroad} \leftimpl \mathit{not} \text{ } \mathit{train\_approaches}.
+ r_1\colon& \mathit{cross\_railroad} \leftimpl \mathit{not} \text{ } \mathit{train\_approaches}.
 \end{align*}
 \end{exmp}
 The following program has the model \{$\mathit{cross\_railroad}$\} because $\mathit{train\_approaches}$ is assumed to be false (as it being true is not stated anywhere). This kind of negation is called \emph{negation as failure}.
 \begin{exmp}
 The next program uses so-called true or classical negation. Since $\mathit{- train\_approaches}$ is not known to be true, the following program has only an empty model.
 \begin{align*}
-\mathit{cross\_railroad} \leftimpl \mathit{- train\_approaches}.
+r_1\colon\mathit{cross\_railroad} \leftimpl \mathit{- train\_approaches}.
 \end{align*}
 \end{exmp}
 The difference between the two kinds of negation is important: in the first example, the railroad track is crossed if there is no information on any trains approaching, which is quite dangerous, while in the second example, it is only crossed if is is known for sure that no train comes. It is important to note that classical negation is stronger than negation as finite failure.
@@ -315,9 +320,9 @@ A \emph{disjunctive head} holds if at least one of its atoms is true. In a simpl
 The \emph{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \emph{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or $\mathit{not}$ \text{}$A$, where $A$ is an atom and the connective $\mathit{not}$ denotes default negation. We say that literal $L$ is positive if it is an atom and negative otherwise. 
 \begin{exmp}
 \begin{align*}
-& \mathit{left\_arm\_broken} \text{ v } \mathit{right\_arm\_broken}.\\
-& \mathit{can\_write} \leftimpl \mathit{left\_arm\_broken}.\\
-& \mathit{be\_angry} \leftimpl \mathit{can\_write}.
+r_1\colon& \mathit{left\_arm\_broken} \text{ v } \mathit{right\_arm\_broken}.\\
+r_2\colon& \mathit{can\_write} \leftimpl \mathit{left\_arm\_broken}.\\
+r_3\colon& \mathit{be\_angry} \leftimpl \mathit{can\_write}.
 \end{align*}
 \end{exmp}
 Suppose we met a friend recently and know that he had one of his arms broken, but do not know which one. Now suppose we did not receive a greeting card for your birthday and wonder if you should be angry on him or he just could not write because his right hand is broken. In the example, \dlvhex{} will generate two possible explanations. The first rule is called a disjunctive rule which is read as \enquote{For sure, either the left or the right arm is broken.} Without being sure which arm is broken \dlvhex{} will evaluate the program and produce the two models $\mathit{\{left\_arm\_broken, can\_write, be\_angry\}}$ and $\mathit{\{right\_arm\_broken\}}$.  
@@ -326,12 +331,12 @@ Suppose we met a friend recently and know that he had one of his arms broken, bu
 Besides integers (constant arithmetic functions), written as sequence of digits $0$,\dots,$9$, \dlvhex{} supports other types of arithmetic functions. We are using the following operators for those functions: $+$ (addition), $-$ (subtraction), $*$ (multiplication), $/$ (integer division). 
 \begin{exmp}
 \begin{align*}
-& \mathit{a}(6). \\
-& \mathit{b}(2). \\
-& c(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),+(X, Y, XX). \\
-& d(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),-(X, Y, XX). \\
-& e(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),*(X, Y, XX). \\
-& f(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),/(X, Y, XX).
+r_1\colon& \mathit{a}(6). \\
+r_2\colon& \mathit{b}(2). \\
+r_3\colon& c(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),+(X, Y, XX). \\
+r_4\colon& d(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),-(X, Y, XX). \\
+r_5\colon& e(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),*(X, Y, XX). \\
+r_6\colon& f(X,Y,XX) \text{ } \leftimpl \text{ } a(X), b(Y),/(X, Y, XX).
 \end{align*}
 \end{exmp}
 The single answer set for the example above is:\\ \centerline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
@@ -341,17 +346,17 @@ The single answer set for the example above is:\\ \centerline{$\mathit{\{a(6),b(
 \dlvhex{} feature a total order among variable-free terms using built-in predicates $==$ (equal), $\neq$ (not equal), $<$ (less than), $\leq$ (less than or equal), $>$ (greater than) and $\geq$ (greater than or equal). All kinds of constants (symbols and integers) may be compared against each other freely. If two integers are compared, the semantics is according to numeric values. All other comparisons are just guaranteed to impose a fixed ordering over all constants. The application of comparison literals to integers is illustrated by the following example.
 \begin{exmp}
 \begin{align*}
-& a(1). \\
-& a(2). \\
-& b(1). \\
-& \\
-& c(X,Y) \text{ } \leftimpl \text{ } a(X), b(Y), X <> Y. \\
-& d(X,Y) :- a(X), b(Y), X \neq Y. \\
-& e(X,Y) :- a(X), b(Y), X < Y. \\
-& f(X,Y) :- a(X), b(Y), X > Y. \\
-& g(X,Y) :- a(X), b(Y), X \leq Y. \\
-& h(X,Y) :- a(X), b(Y), X \geq Y. \\
-& i(X,Y) :- a(X), b(Y), Y == 1. 
+r_1\colon& a(1). \\
+r_2\colon& a(2). \\
+r_3\colon& b(1). \\
+r_4\colon& \\
+r_5\colon& c(X,Y) \text{ } \leftimpl \text{ } a(X), b(Y), X <> Y. \\
+r_6\colon& d(X,Y) \text{ } \leftimpl \text{ } a(X), b(Y), X \neq Y. \\
+r_7\colon& e(X,Y) \text{ } \leftimpl \text{ } a(X), b(Y), X < Y. \\
+r_8\colon& f(X,Y) \text{ } \leftimpl \text{ } a(X), b(Y), X > Y. \\
+r_9\colon& g(X,Y) \text{ } \leftimpl \text{ } a(X), b(Y), X \leq Y. \\
+r_{10}\colon& h(X,Y) \text{ } \leftimpl \text{ } a(X), b(Y), X \geq Y. \\
+r_{11}\colon& i(X,Y) \text{ } \leftimpl \text{ } a(X), b(Y), Y == 1. 
 \end{align*}
 \end{exmp}
 The single answer set for the example above is:\\ $\mathit{\{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1)},$\\
@@ -365,12 +370,12 @@ For example, the rule $\mathit{a \leftimpl b : c.}$ yields $a$ whenever either $
 Together  with variables, conditions allow for specifying collections of expressions within a single rule or aggregate. This is particularly useful for encoding conjunctions (or disjunctions) over arbitrarily many ground atoms as well as for the compact representation of aggregates. 
 \begin{exmp}
 \begin{align*}
-& \mathit{person}(\mathit{jane}). \text{ } \mathit{person}(\mathit{john}).\\
-& \mathit{day}(\mathit{mon}). \text{ } \mathit{day}(\mathit{tue}). \text{ } \mathit{day}(\mathit{wed}). \text{ } \mathit{day}(\mathit{thu}). \text{ } \mathit{day}(\mathit{fri}). \text{ }\\
-& \mathit{available}(\mathit{jane}) \text{ } \leftimpl \text{ } not \text{ } \mathit{on}(\mathit{fri}).\\
-& \mathit{available}(\mathit{john})\text{ } \leftimpl \text{ } \mathit{not} \text{ } \mathit{on}(\mathit{mon}), \mathit{not}  \text{ } \mathit{on}(\mathit{wed}).\\
-& \mathit{meet} \text{ } \leftimpl \text{ } \mathit{available}(X) : \mathit{person}(X).\\
-& \mathit{on}(X) : \mathit{day}(X) \text{ } \leftimpl \text{ } \mathit{meet}.
+r_1\colon& \mathit{person}(\mathit{jane}). \text{ } \mathit{person}(\mathit{john}).\\
+r_2\colon& \mathit{day}(\mathit{mon}). \text{ } \mathit{day}(\mathit{tue}). \text{ } \mathit{day}(\mathit{wed}). \text{ } \mathit{day}(\mathit{thu}). \text{ } \mathit{day}(\mathit{fri}). \text{ }\\
+r_3\colon& \mathit{available}(\mathit{jane}) \text{ } \leftimpl \text{ } not \text{ } \mathit{on}(\mathit{fri}).\\
+r_4\colon& \mathit{available}(\mathit{john})\text{ } \leftimpl \text{ } \mathit{not} \text{ } \mathit{on}(\mathit{mon}), \mathit{not}  \text{ } \mathit{on}(\mathit{wed}).\\
+r_5\colon& \mathit{meet} \text{ } \leftimpl \text{ } \mathit{available}(X) : \mathit{person}(X).\\
+r_6\colon& \mathit{on}(X) : \mathit{day}(X) \text{ } \leftimpl \text{ } \mathit{meet}.
 \end{align*}
 \end{exmp}  
 We have used the conditions in last two lines of the code. The \emph{conjunction} in the body of line 5 is obtained by replacing $X$ in $\mathit{available(X)}$ with all ground terms $t$ such that $\mathit{person(t)}$ holds, namely, with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition for the last line is contained in the head of the rule. It turns into \emph{disjunction} over all ground instances of $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ for which $\mathit{day(t)}$ holds. Any variable occurring within a condition does not count as a positive occurrence outside the condition in the sense of safety. A variable $X$ in an aggregate-free rule is safe if at least one of the following conditions is satisfied:
@@ -388,13 +393,13 @@ The form of an \emph{aggregate atom} occuring in a rule body is as follows:\\ \c
 \\ Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming \emph{aggregate elements}, are non-empty tuples of terms and literals, respectively. $\alpha$ is the name of some function that is applied to the term tupples \texttt{$t_i$} that remain after evaluating the conditions expressed by $L_i$. Finally,  the result of applying $\alpha$ is compared by means of the comparison predicates $\prec_1 or \prec_2$ to the terms $s_1$ and $s_2$ respectively. $\mathit{\#count}$, $\mathit{\#sum}$, $\mathit{\#times}$, $\mathit{\#min}$, and $\mathit{\#max}$ are called aggregate functions, and \dlvhex{} currently supports exactly these five. An aggregate function is applied over a set and returns a numeric value. Let $f(S)$ be an aggregate function. A variable, X, is a \emph{local variable} to $f(S)$ if and only if $X$ appears in $S$ and $X$ does not appear in any aggregate function that is outer to $f(S)$.
 \begin{exmp}
 \begin{align*}
-& emp(1,goofie,1250).\\
-& emp(2,willy,700).\\
-& emp(3,woody,750).\\
-& emp(4,jerry,900).\\
-& emp(5,tom,1050). \\
-& over1000(I,S) \leftimpl emp(I,N,S), S > 1000.\\
-& over1000nr(X) \leftimpl \#count\{I : over1000(I,W)\} = X, \#int(X).
+r_1\colon& emp(1,goofie,1250).\\
+r_2\colon& emp(2,willy,700).\\
+r_3\colon& emp(3,woody,750).\\
+r_4\colon& emp(4,jerry,900).\\
+r_5\colon& emp(5,tom,1050). \\
+r_6\colon& over1000(I,S) \leftimpl emp(I,N,S), S > 1000.\\
+r_7\colon& over1000nr(X) \leftimpl \#count\{I : over1000(I,W)\} = X, \#int(X).
 \end{align*}
 \end{exmp}
 Intuitively the symbolic set appearing in the aggregate predicate consists of two ground predicates: \\ \centerline{$\{\langle 1 \rangle,\langle 5 \rangle\}$}
@@ -493,12 +498,12 @@ For instance, the rule \\ \centerline{ \textit{$reached(X) \leftarrow \&reach[ed
 \\computes the predicate \textit{reached} taking values from the predicate $\&reach$, which computes via \textit{$\&reach[edge,a](X)$} all the reachable nodes in the graph in the graph \textit{edge} from node \textit{a}, delegating this task to an external computational source.
 \begin{exmp}
 \begin{align*}
-& \mathit{systems}(\mathit{dlvhex}). \mathit{systems}(\mathit{clasp}). \\  
-& \mathit{sayhello(X)} \leftimpl \ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, \mathit{systems(Y).}  \\ 
-& \mathit{set1}(a). \text{ } \mathit{set1}(b). \text{ } \mathit{set1}(c).\\
-& \mathit{set2}(b). \text{ } \mathit{set2}(c). \text{ } \mathit{set2}(d).\\
-& \mathit{set3}(X) \leftimpl \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
-&
+r_1\colon& \mathit{systems}(\mathit{dlvhex}). \mathit{systems}(\mathit{clasp}). \\  
+r_2\colon& \mathit{sayhello(X)} \leftimpl \ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, \mathit{systems(Y).}  \\ 
+r_3\colon & \\
+r_4\colon& \mathit{set1}(a). \text{ } \mathit{set1}(b). \text{ } \mathit{set1}(c).\\
+r_5\colon& \mathit{set2}(b). \text{ } \mathit{set2}(c). \text{ } \mathit{set2}(d).\\
+r_6\colon& \mathit{set3}(X) \leftimpl \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
 \end{align*}
 \end{exmp}
 
