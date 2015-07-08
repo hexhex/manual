@@ -315,7 +315,7 @@ Disjunctive logic programs permit the connective ``$\vee$" between atoms in rule
   \text{Rule:} & $A_0$ $\vee$ \dots $\vee$ $A_m$ $\leftimpl$ $L_1,\dots,L_n. $ \\
  \end{tabular}
 \end{center}
-A \emph{disjunctive head} holds if at least one of its atoms is true. In a simple disjunctive program $\mathit{a} \vee \mathit{b.}$ we have the two answer sets \{$a$\} and \{$b$\}. 
+A \emph{disjunctive head} holds if at least one of its atoms is true. If body literals $L_1,\dots,L_n. $ of the rule specified above are known to be true then head will hold also. One of the atoms in the $A_0$ $\vee$ \dots $\vee$ $A_m$ will be true. In a simple disjunctive program $\mathit{a} \vee \mathit{b.}$ we have the two answer sets \{$a$\} and \{$b$\}.  
 
 The \emph{head} $A_0$ of a rule or a fact is an atom of the same syntatic form as a constant or function. In the \emph{body} of a rule or an integrity constraint, every $L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or $\mathit{not}$ \text{}$A$, where $A$ is an atom and the connective $\mathit{not}$ denotes default negation. We say that literal $L$ is positive if it is an atom and negative otherwise. 
 \begin{exmp}
@@ -365,7 +365,7 @@ $\mathit{h(2,1)}\}$
 \subsection{Conditions and Conditional Literals}
 A \emph{conditional literal} is of the form \\ \centerline{$L_0:L_1,\dots,L_n$} where every $\mathit{L_j \text{ } for \text{ } 0 \leq j \leq n}$ is a literal, $L_1,\dots,L_n$ is called \emph{condition}, and \enquote{:} resembles mathematical set notation. Whenever $\mathit{n = 0}$, it is a regular literal and we denote it usually by $L_0$.
 
-For example, the rule $\mathit{a \leftimpl b : c.}$ yields $a$ whenever either $c$ is false (whether $b$ holds or not) or both $b$ and $c$ are true \cite{pott}.
+For example, the rule $\mathit{a \leftimpl b : c.}$ yields $a$ whenever either $c$ is false (whether $b$ holds or not) or both $b$ and $c$ are true. Logically, $L_0$ and $L_1$,\dots,$L_n$ act as head and body, respectively, which gives $L_0$:$L_1$,\dots,$L_n$ the flavour of a nested implication \cite{pott}.
 
 Together  with variables, conditions allow for specifying collections of expressions within a single rule or aggregate. This is particularly useful for encoding conjunctions (or disjunctions) over arbitrarily many ground atoms as well as for the compact representation of aggregates. 
 \begin{exmp}
