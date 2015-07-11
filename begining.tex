@@ -14,7 +14,7 @@
 
 \newcounter{examplecounter}
 \newenvironment{example}{\begin{quote}%
-    \refstepcounter{examplecounter}%
+    \refstepcounter{examplecounter}%-
   \textbf{Example \arabic{examplecounter}}%
   \quad
 }
@@ -55,9 +55,9 @@ This document provides a user guide for the Answer Set Programming (ASP) system 
 
 \section{Introduction} % Section No.1
 \label{sec:intro}
-The \dlvhex{} system is a logic-programming reasoner for computing the models of so-called \hex{}-programs, which are an extension of \emph{answer-set programs} towards integration of \emph{external computation sources}. To enable access to external information, \hex{}-programs extend programs with external atoms, which allow for a bidirectional communication between the logic program and external sources of computation (e.g. description logic reasoners and Web resources) \cite{extatoms}. The system is developed motivated by the need to interoperate with a broad set of external computation sources and the observation, that for meta-reasoning in the context of the Semantic Web, no adequate support is available in ASP to date. To overcome this, \hex{}-programs have been introduced, which support higher-order logic programs (which accommodate meta-reasoning through higher-order atoms) with external atoms for software interoperability.
+The \dlvhex{} system is a logic-programming reasoner for computing the models of so-called \hex{}-programs, which are an extension of \emph{answer-set programs} towards integration of \emph{external computation sources}. To enable access to external information, \hex{}-programs extend programs with external atoms, which allow for a bidirectional communication between the logic program and external sources of computation (e.g. description logic reasoners and Web resources) \cite{DUMMY:1}. The system is developed motivated by the need to interoperate with a broad set of external computation sources and the observation, that for meta-reasoning in the context of the Semantic Web, no adequate support is available in ASP to date. To overcome this, \hex{}-programs have been introduced, which support higher-order logic programs (which accommodate meta-reasoning through higher-order atoms) with external atoms for software interoperability.
 
-This guide helps ASP novices to make use of the system. It provides a reference of the features of the tool that ASP might be tempted to exploit. The language of \hex{}-programs is an extension of disjunctive datalog. It largely implements the ASP-Core-2 Standard \cite{ref} and extends it with external atoms. 
+This guide helps ASP novices to make use of the system. It provides a reference of the features of the tool that ASP might be tempted to exploit. The language of \hex{}-programs is an extension of disjunctive datalog. It largely implements the ASP-Core-2 Standard \cite{DUMMMY:2} and extends it with external atoms. 
 
 
 \subsection{Download and Installation}
@@ -68,7 +68,7 @@ There are two possibilities to install \dlvhex{} system from source: install the
 
 \paragraph{Latest release version (tarball)}
 \label{sec:steps}
-Packages (tarballs) of \dlvhex{} can be downloaded from the project page \url{http://www.kr.tuwien.ac.at/resea} \\ \url{rch/systems/dlvhex}. The latest release of the software runs on Linux-based systems, Mac OS X and Microsoft Windows. Installation instructions are given in the {\tt INSTALL} and {\tt README} files of the \dlvhex{} and plugin source directories. Changes between versions can be found in the {\tt NEWS} files and in detail in the {\tt ChangeLog} file. 
+Packages (tarballs) of \dlvhex{} can be downloaded from the project page \url{http://www.kr.tuwien.ac.at/resea} \\ \url{rch/systems/dlvhex/}. The latest release of the software runs on Linux-based systems, Mac OS X and Microsoft Windows. Installation instructions are given in the {\tt INSTALL} and {\tt README} files of the \dlvhex{} and plugin source directories. Changes between versions can be found in the {\tt NEWS} files and in detail in the {\tt ChangeLog} file. 
 
 The system requires the following packages: git, gcc (version 4.8 or later), g++ (version 4.8 or later), BZ2 library, Python (version 2.7 or later), bison, scons, cmake, automake, autoconf, standard C++ library (version 4.8 or later), Curl library (version 4 or later) and libool. Also the Boost library (version 1.55 or later) is required. The latest Boost library version is available at \url{http://www.boost.org/}. After downloading it to the new folder the following steps should be followed in order to properly install it. After extraction, the folwing commands need to be executed:
 \\ \centerline{\texttt{./bootstrap.sh}}
@@ -444,7 +444,7 @@ r_{10}\colon& \mathit{reached}(X) \leftimpl \mathit{root}(X). \\
 r_{11}\colon& \mathit{reached}(Y) \leftimpl \mathit{reached}(X), \mathit{in\_tree}(X,Y,C). \\
 r_{12}\colon& \leftimpl \mathit{node}(X), \mathit{not} \mathit{reached}(X). \\
 r_{13}\colon&   \\
-r_{14}\colon&\mathit{ \sim in\_tree}(X,Y,C). [C:1]
+r_{14}\colon&\mathit{ : \sim in\_tree}(X,Y,C). [C:1]
 \end{align*}
 \end{exmp}
 Best model: $\mathit{\{reached(a), out\_tree(a,b), in\_tree(a,c,3), reached(b), reached(c),}\\ \mathit{ in\_tree(b,e,4), in\_tree(c,b,2), in\_tree(c,d,3), reached(e), reached(d),} \\ \mathit{  out\_tree(d,e)\}}$
@@ -528,37 +528,9 @@ Second part of the program works with externals source which has predicate input
 
 
 \newpage
-\section{References}
-\begin{thebibliography}{1}
-\bibitem{extatoms} Thomas Eiter, Micheal Fink, Thomas Krennwallner, Christoph Redl {\em Conflict-driven ASP Solving with External Sources} 2003   
-  
-\bibitem{ref} Francesco Calimeri, Wolfgang Faber, Martin Gebser, Giovambattista Ianni, Roland Kaminski, Thomas Krennwallner, Nicola leone, Francesco Ricca, Torsten Schaub {\em ASP-Core-2 Input Language} 2013.
+\bibliography{foo} 
+\bibliographystyle{ieeetr}
 
-\bibitem{licnc} GNU Lesser General Public License. Free Software Foundation, Inc. https://www.gnu.org/copyleft/lesser.html 
-
-\bibitem{onlinedemo}dlvhex. Vienna University of Technology. http://www.kr.tuwien.ac.at/research/systems/dlvhex/demo.php 
-
-\bibitem{git}Software for HEX-Programs. GitHub. https://github.com/hexhex/ 
-
-\bibitem{sourceforge}DLVHEX solver for HEX-programs-  Browse Files at SourceForge.net. Sourceforge.net. http://sourceforge.net/projects/dlvhex/files/
-
-\bibitem{prebuilt}KBS-ASP systems. Thomas Krenwallner. http://www.kr.tuwien.ac.at/staff/tkren/deb.html
-
-\bibitem{boost}Boost C++ Libraries. Boost.org. http://www.boost.org/
-
-\bibitem{hexhex}dlvhex. GitHub. https://github.com/hexhex/core
-
-\bibitem{script}Web location for script
-
-\bibitem{extatoms2}Thomas Eiter, Giovamattista Ianni, Roman Schindlauer and hans Tompits {\em A Uniform Integration of Higher-Order Reasoning and External Evaluations in Answer-Set Programming} 
-
-
-\bibitem{pott}Martin Gebser, Roland Kaminski, Benjamin Kaufmann, Marius Lindauer, Max Ostrowski, Javier Romero, Trosten Schaub and Sven Thiele {\em Pottasco User Guide}
-
-\bibitem{dlvum}Robert Bihlmeyer, Wolfgang Faber, Giuseppe Ielpa, Vincezino Lio and Gerald Pfeifer {\em DLV-User Manual} 
-      
- 
- \end{thebibliography} 
 
 
 
