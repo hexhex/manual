@@ -510,10 +510,60 @@ Second part of the program works with externals source which has predicate input
 
 \section{Examples}
 \label{sec:examples}
-\subsection{Example 1}
-\subsection{Example 2}
-\subsection{Example 3}
+Section~\ref{sec:examples} covers three problems which are encoded and solved by using \dlvhex{}. In Section~\ref{example1} we have solved basic ``swimming problem". Section~\ref{example2} presents ``traveling salesperson" problem. As a last example we have Section~\ref{example3} which shows how we can use \dlvhex{} to plan route of one or multiple agents in the dynamic environment controlled by external atoms.
 
+\subsection{Example 1}
+\label{example1}
+In this example we have presented the program which selects best swimming location among all available locations for a swim in Vienna. While selecting location it has to follow constraints given from the user and place specifications which are obtained from the Internet using external atom.
+ 
+\subsubsection{Problem Instance}
+Imagine Alice wants to go for a swim in Vienna. She knows two indoor pools called Margarethenbad and Amalienbad (represented by $\mathit{margB}$ and $\mathit{amalB}$, respectively), and she knows that outdoor swimming is possible in the river Danube at two locations called Gansehaufel and Alte Donau (denoted $\mathit{gansD}$ and $\mathit{altD}$, respectively). She looks up on the Web whether she needs to pay an entrance fee, and what additional equipment she will need. Finally she has the contraint that she does not want to pay for swimming. Assume Alice finds out that indoor pools in general have an admission fee, and that one also
+has to pay at Gansehaufel, but not at Alte Donau. Furthermore Alice reads some reviews about swimming locations and finds out that she will need her Yoga mat for Alte Donau because the ground is so hard, and she will need goggles for Amalienbad because there is so much chlorine in the water \cite{swim}. Once the problem is defined we can proceed with problem encoding.    
+
+\subsubsection{Problem Encoding}
+\hex{} program to decide swimming location is encoded as follows:
+\begin{exmp}
+\label{swimExample}
+\begin{align*}
+r_1\colon& location(ind, margB). location(ind, amalB). \\& location(outd, gansD). location(outd, altD) \\  
+r_2\colon& swim(ind) \vee swim(outd).\\ 
+r_3\colon& need(inoutd, C) \leftimpl \ext{\mathit{rq}}{\mathit{swim}}{\mathit{C}}. \\
+r_4\colon& goto(X) \vee ngoto(X) \leftimpl swim(P), location(P, X).\\
+r_5\colon& go \leftimpl goto(X)\\
+r_6\colon& \mathit{need}(loc, C) \leftimpl \ext{\mathit{rq}}{\mathit{goto}}{\mathit{C}}. \\ 
+r_7\colon& \leftimpl goto(X), goto(Y), X \neq Y. \\
+r_8\colon& not go. \\
+r_9\colon& need(X, money)
+\end{align*}
+\end{exmp}
+The \hex{} program above represents Alice's reasoning problem. $r_1$ contains a set of facts about possible swimming locations (where $\mathit{ind}$ and $\mathit{outd}$ are short for indoor and outdoor, respectively). Rule in the $r_2$ chooses indoor vs. outdoor swimming locations, and $r_3$ collects requirements that are caused by this choice using the external atom. 
+
+Web research is performed by using an external atom of the form\\ \centerline{$\ext{\mathit{rq}}{\mathit{location-choice}}{\mathit{required-resources}}$} which intuitively evaluates to true if a given $\mathit{location-choice}$ requires a certain $\mathit{required-resource}$ and represents such resources  and their origin ($\mathit{inoutd}$ or $\mathit{loc}$) using predicate $\mathit{need}$. The external atom $\mathit{\&rq}$ has input and output arity $\mathit{in(\&rq)}$ = $\mathit{out(\&rq)}$ = 1. Intuitively  $\ext{\mathit{rq}}{\mathit{\alpha}}{\mathit{\beta}}$ is true if a resource $\beta$ is required when swimming i a place in the extension of predicate $\alpha$. For example, $\ext{\mathit{rq}}{\mathit{swim}}{\mathit{money}}$ is true if $\mathit{swim(ind)}$ is true because indoor swimming pool charge money for swimming \cite{swim}. 
+
+In the $r_4$ it is decided what is to be visited, indoor or outdoor location. By $r_5$ we ensure that one location is selected and integrity constraint from the $r_7$ ensures that only single location is selected. Integrity constraint in the $r_8$ removes all answer in which there is no chosen location to go. $r_6$ collects all requirements caused by the choice of $\mathit{goto}$ location. And finally constraint in the $r_9$ states that all answer sets where Alice has to pay for the swimming are removed.
+
+Important thing to notice here is that an external atom $\mathit{\&rq}$ receives predicate as an input parameter. Using predicates as an input parameter saves a lot of time and makes program more readable and understandable. For instance in $r_6$ if instead of sending a predicate we send constants, $r_6$ should be replaced with:
+\begin{align*}
+r_1\colon& need(loc, C) \leftimpl \ext{rq}{margB}{C}, goto(margB).\\
+r_2\colon& need(loc, C) \leftimpl \ext{rq}{amalB}{C}, goto(amalB).\\
+r_3\colon& need(loc, C) \leftimpl \ext{rq}{altD}{C}, goto(altD).\\
+r_4\colon& need(loc, C) \leftimpl \ext{rq}{gansD}{C}, goto(gansD).\\
+\end{align*}    
+what give us three additional rows which are just repetition of the same rule just with different constant terms. Sending predicate as input parameter does this in a single line. Since input parameter of the external atoms are different, external atom implementation changes. Implementation details of the plugin are discussed in Section~\ref{sec:externalInterfaces}.
+
+\subsubsection{Problem Solution}
+\hex{}-program from the Example \ref{swimExample} has a single answer set:
+\begin{align*}
+& \{ location(ind,margB),location(ind,amalB),location(outd,altD), \\
+& location(outd,gansD), swim(outd),go,ngoto(gansD),goto(altD),\\
+& need(loc,yogamat) \} 
+\end{align*}
+Under answer set, the external atom $\ext{rq}{goto}{yogamat}$ is true and all others:\\($\ext{rq}{swim}{money}, \ext{rq}{goto}{money}, \ext{rq}{swim}{yogamat}, \dots $) are false. Intuitively, answer set tells Alice to take her Yoga mat and go for a swim to Alte Donau (outside) which is free of charge. This is the only answer set which satisfies given constraints.    
+
+\subsection{Example 2}
+\label{traveling}
+\subsection{Example 3}
+\label{example3}
 
 \section{External Interfaces}
 \label{sec:externalInterfaces}
@@ -527,10 +577,44 @@ Second part of the program works with externals source which has predicate input
 \label{sec:future}
 
 
-\newpage
-\bibliography{foo} 
-\bibliographystyle{ieeetr}
+ \newpage
+-\section{References}
+-\begin{thebibliography}{1}
+\bibitem{extatoms} Thomas Eiter, Micheal Fink, Thomas Krennwallner, Christoph Redl {\em Conflict-driven ASP Solving with External Sources} 2003   
+  
+\bibitem{ref} Francesco Calimeri, Wolfgang Faber, Martin Gebser, Giovambattista Ianni, Roland Kaminski, Thomas Krennwallner, Nicola leone, Francesco Ricca, Torsten Schaub {\em ASP-Core-2 Input Language} 2013.
 
+\bibitem{licnc} GNU Lesser General Public License. Free Software Foundation, Inc. https://www.gnu.org/copyleft/lesser.html 
+
+\bibitem{onlinedemo}dlvhex. Vienna University of Technology. http://www.kr.tuwien.ac.at/research/systems/dlvhex/demo.php 
+
+\bibitem{git}Software for HEX-Programs. GitHub. https://github.com/hexhex/ 
+
+\bibitem{sourceforge}DLVHEX solver for HEX-programs-  Browse Files at SourceForge.net. Sourceforge.net. http://sourceforge.net/projects/dlvhex/files/
+
+\bibitem{prebuilt}KBS-ASP systems. Thomas Krenwallner. http://www.kr.tuwien.ac.at/staff/tkren/deb.html
+
+\bibitem{boost}Boost C++ Libraries. Boost.org. http://www.boost.org/
+
+%\bibliography{foo} 
+%\bibliographystyle{ieeetr}
+ 
+\bibitem{hexhex}dlvhex. GitHub. https://github.com/hexhex/core
+
+\bibitem{script}Web location for script
+
+\bibitem{extatoms2}Thomas Eiter, Giovamattista Ianni, Roman Schindlauer and hans Tompits {\em A Uniform Integration of Higher-Order Reasoning and External Evaluations in Answer-Set Programming} 
+
+
+\bibitem{pott}Martin Gebser, Roland Kaminski, Benjamin Kaufmann, Marius Lindauer, Max Ostrowski, Javier Romero, Trosten Schaub and Sven Thiele {\em Pottasco User Guide}
+
+\bibitem{dlvum}Robert Bihlmeyer, Wolfgang Faber, Giuseppe Ielpa, Vincezino Lio and Gerald Pfeifer {\em DLV-User Manual} 
+
+\bibitem{swim}Thomas Eiter, Micheal Fink, Giovambattista Ianni, Thomas Krennwallner, Christoph Redl, Peter Schuler{\em A model building framework for Answer Set Programming with external computations} 
+
+ 
+ 
+\end{thebibliography} 
 
 
 
