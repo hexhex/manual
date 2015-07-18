@@ -4,6 +4,10 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{amsmath}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
 \usepackage{csquotes}
 \newcommand{\ext}[3]{\ensuremath{\&{#1}[#2](#3)}}
 \DeclareMathOperator{\leftimpl}{:-}
@@ -46,7 +50,18 @@
 
 % Abstract part
 \begin{abstract}
-This document provides a user guide for the Answer Set Programming (ASP) system called \dlvhex{} developed at Vienna University of Technology. ASP is a declarative problem solving paradigm, rooted in logic programming and nonmonotonic reasoning, which has been gaining increasing attention during the last years. The \dlvhex{} system is a reasoner for computing the models of so-called \hex{}-programs, which are an extension of \emph{answer-set programs} towards integration of \emph{external computation sources}. This guide aims at enabling users of this system to interoperate with a broad set of external computation sources. The guide refers to release 2.4.     
+This document provides a user guide for the Answer Set 
+Programming (ASP) system called \dlvhex{} developed at 
+Vienna University of Technology. ASP is a declarative 
+problem solving paradigm, rooted in logic programming and 
+nonmonotonic reasoning, which has been gaining increasing 
+attention during the last years. The \dlvhex{} system is a 
+reasoner for computing the models of so-called \hex{}-
+programs, which are an extension of \emph{answer-set 
+programs} towards integration of \emph{external computation 
+sources}. This guide aims at enabling users of this system 
+to interoperate with a broad set of external computation 
+sources. The guide refers to release 2.4.     
 \end{abstract}
 
 % Generates table of contents
@@ -55,9 +70,30 @@ This document provides a user guide for the Answer Set Programming (ASP) system 
 
 \section{Introduction} % Section No.1
 \label{sec:intro}
-The \dlvhex{} system is a logic-programming reasoner for computing the models of so-called \hex{}-programs, which are an extension of \emph{answer-set programs} towards integration of \emph{external computation sources}. To enable access to external information, \hex{}-programs extend programs with external atoms, which allow for a bidirectional communication between the logic program and external sources of computation (e.g. description logic reasoners and Web resources) \cite{DUMMY:1}. The system is developed motivated by the need to interoperate with a broad set of external computation sources and the observation, that for meta-reasoning in the context of the Semantic Web, no adequate support is available in ASP to date. To overcome this, \hex{}-programs have been introduced, which support higher-order logic programs (which accommodate meta-reasoning through higher-order atoms) with external atoms for software interoperability.
+The \dlvhex{} system is a logic-programming reasoner for 
+computing the models of so-called \hex{}-programs, which 
+are an extension of \emph{answer-set programs} towards 
+integration of \emph{external computation sources}. To 
+enable access to external information, \hex{}-programs 
+extend programs with external atoms, which allow for a 
+bidirectional communication between the logic program and 
+external sources of computation (e.g. description logic 
+reasoners and Web resources) \cite{DUMMY:1}. The system is 
+developed motivated by the need to interoperate with a 
+broad set of external computation sources and the 
+observation, that for meta-reasoning in the context of the 
+Semantic Web, no adequate support is available in ASP to 
+date. To overcome this, \hex{}-programs have been 
+introduced, which support higher-order logic programs 
+(which accommodate meta-reasoning through higher-order 
+atoms) with external atoms for software interoperability.
 
-This guide helps ASP novices to make use of the system. It provides a reference of the features of the tool that ASP might be tempted to exploit. The language of \hex{}-programs is an extension of disjunctive datalog. It largely implements the ASP-Core-2 Standard \cite{DUMMMY:2} and extends it with external atoms. 
+This guide helps ASP novices to make use of the system. It 
+provides a reference of the features of the tool that ASP 
+might be tempted to exploit. The language of \hex{}-
+programs is an extension of disjunctive datalog. It largely 
+implements the ASP-Core-2 Standard \cite{DUMMMY:2} and 
+extends it with external atoms. 
 
 
 \subsection{Download and Installation}
@@ -175,8 +211,50 @@ which is doing the same as $r_5$ but allows for specifying lower and upper bound
 
 \subsection{Problem Solution}
 Now we are ready to solve our \emph{social graph} problem. Consider that we load following set of nodes and edges from the from the file:\\
-\includegraphics[width=12.5cm,height=9cm]{graph}
-\\ \\To compute the answer sets representing 
+\begin{center}
+\begin{tikzpicture}
+\tikzset{vertex/.style = {shape=rectangle,draw,minimum size=5em}}
+\tikzset{edge/.style = {->,> = latex'}}
+% vertices
+\node[vertex] (a) at  (0,0) {$\mathit{John}$};
+\node[vertex] (b) at  (4,5) {$\mathit{Mike}$};
+\node[vertex] (c) at  (4,0) {$\mathit{Charly}$};
+\node[vertex] (d) at  (4,-5) {$\mathit{David}$};
+\node[vertex] (e) at (7,7) {$\mathit{Jenifer}$};
+\node[vertex] (f) at (7,5) {$\mathit{Alex}$};
+\node[vertex] (g) at (7,3) {$\mathit{Serena}$};
+\node[vertex] (h) at (7,0) {$\mathit{Roger}$};
+\node[vertex] (i) at (7,-3) {$\mathit{Chris}$};
+\node[vertex] (j) at (7,-7) {$\mathit{Joe}$};
+\node[vertex] (k) at (10,7) {$\mathit{Angel}$};
+\node[vertex] (l) at (10,5) {$\mathit{Thomas}$};
+\node[vertex] (m) at (10,3) {$\mathit{Carolina}$};
+\node[vertex] (n) at (10,0) {$\mathit{Steve}$};
+\node[vertex] (o) at (10,-3) {$\mathit{Mark}$};
+\node[vertex] (p) at (10,-7) {$\mathit{Christopher}$};
+
+
+%edges
+%\draw[edge] (a) to node [auto] {2} (b);
+\draw[edge] (a) to (b);
+\draw[edge] (a) to (c);
+\draw[edge] (a) to (d);
+\draw[edge] (b) to (e);
+\draw[edge] (b) to (f);
+\draw[edge] (b) to (g);
+\draw[edge] (c) to (h);
+\draw[edge] (d) to (i);
+\draw[edge] (d) to (j);
+\draw[edge] (e) to (k);
+\draw[edge] (f) to (l);
+\draw[edge] (g) to (m);
+\draw[edge] (h) to (n);
+\draw[edge] (i) to (o);
+\draw[edge] (j) to (p);
+
+\end{tikzpicture}
+\end{center}
+To compute the answer sets representing 
 the solution, the following command is to be invoked:
 \\ \centerline{\texttt{shell\$ dlvhex2 --pythonplugin=extsource.py program.hex}}
 where \texttt{program.hex} is \hex-program and \texttt{extsource.py} represents the Python file with 
@@ -357,6 +435,7 @@ The single answer set for the example above is:\\ $\mathit{\{a(1),a(2),b(1),i(1,
 $\mathit{h(2,1)}\}$
 
 \subsection{Conditions and Conditional Literals}
+\label{conditions}
 A \emph{conditional literal} is of the form \\ \centerline{$L_0:L_1,\dots,L_n$} where every $\mathit{L_j}$ for $0 \leq j \leq n$ is a literal, $L_1,\dots,L_n$ is called \emph{condition}, and \enquote{:} resembles mathematical set notation. Whenever $\mathit{n = 0}$, it is a regular literal and we denote it usually by $L_0$.
 
 For example, the rule $\mathit{a \leftimpl b : c.}$ yields $a$ whenever either $c$ is false (whether $b$ holds or not) or both $b$ and $c$ are true. Logically, $L_0$ and $L_1$,\dots,$L_n$ act as head and body, respectively, which gives $L_0$:$L_1$,\dots,$L_n$ the flavour of a nested implication \cite{pott}.
@@ -381,6 +460,7 @@ We have used the conditions in last two lines of the code. The \emph{conjunction
 Variables occurring in atoms not subject to any conditions are global. Each variable within an atom in front of a condition must be global or have a positive occurrence on the right hand-side of the condition. During grounding, the instantiation of global variables take precedence over non-global ones, that is, the former are instantiated before the latter. As a consequence, variables that occur globally are substituted by terms before a condition is further evaluated \cite{pott}.    
 
 \subsection{Aggregates}
+\label{aggregates}
 Aggregates allow to express properties over set of elements. \hex{}-programs with aggregates often allow clean and concise problem encodings by minimizing the use of auxiliary predicates and recursive programs, and help the programmers to depict problems in a more natural way. For instance, we may state that the sum of a semester's course credits must be at least 20, or that the sum of shopping items must not exceed 30 Euros. We can say that an aggregate is a function on a set of tuples that are normally subject to conditions. By comparing an aggregated value with given values, we can extract a truth value from an aggregate's evaluation, thus obtaining an aggregate atom. They can occur in the bodies of rule and constraints, possibly negated using negation-as-failure \cite{pott}.
 
 The form of an \emph{aggregate atom} occuring in a rule body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ t_1:L_1;...;t_n:L_n\} \prec_2 s_2$} 
@@ -421,6 +501,7 @@ The aggregate function applied to the given set returns the minimum salary among
 and it outputs $\{highest(1250)\}$ as a highest income in the company.
 
 \subsection{Optimization}
+\label{optimize}
 Introducing \emph{weak constraints} into \hex-programs allows us to formulate several optimization problems in an easy and natural way. These weak constraints are adopted from \emph{DLV}. While standard constraints (integrity constraints, strong constraints) always have to be satisfied, weak constraints should be satisfied if it is possible.
 
 
@@ -562,6 +643,133 @@ Under answer set, the external atom $\ext{rq}{goto}{yogamat}$ is true and all ot
 
 \subsection{Example 2}
 \label{traveling}
+In this section we consider the well-known travelling salesman problem, where the task is to decide whether there is a round trip that visits each node in a graph exactly once and whose accumulated edge costs must not exceed some budget B.
+
+\subsubsection{Problem Instance}
+The Travelling Salesperson Problem describes a salesman who must travel between N cities. The order in which he does so is something he does not care about, as long as he visits each one during his trip, and finishes where he was at first. Each city is connected to other close by cities, or nodes, by airplanes, or by road or railway. Each of those links between the cities has one or more weights (or the cost) attached. The cost describes how "difficult" it is to traverse this edge on the graph, and may be given, for example, by the cost of an airplane ticket or train ticket, or perhaps by the length of the edge, or time required to complete the traversal \cite{wiki}.
+
+This example is interesting for us because it is typical optimization problem. Among all answer sets \dlvhex{} should select best one according to weak constraints explained in Section \ref{optimize}. In the classical solver we are able to load only small graphs because it is not feasible to load all graph at once. For this example we are using external atom which is loading graph from the external source edge by edge up to specified depth level what makes it able to solve problem with extremely large graphs.        
+
+
+\subsubsection{Problem encoding}
+
+\begin{center}
+\begin{tikzpicture}
+\tikzset{vertex/.style = {shape=circle,draw,minimum size=1.5em}}
+\tikzset{edge/.style = {->,> = latex'}}
+% vertices
+\node[vertex] (a) at  (0,0) {$\mathit{Chicago}$};
+\node[vertex] (b) at  (4,-6) {$\mathit{Detroit}$};
+\node[vertex] (c) at  (8,0) {$\mathit{Memphis}$};
+\node[vertex] (d) at  (8,-3) {$\mathit{Boston}$};
+\node[vertex] (a1) at (0,-3) {$\mathit{Austin}$};
+\node[vertex] (a2) at (4,-1.5) {$\mathit{Fresno}$};
+%edges
+\draw[edge] (a) to [bend right=80pt] node [auto] {2} (b);
+\draw[edge] (a) to (a1);
+\draw[edge] (a) to node [auto] {2} (c);
+\draw[edge] (b) to (d);
+\draw[edge] (b) to node [auto] {1} (a1);
+\draw[edge] (c) to (a);
+\draw[edge] (c) to node [auto] {1} (a2);
+\draw[edge] (c) to [bend left=80pt] node [auto] {2}(b);
+\draw[edge] (d) to node [auto] {2} (c);
+\draw[edge] (d) to node [auto] {4} (a2);
+\draw[edge] (d) to node [auto] {2} (b);
+\draw[edge] (a1) to node [auto] {3} (a);
+\draw[edge] (a1) to node [auto] {2} (d);
+\draw[edge] (a1) to (b);
+\draw[edge] (a2) to node [auto,near start] {3} (a);
+\draw[edge] (a2) to (c);
+\draw[edge] (a2) to (d);
+\end{tikzpicture}
+\end{center}
+
+The \hex{}-program for the Travelling salesman problem is encoded as follows:
+\begin{exmp}
+\begin{align*}
+r_1\colon & startingCity(austin).\\
+r_2\colon & budgetB(11).\\
+r_3\colon & \mathit{cityOfDegree(P,0,P,0)} \leftimpl \mathit{startingCity(P).} \\
+& \\
+r_4\colon & \mathit{cityOfDegree(F1, DegPlus, F2, Cost)} \leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\ &\ext{edges}{F1}{F2, Cost}, \mathit{DegPlus=DegPlus+1}, DegPlus < 4, \\ & \#int(DegPlus), \#int(Deg)), \#int(Cost). \\
+r_5\colon& \mathit{node(Y)} \leftimpl \mathit{cityOfDgree(X, V, Y, C)}.\\
+r_6\colon& \mathit{edge}(X, Y) \leftimpl \mathit{cityOfDegree(X, V, Y, C).} \\
+r_7\colon & cost(X,Y,C) \leftimpl cityOfDegree(X, V, Y, C). \end{align*}
+\begin{align*}
+r_8 \colon & \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl node(X). \\
+r_{9} \colon &  \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl node(Y). \\
+& \\
+r_{10} \colon & costCalculated(X) \leftimpl \#sum \{C,X,Y : cycle(X,Y), cost(X,Y,C)\} = X \\
+r_{11} \colon & lastCheck(B,C) \leftimpl budget(B), costCalculated(C), B \geq C. \\
+r_{12} \colon & \leftimpl  budgetB(B), costCalculated(C), \mathit{not} \mathit{lastCheck(B,C).} \\
+& \\
+r_{13} \colon & reached(Y) \leftimpl cycle(austin, Y). \\
+r_{14} \colon & reached(Y) \leftimpl cycle(X,Y), reached(X). \\
+r_{15} \colon & \leftimpl node(Y), \mathit{not} \mathit{reached(Y)}. \\
+& \\
+r_{16} \colon & :\sim cycle(X,Y), cost(X,Y,C). [C:1] 
+\end{align*}
+\end{exmp}
+In the $r_1$ we have a fact which specifies starting city. It is important to notice that in our program starting point for the travelling salesman may change and it is not fixed. Travelling salesman should start his trip from the city specified by the fact from the $r_1$ and also finish his trip there if there is such a cycle which covers all other cities in the graph. $r_2$ is a fact which defines available budget of the travelling salesman, cost of the travelling all path should be at least same as budget available. An atom in $r_3$ keeps track of cities newly discovered, their distances from the root (starting city) and weight of the edge between newly discovered nodes and its predecessor. 
+
+Rule in the $r_4$ is responsible for generating graph of 
+the cities discovered. It is using external atom 
+$\mathit{\&edges}$ to load new cities from the external 
+file and use them in the program. An external atom is of 
+the form $\ext{edges}{F1}{F2,Cost}$ where $\mathit{F1}$ 
+represents the node for which we are finding all successor 
+nodes. $\mathit{F2}$ returns all successor nodes of 
+$\mathit{F1}$ and $\mathit{Cost}$ is an integer value which 
+represents weight of the edge between $\mathit{F1}$ and 
+$\mathit{F2}$. $\mathit{DegPlus}$ is here set to be 4 that 
+means we can go at most three edges far from the root node. 
+There are many advantages of using an external atom of this
+type:
+\begin{itemize}
+\item Graph is very large and it is not possible to load it 
+at once as a set of edges specified manually.
+\item We do not know the graph completely (e.g., all facebook users, all cities on the world etc.) and they have to be visited iteratively.
+\item We want to analyze only subgraph of the graph that is reachable from the node specified.
+\end{itemize}    
+In the $r_5$, $r_6$ and $r_7$ program is extracting $\mathit{nodes}, \mathit{edges}$ and $\mathit{costs}$ of the edges from the $\mathit{cityOfDegree}$ atoms. After this point we have all graph loaded to the program. 
+
+The generate rules in $r_8$ and $r_{9}$ assert that every 
+node must have exactly one outgoing and exactly one 
+incoming edge, respectively, belonging to the cycle. Syntax used in these two lines is described before in Section \ref{conditions}.
+
+In the $r_{10}$ we have used aggregates (Section 
+\ref{aggregates}) to find sum $X$ of the costs over the 
+$\mathit{cycle(X,Y)}$. In the next row, an atom 
+$\mathit{lastCheck(B,C)}$ is true if term of the 
+$\mathit{costCalculated(C)}$ is less than or equal to the 
+term of $\mathit{budgetB(B)}$ available. Integrity 
+constraint from the row $r_{12}$ ensures that in the answer 
+set overall sum of the costs for the cycle will be less 
+than or equal to the budget available. Aggregates can be 
+used to compute length travelled, money and time spent.
+
+Rows $r_{13}$ and $r_{14}$, cyclically check whether nodes are reached by a cycle candidate produced via the rows $r_8$ and $r_9$.  Note that rule in $r_8$ builds on assumption that the cycle starts at city Austin. The second rule in $r_9$ states that, from a reached node $X$, an adjacent node $Y$ can be reached via further edge in the cycle. It make sure that all nodes will be reached with the cycle given. Integrity constraint in $r_{15}$ eliminates all answer sets where all nodes in the subgraph are not reached.
+
+In order to minimize cost, we add the following optimization statement: \\
+\centerline{$:\sim cycle(X,Y), cost(X,Y,C). [C:1].$}
+Here, edges belonging to the cycle are weighted according to their cost and \dlvhex{} lists optimal answer set.
+
+\subsubsection{Problem Solution}
+Finally, we explain how the unique minimum cost round trip 
+can be computed. By invoking weak constraint in $r_{16}$ we  
+emphasize that we are looking for the optimal answer set. To find optimal path we need cycle where overall cost computed is minimized. For this example optimal answer set is as follows:
+\begin{align*}
+& \{ cycle(austin,boston), cycle(boston,memphis),cycle(detroit,austin), \\
+& cycle(chicago,detroit), cycle(memphis,fresno),cycle(fresno,chicago) \} \\
+& <[11:1]>. \\
+\end{align*}
+Note that we omitted some atoms from the answer to make answer set easier to read and understand.
+From the answer set everything is obvious and it is easy to conclude that there is path starting at Austin and ending there. 
+
+
+
+
 \subsection{Example 3}
 \label{example3}
 
@@ -612,6 +820,7 @@ Under answer set, the external atom $\ext{rq}{goto}{yogamat}$ is true and all ot
 
 \bibitem{swim}Thomas Eiter, Micheal Fink, Giovambattista Ianni, Thomas Krennwallner, Christoph Redl, Peter Schuler{\em A model building framework for Answer Set Programming with external computations} 
 
+\bibitem{wiki} Simple English Wikipedia {\em Traveling salesman problem}
  
  
 \end{thebibliography} 
