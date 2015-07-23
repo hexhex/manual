@@ -337,13 +337,13 @@ r_2\colon\mathit{ laugh } & \leftimpl \mathit{ joke }.
 The first line here represents an \emph{atom} which is always true. The second line is a \emph{rule} and reads as \enquote{If $\mathit{joke}$ is true, $\mathit{laugh}$ must also be true}. Also we can read this as \enquote{from $\mathit{joke}$ follows $\mathit{laugh}$}. The single \emph{model} of above program is $\{\mathit{joke}, \mathit{laugh}\}$ since they are the atoms which are true in the program. To explain the concept of \emph{integrity constraints} we will consider following example:
 \begin{exmp}
 \begin{align*}
-r_1\colon&\mathit{node}(X) \leftimpl \mathit{edge}(X, Y). &\\
-r_2\colon&\mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). & \\
-r_3\colon&\mathit{colored}(X, r) \vee \mathit{colored}(X, g) \vee \mathit{X, b} \leftimpl \mathit{node}(X). & \\
-r_4\colon&\leftimpl \mathit{edge}(X, Y), \mathit(colored)(X, C), \mathit{colored}(Y, C) & \\
-r_5\colon&\mathit{edge}(2, 4). \mathit{edge}(2, 3). \mathit{edge}(5, 5). & \\
-r_6\colon&\mathit{edge}(4, 6). \mathit{edge}(4, 5). \mathit{edge}(5, 7). & \\
-r_7\colon&\mathit{edge}(6, 7). &
+r_1\colon & \mathit{node}(X) \leftimpl \mathit{edge}(X, Y). &\\
+r_2\colon & \mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). & \\
+r_3\colon & \mathit{colored}(X, r) \vee \mathit{colored}(X, g) \vee \mathit{X, b} \leftimpl \mathit{node}(X). & \\
+r_4\colon & \leftimpl \mathit{edge}(X, Y), \mathit(colored)(X, C), \mathit{colored}(Y, C) & \\
+r_5\colon & \mathit{edge}(2, 4). \mathit{edge}(2, 3). \mathit{edge}(5, 5). & \\
+r_6\colon & \mathit{edge}(4, 6). \mathit{edge}(4, 5). \mathit{edge}(5, 7). & \\
+r_7\colon & \mathit{edge}(6, 7). &
 \end{align*} 
 \end{exmp}
 In the first three lines one can see node declarations with variables $X$ and $Y$. We concluded that $X$ and $Y$ are variables since they begin with uppercase letter. It says that: \enquote{If $\mathit{edge}(X,Y)$ is true then $\mathit{node(X)}$ is also true}. That is, it extracts the nodes from a graph specified by its edges. In the \emph{guessing part} all possible node color combinations are generated. Each node may be coloured with either red, green or black. In the checking part, integrity constraint delete all color combinations which does not satisfy the requirement that there may be no edge between two nodes of equal color. 
@@ -380,6 +380,7 @@ r_1\colon\mathit{cross\_railroad} \leftimpl \mathit{- train\_approaches}.
 The difference between the two kinds of negation is important: in the first example, the railroad track is crossed if there is no information on any trains approaching, which is quite dangerous, while in the second example, it is only crossed if is is known for sure that no train comes. It is important to note that classical negation is stronger than negation as finite failure.
 
 \subsection{Disjunction}
+\label{disjunction}
 Disjunctive logic programs permit the connective ``$\vee$" between atoms in rule heads. \\
 \begin{center}
 \begin{tabular}{ r l l}
@@ -772,11 +773,133 @@ From the answer set everything is obvious and it is easy to conclude that there 
 
 \subsection{Example 3}
 \label{example3}
+The last example is from the group of \emph{pathfinding } \emph{problems}. Pathfinding or pathing is the plotting of the shortest route between the two points. It searches a graph by starting at one vertex and exploring adjacent nodes until the destination node is reached. In this example we consider pathfinding for a multiple agents.
+ 
+\subsubsection{Problem Instance}
+Pathfinding for a single agent is the problem of planning a route from an initial
+location to a goal location in an environment, going around obstacles. 
+Pathfinding for multiple agents also aims to plan such routes for each agent, 
+subject to different constraints, such as restrictions on the length of each path 
+or on the total length of paths, no self-intersecting paths, no intersection of 
+paths/plans, no crossing/meeting each other.  It also has variations for finding optimal solutions, e.g., with respect 
+to the maximum path length, or the sum of plan lengths. These problems are important
+for many real-life applications, such as motion planning, vehicle routing, environmental monitoring, patrolling, computer games \cite{multipleAgents}. We consider problem where multiple agents need to find paths 
+from their respective starting locations to their goal locations, ensuring that 
+paths do not collide with static obstacles and that no two agents collide with 
+each other. 
+
+\subsubsection{Problem Encoding}
+The \hex-program for the problem introduced in previous subsection is as follows:
+\begin{exmp}
+\begin{align*}
+r_1 \colon & startingNode(one). \\
+r_2 \colon & nodeOfDegree(P,0,P) \leftimpl startingNode(P). \\
+r_3 \colon & nodeOfDegree(F1, DegPlus, F2) \leftimpl nodeOfDegree(\_, Deg, F1), \\ & \ext{edges}{F1}{F2}, DegPlus=Deg+1, DgPlus <= 5, \#int(DegPlus), \\ &\#int(Deg). \\
+r_4 \colon & node(Y) \leftimpl nodeOfDegre(X, V, Y).  \\
+r_5 \colon & edge(X,Y) \leftimpl nodeOfDegree(X,V,Y).\\
+\\
+r_6 \colon &  \mathit{agent(1). } \mathit{ agent(2). }\\
+r_7 \colon & \mathit{start(1,one).} \mathit{ start(2,four).} \\
+r_8 \colon & \mathit{goal(1,ten).} \mathit{ goal(2,eleven).} \\
+\\
+r_9 \colon & clear(V) \leftimpl \mathit{node(V)}, V \neq \mathit{three}\\ 
+\\
+r_{10} \colon & guessPath(I,0,V) \leftimpl start(I,V). \\
+r_{11} \colon &  \mathit{guessPath(I, TPlus, U)} \vee \mathit{nguessPath(I, TPlus, U)} \leftimpl \mathit{agent(I)}, \\ &  \mathit{guessPath(I, T, V)},  \mathit{edge(U,V)}, \mathit{TPlus=T+1}, \mathit{\#int(TPlus)}, \mathit{\#int(T).}  \\
+r_{12} \colon &  \leftimpl 1 \neq \mathit{\#count\{ U \colon guessPath(I, T, U) \}}, \mathit{agent(I)}, \mathit{\#int(T)}.  \\
+\\
+r_{13} \colon &  visit(I, V) \leftimpl guessPath(I,T,V). \\
+\\
+r_{14} \colon & \leftimpl goal(I, V), \mathit{not} \mathit{visit(I, V).} \\
+r_{15} \colon &  \leftimpl guessPath(I, T, V), path(I^{\prime},T,V), X \leq XP. \\
+r_{16} \colon &  \leftimpl guessPath(I,T,V), \mathit{not} \mathit{clear(V).}\\
+\\
+r_{17} \colon &  \mathit{path(I,V,U,T,ValidOrNot)} \leftimpl \mathit{agent(I)}, \\ & \mathit{guessPath(I, T, V)}, \mathit{guessPath(I, TPlus, U)}, \\ & \ext{check}{U, V, T, I}{ValidOrNot}, \mathit{TPlus=T+1}, \#int(T), \#int(TPlus).  \\
+r_{18} \colon & \leftimpl path(I, V, U, T, invalid). 
+\end{align*}
+\end{exmp}
+
+
+In the first part of the program we load the graph using the $\&edges$ external atom. This atom cyclically discovers nodes and edges from the external file. In the $r_4$ we extract node $Y$ whenever an atom $\mathit{nodeOfDegree(X, V, Y)}$ is true. Similar like in the previous line, in $r_5$ we extract an edge from $X$ to $Y$ if an atom $\mathit{nodeOfDegree(X, V,Y)}$ is true. 
+
+From the $r_6$ to the $r_8$ we have defined set of facts. Facts in $r_6$ represent different agents in the program. Facts in the $r_{7}$ and $r_{8}$ define initial and destination node for the agent $I$.  
+
+After introducing set of the facts, rule in the $r_{9}$ represents that vertex $V$ is free and does not have any obstacle on it. Rules in the lines: $r_{10}$, $r_{11}$ and $r_{12}$ guesses next node to be visited by the agent, from node $U$ to the node $V$. Agent can either visit new node using an existing edge or stay at the same node and wait. In the $r_{10}$ we set the initial guess and from that point full path to the goal node is to be generated. Rule with the disjunctive head (cf. Section~\ref{disjunction}) in the $r_{11}$ decides either to include the outgoing edge from the node $U$ to the path or to omit it from the path. This step is cyclically performed until goal nodes are not reached. Constraint in the $r_{12}$ eliminates all those answer sets in which there is more than one outgoing edge selected at the time $t$ from the node $U$. For each step agent has to select single edge since it cannot be at the two different locations at the same time. Rule in the line $r_{13}$ finds which nodes are visited using the path guessed. Integrity constraint in the $r_{14}$ ensures that an agent $I$ reaches its destination node. We ensure that agents do not collide with each other using constraint $r_{15}$. We also ensure that agents do not go through obstacles using constraint $r_{16}$. 
+
+We represent path plans by atoms of the form $\mathit{path(I, V, U, T, ValidOrNot)}$ which specify that at time step $T$, agent $I$ moves from the node $V$ to the node $U$. Is that move valid or invalid is determined by the term $\mathit{ValidOrNot}$ from the external atom. Last two lines of the program are checking is the path guessed valid or invalid. Agent can only know what are the edges available in the graph and make the guess in which direction he should go. Consider that an agent selects some edge but it become unreachable because of some reasons. These reasons may be: obstacle from the environment, the corner is to narrow, doors are too small or any change on the graph or on the environment which is not considered as a fact in the program. By introducing this property we have some kind of a dynamic problem. To perform this check we can use only an external source. External source is of the form \ext{check}{U,V,T,I}{ValidOrNot} and it checks is the guessed move of the agent $I$ from $U$ to $V$ at time $t$ valid or invalid. In the case that any of the moves in the guessed path is invalid whole answer set is removed. If no any invalid moves in the guessed path it means that guessed solution is the answer set of the program.            
+
+\subsubsection{Problem Solution} 
+Let us solve the problem using the following graph:  
+\begin{center}
+\begin{tikzpicture}
+\tikzset{vertex/.style = {shape=circle,draw,minimum size=4em}}
+\tikzset{edge/.style = {->,> = latex'}}
+% vertices
+\node[vertex] (a) at  (0,3) {$\mathit{one}$};
+\node[vertex] (b) at  (2,6) {$\mathit{two}$};
+\node[vertex] (c) at  (2,3) {$\mathit{three}$};
+\node[vertex] (d) at  (2,0) {$\mathit{four}$};
+\node[vertex] (e) at  (4,6) {$\mathit{five}$};
+\node[vertex] (f) at  (4,3) {$\mathit{six}$};
+\node[vertex] (g) at  (4,0) {$\mathit{seven}$};
+\node[vertex] (i) at  (6,6) {$\mathit{eight}$};
+\node[vertex] (j) at  (6,3) {$\mathit{nine}$};
+\node[vertex] (k) at  (8,6) {$\mathit{ten}$};
+\node[vertex] (l) at  (8,3) {$\mathit{eleven}$};
+%edges
+\draw[edge] (a) to (b);
+\draw[edge] (a) to (c);
+\draw[edge] (a) to (d);
+\draw[edge] (b) to (e);
+\draw[edge] (c) to (f);
+\draw[edge] (d) to (g);
+\draw[edge] (e) to (i);
+\draw[edge] (f) to (j);
+\draw[edge] (g) to (j);
+\draw[edge] (i) to (k);
+\draw[edge] (j) to (l);
+\draw[edge] (j) to (k);
+\end{tikzpicture}
+\end{center}
+Graph is again loaded from the external file and it is not specified as a set of facts manually. From the facts specified we know that there is an obstacle at the node $\mathit{three}$ so then any answer set with node $\mathit{three}$ in the path is removed. All other constraints must be satisfied as well. Note that we have omitted most of the atoms in order to emphasize actual solution. In order to see how to filter out answer set and show only specific atoms at the output refer to the Section~\ref{sec:commandline}. In our answer set we are interested only in $\mathit{path}$ atoms since we want to see what is the path from the initial node $U$ to the destination node $V$. One answer set is as follows:
+\\Answer Set 1:
+\begin{align*}
+\{ & path(1,one,two,0,valid), path(1,two,five,1,valid),
+\\ & path(1,five,five,2,valid), path(2,four,four,0,valid),
+\\ & path(2,four,seven,1,valid), path(1,five,eight,3,valid),
+\\ & path(2,seven,nine,2,valid), path(1,eight,ten,4,valid),
+\\ & path(2,nine,eleven,3,valid),path(2,eleven,eleven,4,valid) \}
+\end{align*} 
+From the answer set above it is possible to see that $\mathit{agent(1)}$ follows the path:
+one $\rightarrow$ two $\rightarrow$ five $\rightarrow$ five $\rightarrow$ eight $\rightarrow$ ten. At each time instance $t$ an agent chooses either to wait or to move to the another node. At $t=2$ the $\mathit{agent(1)}$ chooses to wait and not to move. Same logic is applied for the $\mathit{agent(2)}$. Just to show different choices we are giving two answer sets more:
+\\Answer Set 2:
+\begin{align*}
+\{ & path(1,one,two,0,valid),path(1,two,five,1,valid),
+\\ & path(1,five,five,2,valid),path(2,four,seven,0,valid),
+\\ & path(1,five,eight,3,valid),path(2,seven,nine,1,valid),
+\\ & path(2,nine,nine,2,valid),path(1,eight,ten,4,valid),
+\\ & path(2,nine,eleven,3,valid),path(2,eleven,eleven,4,valid)\}
+\end{align*}
+In the second answer set path for the first agent did not change. However, second agent changes its path and instead of waiting at $t=0$ on the node four it moves to the node seven.  
+\\Answer Set 3:
+\begin{align*}
+\{ & path(1,one,two,0,valid), path(1,two,five,1,valid),
+\\ & path(1,five,five,2,valid), path(2,four,four,0,valid),
+\\ & path(2,four,seven,1,valid), path(1,five,eight,3,valid),
+\\ & path(2,seven,nine,2,valid), path(1,eight,ten,4,valid),
+\\ & path(2,nine,eleven,3,valid),path(2,eleven,eleven,4,valid) \}
+\end{align*} 
+
+   
+
 
 \section{External Interfaces}
 \label{sec:externalInterfaces}
 \subsection{Python}
 \subsection{C++}
+
+\section{Command Line options}
+\label{sec:commandline}
 
 \section{Input-related warnings and errors}
 \label{sec:inputRelatedWarnings}
@@ -821,6 +944,8 @@ From the answer set everything is obvious and it is easy to conclude that there 
 \bibitem{swim}Thomas Eiter, Micheal Fink, Giovambattista Ianni, Thomas Krennwallner, Christoph Redl, Peter Schuler{\em A model building framework for Answer Set Programming with external computations} 
 
 \bibitem{wiki} Simple English Wikipedia {\em Traveling salesman problem}
+
+\bibitem{multipleAgents} EsraDerdem and Doga Kisa, and Umut Oztok and Peter Schuller {\em A General Framework for  Pathfinding Problems with Multiple Agents}
  
  
 \end{thebibliography} 
