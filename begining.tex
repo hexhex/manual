@@ -56,8 +56,7 @@ Vienna University of Technology. ASP is a declarative
 problem solving paradigm, rooted in logic programming and 
 nonmonotonic reasoning, which has been gaining increasing 
 attention during the last years. The \dlvhex{} system is a 
-reasoner for computing the models of so-called \hex{}-
-programs, which are an extension of \emph{answer-set 
+reasoner for computing the models of so-called \hex{}-programs, which are an extension of \emph{answer-set 
 programs} towards integration of \emph{external computation 
 sources}. This guide aims at enabling users of this system 
 to interoperate with a broad set of external computation 
@@ -78,7 +77,7 @@ enable access to external information, \hex{}-programs
 extend programs with external atoms, which allow for a 
 bidirectional communication between the logic program and 
 external sources of computation (e.g. description logic 
-reasoners and Web resources) \cite{DUMMY:1}. The system is 
+reasoners and Web resources) \cite{extatoms}. The system is 
 developed motivated by the need to interoperate with a 
 broad set of external computation sources and the 
 observation, that for meta-reasoning in the context of the 
@@ -90,9 +89,8 @@ atoms) with external atoms for software interoperability.
 
 This guide helps ASP novices to make use of the system. It 
 provides a reference of the features of the tool that ASP 
-might be tempted to exploit. The language of \hex{}-
-programs is an extension of disjunctive datalog. It largely 
-implements the ASP-Core-2 Standard \cite{DUMMMY:2} and 
+might be tempted to exploit. The language of \hex{}-programs is an extension of disjunctive datalog. It largely 
+implements the ASP-Core-2 Standard \cite{ref} and 
 extends it with external atoms. 
 
 
@@ -101,8 +99,7 @@ extends it with external atoms.
 published under the GNU Lesser General Public License 
 \cite{licnc}. In this section we provide an overview of the 
 download and installation process. For a quick overview, 
-some examples and the possibility to evaluate \hex{}-
-programs directly in the browser, the online demo at 
+some examples and the possibility to evaluate \hex{}-programs directly in the browser, the online demo at 
 \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/demo.php} 
 is provided. However the system can also be installed 
 locally. 
@@ -167,15 +164,15 @@ After cloning and bootstrapping, the steps from
 Section~\ref{sec:steps} (\texttt{configure, make} and 
 \texttt{make install}) are to be followed in order to 
 complete the installation.
-We provide a script which should install \dlvhex{} 
+
+We provide a script which installs \dlvhex{} 
 automatically on your system and can be found at 
 \url{https://github.com/hexhex/core/blob/master/scripts/setupdlvhex.sh}.
 Once installation is completed, the system can be used from 
 the terminal as follows:\\ 
 \centerline{\texttt{shell\$ dlvhex2 program.hex}} where 
 \texttt{program.hex} refers to the input program. Various 
-additional options are available and explained in following 
-sections.    
+additional command line options are available and explained in Section~\ref{sec:commandline}.    
 
 \subsubsection{Pre-built binaries}
 We provide pre-built binaries of \dlvhex{} for some 
@@ -269,8 +266,9 @@ F2}) \leftimpl & \\
 \begin{align*}
 r_{4}\colon & \mathit{invite(P)} \vee \mathit{ninvite(P) 
 \leftimpl  friendOfDegree(john,X,P), \#int(X).}\\
-r_{5}\colon & \leftimpl   \mathit{not} 4 = \mathit{\#count} 
-\{ P : \mathit{invite(P)} \}.
+r_{5}\colon & \leftimpl   \mathit{not} \ 4 = \mathit{\#count} 
+\{ P : \mathit{invite(P)} \}. \\
+r_5 \prime  \colon & 3 \leq \{ invite(P) \ \colon \ friendOfDegree(john,X,P)\} \geq 3.
 \end{align*}
 \end{exmp}
 The rule $r_1$ specifies the person who organizes the event 
@@ -389,8 +387,7 @@ the solution, the following command is to be invoked:
 pythonplugin=extsource.py program.hex}}
 where \texttt{program.hex} is \hex-program and 
 \texttt{extsource.py} represents the Python file with 
-external source implementation (see 
-Section~\ref{sec:externalInterfaces}). The output of the 
+external source implementation (cf. Section~\ref{sec:externalInterfaces}). The output of the 
 \dlvhex{} is as follows:
 
 
@@ -611,8 +608,8 @@ r_1\colon& \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).
 \\
 r_2\colon& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). 
 \\
-r_3\colon& \\
-r_4\colon& \mathit{comp\_edge}(X, Y) \leftimpl 
+\\
+r_3\colon& \mathit{comp\_edge}(X, Y) \leftimpl 
 \mathit{node}(X), \mathit{node}(Y), \mathit{ not } \mathit{ 
 edge }(X, Y). 
 \end{align*}
@@ -627,14 +624,14 @@ not be contained in the original edge set.
 emphasize difference between explicitly expressing 
 falseness of an atom and having it done by \emph{Closed 
 World Assumption}. The connective $\mathit{not}$ expresses 
-default negation, i.e. a literal $\mathit{not}A$ is assumed 
+default negation, i.e. a literal $\mathit{not} \ A$ is assumed 
 to hold unless atom $A$ is derived to be true. In contrast, 
 the classical (or strong) negation of an atom holds only if 
 it can be derived. In other words if there is no evidence 
 that an atom is true, it is considered to be false. 
-Classical negation, indicated by symbol \enquote{-}, is 
+Classical negation, indicated by symbol ``-'', is 
 permitted in from of an atoms. The semantic relationship 
-between $A$ and $-A$ is simply that they must not jointly 
+between $A$ and $\mathit{-A}$ is simply that they must not jointly 
 hold.
 
 \begin{exmp} 
@@ -759,14 +756,14 @@ to integers is illustrated by the following example.
 r_1\colon& a(1). \\
 r_2\colon& a(2). \\
 r_3\colon& b(1). \\
-r_4\colon& \\
-r_5\colon& c(X,Y) \leftimpl a(X), b(Y), X <> Y. \\
-r_6\colon& d(X,Y) \leftimpl a(X), b(Y), X \neq Y. \\
-r_7\colon& e(X,Y) \leftimpl a(X), b(Y), X < Y. \\
-r_8\colon& f(X,Y) \leftimpl a(X), b(Y), X > Y. \\
-r_9\colon& g(X,Y) \leftimpl a(X), b(Y), X \leq Y. \\
-r_{10}\colon& h(X,Y) \leftimpl a(X), b(Y), X \geq Y. \\
-r_{11}\colon& i(X,Y) \leftimpl a(X), b(Y), Y == 1. 
+\\
+r_4\colon& c(X,Y) \leftimpl a(X), b(Y), X <> Y. \\
+r_5\colon& d(X,Y) \leftimpl a(X), b(Y), X \neq Y. \\
+r_6\colon& e(X,Y) \leftimpl a(X), b(Y), X < Y. \\
+r_7\colon& f(X,Y) \leftimpl a(X), b(Y), X > Y. \\
+r_8\colon& g(X,Y) \leftimpl a(X), b(Y), X \leq Y. \\
+r_{9}\colon& h(X,Y) \leftimpl a(X), b(Y), X \geq Y. \\
+r_{10}\colon& i(X,Y) \leftimpl a(X), b(Y), Y == 1. 
 \end{align*}
 \end{exmp}
 The single answer set for the example above is:\\ 
@@ -798,15 +795,15 @@ atoms as well as for the compact representation of
 aggregates. 
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{person}(\mathit{jane}). \mathit{person}
+r_1\colon& \mathit{person}(\mathit{jane}). \  \mathit{person}
 (\mathit{john}).\\
-r_2\colon& \mathit{day}(\mathit{mon}). \mathit{day}
-(\mathit{tue}). \mathit{day}(\mathit{wed}). \mathit{day}
-(\mathit{thu}). \mathit{day}(\mathit{fri}). \\
-r_3\colon& \mathit{available}(\mathit{jane}) \leftimpl not 
+r_2\colon& \mathit{day}(\mathit{mon}). \ \mathit{day}
+(\mathit{tue}). \ \mathit{day}(\mathit{wed}). \ \mathit{day}
+(\mathit{thu}). \ \mathit{day}(\mathit{fri}). \ \\
+r_3\colon& \mathit{available}(\mathit{jane}) \leftimpl not \  
 \mathit{on}(\mathit{fri}).\\
 r_4\colon& \mathit{available}(\mathit{john}) \leftimpl 
-\mathit{not} \mathit{on}(\mathit{mon}), \mathit{not} 
+\mathit{not} \ \mathit{on}(\mathit{mon}), \mathit{not} \ 
 \mathit{on}(\mathit{wed}).\\
 r_5\colon& \mathit{meet} \leftimpl \mathit{available}(X) : 
 \mathit{person}(X).\\
@@ -987,28 +984,28 @@ of a weighed directed graph.
 \begin{exmp}
 \begin{align*}
 r_1\colon& \mathit{root}(a). \\
-r_2\colon& \mathit{node}(a). \mathit{node}(b). 
-\mathit{node}(c). \mathit{node}(d). \mathit{node}(e). \\
-r_3\colon& \mathit{edge}(a,b,4). \mathit{edge}(a,c,3). 
-\mathit{edge}(c,b,2). \mathit{edge}(c,d,3). \\
-r_4\colon& \mathit{edge}(b,e,4). \mathit{edge}(d,e,5). \\
-r_5\colon& \\
-r_6 \colon & \mathit{in\_tree}(X,Y,C) \vee 
+r_2\colon& \mathit{node}(a). \ \mathit{node}(b). \ 
+\mathit{node}(c). \ \mathit{node}(d). \ \mathit{node}(e). \ \\
+r_3\colon& \mathit{edge}(a,b,4). \ \mathit{edge}(a,c,3). \ 
+\mathit{edge}(c,b,2). \ \mathit{edge}(c,d,3). \ \\
+r_4\colon& \mathit{edge}(b,e,4). \ \mathit{edge}(d,e,5). \ \\
+\\
+r_5 \colon & \mathit{in\_tree}(X,Y,C) \vee 
 \mathit{out\_tree}(X,Y) \leftimpl \mathit{edge}(X,Y,C), 
 \mathit{reached}(X). \\
-r_7\colon& \leftimpl \mathit{root}(X), \mathit{in\_tree}
+r_6\colon& \leftimpl \mathit{root}(X), \mathit{in\_tree}
 (\_,X,C).\\
-r_8\colon& \leftimpl \mathit{in\_tree}(X,Y,C), 
+r_7\colon& \leftimpl \mathit{in\_tree}(X,Y,C), 
 \mathit{in\_tree}(Z,Y,C), X \neq Z. \\
-r_9\colon&  \\
-r_{10}\colon& \mathit{reached}(X) \leftimpl \mathit{root}
+\\
+r_{8}\colon& \mathit{reached}(X) \leftimpl \mathit{root}
 (X). \\
-r_{11}\colon& \mathit{reached}(Y) \leftimpl 
+r_{9}\colon& \mathit{reached}(Y) \leftimpl 
 \mathit{reached}(X), \mathit{in\_tree}(X,Y,C). \\
-r_{12}\colon& \leftimpl \mathit{node}(X), \mathit{not} 
+r_{10}\colon& \leftimpl \mathit{node}(X), \mathit{not} \ 
 \mathit{reached}(X). \\
-r_{13}\colon&   \\
-r_{14}\colon&\mathit{ : \sim in\_tree}(X,Y,C). [C:1]
+\\
+r_{11}\colon&\mathit{ : \sim in\_tree}(X,Y,C). [C:1]
 \end{align*}
 \end{exmp}
 Best model: $\mathit{\{reached(a), out\_tree(a,b), 
@@ -1019,14 +1016,14 @@ reached(e), reached(d),} \\ \mathit{  out\_tree(d,e)\}}$
 
 Fact from the $r_1$ of the example above defines root node 
 of a tree. Nodes and edges are defined in $r_2$ and $r_3$. 
-Rule from the $r_6$ determines is an edge going from node 
+Rule from the $r_5$ determines is an edge going from node 
 $X$ (node $X$ is already reached) in the minimum spanning 
-tree or out of it. Integrity constraint from $r_7$ ensures 
-that there is no incoming edges to the root node. $r_8$ 
+tree or out of it. Integrity constraint from $r_6$ ensures 
+that there is no incoming edges to the root node. $r_7$ 
 eliminates all answer sets where there are two outgoing 
-edges going to same node $Y$. In the $r_{10}$ and $r_{11}$ 
+edges going to same node $Y$. In the $r_{8}$ and $r_{9}$ 
 we have rules that are deciding is node reached or not. 
-$r_{11}$ removes all answer sets where there is any node 
+$r_{10}$ removes all answer sets where there is any node 
 which is not discovered. Last line of the program is weak 
 constraint with weight $C$ and level 1. Weak constraint 
 should be satisfied, but their violation does not kill the 
@@ -1046,22 +1043,22 @@ skills are concerned, and require that people married with
 one another do not work in the same group.
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{employee}(a). \mathit{employee}(b). 
-\mathit{employee}(c). \mathit{employee(d)}. \\
+r_1\colon& \mathit{employee}(a). \ \mathit{employee}(b). \ 
+\mathit{employee}(c). \ \mathit{employee(d)}. \ \\
 r_2\colon& \mathit{employee}(e). \\
-r_3\colon& \mathit{know}(a,b). \mathit{know}(b,c). 
-\mathit{know}(c,d). \mathit{know}(d,e). \\
+r_3\colon& \mathit{know}(a,b). \ \mathit{know}(b,c). \ 
+\mathit{know}(c,d). \ \mathit{know}(d,e). \ \\
 r_4\colon& \mathit{same\_skill}(a,b). \\
 r_5\colon& \mathit{married(c,d)}. \\
-r_6\colon&  \\ 
-r_7\colon& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
+\\ 
+r_6\colon& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
 \leftimpl \mathit{employee}(X).\\
-r_8\colon& : \sim \mathit{member}(X,P), \mathit{member}
-(Y,P), X \neq Y, \mathit{not} \mathit{know(X,Y)}. \colon& 
+r_7\colon& : \sim \mathit{member}(X,P), \mathit{member}
+(Y,P), X \neq Y, \mathit{not} \ \mathit{know(X,Y)}.& 
 [1:1] \\
-r_{9}\colon& : \sim  \mathit{member}(X,P), \mathit{member}
+r_{8}\colon& : \sim  \mathit{member}(X,P), \mathit{member}
 (Y,P), X \neq Y, \mathit{marrie}d(X,Y). & [1:2]\\
-r_{10}\colon& : \sim member(X,P), member(Y,P), X \neq Y, 
+r_{9}\colon& : \sim member(X,P), member(Y,P), X \neq Y, 
 same\_skill(X,Y). & [1:2] 
 \end{align*}
 \end{exmp}
@@ -1083,7 +1080,7 @@ facts. Rows $r_3$, $r_4$ and $r_5$ specify $\mathit{know}$,
 $\mathit{same\_skill}$ and $\mathit{married}$ relations 
 between some of employees. Since $\mathit{employee}(X)$ is 
 true, each $\mathit{employee}$ will be assigned either to 
-the project 1 or project 2 what is given in $r_7$. Last 
+the project 1 or project 2 what is given in $r_6$. Last 
 three lines of program are weak constraints, this time with 
 same weights but different levels of priority. Under 
 prioritization, the \dlvhex{} minimizes the violation of 
@@ -1151,15 +1148,15 @@ the graph in the graph \textit{edge} from node \textit{a},
 delegating this task to an external computational source.
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{systems}(\mathit{dlvhex}). 
+r_1\colon& \mathit{systems} \ (\mathit{dlvhex}). 
 \mathit{systems}(\mathit{clasp}). \\  
 r_2\colon& \mathit{sayhello(X)} \leftimpl 
 \ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, 
 \mathit{systems(Y).}  \\ 
 r_3\colon & \\
-r_4\colon& \mathit{set1}(a). \mathit{set1}(b). 
+r_4\colon& \mathit{set1}(a). \ \mathit{set1}(b). \ 
 \mathit{set1}(c).\\
-r_5\colon& \mathit{set2}(b). \mathit{set2}(c). 
+r_5\colon& \mathit{set2}(b). \ \mathit{set2}(c). \ 
 \mathit{set2}(d).\\
 r_6\colon& \mathit{set3}(X) \leftimpl 
 \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
