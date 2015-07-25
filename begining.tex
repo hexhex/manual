@@ -1196,12 +1196,8 @@ have: $\mathit{set3}(a)$
 \section{Examples}
 \label{sec:examples}
 Section~\ref{sec:examples} covers three real life examples  
-which are encoded and solved in the \dlvhex{}. In the 
-Section~\ref{example1} we have solved basic ``swimming 
-problem". In the Section~\ref{traveling} we have presented 
-``traveling salesperson" problem. As a last example we have 
-Section~\ref{example3} which shows how we can use \dlvhex{} 
-to plan route of one or multiple agents in the dynamic 
+which are encoded and solved in the \dlvhex{}. In Section~\ref{example1} we have solved a basic ``swimming 
+problem". In Section~\ref{traveling} we have presented the ``traveling salesperson" problem. As a last example we have the problem in Section~\ref{example3} which shows how we can use \dlvhex{} to plan route of one or multiple agents in the dynamic 
 environment controlled by the external atoms.
 
 \subsection{Example 1}
@@ -1209,8 +1205,7 @@ environment controlled by the external atoms.
 In this example we have presented the program which selects  
 the best swimming location among all available locations 
 for a swim in Vienna. While selecting location it has to 
-satisfy all constraints given from the user and place 
-specifications which are obtained from the Internet using  
+satisfy all constraints given from the user and all swimming location's specifications which are obtained from the Internet using  
 an external atom.
  
 \subsubsection{Problem Instance}
@@ -1222,7 +1217,7 @@ possible in the river Danube at two locations called
 Gansehaufel and Alte Donau (denoted $\mathit{gansD}$ and 
 $\mathit{altD}$, respectively). She looks up on the Web 
 whether she needs to pay an entrance fee, and what 
-additional equipment she will need. Finally she has the 
+additional equipment she needs. Finally she has the 
 contraint that she does not want to pay for swimming. 
 Assume Alice finds out that indoor pools in general have an 
 admission fee, and that one also
@@ -1232,7 +1227,7 @@ locations and finds out that she will need her Yoga mat for
 Alte Donau because the ground is so hard, and she will need 
 goggles for Amalienbad because there is so much chlorine in 
 the water \cite{swim}. Once the problem is defined we can 
-proceed with problem encoding.    
+proceed with encodings.    
 
 \subsubsection{Problem Encoding}
 \hex{} program to decide swimming location is encoded as 
@@ -1240,22 +1235,24 @@ follows:
 \begin{exmp}
 \label{swimExample}
 \begin{align*}
-r_1\colon& location(ind, margB). location(ind, amalB). \\& 
-location(outd, gansD). location(outd, altD) \\  
+r_1\colon& location(ind, margB). \ location(ind, amalB). \ \\& 
+location(outd, gansD). \ location(outd, altD) \\  
 r_2\colon& swim(ind) \vee swim(outd).\\ 
 r_3\colon& need(inoutd, C) \leftimpl \ext{\mathit{rq}}
 {\mathit{swim}}{\mathit{C}}. \\
+\\
 r_4\colon& goto(X) \vee ngoto(X) \leftimpl swim(P), 
 location(P, X).\\
 r_5\colon& go \leftimpl goto(X)\\
-r_6\colon& \mathit{need}(loc, C) \leftimpl 
-\ext{\mathit{rq}}{\mathit{goto}}{\mathit{C}}. \\ 
+r_6\colon& \leftimpl not \ go. \\
 r_7\colon& \leftimpl goto(X), goto(Y), X \neq Y. \\
-r_8\colon& not go. \\
-r_9\colon& need(X, money)
+\\
+r_8\colon& \mathit{need}(loc, C) \leftimpl 
+\ext{\mathit{rq}}{\mathit{goto}}{\mathit{C}}. \\ 
+r_9\colon& \leftimpl need(X, money)
 \end{align*}
 \end{exmp}
-The \hex{} program above represents Alice's reasoning 
+The \hex{} program above represents the Alice's reasoning 
 problem. $r_1$ contains a set of facts about possible 
 swimming locations (where $\mathit{ind}$ and 
 $\mathit{outd}$ are short for indoor and outdoor, 
@@ -1269,23 +1266,20 @@ choice}}{\mathit{required-resources}}$} which intuitively
 evaluates to true if a given $\mathit{location-choice}$ 
 requires a certain $\mathit{required-resource}$ and 
 represents such resources  and their origin 
-($\mathit{inoutd}$ or $\mathit{loc}$) using predicate 
+($\mathit{inoutd}$ or $\mathit{loc}$) using the predicate 
 $\mathit{need}$. The external atom $\mathit{\&rq}$ has 
 input and output arity $\mathit{in(\&rq)}$ = 
 $\mathit{out(\&rq)}$ = 1. Intuitively  $\ext{\mathit{rq}}
 {\mathit{\alpha}}{\mathit{\beta}}$ is true if a resource 
-$\beta$ is required when swimming i a place in the 
+$\beta$ is required when swimming is a place in the 
 extension of predicate $\alpha$. For example, 
 $\ext{\mathit{rq}}{\mathit{swim}}{\mathit{money}}$ is true 
 if $\mathit{swim(ind)}$ is true because indoor swimming 
 pool charge money for swimming \cite{swim}. 
 
 In the $r_4$ it is decided what is to be visited, indoor or 
-outdoor location. By $r_5$ we ensure that one location is 
-selected and integrity constraint from the $r_7$ ensures 
-that only single location is selected. Integrity constraint 
-in the $r_8$ removes all answer in which there is no chosen 
-location to go. $r_6$ collects all requirements caused by 
+outdoor location. By $r_5$ we ensure that at least one location is selected. Integrity constraint 
+in the $r_6$ removes all answer sets in which there is no selected location to go. Integrity constraint from the $r_7$ ensures that only single location is selected since Alice can not go to the different location at the same time. $r_8$ collects all requirements caused by 
 the choice of $\mathit{goto}$ location. And finally 
 constraint in the $r_9$ states that all answer sets where 
 Alice has to pay for the swimming are removed.
@@ -1309,10 +1303,7 @@ goto(gansD).\\
 what give us three additional rows which are just 
 repetition of the same rule just with different constant 
 terms. Sending predicate as input parameter does this in a 
-single line. Since input parameter of the external atoms 
-are different, external atom implementation changes. 
-Implementation details of the plugin are discussed in 
-Section~\ref{sec:externalInterfaces}.
+single line. However, it is not always the case that we can send constant terms of the predicate instead of predicate itself  as a parameter. Since input parameters of the external atom are different, external atom implementation changes. Implementation details of the plugins are discussed in Section~\ref{sec:externalInterfaces}.
 
 \subsubsection{Problem Solution}
 \hex{}-program from the Example \ref{swimExample} has a 
@@ -1331,7 +1322,7 @@ Under answer set, the external atom $\ext{rq}{goto}
 \dots $) are false. Intuitively, answer set tells Alice to 
 take her Yoga mat and go for a swim to Alte Donau (outside) 
 which is free of charge. This is the only answer set which 
-satisfies given constraints.    
+satisfies constraints given.    
 
 \subsection{Example 2}
 \label{traveling}
@@ -1358,15 +1349,13 @@ complete the traversal \cite{wiki}.
 This example is interesting for us because it is typical 
 optimization problem. Among all answer sets \dlvhex{} 
 should select best one according to weak constraints 
-explained in Section \ref{optimize}. In the classical 
-solver we are able to load only small graphs because it is 
-not feasible to load all graph at once. For this example we 
-are using external atom which is loading graph from the 
-external source edge by edge up to specified depth level 
-what makes it able to solve problem with extremely large 
-graphs.        
-
-
+concept explained in Section \ref{optimize}. In the 
+classical solver we are able to load only small graphs 
+because it is not feasible to load all graph at once. For 
+this example we are using an external atom which is loading 
+graph from the external source edge by edge up to specified 
+depth level what makes it able to solve problems with 
+extremely large graphs.        
 \subsubsection{Problem encoding}
 
 \begin{center}
@@ -1408,6 +1397,7 @@ encoded as follows:
 \begin{align*}
 r_1\colon & startingCity(austin).\\
 r_2\colon & budgetB(11).\\
+\\
 r_3\colon & \mathit{cityOfDegree(P,0,P,0)} \leftimpl 
 \mathit{startingCity(P).} \\
 & \\
@@ -1430,21 +1420,22 @@ node(Y). \\
 & \\
 r_{10} \colon & costCalculated(X) \leftimpl \#sum \{C,X,Y : 
 cycle(X,Y), cost(X,Y,C)\} = X \\
-r_{11} \colon & lastCheck(B,C) \leftimpl budget(B), 
+r_{11} \colon & withinBudget(B,C) \leftimpl budget(B), 
 costCalculated(C), B \geq C. \\
 r_{12} \colon & \leftimpl  budgetB(B), costCalculated(C), 
-\mathit{not} \mathit{lastCheck(B,C).} \\
+\mathit{not} \ \mathit{withinBudget(B,C).} \\
 & \\
-r_{13} \colon & reached(Y) \leftimpl cycle(austin, Y). \\
+r_{13} \colon & reached(Y) \leftimpl cycle(C, Y), startingCity(C). \\
 r_{14} \colon & reached(Y) \leftimpl cycle(X,Y), 
 reached(X). \\
-r_{15} \colon & \leftimpl node(Y), \mathit{not} 
+r_{15} \colon & \leftimpl node(Y), \mathit{not} \ 
 \mathit{reached(Y)}. \\
 & \\
 r_{16} \colon & :\sim cycle(X,Y), cost(X,Y,C). [C:1] 
 \end{align*}
 \end{exmp}
-In the $r_1$ we have a fact which specifies starting city. 
+In the $r_1$ we have the fact which specifies the starting 
+city. 
 It is important to notice that in our program starting 
 point for the travelling salesman may change and it is not 
 fixed. Travelling salesman should start his trip from the 
@@ -1452,18 +1443,20 @@ city specified by the fact from the $r_1$ and also finish
 his trip there if there is such a cycle which covers all 
 other cities in the graph. $r_2$ is a fact which defines 
 available budget of the travelling salesman, cost of the 
-travelling all path should be at least same as budget 
-available. An atom in $r_3$ keeps track of cities newly 
-discovered, their distances from the root (starting city) 
-and weight of the edge between newly discovered nodes and 
-its predecessor. 
-
-Rule in the $r_4$ is responsible for generating graph of 
+travelling all path should be within the budget
+available. An atom $\mathit{cityOfDegree(R,D,S,C)}$ keeps 
+track of the cities newly discovered defined as successors 
+nodes $S$ for the root node $R$, their distances from the 
+root node as $D$ and weight of the edge between $R$ and $S$ 
+denoted as $C$. Rule in the $r_3$ defines starting city for 
+the path candidate. Rule in the $r_4$ is responsible for 
+generating graph of 
 the cities discovered. It is using external atom 
 $\mathit{\&edges}$ to load new cities from the external 
 file and use them in the program. An external atom is of 
 the form $\ext{edges}{F1}{F2,Cost}$ where $\mathit{F1}$ 
-represents the node for which we are finding all successor 
+represents the predecessor node for which we are finding 
+all successor 
 nodes. $\mathit{F2}$ returns all successor nodes of 
 $\mathit{F1}$ and $\mathit{Cost}$ is an integer value which 
 represents weight of the edge between $\mathit{F1}$ and 
@@ -1476,7 +1469,7 @@ type:
 at once as a set of edges specified manually.
 \item We do not know the graph completely (e.g., all 
 facebook users, all cities on the world etc.) and they have 
-to be visited iteratively.
+to be discovered starting from the initial node specified.
 \item We want to analyze only subgraph of the graph that is 
 reachable from the node specified.
 \end{itemize}    
@@ -1491,27 +1484,27 @@ incoming edge, respectively, belonging to the cycle. Syntax
 used in these two lines is described before in Section 
 \ref{conditions}.
 
-In the $r_{10}$ we have used aggregates (Section 
+In the $r_{10}$ we have used aggregates (cf. Section 
 \ref{aggregates}) to find sum $X$ of the costs over the 
 $\mathit{cycle(X,Y)}$. In the next row, an atom 
-$\mathit{lastCheck(B,C)}$ is true if term of the 
+$\mathit{withinBudget(B,C)}$ is true if term of the 
 $\mathit{costCalculated(C)}$ is less than or equal to the 
 term of $\mathit{budgetB(B)}$ available. Integrity 
 constraint from the row $r_{12}$ ensures that in the answer 
 set overall sum of the costs for the cycle will be less 
-than or equal to the budget available. Aggregates can be 
-used to compute length travelled, money and time spent.
+than or equal to the budget available. Same rules can be applied to limit length travelled or time spent.
 
-Rows $r_{13}$ and $r_{14}$, cyclically check whether nodes 
+Rows $r_{13}$ and $r_{14}$, cyclically check whether all 
+nodes 
 are reached by a cycle candidate produced via the rows 
 $r_8$ and $r_9$.  Note that rule in $r_8$ builds on 
 assumption that the cycle starts at city Austin. The second 
 rule in $r_9$ states that, from a reached node $X$, an 
 adjacent node $Y$ can be reached via further edge in the 
 cycle. It make sure that all nodes will be reached with the 
-cycle given. Integrity constraint in $r_{15}$ eliminates 
-all answer sets where all nodes in the subgraph are not 
-reached.
+cycle given \cite{pott}. Integrity constraint in $r_{15}$ 
+eliminates answer sets where all nodes in the subgraph are 
+not reached.
 
 In order to minimize cost, we add the following 
 optimization statement: \\
@@ -1534,19 +1527,18 @@ cycle(memphis,fresno),cycle(fresno,chicago) \} \\
 & <[11:1]>. \\
 \end{align*}
 Note that we omitted some atoms from the answer to make 
-answer set easier to read and understand.
+answer set easier to read and understand. Route which satisfies given constraints is: Austin $\rightarrow$ Boston $\rightarrow$ Memphis $\rightarrow$ Fresno $\rightarrow$ Chicago $\rightarrow$ Detroit $\rightarrow$ Austin.
 From the answer set everything is obvious and it is easy to 
 conclude that there is path starting at Austin and ending 
-there. 
+there with the minimum cost of 11. 
 
 
 
 
 \subsection{Example 3}
 \label{example3}
-The last example is from the group of \emph{pathfinding } 
-\emph{problems}. Pathfinding or pathing is the plotting of 
-the shortest route between the two points. It searches a 
+The last example is from the group of ``pathfinding'' problems. Pathfinding or pathing is the plotting of 
+the route between the two points. It searches a 
 graph by starting at one vertex and exploring adjacent 
 nodes until the destination node is reached. In this 
 example we consider pathfinding for a multiple agents.
@@ -1569,7 +1561,8 @@ to the maximum path length, or the sum of plan lengths.
 These problems are important
 for many real-life applications, such as motion planning, 
 vehicle routing, environmental monitoring, patrolling, 
-computer games \cite{multipleAgents}. We consider problem 
+computer games \cite{multipleAgents}. We consider the 
+problem 
 where multiple agents need to find paths 
 from their respective starting locations to their goal 
 locations, ensuring that 
@@ -1592,10 +1585,10 @@ DegPlus=Deg+1, DgPlus <= 5, \#int(DegPlus), \\ &\#int(Deg).
 r_4 \colon & node(Y) \leftimpl nodeOfDegre(X, V, Y).  \\
 r_5 \colon & edge(X,Y) \leftimpl nodeOfDegree(X,V,Y).\\
 \\
-r_6 \colon &  \mathit{agent(1). } \mathit{ agent(2). }\\
-r_7 \colon & \mathit{start(1,one).} \mathit{ 
+r_6 \colon &  \mathit{agent(1). } \ \mathit{ agent(2). }\\
+r_7 \colon & \mathit{start(1,one).} \ \mathit{ 
 start(2,four).} \\
-r_8 \colon & \mathit{goal(1,ten).} \mathit{ 
+r_8 \colon & \mathit{goal(1,ten).} \ \mathit{ 
 goal(2,eleven).} \\
 \\
 r_9 \colon & clear(V) \leftimpl \mathit{node(V)}, V \neq 
@@ -1613,11 +1606,11 @@ r_{12} \colon &  \leftimpl 1 \neq \mathit{\#count\{ U
 \\
 r_{13} \colon &  visit(I, V) \leftimpl guessPath(I,T,V). \\
 \\
-r_{14} \colon & \leftimpl goal(I, V), \mathit{not} 
+r_{14} \colon & \leftimpl goal(I, V), \mathit{not} \  
 \mathit{visit(I, V).} \\
 r_{15} \colon &  \leftimpl guessPath(I, T, V), 
 path(I^{\prime},T,V), X \leq XP. \\
-r_{16} \colon &  \leftimpl guessPath(I,T,V), \mathit{not} 
+r_{16} \colon &  \leftimpl guessPath(I,T,V), \mathit{not} \  
 \mathit{clear(V).}\\
 \\
 r_{17} \colon &  \mathit{path(I,V,U,T,ValidOrNot)} 
@@ -1641,7 +1634,7 @@ $\mathit{nodeOfDegree(X, V,Y)}$ is true.
 From the $r_6$ to the $r_8$ we have defined set of facts. 
 Facts in $r_6$ represent different agents in the program. 
 Facts in the $r_{7}$ and $r_{8}$ define initial and 
-destination node for the agent $I$.  
+destination nodes for the agent $I$.  
 
 After introducing set of the facts, rule in the $r_{9}$ 
 represents that vertex $V$ is free and does not have any 
@@ -1673,20 +1666,22 @@ at time step $T$, agent $I$ moves from the node $V$ to the
 node $U$. Is that move valid or invalid is determined by 
 the term $\mathit{ValidOrNot}$ from the external atom. Last 
 two lines of the program are checking is the path guessed 
-valid or invalid. Agent can only know what are the edges 
+valid or invalid. Agents can only know what are the edges 
 available in the graph and make the guess in which 
-direction he should go. Consider that an agent selects some 
-edge but it become unreachable because of some reasons. 
-These reasons may be: obstacle from the environment, the 
+direction they should go. Consider that an agent selects 
+some 
+edge but it become unreachable because of some reasons in the meantime. 
+The reasons may be: obstacle from the environment, the 
 corner is to narrow, doors are too small or any change on 
 the graph or on the environment which is not considered as 
 a fact in the program. By introducing this property we have 
 some kind of a dynamic problem. To perform this check we 
 can use only an external source. External source is of the 
 form \ext{check}{U,V,T,I}{ValidOrNot} and it checks is the 
-guessed move of the agent $I$ from $U$ to $V$ at time $t$ 
-valid or invalid. In the case that any of the moves in the 
-guessed path is invalid whole answer set is removed. If no 
+guessed move of the agent $I$ from $U$ to $V$ at time $T$ 
+$\mathit{valid}$ or $\mathit{invalid}$. In the case that 
+any of the moves in the guessed path is invalid whole 
+answer set is removed. If no 
 any invalid moves in the guessed path it means that guessed 
 solution is the answer set of the program.            
 
@@ -1755,7 +1750,8 @@ $\rightarrow$ eight $\rightarrow$ ten. At each time
 instance $t$ an agent chooses either to wait or to move to 
 the another node. At $t=2$ the $\mathit{agent(1)}$ chooses 
 to wait and not to move. Same logic is applied for the 
-$\mathit{agent(2)}$. Just to show different choices we are 
+$\mathit{agent(2)}$. Just to show different choices 
+possible we are 
 giving two answer sets more:
 \\Answer Set 2:
 \begin{align*}
@@ -1772,13 +1768,13 @@ of waiting at $t=0$ on the node four it moves to the node
 seven.  
 \\Answer Set 3:
 \begin{align*}
-\{ & path(1,one,two,0,valid), path(1,two,five,1,valid),
-\\ & path(1,five,five,2,valid), path(2,four,four,0,valid),
-\\ & path(2,four,seven,1,valid), 
-path(1,five,eight,3,valid),
-\\ & path(2,seven,nine,2,valid), path(1,eight,ten,4,valid),
+\{ & path(1,one,four,0,valid), path(1,four,seven,1,valid),
+\\ & path(1,seven,nine,2,valid), path(2,four,seven,0,valid),
+\\ & path(2,seven,nine,1,valid), 
+path(1,nine,ten,3,valid),
+\\ & path(2,nine,eleven,2,valid), path(1,ten,ten,4,valid),
 \\ & 
-path(2,nine,eleven,3,valid),path(2,eleven,eleven,4,valid) 
+path(2,eleven,eleven,3,valid),path(2,eleven,eleven,4,valid) 
 \}
 \end{align*} 
 
