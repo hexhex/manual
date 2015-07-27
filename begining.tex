@@ -249,6 +249,7 @@ Section~\ref{sec:externalInterfaces}.
 \subsection{Problem Encoding}
 The problem can be modeled as a \hex{}-program as follows:
 \begin{exmp}
+\label{faceQuery}
 \begin{align*}
 r_1\colon & \mathit{personOfInterest}(\mathit{john}). \\
 r_2\colon & \mathit{friendOfDegree}(\mathit{P, 0, P}) 
@@ -1899,7 +1900,95 @@ Implementation of the $\mathit{concat}$ function would look like:
 & \ \  \ \text{\# \ Function body goes here} \\
 & \ \ \  dlvhex.output((str, \ ))
 \end{align*} 
+To get more familiar with writing Python plugins we are providing three examples as there are three possible input parameter types.
+
+The plugin in Example~\ref{constantAsInput} uses ``constant'' (string) as an input parameter. Plugin is used in the Example~\ref{faceQuery} and it queries all friends of the person of interest.
+\begin{exmp}
+\label{constantAsInput}
+\begin{align*}
+r_1 \colon & import \ dlvhex  \\
+r_2 \colon & import \ networkx \ as \ nx\\
+\\
+r_3 \colon & def \ friendsOf(personOfInterest)\colon \\
+r_4 \colon & \ \ g=nx.read\_weighted\_edgelist("test.edgelist", nodetype=str,\\ & \ \ create\_using=nx.DiGraph() \\
+r_5 \colon & \ \  friendList=g.successors(personOfInterest.value()) \\
+r_6 \colon & \ \ for \ item \ in \ friendList \colon \\
+r_7 \colon & \ \ \ \ dlvhex.output((item,)) \\
+\\
+r_8 \colon & def \ register() \colon \\
+r_9 \colon & prop = dlvhex.ExtSourceProperties()\\
+r_{10} \colon & prop.addFiniteOutputDomain(0)\\
+r_{11} \colon & dlvhex.addAtom("friendsOf", \  (dlvhex.Constant,), \  1, \ prop)   \\
+\end{align*}
+\end{exmp}
+
+In the first two lines we have imported two libraries which 
+are required. We have to import ``$\mathit{dlvhex}$'' 
+library for every plugin. The ``$\mathit{networkx}$'' 
+library is needed in this particular example since we are 
+doing some graph operations. 
+
+From the $r_3$ to the $r_7$ we have written function 
+implementation for the $\mathit{friendsOf}$ external atom. 
+It receives name of the person as string and search for all 
+friends of it in the graph and stores them to the linked 
+list. All friends discovered, stored in the linked list, are sent to the output. 
+
+In the last four lines we have registered an external atom 
+$\mathit{friendsOf}$ with constant input parameter and 
+single output parameter. 
+\bigskip \\
+Following example uses ``predicate'' as the input parameter 
+for the $\mathit{\&rq}$ external atom. Plugin is used in 
+the Example~\ref{swimExample}. External atom is performing 
+web research and it is of the form 
+$\ext{\mathit{rq}}{\mathit{location-choice}}
+{\mathit{required-resource}}$ which intuitively evaluates 
+to true if a given location-choice requires a certain 
+required-resource and represents such resources and their 
+origin (inoutd, or loc) using predicate need. 
+\begin{exmp}
+\label{predicateAsInput}
+\begin{align*}
+r_1 \colon & import \ dlvhex \\
+\\
+r_2 \colon & def \ rq(predic) \colon \\
+r_3 \colon &  \ \ for \ x \ in \ dlvhex.getTrueInputAtoms() \colon \\
+r_4 \colon &  \ \ io \ = \{ \textsc{\char13}ind \textsc{\char13} \colon \textsc{\char13}money\textsc{\char13},\textsc{\char13}amalB\textsc{\char13} \colon \textsc{\char13}goggles\textsc{\char13},\textsc{\char13}altD\textsc{\char13} \colon \textsc{\char13}yogamat\textsc{\char13}, \\ & \ \ \textsc{\char13}gansD\textsc{\char13} \colon \textsc{\char13}money\textsc{\char13} \} \\
+r_5 \colon &  \ \ inp = x.tuple()[1].value()\colon \\
+r_6 \colon &  \ \ if \ predic == x.tuple()[0]\colon  \\
+r_7 \colon &  \ \ \ \ if \ inp \ in \ io \colon \\
+r_8 \colon &  \ \ \ \ \ \ dlvhex.output((io[inp],))  \\
+\\
+r_9 \colon & def \ register() \colon  \\
+r_{10} \colon &  \ \ dlvhex.addAtom(\textsc{\char13}\textsc{\char13}rq\textsc{\char13}\textsc{\char13}, \ (dlvhex.PRDICATE), \ ), \ 1) \\
+\end{align*}
+\end{exmp}
+
+Implementation in this example is a bit different than the 
+implementation in the previous example. In this example we 
+have a predicate as input parameter. From the $r_2$ till 
+the $r_8$ we have implementation of the $rq$ function. In 
+the $r_5$ we are taking the term of the input predicate as 
+a string value. In the $r_6$ we are making sure that we are  
+working with right predicate. $r_8$ is returning  
+requirement (if there is any) for the location specified by 
+$\mathit{inp}$. Last two lines are defining the register 
+function for the $\mathit{rq}$ external atom. We could here receive constants instead of predicate and only register function will be modified. \hex{} program will be affected a lot and may not be always possible to get desired functionality as explained in Section~\ref{example1}.  
+
+\begin{exmp}
+\label{tupleAsInput}
+\begin{align*}
+TODO
+\end{align*}
+\end{exmp}
+
  
+
+
+
+
+
 
 
 Methods available for the \dlvhex{} Python module can be found at:\\ \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/}
