@@ -1123,6 +1123,7 @@ we are providing example which show how we can get use of
 external atoms in ordinary ASP.
 
 \subsection{External Atoms}
+\label{extatoms}
 Through external atoms, \hex{}-programs can communicate 
 with other sources of computation; this can be used to 
 model extensions of ASP.  
@@ -1391,6 +1392,7 @@ size=1.5em}}
 The \hex{}-program for the Travelling salesman problem is 
 encoded as follows:
 \begin{exmp}
+\label{travellingSalesman}
 \begin{align*}
 r_1\colon & startingCity(austin).\\
 r_2\colon & budgetB(11).\\
@@ -1571,6 +1573,7 @@ each other.
 The \hex-program for the problem introduced in previous 
 subsection is as follows:
 \begin{exmp}
+\label{pathfindingAgent}
 \begin{align*}
 r_1 \colon & startingNode(one). \\
 r_2 \colon & nodeOfDegree(P,0,P) \leftimpl startingNode(P). 
@@ -1775,17 +1778,140 @@ path(2,eleven,eleven,3,valid),path(2,eleven,eleven,4,valid)
 \}
 \end{align*} 
 
-   
-
-
 \section{External Interfaces}
 \label{sec:externalInterfaces}
+\dlvhex{} evaluates Answer Set Programs with external 
+atoms. One important design principle was to provide a 
+mechanism to easily add further external atoms without 
+having to recompile the main application. External atoms are introduced in Section~\ref{extatoms}.
+ 
+Formally, an external atom is defined to evaluate to true
+or false, depending on a number of parameters:
+\begin{itemize}
+\item An interpretation (a set of facts)
+\item A list of input constants
+\item A list of output constants
+\end{itemize}  
+However, It is more intuitive and convenient to think of an 
+external atom no as being boolean, but rather functional:
+Depending on a given interpretation and a list of input 
+constants, it returns output tuples. For instance, the 
+external atom to import triples from RDF files has this 
+form: \\
+\centerline{$\ext{rdf}{uri}{X,Y,Y}$} 
+where $\mathit{uri}$ stands for a string denoting the RDF-source and X,Y, and Z are variables that represent an RDF-triples from the specified source.
+
+\subsection{Information Flow}
+The interface that is used by \dlvhex{} to access a plugin 
+follows very closely these semantics. For each atom, a 
+retrieval function has to be implemented, which receives a 
+query-object and has to return an an answer-object. The 
+query-object carries the input interpretation as well as 
+the ground input parameters of the external atom call, 
+while the answer object is a container for the output 
+tuples of the external atom's function.   
+
+\subsection{Types of Input Parameters}
+Theoretically, it is completely up to the atom function how 
+to process the interpretation together with the input 
+constants,
+which are basically only names. In practice however, only 
+parts of the interpretation might be needed. Considering 
+this as well as for efficiency reasons, in the \dlvhex{} 
+there are three categories of input parameters: 
+\begin{itemize}
+\item Constant parameter
+\item Predicate parameter
+\item Tuple
+\end{itemize}
+
+A parameter of type ``Constant'' is not related to the 
+interpretation at all, like in the previous example of the 
+RDF-atom where we have strings as a constant input to the external atom. 
+
+A parameter is of type ``Predicate'' means that 
+all facts in the interpretation with this predicate are 
+necessary for the atom. Let us assume, we have an external 
+atom that calculates the overall price of a number of books 
+given by their ISBN number:\\
+\centerline{$\ext{overallbookprice}{isbn}{X}$}
+The single input parameter of this atom would be of type 
+``Predicate'', meaning that not the constant itself is 
+necessary for the atom's function, but the part of the 
+interpretation with this predicate. So if we have, e.g.,\\ 
+$I= \{ \mathit{isbn(0-19-82183-6)}, \  \mathit{isbn(0-201-99954-4)}, \ p(a), \ q(b), \dots$ \} 
+the atom's function will be called with a ``reduced'' interpretation: \\
+$I= \{ \mathit{isbn(0-19-82183-6)}, \  \mathit{isbn(0-201-99954-4)}\}$
+
+A parameter of type ``Tuple'' represents a meta category standing for an arbitrary mount of Constant input parameters. This is useful when we have to send multiple constant parameters separately, e.g., for \\
+\centerline{$\ext{concat}{string1, string2, string3, \dots}{Out}$}. 
+
+Specifying the type of input parameters not only helps to 
+single out the relevant part of the interpretation, but 
+also supports \dlvhex{} in calculating the dependencies 
+within a \hex-program. More details about the Python and 
+C++ plugin implementations are given in the following two 
+subsections.
+
 \subsection{Python}
+With \dlvhex{} version 2.4.0 a Python plugin interface was 
+introduced, which supports Python scripts that provide 
+functions to realise custom external atoms. For every Python plugin two necessary tasks are:
+\begin{itemize}
+\item Write a new Python script which contains a register function and imports the package \dlvhex{}
+\item Write another function for each external atom, and export this function using the $\mathit{register}$ function 
+\end{itemize}
+The $\mathit{register}$ function has the following form:
+\begin{align*}
+&def \ register():\\
+& \ \ \  dlvhex.addAtom("Atom\_Name", \ (Input\_Parameters), \ Output\_Arity)
+\end{align*}
+It adds one entry for each external atom. Each entry is 
+again a tuple of arity 3:
+\begin{itemize}
+\item $\mathit{Atom}\_\mathit{Name}$: is the name of the 
+external predicate
+\item $\mathit{Input}\_\mathit{Parameters}$: is another 
+tuple of input parameter types. Number of input parameters 
+is not fixed. Input parameter types can be one of the 
+following: dlvhex.CONSTANT, dlvhex.PREDICATE or 
+dlvhex.TUPLE. Different input parameters are separated with  
+``,'' sign   
+\item $\mathit{Output}\_\mathit{Arity}$: integer value representing the output arity of an atom  
+\end{itemize}
+Consider the instance of $\mathit{\&concat}$ external atom which we introduced in the previous section. It just takes two strings and outputs their concatenation. The register function then would look like:
+\begin{align*}
+&def \ register():\\
+& \ \ \  dlvhex.addAtom("concat", \ (dlvhex.CONSTANT, dlvhex.CONSTANT),1)
+\end{align*}
+
+Once the external atom is registered successfully, it has 
+to be implemented in the form of another Python function 
+with an appropriate number of input parameters. It has the 
+following form:  
+\begin{align*}
+& \mathit{def} \ \mathit{Atom\_Name}(Input\_Parameter\_1, \ Input\_Parameter\_2, \ \dots) \\
+& \ \ \  dlvhex.output((Output\_Parameter\_1, \ \dots ))
+\end{align*} 
+Implementation of the $\mathit{concat}$ function would look like:
+\begin{align*}
+& \mathit{def} \ \mathit{concat}(a, \ b) \\
+& \ \  \ \text{\# \ Function body goes here} \\
+& \ \ \  dlvhex.output((str, \ ))
+\end{align*} 
+ 
+
+
+Methods available for the \dlvhex{} Python module can be found at:\\ \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/}
 \subsection{C++}
+
+
+
+
+
 
 \section{Command Line options}
 \label{sec:commandline}
-
 \section{Input-related warnings and errors}
 \label{sec:inputRelatedWarnings}
 
