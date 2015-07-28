@@ -1867,84 +1867,86 @@ functions to realise custom external atoms. For every Python plugin two necessar
 \item Write a new Python script which contains a register function and imports the package \dlvhex{}
 \item Write another function for each external atom, and export this function using the $\mathit{register}$ function 
 \end{itemize}
-The $\mathit{register}$ function has the following form:
-\begin{align*}
-&def \ register():\\
-& \ \ \  dlvhex.addAtom("Atom\_Name", \ (Input\_Parameters), \ Output\_Arity)
-\end{align*}
+The \verb+register+ function has the following form:
+\begin{verbatim} 
+def register():
+  dlvhex.addAtom("Atom_Name",(Input_Parameters),Output_Arity) 
+\end{verbatim}
 It adds one entry for each external atom. Each entry is 
 again a tuple of arity 3:
 \begin{itemize}
-\item $\mathit{Atom}\_\mathit{Name}$: is the name of the 
+\item \verb+Atom_Name+: is the name of the 
 external predicate
-\item $\mathit{Input}\_\mathit{Parameters}$: is another 
+\item \verb+Input_Parameters+: is another 
 tuple of input parameter types. Number of input parameters 
 is not fixed. Input parameter types can be one of the 
-following: dlvhex.CONSTANT, dlvhex.PREDICATE or 
-dlvhex.TUPLE as it is introduced in the previous section. Different input parameters are separated with  
+following: \verb+dlvhex.CONSTANT+, \verb+dlvhex.PREDICATE+ or 
+\verb+dlvhex.TUPLE+ as it is introduced in the previous section. Different input parameters are separated with  
 ``,'' sign   
-\item $\mathit{Output}\_\mathit{Arity}$: integer value representing the output arity of an atom  
+\item \verb+Output_Arity+: integer value representing the output arity of an atom  
 \end{itemize}
 Consider instance of the $\mathit{\&concat}$ external atom which we introduced in the previous section. It just takes two strings and outputs their concatenation. The register function then would look like:
-\begin{align*}
-&def \ register():\\
-& \ \ \  dlvhex.addAtom("concat", \ (dlvhex.CONSTANT, dlvhex.CONSTANT),1)
-\end{align*}
-
+\begin{verbatim}
+def register():
+  dlvhex.addAtom("concat",(dlvhex.CONSTANT,dlvhex.CONSTANT),1)  
+\end{verbatim}
 Once the external atom is registered successfully, it has 
 to be implemented in the form of another Python function 
 with an appropriate number of input parameters. It has the 
 following form:  
-\begin{align*}
-& \mathit{def} \ \mathit{Atom\_Name}(Input\_Parameter\_1, \ Input\_Parameter\_2, \ \dots) \\
-& \ \ \  dlvhex.output((Output\_Parameter\_1, \ \dots ))
-\end{align*} 
-Implementation of the $\mathit{concat}$ function would look like:
-\begin{align*}
-& \mathit{def} \ \mathit{concat}(a, \ b) \\
-& \ \  \ \text{\# \ Function body goes here} \\
-& \ \ \  dlvhex.output((str, \ ))
-\end{align*} 
+\begin{verbatim}
+def Atom_Name(Input_Parameter_1,Input_Parameter_2,...)
+  dlvhex.output((Output_Parameter_1,...))
+\end{verbatim}
+
+Implementation of the \verb+concat+ function would look like:
+\begin{verbatim}
+def concat(a,b)
+  # Function body goes here
+  dlvhex.output((str, ))
+\end{verbatim} 
 To get more familiar with Python plugins we are providing three examples as there are three possible input parameter types.
 
 The plugin in Example~\ref{constantAsInput} uses ``constant'' (string) as an input parameter. Plugin is used in the Example~\ref{faceQuery} and it queries all direct friends for the person of interest.
 \begin{exmp}
 \label{constantAsInput}
-\begin{align*}
-r_1 \colon & import \ dlvhex  \\
-r_2 \colon & import \ networkx \ as \ nx\\
-\\
-r_3 \colon & def \ friendsOf(personOfInterest)\colon \\
-r_4 \colon & \ \ g=nx.read\_weighted\_edgelist("test.edgelist", nodetype=str,\\ & \ \ create\_using=nx.DiGraph() \\
-r_5 \colon & \ \  friendList=g.successors(personOfInterest.value()) \\
-r_6 \colon & \ \ for \ item \ in \ friendList \colon \\
-r_7 \colon & \ \ \ \ dlvhex.output((item,)) \\
-\\
-r_8 \colon & def \ register() \colon \\
-r_9 \colon & prop = dlvhex.ExtSourceProperties()\\
-r_{10} \colon & prop.addFiniteOutputDomain(0)\\
-r_{11} \colon & dlvhex.addAtom("friendsOf", \  (dlvhex.Constant,), \  1, \ prop)   \\
-\end{align*}
+\begin{verbatim}
+
+1:  import dlvhex
+2:  import networkx as nx
+
+3:  def friendsOf(personOfInterest):
+4:    g = nx.read_weighted_edgelist("test.edgelist",nodetype=str,
+                                    create_using=nx.DiGraph())
+5:    friendList = g.successors(personOfInterest.value())
+6:    for item in friendList:
+7:      dlvhex.output((item, ))
+
+8:  def register():
+9:  prop = dlvhex.ExtSourceProperties()
+10: prop.addFiniteOutputDomain(0)
+11: dlvhex.addAtom("friendsOf",(dlvhex.Constant, ),1,prop)
+\end{verbatim}
 \end{exmp}
 
 In the first two lines we have imported two libraries which 
-are required. We have to import ``$\mathit{dlvhex}$'' 
-library for every plugin. The ``$\mathit{networkx}$'' 
+are required. We have to import ``\verb+dlvhex+'' 
+library for every plugin. The ``\verb+networkx+'' 
 library is needed in this particular example since we are 
 doing some graph operations (i.e. loading graphs from the file, get all successors of the node etc.). 
 
-From the $r_3$ to the $r_7$ we have written function 
-implementation for the $\mathit{friendsOf}$ external atom. 
+From the lines \verb+3+ to the line \verb+7+ we have written function 
+implementation for the \verb+friendsOf+ external atom. 
 It receives name of the person as string and search for all 
-direct friends of that person in the graph, which is loaded from the file in the $r_4$, and stores them to the linked 
-list. All friends discovered, stored in the linked list, are sent to the output as it is specified in the $r_7$. 
+direct friends of that person in the graph, which is loaded from the file in the line \verb+4+, and stores them to the linked 
+list. All friends discovered, stored in the linked list, are sent to the output as it is specified in the line \verb+7+. 
 
 In the last four lines we have registered an external atom 
-$\mathit{friendsOf}$ with constant input parameter and 
+\verb+friendsOf+ with constant input parameter and 
 single output parameter. 
 \bigskip \\
 Following example uses ``predicate'' as the input parameter 
-for the $\mathit{\&rq}$ external atom. Plugin is used in 
+for the \verb+&rq+ external atom. Plugin is used in 
 the Example~\ref{swimExample}. External atom is performing 
 web research to check what are the requirements for the location choice selected. It is of the form 
 $\ext{\mathit{rq}}{\mathit{location-choice}}
@@ -1954,52 +1956,55 @@ required-resource and represents such resources and their
 origin (inoutd, or loc) using predicate need. 
 \begin{exmp}
 \label{predicateAsInput}
-\begin{align*}
-r_1 \colon & import \ dlvhex \\
-\\
-r_2 \colon & def \ rq(predic) \colon \\
-r_3 \colon &  \ \ for \ x \ in \ dlvhex.getTrueInputAtoms() \colon \\
-r_4 \colon &  \ \ io \ = \{ \textsc{\char13}ind \textsc{\char13} \colon \textsc{\char13}money\textsc{\char13},\textsc{\char13}amalB\textsc{\char13} \colon \textsc{\char13}goggles\textsc{\char13},\textsc{\char13}altD\textsc{\char13} \colon \textsc{\char13}yogamat\textsc{\char13}, \\ & \ \ \textsc{\char13}gansD\textsc{\char13} \colon \textsc{\char13}money\textsc{\char13} \} \\
-r_5 \colon &  \ \ inp = x.tuple()[1].value()\colon \\
-r_6 \colon &  \ \ if \ predic == x.tuple()[0]\colon  \\
-r_7 \colon &  \ \ \ \ if \ inp \ in \ io \colon \\
-r_8 \colon &  \ \ \ \ \ \ dlvhex.output((io[inp],))  \\
-\\
-r_9 \colon & def \ register() \colon  \\
-r_{10} \colon &  \ \ dlvhex.addAtom(\textsc{\char13}\textsc{\char13}rq\textsc{\char13}\textsc{\char13}, \ (dlvhex.PRDICATE), \ ), \ 1) \\
-\end{align*}
+\begin{verbatim}
+
+1:  import dlvhex 
+
+2:  def rq(predic)
+3:    for x in dlvhex.getTrueInputAtoms():
+4:      io = {"ind":"money","amalB":"goggles","altD":"yogamat",
+              "gansD":"money"}
+5:      inp = x.tuple()[1].value()
+6:        if predic == x.tuple()[0]:
+7:          if inp in io:
+8:            dlvhex.output((io[inp], ))
+
+9:  def register():
+10:   dlvhex.addAtom("rq",(dlvhex.PRDICATE), ),1)
+\end{verbatim}
 \end{exmp}
 
 In this example we 
-have a predicate as input parameter. From the $r_2$ to 
-the $r_8$ we have implementation of the $rq$ function. In 
-the $r_5$ we are taking the term of the input predicate as 
-a string value. In the $r_6$ we are making sure that we are  
-working with right predicate. $r_8$ is returning  
-requirement (if there is any) for the location specified by 
-$\mathit{inp}$. Last two lines are defining the register 
-function for the $\mathit{rq}$ external atom. We could here receive constants instead of predicate and only register function will be modified. \hex{} program will be affected a lot and may not be always possible to get desired functionality. This is explained in Section~\ref{example1}.  
+have a predicate as input parameter. From the line \verb+2+ to 
+the line \verb+8+ we have implementation of the \verb+rq+ function. In 
+the line \verb+5+ we are taking the term of the input predicate as 
+a string value. In the line \verb+6+ we are making sure that we are  
+working with right predicate. Line \verb+8+ is returning  
+requirement (if there is any) for the location specified by variable 
+\verb+inp+. Last two lines are defining the register 
+function for the \verb+rq+ external atom. We could here receive constants instead of predicate and only register function will be modified. \hex{} program will be affected a lot and may not be always possible to get desired functionality. This is explained in Section~\ref{example1}.  
 \bigskip \\
 As we said before, there exist a third category called Tuple. It stands for an arbitrary mount of Constant input parameters. The following example presents usage of the Tuple in a plugin. Plugin is used to implement string concatenation.  
 \begin{exmp}
 \label{tupleAsInput}
-\begin{align*}
-r_1 \colon & import \ dlvhex \\
-\\
-r_2 \colon & def \ concat(tup) \colon\\
-r_3 \colon & \ \ ret=\textsc{\char13}\textsc{\char13} \ \textsc{\char13}\textsc{\char13}  \\
-r_4 \colon & \ \ for \ x \ in \ tup \colon \\
-r_5 \colon & \ \ \ \ ret = ret + x.value() \\
-r_6 \colon & \ \ dlvhex.output((ret, \ )) \\
-\\
-r_7 \colon & def \ register() \colon \\
-r_8 \colon & \ \ dlvhex.addAtom(\textsc{\char13}\textsc{\char13}concat\textsc{\char13}\textsc{\char13}, (dlvhex.TUPLE, \ ), \ 1) \\
-\end{align*}
+\begin{verbatim}
+
+1:  import dlvhex
+
+2:  def concat(tup):
+3:    ret=" "
+4:    for x in tup:
+5:      ret = ret + x.value()
+6:    dlvhex.output((ret, ))
+
+7:  def register():
+8:    dlvhex.addAtom("concat",(dlvhex.TUPLE, ),1)
+\end{verbatim}
 \end{exmp}
 This plugin receives tuple of the strings, concatenates 
 them and output as a single string value. Function to do 
 this is called ``concat'' and it is implemented from the 
-$r_2$ to the $r_6$ in the example above. In the $r_3$ an 
+line \verb+2+ to the line \verb+6+ in the example above. In the line \verb+3+ an 
 empty string is initialized. Inside the for loop input 
 string is appended to the string initialized. This process 
 is continued until all strings from the tuple are not 
