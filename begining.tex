@@ -820,7 +820,12 @@ with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition
 for the last line is contained in the head of the rule. It 
 turns into \emph{disjunction} over all ground instances of 
 $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ 
-for which $\mathit{day(t)}$ holds. Any variable occurring 
+for which $\mathit{day(t)}$ holds. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with ``;'' sign, the rule would look like:
+\centerline{\{$\mathit{on}(X);\mathit{travel}(X) : \mathit{day}(X)\} \leftimpl 
+\mathit{meet}.$}
+where for all ground instances of $\mathit{on(X)}$ and $\mathit{travel(X)}$ such that $X$ is is substituted by terms $t$ for which $\mathit{day(t)}$ holds. 
+
+Any variable occurring 
 within a condition does not count as a positive occurrence 
 outside the condition in the sense of safety. A variable 
 $X$ in an aggregate-free rule is safe if at least one of 
@@ -2001,13 +2006,6 @@ is continued until all strings from the tuple are not
 processed. Once all elements in the tuple are processed, 
 the result is sent to the output.  
  
-
-
-
-
-
-
-
 Methods available for the \dlvhex{} Python module can be found at:\\ \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/}
 \subsection{C++}
 
