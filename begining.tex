@@ -4,6 +4,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{amsmath}
+\usepackage{array}
 
 \usepackage{tikz}
 \usetikzlibrary{arrows}
@@ -2013,14 +2014,47 @@ the result is sent to the output.
  
 Methods available for the \dlvhex{} Python module can be found at:\\ \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/}
 \subsection{C++}
-
-
-
-
-
+TODO
 
 \section{Command Line options}
 \label{sec:commandline}
+In this section, we briefly describe the meaning of some 
+selected command line options supported by \dlvhex{}. 
+Calling only \dlvhex{} without any arguments will show all 
+command line options available. For each option, we below indicate whether it requires an argument, and if so, we also describe its meaning. An abstract invocation of \dlvhex{} looks as follows:\\
+\texttt{dlvhex2 [OPTION] FILENAME [FILENAME ...]} or \texttt{dlvhex2 [OPTION] --.}
+
+
+\subsection{Input, Output and Reasoning Options}
+
+
+% Sets column space
+%\def\arraystretch{2}\tabrowsep=50pt
+% Sets row space
+\renewcommand{\arraystretch}{2}
+\begin{center}
+\begin{tabular}{  m{1cm}  m{4.7cm} m{6.1cm} } 
+ & \texttt{--} & Parse from standard input. \\ 
+\texttt{-s} & \texttt{--silent}& Do not display anything than the actual result \\ 
+\texttt{-f} & \texttt{--filter=foo[,bar[,...]]} & Only display instances of the specified predicate \\
+& \texttt{--nofacts} & Do not output EDB facts.\\
+\texttt{-n} & \texttt{--number=<num>} & Limit number of displayed models to $\langle$num$\rangle$, 0 (default)  \\ 
+\end{tabular}
+\end{center}
+
+
+
+
+
+
+\subsection{Plugin Options}
+
+\subsection{Performance Tuning Options}
+
+\subsection{Debugging and General Options}
+
+
+
 \section{Input-related warnings and errors}
 \label{sec:inputRelatedWarnings}
 
