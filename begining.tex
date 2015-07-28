@@ -2024,10 +2024,8 @@ Calling only \dlvhex{} without any arguments will show all
 command line options available. For each option, we below indicate whether it requires an argument, and if so, we also describe its meaning. An abstract invocation of \dlvhex{} looks as follows:\\
 \texttt{dlvhex2 [OPTION] FILENAME [FILENAME ...]} or \texttt{dlvhex2 [OPTION] --.}
 
-
-\subsection{Input, Output and Reasoning Options}
-
-
+\bigskip
+The following set of commands is related with Input, Output and  Reasoning options and they directly affect the result.
 % Sets column space
 %\def\arraystretch{2}\tabrowsep=50pt
 % Sets row space
@@ -2036,9 +2034,27 @@ command line options available. For each option, we below indicate whether it re
 \begin{tabular}{  p{1cm}  p{4.7cm} p{6.1cm}  } 
  & \texttt{--} & Parse from standard input. \\ 
 \texttt{-s} & \texttt{--silent}& Do not display anything than the actual result \\ 
-\texttt{-f} & \texttt{--filter=foo[,bar[,...]]} & Only display instances of the specified predicate \\
-& \texttt{--nofacts} & Do not output EDB facts.\\
-\texttt{-n} & \texttt{--number=<num>} & Limit number of displayed models to $\langle$num$\rangle$, 0 (default)  \\ 
+\texttt{-f} & \texttt{--filter=foo[,bar[,...]]} & Only display instances of the specified predicate(s). \\
+& \texttt{--nofacts} & Do not output EDB facts. EDB facts are the facts of the program.  \\
+\texttt{-n} & \texttt{--number=<num>} & Limit number of displayed models to $\langle$num$\rangle$, 0 (default)\\ 
+\texttt{-N} & \texttt{--maxint=<num>} & Set maximum integer (\#maxint in the program takes precedence). \\
+ & \texttt{--weaksafety} & Skip strong safety check.\\
+ & \texttt{--strongsafety} & Applies traditional strong safety criteria. \\
+  & \texttt{--liberalsafety} & Uses more liberal safety condition than strong safety. \\
+  &\texttt{--mlp}& Use dlvhex$+$mlp solver (modular nonmonotonic logic programs).\\
+  & \texttt{--forget} & Forget previous instantiations that are not involved in current computation (mlp setting). \\
+  & \texttt{--split} &Use instantiation splitting techniques.\\
+  & \texttt{--noeval} & Just parse the program, don't evaluate it (only useful with --verbose). \\
+  & \texttt{--keepnsprefix} & Keep specified namespace-prefixes in the result. \\
+  & \texttt{--keepauxpreds} & Keep auxiliary predicates in answer sets. \\
+\end{tabular}
+\end{center}
+\bigskip
+Following command is related with plugin options.
+\begin{center}
+\begin{tabular}{  p{1cm}  p{4.7cm} p{6.1cm}  } 
+ \texttt{-p}&\texttt{plugindir=DIR}&Specify additional directory where to look for plugin libraries (additionally to the installation plugin-dir and \$HOME/.dlvhex/plugins). Start with ! to reset the preset plugin paths, e.g., ``!:/lib'' will use only /lib/.
+ \\
 \end{tabular}
 \end{center}
 
