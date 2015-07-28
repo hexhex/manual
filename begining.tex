@@ -1876,11 +1876,11 @@ external predicate
 tuple of input parameter types. Number of input parameters 
 is not fixed. Input parameter types can be one of the 
 following: dlvhex.CONSTANT, dlvhex.PREDICATE or 
-dlvhex.TUPLE. Different input parameters are separated with  
+dlvhex.TUPLE as it is introduced in the previous section. Different input parameters are separated with  
 ``,'' sign   
 \item $\mathit{Output}\_\mathit{Arity}$: integer value representing the output arity of an atom  
 \end{itemize}
-Consider the instance of $\mathit{\&concat}$ external atom which we introduced in the previous section. It just takes two strings and outputs their concatenation. The register function then would look like:
+Consider instance of the $\mathit{\&concat}$ external atom which we introduced in the previous section. It just takes two strings and outputs their concatenation. The register function then would look like:
 \begin{align*}
 &def \ register():\\
 & \ \ \  dlvhex.addAtom("concat", \ (dlvhex.CONSTANT, dlvhex.CONSTANT),1)
@@ -1900,9 +1900,9 @@ Implementation of the $\mathit{concat}$ function would look like:
 & \ \  \ \text{\# \ Function body goes here} \\
 & \ \ \  dlvhex.output((str, \ ))
 \end{align*} 
-To get more familiar with writing Python plugins we are providing three examples as there are three possible input parameter types.
+To get more familiar with Python plugins we are providing three examples as there are three possible input parameter types.
 
-The plugin in Example~\ref{constantAsInput} uses ``constant'' (string) as an input parameter. Plugin is used in the Example~\ref{faceQuery} and it queries all friends of the person of interest.
+The plugin in Example~\ref{constantAsInput} uses ``constant'' (string) as an input parameter. Plugin is used in the Example~\ref{faceQuery} and it queries all direct friends for the person of interest.
 \begin{exmp}
 \label{constantAsInput}
 \begin{align*}
@@ -1926,13 +1926,13 @@ In the first two lines we have imported two libraries which
 are required. We have to import ``$\mathit{dlvhex}$'' 
 library for every plugin. The ``$\mathit{networkx}$'' 
 library is needed in this particular example since we are 
-doing some graph operations. 
+doing some graph operations (i.e. loading graphs from the file, get all successors of the node etc.). 
 
 From the $r_3$ to the $r_7$ we have written function 
 implementation for the $\mathit{friendsOf}$ external atom. 
 It receives name of the person as string and search for all 
-friends of it in the graph and stores them to the linked 
-list. All friends discovered, stored in the linked list, are sent to the output. 
+direct friends of that person in the graph, which is loaded from the file in the $r_4$, and stores them to the linked 
+list. All friends discovered, stored in the linked list, are sent to the output as it is specified in the $r_7$. 
 
 In the last four lines we have registered an external atom 
 $\mathit{friendsOf}$ with constant input parameter and 
@@ -1941,7 +1941,7 @@ single output parameter.
 Following example uses ``predicate'' as the input parameter 
 for the $\mathit{\&rq}$ external atom. Plugin is used in 
 the Example~\ref{swimExample}. External atom is performing 
-web research and it is of the form 
+web research to check what are the requirements for the location choice selected. It is of the form 
 $\ext{\mathit{rq}}{\mathit{location-choice}}
 {\mathit{required-resource}}$ which intuitively evaluates 
 to true if a given location-choice requires a certain 
@@ -1965,24 +1965,41 @@ r_{10} \colon &  \ \ dlvhex.addAtom(\textsc{\char13}\textsc{\char13}rq\textsc{\c
 \end{align*}
 \end{exmp}
 
-Implementation in this example is a bit different than the 
-implementation in the previous example. In this example we 
-have a predicate as input parameter. From the $r_2$ till 
+In this example we 
+have a predicate as input parameter. From the $r_2$ to 
 the $r_8$ we have implementation of the $rq$ function. In 
 the $r_5$ we are taking the term of the input predicate as 
 a string value. In the $r_6$ we are making sure that we are  
 working with right predicate. $r_8$ is returning  
 requirement (if there is any) for the location specified by 
 $\mathit{inp}$. Last two lines are defining the register 
-function for the $\mathit{rq}$ external atom. We could here receive constants instead of predicate and only register function will be modified. \hex{} program will be affected a lot and may not be always possible to get desired functionality as explained in Section~\ref{example1}.  
-
+function for the $\mathit{rq}$ external atom. We could here receive constants instead of predicate and only register function will be modified. \hex{} program will be affected a lot and may not be always possible to get desired functionality. This is explained in Section~\ref{example1}.  
+\bigskip \\
+As we said before, there exist a third category called Tuple. It stands for an arbitrary mount of Constant input parameters. The following example presents usage of the Tuple in a plugin. Plugin is used to implement string concatenation.  
 \begin{exmp}
 \label{tupleAsInput}
 \begin{align*}
-TODO
+r_1 \colon & import \ dlvhex \\
+\\
+r_2 \colon & def \ concat(tup) \colon\\
+r_3 \colon & \ \ ret=\textsc{\char13}\textsc{\char13} \ \textsc{\char13}\textsc{\char13}  \\
+r_4 \colon & \ \ for \ x \ in \ tup \colon \\
+r_5 \colon & \ \ \ \ ret = ret + x.value() \\
+r_6 \colon & \ \ dlvhex.output((ret, \ )) \\
+\\
+r_7 \colon & def \ register() \colon \\
+r_8 \colon & \ \ dlvhex.addAtom(\textsc{\char13}\textsc{\char13}concat\textsc{\char13}\textsc{\char13}, (dlvhex.TUPLE, \ ), \ 1) \\
 \end{align*}
 \end{exmp}
-
+This plugin receives tuple of the strings, concatenates 
+them and output as a single string value. Function to do 
+this is called ``concat'' and it is implemented from the 
+$r_2$ to the $r_6$ in the example above. In the $r_3$ an 
+empty string is initialized. Inside the for loop input 
+string is appended to the string initialized. This process 
+is continued until all strings from the tuple are not 
+processed. Once all elements in the tuple are processed, 
+the result is sent to the output.  
  
 
 
