@@ -2030,25 +2030,25 @@ The following set of commands is related with Input, Output and  Reasoning optio
 % Sets column space
 %\def\arraystretch{2}\tabrowsep=50pt
 % Sets row space
-\renewcommand{\arraystretch}{2}
+\renewcommand{\arraystretch}{1.7}
 \begin{center}
-\begin{tabular}{  p{1cm}  p{4.7cm} p{6.1cm}  } 
- & \texttt{--} & Parse from standard input. \\ 
-\texttt{-s} & \texttt{--silent}& Do not display anything than the actual result \\ 
-\texttt{-f} & \texttt{--filter=foo[,bar[,...]]} & Only display instances of the specified predicate(s). \\
-& \texttt{--nofacts} & Do not output EDB facts. EDB facts are the facts of the program.  \\
-\texttt{-n} & \texttt{--number=<num>} & Limit number of displayed models to $\langle$num$\rangle$, 0 (default)\\ 
-\texttt{-N} & \texttt{--maxint=<num>} & Set maximum integer (\#maxint in the program takes precedence). \\
- & \texttt{--weaksafety} & Skip strong safety check.\\
- & \texttt{--strongsafety} & Applies traditional strong safety criteria. \\
-  & \texttt{--liberalsafety} & Uses more liberal safety condition than strong safety. \\
-  &\texttt{--mlp}& Use dlvhex$+$mlp solver (modular nonmonotonic logic programs).\\
-  & \texttt{--forget} & Forget previous instantiations that are not involved in current computation (mlp setting). \\
-  & \texttt{--split} &Use instantiation splitting techniques.\\
-  & \texttt{--noeval} & Just parse the program, don't evaluate it (only useful with --verbose). \\
-  & \texttt{--keepnsprefix} & Keep specified namespace-prefixes in the result. \\
-  & \texttt{--keepauxpreds} & Keep auxiliary predicates in answer sets. \\
-\end{tabular}
+\begin{longtable}{p{0.7cm}  p{2cm} p{0.7cm} p{7.0cm}  } 
+ & \texttt{--}& & Parse from standard input. \\ 
+\texttt{-s} & \texttt{--silent}&& Do not display anything than the actual result \\ 
+\texttt{-f} & \texttt{--filter=foo[,bar[,...]]} && Only display instances of the specified predicate(s). \\
+& \texttt{--nofacts} && Do not output EDB facts. EDB facts are the facts of the program.  \\
+\texttt{-n} & \texttt{--number=<num>} && Limit number of displayed models to $\langle$num$\rangle$, 0 (default)\\ 
+\texttt{-N} & \texttt{--maxint=<num>} && Set maximum integer (\#maxint in the program takes precedence). \\
+ & \texttt{--weaksafety} && Skip strong safety check.\\
+ & \texttt{--strongsafety} && Applies traditional strong safety criteria. \\
+  & \texttt{--liberalsafety} && Uses more liberal safety condition than strong safety. \\
+  &\texttt{--mlp}&& Use dlvhex$+$mlp solver (modular nonmonotonic logic programs).\\
+  & \texttt{--forget} && Forget previous instantiations that are not involved in current computation (mlp setting). \\
+  & \texttt{--split} &&Use instantiation splitting techniques.\\
+  & \texttt{--noeval} && Just parse the program, don't evaluate it (only useful with --verbose). \\
+  & \texttt{--keepnsprefix} && Keep specified namespace-prefixes in the result. \\
+  & \texttt{--keepauxpreds} && Keep auxiliary predicates in answer sets. \\
+\end{longtable}
 \end{center}
 \bigskip
 \subsection{Plugin Options}
@@ -2061,10 +2061,10 @@ The following set of commands is related with Input, Output and  Reasoning optio
 
 \subsection{Performance Tuning Options}
 \begin{center}
-\begin{longtable}{p{0.7cm}  p{2cm} p{0.3cm} p{7.0cm}  } 
+\begin{longtable}{p{0.7cm}  p{2.2cm} p{0.3cm} p{7.0cm}  } 
 %--EXTLEARN
 \multicolumn{4}{l}{\texttt{--extlearn[=none,iobehavior,monotonicity,functionality,}} \\
-\multicolumn{4}{l}{\texttt{linearity,neg,user,generalize]}} \\
+\multicolumn{3}{l}{\texttt{linearity,neg,user,generalize]}} \\
 & & & Learn nogoods from external atom evaluation (only useful with \texttt{--solver=genuineii} or \texttt{--solver=genuinegi)}.\\
 &\texttt{none}:& & Deactivate external learning. \\
 &\texttt{iobehaviour}:& &Apply generic rules to learn input-output behaviour. \\
@@ -2151,6 +2151,16 @@ The following set of commands is related with Input, Output and  Reasoning optio
 %%%%%%%%%%%%%%%%%%%
 -m& \multicolumn{3}{l}{\texttt{--modelbuilder=M}}\\
 & & & Use M as model builder, where M is one of (online,offline).\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{\texttt{--nocache}}\\
+& & &Do not cache queries to and answers from external atoms.\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{\texttt{--iauxinaux}}\\
+& & &Keep auxiliary input predicates in auxiliary external atom predicates (can increase or decrease efficiency).\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{\texttt{--constspace}}\\
+& & &Free partial models immediately after using them. This may cause some models to be computed multiple times. (Not with monolithic.)\\
+
 
 
 \end{longtable}
