@@ -5,6 +5,7 @@
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage{array}
+\usepackage{longtable}
 
 \usepackage{tikz}
 \usetikzlibrary{arrows}
@@ -2057,195 +2058,107 @@ The following set of commands is related with Input, Output and  Reasoning optio
  \\
 \end{tabular}
 \end{center}
+
 \subsection{Performance Tuning Options}
+\begin{center}
+\begin{longtable}{p{0.7cm}  p{2cm} p{0.3cm} p{7.0cm}  } 
 %--EXTLEARN
-\texttt{--extlearn[=none,iobehavior,monotonicity,functionality,linearity,\\neg,user,generalize]}
-\begin{center}
-\begin{tabular}{p{3cm}  p{7.8cm}} 
- & Learn nogoods from external atom evaluation (only useful with \texttt{--solver=genuineii} or \texttt{--solver=genuinegi)}.\\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-\texttt{none}&:& Deactivate external learning. \\
-\texttt{iobehaviour}&:&Apply generic rules to learn input-output behaviour. \\
-\texttt{monotonicity}&:&Apply special rules for monotonic and antimonotonic external atoms.\\
-\texttt{functionality}&:&Apply special rules for external atoms which are linear in all predicate parameters.\\
-\texttt{linearity}&:&Apply special rules for external atoms which are linear in all predicate parameters.\\
-\texttt{neg}&:&Learn negative information\\
-\texttt{user}&:&Apply user-defined rules for nogood learning\\
-\texttt{generalize}&:&Generalize learned ground nogoods to ground nogoods.\\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3cm}  p{7.8cm}} 
- & By default all options above except ``generalize'' are enabled.\\
-\end{tabular}
-\end{center}
-%--SUPPOTSETS
-\bigskip
-\texttt{--supportsets}
-\begin{center}
-\begin{tabular}{p{3cm} p{0.2cm} p{7.8cm}}
-&&Exploits support sets for evaluation.\\
-\end{tabular}
-\end{center}
-%--EVALALL
-\bigskip
-\texttt{--evalall}
-\begin{center}
-\begin{tabular}{p{3cm} p{0.2cm} p{7.8cm}}
-&&Evaluate all external atoms in every compatibility check, even if previous external atoms already failed.  This makes nogood learning more independent of the sequence of external atom checks. Only useful with \texttt{--extlearn}.\\
-\end{tabular}
-\end{center}
-%--NONGROUNDGOODS
-\bigskip
-\texttt{--nongroundnogoods}
-\begin{center}
-\begin{tabular}{p{2.5cm} p{0.5cm} p{7.8cm}}
-&&Automatically instantiate learned nonground nogoods.\\
-\end{tabular}
-\end{center}
-%--FLPCHECK
-\bigskip
-\texttt{--flpcheck=[explicit,ufs,ufsm,aufs,aufsm,none]}
-\begin{center}
-\begin{tabular}{p{3cm}  p{7.8cm}} 
- & Sets the strategy used to check if a candidate is a subset-minimal model of the reduct.\\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-\texttt{explicit}&:&Compute the reduct and compare its models with the candidate\\
-\texttt{ufs}&:&Use unfounded sets for minimality checking
+& \multicolumn{3}{l}{\texttt{--extlearn[=none,iobehavior,monotonicity,functionality,}} \\
+& \multicolumn{3}{l}{\texttt{linearity,neg,user,generalize]}} \\
+& & & Learn nogoods from external atom evaluation (only useful with \texttt{--solver=genuineii} or \texttt{--solver=genuinegi)}.\\
+&\texttt{none}:& & Deactivate external learning. \\
+&\texttt{iobehaviour}:& &Apply generic rules to learn input-output behaviour. \\
+&\texttt{monotonicity}:& &Apply special rules for monotonic and antimonotonic external atoms.\\
+&\texttt{functionality}:& &Apply special rules for external atoms which are linear in all predicate parameters.\\
+&\texttt{linearity}:& &Apply special rules for external atoms which are linear in all predicate parameters.\\
+&\texttt{neg}:& &Learn negative information\\
+&\texttt{user}:& &Apply user-defined rules for nogood learning\\
+&\texttt{generalize}:& &Generalize learned ground nogoods to ground nogoods.\\
+& & & By default all options above except ``generalize'' are enabled.\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{1}{l}{\texttt{--supportsets}} & & \\
+& & &Exploits support sets for evaluation.\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{1}{l}{\texttt{--evalall}} & & \\
+& & &Evaluate all external atoms in every compatibility check, even if previous external atoms already failed.  This makes nogood learning more independent of the sequence of external atom checks. Only useful with \texttt{--extlearn}.\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{1}{l}{\texttt{--nongroundnogoods}} & & \\
+& & &Automatically instantiate learned nonground nogoods.\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{3}{l}{\texttt{--flpcheck=[explicit,ufs,ufsm,aufs,aufsm,none]}}\\
+& & &Sets the strategy used to check if a candidate is a subset-minimal model of the reduct.\\
+&\texttt{explicit}:&&Compute the reduct and compare its models with the candidate\\
+&\texttt{ufs}:&&Use unfounded sets for minimality checking
 \\
-\texttt{ufsm}&:&Use unfounded sets for minimality checking, do not decompose the program for UFS checking.\\
-\texttt{aufs (default)}&:&Use unfounded sets for minimality checking by exploiting assumptions\\
-\texttt{aufs}&:&Use unfounded sets for minimality checking by exploiting assumptions. Do not decompose the program for UFS checking.\\
-\texttt{none}&:&Disable the check.\\
-\end{tabular}
+&\texttt{ufsm}:&&Use unfounded sets for minimality checking, do not decompose the program for UFS checking.\\
+&\texttt{aufs (default)}:&&Use unfounded sets for minimality checking by exploiting assumptions\\
+&\texttt{aufs}:&&Use unfounded sets for minimality checking by exploiting assumptions. Do not decompose the program for UFS checking.\\
+&\texttt{none}:&&Disable the check.\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{3}{l}{\texttt{--flpcriterion=[all,head,e,none]}}\\
+& & & Defines the kind of cycles whose absence is exploited for skipping minimality checks.\\
+&\texttt{all (default)}:&&Exploit head- and e-cycles for skipping minimality checks\\
+&\texttt{head}:&& Exploit head-cycles for skipping minimality checks\\
+&\texttt{e}:&&Exploit e-cycles for skipping minimality checks\\
+&\texttt{none}:&& Do not exploit head- or e-cycles for skipping minimality checks\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{3}{l}{\texttt{--noflpcriterion}}\\
+& & & Do no apply decision criterion to skip the FLP check. (equivalent to \texttt{--flpcriterion=none)}\\
+& \multicolumn{3}{l}{\texttt{--ufslearn=[none,reduct,ufs]}}\\
+& & & Enable learning from UFS checks (only useful with \texttt{--flpcheck=[a]ufs[m]}).\\
+&\texttt{none}:&&No learning\\
+&\texttt{reduct}:&&Learning is based on the FLP-reduct\\
+&\texttt{ufs (default)}:&&Learning is based on the unfounded set\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{3}{l}{\texttt{--eaevalheuristics=[always,periodic,inputcomplete,}}\\
+& \multicolumn{3}{l}{\texttt{eacomplete,post,never}}\\
+& & & Selects the heuristic for external atom evaluation.\\
+&\texttt{always}:&&Evaluate whenever possible\\
+&\texttt{periodic}:&&Evaluate in regular intervals.\\
+&\texttt{incomplete}:&&Evaluate whenever the input to the external atom is complete\\
+&\texttt{eacomplete}:&& Evaluate whenever all atoms relevant for the external atom are assigned\\
+&\texttt{post (default)}:&&Only evaluate at the end\\
+&\texttt{never}:&&Only evaluate at the end and also ignore custom heuristics provided by plugins\\
+&&&Except for heuristics "never", custom heuristics provided by external atoms overrule the global heuristics for the particular external atom.\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{3}{l}{\texttt{--ufscheckheuristic=[post,max,periodic]}}\\
+& & & Specifies the frequency of unfounded set checks (only useful with \texttt{--flpcheck=[a]ufs[m])}.\\
+&\texttt{post (default)}:&&Do UFS check only over complete interpretations\\
+&\texttt{max}:&&Do UFS check as frequent as possible and over maximal subprograms\\
+&\texttt{periodic}:&&Do UFS check in periodic intervals\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{3}{l}{\texttt{--modelqueuesize=N}}\\
+& & & Size of the model queue, i.e. number of models which can be computed in parallel. Default value is 5. The option is only useful for clasp solver.\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{3}{l}{\texttt{--solver=S}}\\
+& & & Use S as ASP engine, where S is one of dlv, dlvdb, libdlv, libclingo, genuineii, genuinegi, genuineic, genuinegc (genuineii=(i)nternal grounder and (i)nternal solver; genuinegi=(g)ringo grounder and (i)nternal solver genuineic=(i)nternal grounder and (c)lasp solver; genuinegc=(g)ringo grounder and (c)lasp solver).\\
+%%%%%%%%%%%%%%%%%%%
+& \multicolumn{3}{l}{\texttt{--claspconfig=C}}\\
+& & & If clasp is used, configure it with C where C is parsed by clasp config parser, or C is one of the predefined strings frumpy, jumpy, handy, crafty, or trendy.\\
+%%%%%%%%%%%%%%%%%%%
+-e& \multicolumn{3}{l}{\texttt{--heuristics=H}}\\
+& & & Use H as evaluation heuristics, where H is one of\\
+&\texttt{old}:&&Old dlvhex behavior\\
+&\texttt{trivial}:&&Use component graph as eval graph (much overhead)\\
+&\texttt{easy}:&&Simple heuristics, used for LPNMR2011\\
+&\texttt{greedy (default)}:&& Heuristics with advantages for external behaviour learning\\
+&\texttt{monolithic}:&& Put entire program into one unit\\
+&\texttt{manual:<file>} :&&  Read ``collapse'' $\langle$ idxs $\rangle$ share $\langle$idxs$\rangle$ commands from $\langle$file$\rangle$ where component indices $\langle$idx$\rangle$ are from \texttt{--graphviz=comp}\\
+&\texttt{asp:<script>}:&&Use asp program <script> as eval heuristic\\
+%%%%%%%%%%%%%%%%%%%
+&\multicolumn{3}{l}{\texttt{--forcegc}}\\
+& & & Always use the guess and check model generator.\\
+%%%%%%%%%%%%%%%%%%%
+-m& \multicolumn{3}{l}{\texttt{--modelbuilder=M}}\\
+& & & Use M as model builder, where M is one of (online,offline).\\
+
+
+\end{longtable}
 \end{center}
-%--FLPCRITERION
-\bigskip
-\texttt{--flpcriterion=[all,head,e,none]}
-\begin{center}
-\begin{tabular}{p{3cm}  p{7.8cm}} 
- & Defines the kind of cycles whose absence is exploited for skipping minimality checks.\\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-\texttt{all (default)}&:&Exploit head- and e-cycles for skipping minimality checks\\
-\texttt{head} &:& Exploit head-cycles for skipping minimality checks\\
-\texttt{e}&:&Exploit e-cycles for skipping minimality checks\\
-\texttt{none} &:& Do not exploit head- or e-cycles for skipping minimality checks\\
-\end{tabular}
-\end{center}
-\bigskip
-\texttt{--noflpcriterion}
-\begin{center}
-\begin{tabular}{p{3cm}  p{7.8cm}}
-%--NOFLPCRITERION
-& Do no apply decision criterion to skip the FLP check. (equivalent to \texttt{--flpcriterion=none)}\\
-\end{tabular}
-\end{center}
-%--UFSLEARN
-\bigskip
-\texttt{--ufslearn=[none,reduct,ufs]}
-\begin{center}
-\begin{tabular}{p{3cm}  p{7.8cm}} 
- & Enable learning from UFS checks (only useful with 
-%--FLPCHECK
-\texttt{--flpcheck=[a]ufs[m]}).\\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-\texttt{none}&:&No learning\\
-\texttt{reduct}&:&Learning is based on the FLP-reduct\\
-\texttt{ufs (default)}&:&Learning is based on the unfounded set\\
-\end{tabular}
-\end{center}
-%EAEVALHEURISTICS
-\bigskip
-\texttt{--eaevalheuristics=[always,periodic,inputcomplete,eacomplete,
-\\post,never]}
-\begin{center}
-\begin{tabular}{p{3cm}  p{7.8cm}} 
- & Selects the heuristic for external atom evaluation.
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-\texttt{laways}&:&Evaluate whenever possible\\
-\texttt{periodic}&:&Evaluate in regular intervals.\\
-\texttt{incomplete}&:&Evaluate whenever the input to the external atom is complete\\
-\texttt{eacomplete}&:& Evaluate whenever all atoms relevant for the external atom are assigned\\
-\texttt{post (default)}&:&Only evaluate at the end\\
-\texttt{never}&:&Only evaluate at the end and also ignore custom heuristics provided by plugins
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3cm}  p{7.8cm}} 
- & Except for heuristics "never", custom heuristics provided by external atoms overrule the global heuristics for the particular external atom.
-\end{tabular}
-\end{center}
-%UFSCHECKHEURISTIC
-\bigskip
-\texttt{--ufscheckheuristic=[post,max,periodic]}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-& &Specifies the frequency of unfounded set checks (only useful with \texttt{--flpcheck=[a]ufs[m])}.\\
-\texttt{post (default)}&:&Do UFS check only over complete interpretations\\
-\texttt{max}&:&Do UFS check as frequent as possible and over maximal subprograms\\
-\texttt{periodic}&:&Do UFS check in periodic intervals\\
-\end{tabular}
-\end{center}
-%MODELQUEUESIZE
-\bigskip
-\texttt{--modelqueuesize=N}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-& &Size of the model queue, i.e. number of models which can be computed in parallel. Default value is 5. The option is only useful for clasp solver.
-\\
-\end{tabular}
-\end{center}
-%--SOLVER
-\bigskip
-\texttt{--solver=S}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-& &Use S as ASP engine, where S is one of dlv, dlvdb, libdlv, libclingo, genuineii, genuinegi, genuineic, genuinegc (genuineii=(i)nternal grounder and (i)nternal solver; genuinegi=(g)ringo grounder and (i)nternal solver genuineic=(i)nternal grounder and (c)lasp solver; genuinegc=(g)ringo grounder and (c)lasp solver).
-\end{tabular}
-\end{center}
-%--CLASPCONFIG
-\bigskip
-\texttt{--claspconfig=C}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-& & If clasp is used, configure it with C where C is parsed by clasp config parser, or C is one of the predefined strings frumpy, jumpy, handy, crafty, or trendy.
-\end{tabular}
-\end{center}
-%--
-\bigskip
-\texttt{-e \ \ --heuristics=H}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-& & Use H as evaluation heuristics, where H is one of
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{2.5cm}  p{0.5cm} p{7.8cm}  } 
-& &Specifies the frequency of unfounded set checks (only useful with \texttt{--flpcheck=[a]ufs[m])}.\\
-\texttt{old}&:&Old dlvhex behavior\\
-\texttt{trivial}&:&Use component graph as eval graph (much overhead)\\
-\texttt{easy}&:&Simple heuristics, used for LPNMR2011\\
-\texttt{greedy (default)}&:& Heuristics with advantages for external behaviour learning\\
-\texttt{monolithic}&:& Put entire program into one unit\\
-\texttt{manual:<file>} &:&  Read ``collapse'' $\langle$ idxs $\rangle$ share $\langle$idxs$\rangle$ commands from $\langle$file$\rangle$ where component indices $\langle$idx$\rangle$ are from \texttt{--graphviz=comp}\\
-\texttt{asp:<script>} &:&Use asp program <script> as eval heuristic\\
-\end{tabular}
-\end{center}
+
+
+
+
 
 
 
