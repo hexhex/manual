@@ -724,6 +724,7 @@ r_5\colon& e(X,Y,XX) \leftimpl a(X), b(Y),*(X, Y, XX). \\
 r_6\colon& f(X,Y,XX) \leftimpl a(X), b(Y),/(X, Y, XX).
 \end{align*}
 \end{exmp}
+An atom $+(X,Y,XX)$ is true, iff $XX$ is sum of $X$ and $Y$ (likewise for other operators).
 The single answer set for the example above is:\\ 
 \centerline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
 \\Alternatively to \emph{prefix notation} one can also use 
@@ -736,7 +737,7 @@ alternatively can be written as $\mathit{XX=X+Y}$.
 using built-in predicates $==$ (equal), $\neq$ (not equal), 
 $<$ (less than), $\leq$ (less than or equal), $>$ (greater 
 than) and $\geq$ (greater than or equal). All kinds of 
-constants (symbols and integers) may be compared against 
+constants (symbols and integers) may be compared to 
 each other freely. If two integers are compared, the 
 semantics is according to numeric values. All other 
 comparisons are just guaranteed to impose a fixed ordering 
@@ -757,10 +758,11 @@ r_{9}\colon& h(X,Y) \leftimpl a(X), b(Y), X \geq Y. \\
 r_{10}\colon& i(X,Y) \leftimpl a(X), b(Y), Y == 1. 
 \end{align*}
 \end{exmp}
-The single answer set for the example above is:\\ 
-$\mathit{\{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1)},
-$\\
-$\mathit{h(2,1)}\}$
+The single answer set for the example above is:
+\begin{align*}
+\{ & \mathit{a(1),a(2),b(1),i(1,1),i(2,1),c(2,1),d(2,1),f(2,1),g(1,1),h(1,1)},\\
+   & \mathit{h(2,1)}\}
+\end{align*}
 
 \subsection{Conditions and Conditional Literals}
 \label{conditions}
@@ -803,11 +805,11 @@ r_6\colon& \mathit{on}(X) : \mathit{day}(X) \leftimpl
 \end{align*}
 \end{exmp}  
 We have used the conditions in last two lines of the code. 
-The \emph{conjunction} in the body of line 5 is obtained by 
+The \emph{conjunction} in the body of rule $r_5$ is obtained by 
 replacing $X$ in $\mathit{available(X)}$ with all ground 
 terms $t$ such that $\mathit{person(t)}$ holds, namely, 
 with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition 
-for the last line is contained in the head of the rule. It 
+for the rule $r_6$ is contained in the head of the rule. It 
 turns into \emph{disjunction} over all ground instances of 
 $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ 
 for which $\mathit{day(t)}$ holds. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with ``;'' sign, the rule would look like:
@@ -877,7 +879,7 @@ appear in any aggregate function that is outer to $f(S)$.
 \begin{exmp}
 \begin{align*}
 r_1\colon& emp(1,goofie,1250).\\
-r_2\colon& emp(2,willy,700).\\
+r_2\colon& emp(2,willy,750).\\
 r_3\colon& emp(3,woody,750).\\
 r_4\colon& emp(4,jerry,900).\\
 r_5\colon& emp(5,tom,1050). \\
@@ -892,44 +894,47 @@ predicate consists of two ground predicates: \\
 \\which are both true w.r.t. the unique model of the whole 
 program, hence \\ \centerline{$ 
 \#count\{over1000(1,1250),over1000(5,1050)\}$} \\returns 2 
-as output of aggregate function and outputs:\\ \centerline{ 
-$\mathit{emph(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),}$}
-\\ \centerline{ 
-$\mathit{emp(5,tom,1050),over1000(1,1250),over1000(5,1050),over1000nr(2)}$}
+as output of aggregate function and outputs:\\
+$\mathit{emph(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),}$
+\\
+$\mathit{emp(5,tom,1050),over1000(1,1250),over1000(5,1050),over1000nr(2)}$
 \\as a result of the program.
 The aggregate function $\mathit{\#count}$ returns the 
 cardinality of the symbolic set to which it is applied. We 
 want to count how many employees of the company earn more 
 than 1000. 
-\bigskip Aggregate function $\mathit{\#sum}$ returns the 
+
+Aggregate function $\mathit{\#sum}$ returns the 
 sum of the first local variable to be aggregated over in 
 the symbolic set. Suppose we want to know how much the 
 Cartoon Co. spends on salaries.
 \begin{align*}
-\mathit{salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : 
+\mathit{r_8 \colon \ salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : 
 \mathit{emp(I,N,S)}\} = X.
 \end{align*}
-The symbolic set here consists of 5 elements, namely all of 
-the facts stored in the database of the employees. The 
+In $r_8$ except term tuple $S$ we need also $I$ in order to get correct result. Reason for this is that we have two persons with same salaries and aggregate function will give same symbolic sets for both of them. Since one person is missing from the symbolic set we get incorrect result at the end.  
+The symbolic set for the $r_8$ consists of 5 elements:\\ 
+\centerline{$\{ \langle 1250,1 \rangle, \langle 750,2 \rangle, \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}$} 
+\\The 
 aggregate function applied to the given set returns the sum 
 of the salaries of all the employees, the output thus is: 
 \\ \centerline{
-\{$\mathit{salaryTotal(4650)}$\}}. $\mathit{\#times}$ is 
+\{$\mathit{salaryTotal(4700)}$\}}. $\mathit{\#times}$ is 
 similar to $\mathit{\#sum}$, but computes the product of 
 the first local variable to be aggregated over in the 
 symbolic set. When applied over the empty set, 
 $\mathit{\#times}$ returns 1.
-\bigskip \\The aggregate function $\mathit{\#min}$ returns 
+
+The aggregate function $\mathit{\#min}$ returns 
 the minimum value of the first local variable to be 
-aggregated over in the symbolic set. The following simple 
-program then returns the lowest income among all employees.
+aggregated over in the symbolic set. The following rule then returns the lowest income among all employees.
 \begin{align*}
 & lowest(X) \leftimpl \#min\{S : emp(I,N,S)\} = X.
 \end{align*}
 The aggregate function applied to the given set returns the 
 minimum salary among of all the employees, the output thus 
 is:
-{$\mathit{lowest(700)}$}.
+{$\mathit{lowest(750)}$}.
 \bigskip \\The aggregate function $\mathit{\#max}$ returns 
 the maximum value of the first local variable to be 
 aggregated over in the symbolic set. The following program 
