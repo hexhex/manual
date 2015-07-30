@@ -2031,11 +2031,12 @@ The following set of commands is related with Input, Output and  Reasoning optio
 %\def\arraystretch{2}\tabrowsep=50pt
 % Sets row space
 \renewcommand{\arraystretch}{1.7}
-\begin{center}
-\begin{longtable}{p{0.7cm}  p{2cm} p{0.7cm} p{7.0cm}  } 
+
+\begin{longtable}{p{2.2cm}  p{2.5cm} p{0.7cm} p{6.3cm}  } 
  & \texttt{--}& & Parse from standard input. \\ 
 \texttt{-s} & \texttt{--silent}&& Do not display anything than the actual result \\ 
-\texttt{-f} & \texttt{--filter=foo[,bar[,...]]} && Only display instances of the specified predicate(s). \\
+\texttt{-f} & \texttt{--filter=foo[,bar[,...]]} && \\
+& & & Only display instances of the specified predicate(s).\\
 & \texttt{--nofacts} && Do not output EDB facts. EDB facts are the facts of the program.  \\
 \texttt{-n} & \texttt{--number=<num>} && Limit number of displayed models to $\langle$num$\rangle$, 0 (default)\\ 
 \texttt{-N} & \texttt{--maxint=<num>} && Set maximum integer (\#maxint in the program takes precedence). \\
@@ -2049,12 +2050,11 @@ The following set of commands is related with Input, Output and  Reasoning optio
   & \texttt{--keepnsprefix} && Keep specified namespace-prefixes in the result. \\
   & \texttt{--keepauxpreds} && Keep auxiliary predicates in answer sets. \\
 \end{longtable}
-\end{center}
 \bigskip
 \subsection{Plugin Options}
 \begin{center}
-\begin{tabular}{  p{1cm}  p{4.7cm} p{6.1cm}  } 
- \texttt{-p}&\texttt{plugindir=DIR}&Specify additional directory where to look for plugin libraries (additionally to the installation plugin-dir and \$HOME/.dlvhex/plugins). Start with ! to reset the preset plugin paths, e.g., ``!:/lib'' will use only /lib/.
+\begin{tabular}{p{2.2cm}  p{2.5cm} p{0.7cm} p{6.3cm}  } 
+ \texttt{-p}&\texttt{--plugindir=DIR}&&Specify additional directory where to look for plugin libraries (additionally to the installation plugin-dir and \$HOME/.dlvhex/plugins). Start with ! to reset the preset plugin paths, e.g., ``!:/lib'' will use only /lib/.
  \\
 \end{tabular}
 \end{center}
