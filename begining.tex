@@ -473,14 +473,14 @@ This section provides an overview of the input language of
 \dlvhex{} and some examples to illustrate the concepts. 
 
 \subsection{Terms and Atoms}
-The vocabulary consists of: terms, constants, variables and 
+The vocabulary consists of terms, constants, variables and 
 external predicates. Terms may be integers, constants, 
 strings and variables as well as the \enquote{\_} tokens. 
 Constant names begin with lowercase letters or are strings 
 enclosed in quotation marks and variable names begin with 
 uppercase letters.
 
-While a constant or string represent itself, a variable is 
+While a constant or string represents itself, a variable is 
 placeholder for all variable-free terms in the language of 
 a logic program. There is a special feature, which is 
 called anonymous variable. The anonymous variable is 
@@ -495,12 +495,12 @@ $p$ is a predicate name, $t_1,\dots,t_n$ are terms and $n$
 $\geq$ $0$ is the arity of the predicate atom; a predicate 
 atom $p()$ of arity 0 is likewise represented by its 
 predicate name $p$ without parentheses. Classical atoms 
-are: $q$, $q$ and $-$ $q$.
+are: $q$ and -$q$.
 
 \begin{exmp}
 \text{   }
 \\ \text{Constants:} $a$, $1$, $\mathit{a1}$, 
-$\mathit{9862}$, $\mathit{c1}$
+$\mathit{9862}$, $\mathit{c1}$, ''hello''
 \\ \text{Variables:} $X$, $Y$, $Z$
 \\ \text{Atoms:} $\mathit{parent}(X,Y)$, $\mathit{employee}
 (name, salary, ID, location)$
@@ -513,17 +513,14 @@ and integrity constraints}.
 \begin{center}
 \begin{tabular}{ r l r }
 \text{Fact:} & \texttt{$A_0$}. & \\
-\text{Rule:} & \texttt{$A_0$}& $\leftimpl$  \texttt{$L_1$},
-\dots, \texttt{$L_n$}. \\
-\text{Constraint:}&& $\leftimpl$  \texttt{$L_1$},\dots,
-\texttt{$L_n$}. 
+\text{Rule:} & \texttt{$A_0$}& $\leftimpl$  \texttt{$L_1$},\dots, \texttt{$L_n$}. \\
+\text{Constraint:}&& $\leftimpl$  \texttt{$L_1$},\dots, \texttt{$L_n$}. 
 \end{tabular}
 \end{center}
 The sign \enquote{$\leftimpl$} is meant to be an 
 implication to the left. The left side of a rule is called 
 its head, and right side is called its body. The head 
-\texttt{$A_0$} of a rule or a fact is an atom of the same 
-syntatic form as a constant or function. In the body of a 
+\texttt{$A_0$} of a rule or a fact is an atom. In the body of a 
 rule or an integrity constraint, every \texttt{$L_j$} for 1 
 $\leq$ j $\leq$ n is a literal of the form \texttt{A} or 
 \texttt{not A}, where \texttt{A} is an atom and the 
@@ -537,7 +534,7 @@ $A_0$ must be true. On the other hand, an integrity
 constraint is a rule that filters solution candidates, 
 meaning that the literals in its body must not jointly be 
 satisfied. A result of \dlvhex{} computation is called an 
-\emph{answer set} which is a consistent explanation(model) 
+\emph{answer set} which is a consistent explanation (model) 
 of the world.
 
 \begin{exmp} 
@@ -557,31 +554,35 @@ $\mathit{joke}$ follows $\mathit{laugh}$}. The single
 in the program. To explain the concept of \emph{integrity 
 constraints} we will consider following example:
 \begin{exmp}
+\label{nodecoloring}
 \begin{align*}
 r_1\colon & \mathit{node}(X) \leftimpl \mathit{edge}(X, Y). 
 &\\
 r_2\colon & \mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). 
 & \\
-r_3\colon & \mathit{colored}(X, r) \vee \mathit{colored}(X, 
-g) \vee \mathit{X, b} \leftimpl \mathit{node}(X). & \\
-r_4\colon & \leftimpl \mathit{edge}(X, Y), \mathit(colored)
+\\
+r_3\colon & \mathit{colored}(X, r) \leftimpl \mathit{node}(X), not \  colored(X,g),not \ colored(X,b). & \\
+r_4\colon & \mathit{colored}(X, g) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,b). & \\
+r_5\colon & \mathit{colored}(X, b) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,g). & \\
+\\
+r_6\colon & \leftimpl \mathit{edge}(X, Y), \mathit(colored)
 (X, C), \mathit{colored}(Y, C) & \\
-r_5\colon & \mathit{edge}(2, 4). \mathit{edge}(2, 3). 
+\\
+r_7\colon & \mathit{edge}(2, 4). \  \mathit{edge}(2, 3). \  
 \mathit{edge}(5, 5). & \\
-r_6\colon & \mathit{edge}(4, 6). \mathit{edge}(4, 5). 
+r_8\colon & \mathit{edge}(4, 6). \  \mathit{edge}(4, 5). \ 
 \mathit{edge}(5, 7). & \\
-r_7\colon & \mathit{edge}(6, 7). &
+r_9\colon & \mathit{edge}(6, 7). &
 \end{align*} 
 \end{exmp}
-In the first three lines one can see node declarations with 
-variables $X$ and $Y$. We concluded that $X$ and $Y$ are 
+In the first two lines we extract the nodes implicitly given by the edges of the graph.
+$X$ and $Y$ are 
 variables since they begin with uppercase letter. It says 
 that: \enquote{If $\mathit{edge}(X,Y)$ is true then 
-$\mathit{node(X)}$ is also true}. That is, it extracts the 
-nodes from a graph specified by its edges. In the 
-\emph{guessing part} all possible node color combinations 
-are generated. Each node may be coloured with either red, 
-green or black. In the checking part, integrity constraint 
+$\mathit{node(X)}$ is also true}. In the 
+\emph{guessing part} which is from line $3$ to $5$, all possible node color combinations 
+are generated. Each node may be colored either red, 
+green or black. In the checking part, the integrity constraint 
 delete all color combinations which does not satisfy the 
 requirement that there may be no edge between two nodes of 
 equal color. 
@@ -607,11 +608,11 @@ r_2\colon& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y).
 \\
 \\
 r_3\colon& \mathit{comp\_edge}(X, Y) \leftimpl 
-\mathit{node}(X), \mathit{node}(Y), \mathit{ not } \mathit{ 
+\mathit{node}(X), \mathit{node}(Y), \mathit{ not } \ \mathit{ 
 edge }(X, Y). 
 \end{align*}
 \end{exmp}
-Here $\mathit{comp\_edge}$ describes the set of edges in 
+Here, $\mathit{comp\_edge}$ describes the set of edges in 
 the complementary graph. Such an edge must go from one node 
 to another node (possibly the same one), and this edge must 
 not be contained in the original edge set. 
@@ -675,21 +676,15 @@ between atoms in rule heads. \\
  \end{tabular}
 \end{center}
 A \emph{disjunctive head} holds if at least one of its 
-atoms is true. If body literals $L_1,\dots,L_n. $ of the 
-rule specified above are known to be true then head will 
-hold also. One of the atoms in the $A_0$ $\vee$ \dots 
-$\vee$ $A_m$ will be true. In a simple disjunctive program 
-$\mathit{a} \vee \mathit{b.}$ we have the two answer sets 
-\{$a$\} and \{$b$\}.  
+atoms is true. If all body literals $L_1,\dots,L_n$ of the 
+rule specified above are known to be true then head also needs to hold, i.e. one of the atoms in $A_0$ $\vee$ \dots 
+$\vee$ $A_m$ needs to be true. In a simple disjunctive program 
+$\mathit{a} \vee \mathit{b.}$, we have the two answer sets 
+\{$a$\} and \{$b$\}.
 
-The \emph{head} $A_0$ of a rule or a fact is an atom of the 
-same syntatic form as a constant or function. In the 
-\emph{body} of a rule or an integrity constraint, every 
-$L_j$ for 1 $\leq$ j $\leq$ n is a literal of the form A or 
-$\mathit{not}A$, where $A$ is an atom and the connective 
-$\mathit{not}$ denotes default negation. We say that 
-literal $L$ is positive if it is an atom and negative 
-otherwise. 
+In the Example~\ref{nodecoloring} we could replace lines $3$ to $5$ by a single disjunctive rule as follows:\\
+\centerline{$\mathit{colored(X,r)} \vee \mathit{colored(X,g)} \vee \mathit{colored(X,b)} \leftimpl \mathit{node(X).}$} 
+\\which generates all possible node color combinations 
 \begin{exmp}
 \begin{align*}
 r_1\colon& \mathit{left\_arm\_broken} \vee 
@@ -707,11 +702,10 @@ wonder if you should be angry on him or he just could not
 write because his right hand is broken. In the example, 
 \dlvhex{} will generate two possible explanations. The 
 first rule is called a disjunctive rule which is read as 
-\enquote{For sure, either the left or the right arm is \
-broken.} Without being sure which arm is broken \dlvhex{} 
+\enquote{For sure, either the left or the right arm is broken.} Without being sure which arm is broken \dlvhex{} 
 will evaluate the program and produce the two models 
 $\mathit{\{left\_arm\_broken, can\_write, be\_angry\}}$ and 
-$\mathit{\{right\_arm\_broken\}}$.  
+$\mathit{\{right\_arm\_broken\}}$..
 
 \subsection{Built-in Arithmetic Functions}
 Besides integers (constant arithmetic functions), written 
