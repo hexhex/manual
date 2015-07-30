@@ -90,11 +90,10 @@ introduced, which support higher-order logic programs
 (which accommodate meta-reasoning through higher-order 
 atoms) with external atoms for software interoperability.
 
-This guide helps ASP novices to make use of the system. It 
-provides a reference of the features of the tool that ASP 
-might be tempted to exploit. The language of \hex{}-programs is an extension of disjunctive datalog. It largely 
+This guide helps beginners to make use of the system and 
+provides a reference of the features of the tool. The language of \hex{}-programs is an extension of disjunctive datalog. It largely 
 implements the ASP-Core-2 Standard \cite{ref} and 
-extends it with external atoms. 
+extends it with external and high-order atoms. 
 
 
 \subsection{Download and Installation}
@@ -136,13 +135,13 @@ cmake, automake, autoconf, standard C++ library (version
 libool. Also the Boost library (version 1.55 or later) is 
 required. The latest Boost library version is available at 
 \url{http://www.boost.org/}. After downloading it to the 
-new folder the following steps should be followed in order 
+new folder, the following steps should be followed in order 
 to properly install it. After extraction, the folwing 
 commands need to be executed:
 \\ \centerline{\texttt{./bootstrap.sh}}
 \centerline{\texttt{./b2 install --prefix=PREFIX}} In this 
 command \texttt{PREFIX} is the directory where Boost should 
-be installed. After downloading latest release version by 
+be installed. After downloading the latest release version of \dlvhex{} by 
 executing the following sequence of commands \dlvhex{} will 
 be successfully installed:
 \\ \centerline{\texttt{./configure}} To enable the Python 
@@ -151,7 +150,7 @@ added as option of \texttt{configure}. Afterwards, the
 following command builds the system:
 \\ \centerline{\texttt{make}} To allow using of multiple 
 cores one should specify the \texttt{-jN} option to make 
-use of N cores. Finally the following
+use of N cores. Finally, the following
 \\ \centerline{\texttt{make install}} installs the package 
 in the location specified with configure.  
    
@@ -185,14 +184,14 @@ systems. For details see our website
 \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/}. 
 
 \subsection{Outline}
-This guide is organized as follows: Section~\ref{sec:quick} 
+This guide is organized as follows. Section~\ref{sec:quick} 
 provides an introductory example which will be used to 
 explain the problem instance, the encoding and its 
-solution. Section~\ref{sec:inputLang} is focused on input 
+solution. Section~\ref{sec:inputLang} is focused on the input 
 language of the \dlvhex{}. In Section~\ref{sec:examples} we 
-introduced three real life problems which can be solved 
+introduce three real life problems which can be solved 
 using our system. Section~\ref{sec:externalInterfaces} is 
-focused on description of external interfaces which are 
+focused on the description of external interfaces which are 
 written in C++ or Python. Input-related warnings and errors 
 are described into more details in 
 Section~\ref{sec:inputRelatedWarnings}. And finally, in 
@@ -217,18 +216,18 @@ money among users. In this environment, the social graph
 for a particular user consists 
 of the set of nodes and edges which model other users that 
 are directly connected, to that actor. 
-Individuals and organizations, called actors, are nodes on 
+Individuals and organizations, called actors, are nodes of 
 the graph. Interdependencies, 
-called ties, can be multiple and diverse, including such 
-characteristics or concepts as age, 
-gender, race, genealogy, chain of command, ideas, financial 
+called ties, can be multiple and diverse, including 
+characteristics or concepts such as age, 
+gender, ethnical group, genealogy, chain of command, ideas, financial 
 transactions, trade relationships, 
 political affiliations, club memberships, occupation, 
 education and economic status. 
 Social graphs contain edges between one person and related 
 people, places, and things they interact 
 with online. For this particular example, we consider a 
-simulation of Facebook social graph. 
+simulation of social graphs as used e.g. by Facebook. 
 
 Consider the situation where a birthday party should be 
 organized and a specific number of friends will be invited. 
@@ -274,31 +273,29 @@ r_{4}\colon & \mathit{invite(P)} \vee \mathit{ninvite(P)
 \leftimpl  friendOfDegree(john,X,P), \#int(X).}\\
 r_{5}\colon & \leftimpl   \mathit{not} \ 4 = \mathit{\#count} 
 \{ P : \mathit{invite(P)} \}. \\
-r_5 \prime  \colon & 3 \leq \{ invite(P) \ \colon \ friendOfDegree(john,X,P)\} \geq 3.
 \end{align*}
 \end{exmp}
-The rule $r_1$ specifies the person who organizes the event 
-and initializes the search. 
-
-The rule $r_2$ specifies that the initiating person has 
+Rule $r_1$ specifies the person who organizes the event 
+and initializes the search. Rule $r_2$ specifies that the initiating person has 
 distance 0 from him or herself. 
 
-The main computational part of the program is the $r_3$ of 
+
+The main computational part of the program is rule $r_3$ of 
 the program above. It cyclically queries all  friends of 
 already known persons and increments the distance with each 
 derivation. Variables used in these predicates are: 
 
 \begin{itemize}
-\item $\mathit{F1}$ represents person for which we are 
+\item $\mathit{F1}$ to represent the person for which we are 
 looking for the successors.
 
-\item $\mathit{F2}$ is the variable which holds successor 
+\item $\mathit{F2}$ is the variable which holds the successor 
 nodes of $F1$. 
 
-\item $P$ represents the person of the interest.
+\item $P$ represents the person of interest.
 
 \item $\mathit{Deg}$ and $DegPlus$ are variables used to 
-compute distance from the root node.
+compute the distance from the root node.
 \end{itemize}
 The external atom \ext{friendsOf}{F1}{F2} has one input and 
 one output parameter. For input $\mathit{F1}$, 
@@ -324,25 +321,24 @@ greater than to $F1$. The condition
 \end{align*}
 ensures the distance is limited to 2. 
 
-We now move to the more interesting part where we will 
-handle invitations. The rule at $r_4$ guesses all possible 
+We now move to the part where we handle invitations. Rule $r_4$ guesses all possible 
 persons to be invited or not. Since atom 
-$\mathit{friendOfDegree(john, X, P)}$ is true for the 
-person $P$, that person will be either invited or not.
+$\mathit{friendOfDegree(john, X, P)}$ is true for person $P$, that person will be either invited or not.
 
 We limit the number of invited persons by using an 
 \emph{integrity constraint} from the $r_5$
 It ensures that exactly 4 persons are invited to the party. 
-It is possible to replace $r_5$ statement by the $r_5 
-\prime $
-which is doing the same as $r_5$ but allows for specifying 
-lower and upper bound on the number of persons.
+It is possible to replace $r_5$ by $r_5 \prime $ which allows for specifying 
+lower and upper bound on the number of persons independently. Rule $r_5 \prime $ can be written as follows:
+\begin{align*}
+r_5 \prime  \colon & 3 \leq \{ invite(P) \ \colon \ friendOfDegree(john,X,P)\} \geq 3.
+\end{align*} 
   
 
 \subsection{Problem Solution}
 Now we are ready to solve our \emph{social graph} problem. 
-Consider that we load following set of nodes and edges from 
-the from the file:\\
+Consider that we data as specified in the Figure~\ref{fig:socialnetwork}.\\
+\begin{figure}
 \begin{center}
 \begin{tikzpicture}
 \tikzset{vertex/.style = {shape=rectangle,draw,minimum 
@@ -387,6 +383,9 @@ size=5em}}
 
 \end{tikzpicture}
 \end{center}
+\caption{Social Network Graph}
+\label{fig:socialnetwork}
+\end{figure}
 To compute the answer sets representing 
 the solution, the following command is to be invoked:
 \\ \centerline{\texttt{shell\$ dlvhex2 --
@@ -397,31 +396,24 @@ external source implementation (cf. Section~\ref{sec:externalInterfaces}). The o
 \dlvhex{} is as follows:
 
 
-\begin{tabular}{ l r }
-   $\mathit{\{personOfInterest(john), 
-   friendOfDegree(john,0,john), }$& \\
-   $\mathit{invite(john), friendOfDegree(john,1,mike),}$& 
-   \\
-   $\mathit{friendOfDegree(john,1,david), 
-   friendOfDegree(john,1,charly),}$ & \\
-   $\mathit{invite(mike),invite(david),invite(charly)\}}$
- \end{tabular}
-\\ \\
+\begin{align*}
+   \{ &\mathit{personOfInterest(john), \ friendOfDegree(john,0,john), }\\
+      &\mathit{invite(john), \ friendOfDegree(john,1,mike),}\\ 
+      & \mathit{friendOfDegree(john,1,david), \ friendOfDegree(john,1,charly),} \\
+      & \mathit{invite(mike), \ invite(david), \ invite(charly)}
+       \}
+ \end{align*}
 Note that order of the atoms and the order of answer sets 
 does not bear any meaning. Single answer set for this 
-problem contain atoms given above. As it is expected, the 
-first atom is $\mathit{personOfInterest(john)}$ 
-since $\mathit{john}$ is organizing the party and program 
-should generate sets of the friends who should be invited 
-to the party by him. As we specified in the previous 
+problem contain atoms given above. As we specified in the previous 
 section, we can travel at most 1 edge far from the root 
 node. Considering the graph given above only $\mathit{John, 
 Mike, Charly}$ and $\mathit{David}$ are found since they 
-are one edge far from the root node. The next three atoms 
+are at most one edge away from the root node. The next three atoms 
 express who are the new friends discovered and at which 
 depth 
 level. For the invitations, it is specified by using 
-aggregates that answer set must have four distinct 
+aggregates that answer sets must have four distinct 
 $\mathit{invites}$ atoms.
 In single answer set we have four $\mathit{invites}$ atoms 
 which are $\mathit{invite(john), 
@@ -437,10 +429,9 @@ discovered. If we decrease minimum number of friends to be
 invited to the party there may be more than one answer set. 
 Consider the different example where we instead of 4 
 persons want to invite only 3 persons to the party. 
-Integrity constraint at $r_5$ will be modified as:
+The integrity constraint at $r_5$ will be modified to:
 \begin{align*}
-& r_5 \colon \leftimpl \mathit{ not } \mathit{ 3 } 
-=\mathit{\#count} \{ P : \mathit{invite(P)} \}.
+& r_5 \prime \prime \colon \leftimpl \mathit{ not } \  \mathit{\#count} \{ P : \mathit{invite(P)} \} = 3.
 \end{align*} 
  This time we have more than one answer set. Since depth 
  level is still 2 there will be 4 persons discovered again, 
@@ -449,29 +440,29 @@ Integrity constraint at $r_5$ will be modified as:
  According to this we have 4 answer sets. Two of them are 
  showed bellow:\\
 \textbf{Answer set 1:}\\
-\begin{tabular}{ l r }
-   $\mathit{\{personOfInterest(john), 
-   friendOfDegree(john,0,john),}$& \\
-   $\mathit{invite(john), friendOfDegree(john,1,mike), 
-   \mathit{ninvite(charly)},}$& \\
-   $\mathit{friendOfDegree(john,1,david), 
-   friendOfDegree(john,1,charly),}$ & \\
-   $\mathit{invite(mike),invite(david)\}}$
- \end{tabular}
+\begin{align*}
+   \{ &\mathit{personOfInterest(john), 
+      friendOfDegree(john,0,john),}\\
+      &\mathit{invite(john), friendOfDegree(john,1,mike), 
+      \mathit{ninvite(charly)},}\\
+      &\mathit{friendOfDegree(john,1,david), 
+      friendOfDegree(john,1,charly),}\\
+      &\mathit{invite(mike),invite(david)}  \}
+ \end{align*}
 \\ \textbf{Answer set 2:}\\
- \begin{tabular}{ l r }
-   $\mathit{\{personOfInterest(john), 
-   friendOfDegree(john,0,john),}$& \\
-   $\mathit{invite(john), friendOfDegree(john,1,mike), 
-   \mathit{ninvite(mike)},}$& \\
-   $\mathit{friendOfDegree(john,1,david), 
-   friendOfDegree(john,1,charly),}$ & \\
-   $\mathit{invite(david),invite(charly)\}}$
- \end{tabular}
-\\ \\ This time in answer set we have 
+ \begin{align*}
+   \{&\mathit{personOfInterest(john), 
+   friendOfDegree(john,0,john),} \\
+   &\mathit{invite(john), friendOfDegree(john,1,mike), 
+   \mathit{ninvite(mike)},}\\
+   &\mathit{friendOfDegree(john,1,david), 
+   friendOfDegree(john,1,charly),} \\
+   &\mathit{invite(david),invite(charly)}\}
+ \end{align*}
+ This time in answer set we have 
 $\mathit{ninvite(charly)}$ and $\mathit{ninvite(mike)}$ 
 since one friend must be discarded and only three will be 
-invited. One can just play with \emph{Depth constraint} and 
+invited. One can experiment with \emph{Depth constraint} and 
 \emph{Aggregate constraint} to see how real output and 
 answer sets will be affected.    
 
@@ -1019,11 +1010,14 @@ r_{10}\colon& \leftimpl \mathit{node}(X), \mathit{not} \
 r_{11}\colon&\mathit{ : \sim in\_tree}(X,Y,C). [C:1]
 \end{align*}
 \end{exmp}
-Best model: $\mathit{\{reached(a), out\_tree(a,b), 
-in\_tree(a,c,3), reached(b), reached(c),}\\ \mathit{ 
-in\_tree(b,e,4), in\_tree(c,b,2), in\_tree(c,d,3), 
-reached(e), reached(d),} \\ \mathit{  out\_tree(d,e)\}}$
-\\Cost ([Weight:Level]): $<[12:1]>$
+Best model:
+\begin{align*}
+\{ & \mathit{reached(a), out\_tree(a,b), 
+   in\_tree(a,c,3), reached(b), reached(c),}\\ 
+   & \mathit{in\_tree(b,e,4), in\_tree(c,b,2), in\_tree(c,d,3), 
+   reached(e), reached(d),}\\ 
+   &\mathit{  out\_tree(d,e)\}} \ \ Cost ([Weight:Level]): <[12:1]>
+\end{align*}
 
 Fact from the $r_1$ of the example above defines root node 
 of a tree. Nodes and edges are defined in $r_2$ and $r_3$. 
@@ -1074,16 +1068,19 @@ same\_skill(X,Y). & [1:2]
 \end{align*}
 \end{exmp}
 This program has two best models:
-\\ \{$\mathit{member}(a,p2), \mathit{member}(b,p1), 
-\mathit{member}(c,p1), \mathit{member}(d,p2), 
-\mathit{member}(e,p2)$\}
-\\$\mathit{Cost}$ ($[ \mathit{Weight:Level]}$): $ \langle 
-[6:1],[0:2] \rangle $
-\\ \{$\mathit{member}(a,p1), \mathit{member}(b,p2), 
-\mathit{member}(c,p2), \mathit{member}(d,p1), 
-\mathit{member}(e,p1)$\}
-\\$\mathit{Cost}$ ($[ \mathit{Weight:Level]}$): $ \langle 
-[6:1],[0:2] \rangle $ '\\
+\begin{align*}
+\{ & \mathit{member}(a,p2), \mathit{member}(b,p1), 
+   \mathit{member}(c,p1), \mathit{member}(d,p2), 
+   \mathit{member}(e,p2) \} \\
+   & \mathit{Cost} [ \mathit{Weight:Level]}):  \langle 
+   [6:1],[0:2] \rangle \\ 
+\{ & \mathit{member}(a,p1), \mathit{member}(b,p2), 
+   \mathit{member}(c,p2), \mathit{member}(d,p1), 
+   \mathit{member}(e,p1) \} \\
+   & \mathit{Cost} ([ \mathit{Weight:Level]}):\langle 
+   [6:1],[0:2] \rangle
+\end{align*}
+
 
 
 In the $r_1$ and $r_2$ we defined employees as a set of the 
@@ -1165,12 +1162,12 @@ r_1\colon& \mathit{systems} \ (\mathit{dlvhex}).
 r_2\colon& \mathit{sayhello(X)} \leftimpl 
 \ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, 
 \mathit{systems(Y).}  \\ 
-r_3\colon & \\
-r_4\colon& \mathit{set1}(a). \ \mathit{set1}(b). \ 
+\\
+r_3\colon& \mathit{set1}(a). \ \mathit{set1}(b). \ 
 \mathit{set1}(c).\\
-r_5\colon& \mathit{set2}(b). \ \mathit{set2}(c). \ 
+r_4\colon& \mathit{set2}(b). \ \mathit{set2}(c). \ 
 \mathit{set2}(d).\\
-r_6\colon& \mathit{set3}(X) \leftimpl 
+r_5\colon& \mathit{set3}(X) \leftimpl 
 \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
 \end{align*}
 \end{exmp}
@@ -1318,7 +1315,7 @@ single line. However, it is not always the case that we can send constant terms 
 \hex{}-program from the Example \ref{swimExample} has a 
 single answer set:
 \begin{align*}
-& \{ 
+\{ & 
 location(ind,margB),location(ind,amalB),location(outd,altD), 
 \\
 & location(outd,gansD), 
@@ -1366,7 +1363,7 @@ graph from the external source edge by edge up to specified
 depth level what makes it able to solve problems with 
 extremely large graphs.        
 \subsubsection{Problem encoding}
-
+\begin{figure}
 \begin{center}
 \begin{tikzpicture}
 \tikzset{vertex/.style = {shape=circle,draw,minimum 
@@ -1399,7 +1396,8 @@ size=1.5em}}
 \draw[edge] (a2) to (d);
 \end{tikzpicture}
 \end{center}
-
+\caption{Graph of the cities}
+\end{figure}
 The \hex{}-program for the Travelling salesman problem is 
 encoded as follows:
 \begin{exmp}
@@ -1698,6 +1696,7 @@ solution is the answer set of the program.
 
 \subsubsection{Problem Solution} 
 Let us solve the problem using the following graph:  
+\begin{figure}
 \begin{center}
 \begin{tikzpicture}
 \tikzset{vertex/.style = {shape=circle,draw,minimum 
@@ -1730,6 +1729,8 @@ size=4em}}
 \draw[edge] (j) to (k);
 \end{tikzpicture}
 \end{center}
+\caption{Simulation of the environment}
+\end{figure}
 Graph is again loaded from the external file and it is not 
 specified as a set of facts manually. From the facts 
 specified we know that there is an obstacle at the node 
