@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \usepackage{array}
 \usepackage{longtable}
+\usepackage{multirow}
 
 \usepackage{tikz}
 \usetikzlibrary{arrows}
@@ -2030,9 +2031,8 @@ The following set of commands is related with Input, Output and  Reasoning optio
 % Sets column space
 %\def\arraystretch{2}\tabrowsep=50pt
 % Sets row space
-\renewcommand{\arraystretch}{1.7}
-
-\begin{longtable}{p{2.2cm}  p{2.5cm} p{0.7cm} p{6.3cm}  } 
+\renewcommand{\arraystretch}{1.6}
+\begin{longtable}{p{2.2cm}  p{2.5cm} p{0.6cm} p{6.3cm}  } 
  & \texttt{--}& & Parse from standard input. \\ 
 \texttt{-s} & \texttt{--silent}&& Do not display anything than the actual result \\ 
 \texttt{-f} & \texttt{--filter=foo[,bar[,...]]} && \\
@@ -2053,7 +2053,7 @@ The following set of commands is related with Input, Output and  Reasoning optio
 \bigskip
 \subsection{Plugin Options}
 \begin{center}
-\begin{tabular}{p{2.2cm}  p{2.5cm} p{0.7cm} p{6.3cm}  } 
+\begin{tabular}{p{2.2cm}  p{2.5cm} p{0.6cm} p{6.3cm}  } 
  \texttt{-p}&\texttt{--plugindir=DIR}&&Specify additional directory where to look for plugin libraries (additionally to the installation plugin-dir and \$HOME/.dlvhex/plugins). Start with ! to reset the preset plugin paths, e.g., ``!:/lib'' will use only /lib/.
  \\
 \end{tabular}
@@ -2063,8 +2063,9 @@ The following set of commands is related with Input, Output and  Reasoning optio
 \begin{center}
 \begin{longtable}{p{0.7cm}  p{2.2cm} p{0.3cm} p{7.0cm}  } 
 %--EXTLEARN
-\multicolumn{4}{l}{\texttt{--extlearn[=none,iobehavior,monotonicity,functionality,}} \\
+\multicolumn{4}{p{6cm}}{\texttt{--extlearn[=none,iobehavior,monotonicity,functionality,}} \\
 \multicolumn{3}{l}{\texttt{linearity,neg,user,generalize]}} \\
+%\texttt{--extlearn[=none,iobehavior,monotonicity,functionality,linearity,neg,user,generalize]}
 & & & Learn nogoods from external atom evaluation (only useful with \texttt{--solver=genuineii} or \texttt{--solver=genuinegi)}.\\
 &\texttt{none}:& & Deactivate external learning. \\
 &\texttt{iobehaviour}:& &Apply generic rules to learn input-output behaviour. \\
@@ -2160,21 +2161,98 @@ The following set of commands is related with Input, Output and  Reasoning optio
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{\texttt{--constspace}}\\
 & & &Free partial models immediately after using them. This may cause some models to be computed multiple times. (Not with monolithic.)\\
-
-
+\end{longtable}
+\end{center}
+\subsection{Debugging and General Options}
+\begin{center}
+\begin{longtable}{p{2.2cm}  p{2.5cm} p{0.6cm} p{6.3cm}  }
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{\texttt{--dumpevalplan=F}}\\
+& & & Dump evaluation plan (usable as manual heuristics) to file F.\\
+%%%%%%%%%%%%%%%%%%%
+-v& \multicolumn{3}{l}{\texttt{--verbose[=N]}}\\
+& & & Specify verbose category (if option is used without [=N] then default is 1):\\
+&\texttt{1}:&& Program analysis informations (including dot-file)\\
+&\texttt{2}:&& Program modifications by plugins\\
+&\texttt{4}:&& Intermediate model generation info\\
+&\texttt{8}:&& Timing information (only if configured with \texttt{--enable-benchmark})\\
+&&&add values for multiple categories.\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{\texttt{--dumpstats}}\\
+& & & Dump certain benchmarking results and statistics in CSV format. (Only if configured with --enable-benchmark.)\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{\texttt{--graphviz=G}}\\
+& & & Specify comma separated list of graph types to export as .dot files. Default is none, graph types are:\\
+&\texttt{dep}:&& Dependency Graph (once per program)\\
+&\texttt{cycinp}:&& Graph for analysis cyclic predicate inputs (once per G\&C-eval unit)\\
+&\texttt{comp}:&& Component Graph (once per program)\\
+&\texttt{eval}:&& Evaluation Graph (once per program)\\
+&\texttt{model}:&& Model Graph (once per program, after end of computation)\\
+&\texttt{imodel}:&& Individual Model Graph (once per model)\\
+&\texttt{attr}:&& Attribute dependency graph (once per program)\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{\texttt{--version}}\\
+& & & Shows version information.\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{Plugin help for dlvhex-manualevalheuristicsplugin[internal]:}\\
+\multicolumn{4}{l}{\texttt{--manualevalheuristics-enable}}\\
+& & & Enable parsing and processing of '\#evalunit(...).' instructions.\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{Plugin help for dlvhex-manualevalheuristicsplugin[internal]:}\\
+\multicolumn{4}{l}{\texttt{--query-enable=[true,false]}}\\
+& & & Enable or disable the querying plugin (default is disabled).\\
+\multicolumn{4}{l}{\texttt{--query-brave}}\\
+& & & Do brave reasoning.\\
+\multicolumn{4}{l}{\texttt{--query-all}}\\
+& & & Give all witnesses when doing ground reasoning.\\
+\multicolumn{4}{l}{\texttt{--query-cautious}}\\
+& & & Do cautious reasoning.\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{Plugin help for dlvhex-aggregateplugin[internal]:}\\
+\multicolumn{4}{l}{\texttt{--aggregate-enable[=true,false]}}\\
+& & & Enable aggregate plugin (default is enabled).\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{\texttt{--aggregate-mode=[native,ext]}}\\
+& & & Enable aggregate plugin (default is enabled).\\
+&\texttt{native (default)}:&& Keep aggregates (but simplify them to some basic types).\\
+&\texttt{ext}:&& Rewrite aggregates to an external atoms.\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{\texttt{--aggregate-allowaggextcycles}}\\
+& & & Allows cycles which involve both aggregates and external atoms. If the option is not specified, such cycles lead to abortion; if specified, only a warning is printed but the models might be not minimal. With \texttt{--aggregate-mode=ext}, the option is irrelevant as aggregates are replaced by external atoms (models will be minimal in that case). See examples/aggextcycle1.hex..\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{Plugin help for dlvhex-strongnegationplugin[internal]:}\\
+\multicolumn{4}{l}{\texttt{--strongnegation-enable[=true,false]}}\\
+& & & Enable or disable strong negation plugin (default is enabled).\\ 
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{Plugin help for dlvhex-weakconstraintplugin[internal]:}\\
+\multicolumn{4}{l}{\texttt{--weak-enable[=true,false]}}\\
+& & & Enable or disable weak constraint plugin (default is enabled). \texttt{--weak-allmodels} Display all models also under weak constraints.\\ 
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{Plugin help for dlvhex-functionplugin[internal]:}\\
+\multicolumn{4}{l}{\texttt{--function-maxarity=<N>}}\\
+& & & Maximum number of output terms in functionDecompose.\\ 
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{\texttt{--function-rewrite}}\\
+& & & Rewrite function symbols to external atoms.\\ 
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{Plugin help for dlvhex-choicePlugin[internal]:}\\
+\multicolumn{4}{l}{\texttt{--choice-enable[=true,false]}}\\
+& & & Enable choice rules (default is enabled).\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{Plugin help for dlvhex-conditionalLiteralPlugin[internal]:}\\
+\multicolumn{4}{l}{\texttt{--conditinal-enable[=true,false]}}\\
+& & & Enable conditional literals (default is enabled).\\
+%%%%%%%%%%%%%%%%%%%
+\multicolumn{4}{l}{Plugin help for dlvhex-pythonplugin[internal]:}\\
+\multicolumn{4}{l}{\texttt{--python-plugin=[PATH]}}\\
+& & & Add Python script "PATH" as new plugin.\\
+\multicolumn{4}{l}{\texttt{--python-main=PATH}}\\
+& & & Call method "main" in the specified Python script (with dlvhex support) instead of evaluating a program.\\
+\multicolumn{4}{l}{\texttt{--python-arg=ARG}}\\
+& & &Passes arguments to Python (sys.argv) (can be used multiple times).\\
 
 \end{longtable}
 \end{center}
-
-
-
-
-
-
-
-
-
-\subsection{Debugging and General Options}
 
 
 
