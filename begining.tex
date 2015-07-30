@@ -1,4 +1,4 @@
-\documentclass[14pt,a4paper, titlepage]{article}
+\documentclass[a4paper, titlepage]{article}
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{hyperref}
@@ -98,11 +98,13 @@ extends it with external atoms.
 
 
 \subsection{Download and Installation}
-\dlvhex{} is written in the C++ programming-language and 
-published under the GNU Lesser General Public License 
-\cite{licnc}. In this section we provide an overview of the 
+\dlvhex{} is written in the C++ programming-language
+and published under the GNU Lesser General 
+Public License \cite{licnc}. 
+In this section we provide an overview of the 
 download and installation process. For a quick overview, 
-some examples and the possibility to evaluate \hex{}-programs directly in the browser, the online demo at 
+some examples and the possibility to evaluate 
+\hex{}-programs directly in the browser, the online demo at 
 \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/demo.php} 
 is provided. However the system can also be installed 
 locally. 
@@ -1789,23 +1791,22 @@ path(2,eleven,eleven,3,valid),path(2,eleven,eleven,4,valid)
 
 \section{External Interfaces}
 \label{sec:externalInterfaces}
-\dlvhex{} evaluates Answer Set Programs with external 
-atoms. One important design principle was to provide a 
+This section discusses implementation of external sources in \dlvhex{}. One important design principle was to provide a 
 mechanism to easily add further external atoms without 
 having to recompile the main application. External atoms are introduced in Section~\ref{extatoms}.
  
 Formally, an external atom is defined to evaluate to true
 or false, depending on a number of parameters:
 \begin{itemize}
-\item An interpretation (a set of facts)
+\item An interpretation (a set of atoms)
 \item A list of input constants
 \item A list of output constants
 \end{itemize}  
-However, It is more intuitive and convenient to think of an 
-external atom no as being boolean, but rather functional:
-Depending on a given interpretation and a list of input 
-constants, it returns output tuples. For instance, the 
-external atom to import triples from RDF files has this 
+However, it is more intuitive and convenient to think of an 
+external atom not as being boolean, but rather functional:
+depending on a given interpretation and a list of input 
+constants, it returns output tuples for which it is true. For instance, the 
+external atom to import triples from RDF files has the 
 form: \\
 \centerline{$\ext{rdf}{uri}{X,Y,Y}$} 
 where $\mathit{uri}$ stands for a string denoting the RDF-source and X,Y, and Z are variables that represent an RDF-triples from the specified source.
@@ -1814,8 +1815,8 @@ where $\mathit{uri}$ stands for a string denoting the RDF-source and X,Y, and Z 
 The interface that is used by \dlvhex{} to access a plugin 
 follows very closely these semantics. For each atom, a 
 retrieval function has to be implemented, which receives a 
-query-object and has to return an an answer-object. The 
-query-object carries the input interpretation as well as 
+query object and has to return an an answer-object. The 
+query object carries the input interpretation as well as 
 the ground input parameters of the external atom call, 
 while the answer object is a container for the output 
 tuples of the external atom's function.   
@@ -1826,21 +1827,20 @@ to process the interpretation together with the input
 constants,
 which are basically only names. In practice however, only 
 parts of the interpretation might be needed. Considering 
-this as well as for efficiency reasons, in the \dlvhex{} 
-there are three categories of input parameters: 
+this as well as for efficiency reasons, there are three types of input parameters: 
 \begin{itemize}
-\item Constant parameter
-\item Predicate parameter
-\item Tuple
+\item Constant parameters
+\item Predicate parameters
+\item Tuples
 \end{itemize}
 
-A parameter of type ``Constant'' is not related to the 
+A parameter of type \emph{constant} is not related to the 
 interpretation at all, like in the previous example of the 
 RDF-atom where we have strings as a constant input to the external atom. 
 
-A parameter is of type ``Predicate'' means that 
-all facts in the interpretation with this predicate are 
-necessary for the atom. Let us assume, we have an external 
+A parameter is of type \emph{predicate} means that 
+all atoms in the interpretation with this predicate are 
+necessary for the external atom. Let us assume, we have an external 
 atom that calculates the overall price of a number of books 
 given by their ISBN number:\\
 \centerline{$\ext{overallbookprice}{isbn}{X}$}
@@ -1848,61 +1848,55 @@ The single input parameter of this atom would be of type
 ``Predicate'', meaning that not the constant itself is 
 necessary for the atom's function, but the part of the 
 interpretation with this predicate. So if we have, e.g.,\\ 
-$I= \{ \mathit{isbn(0-19-82183-6)}, \  \mathit{isbn(0-201-99954-4)}, \ p(a), \ q(b), \dots$ \} 
+I = \{``$\mathit{isbn(0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6)}$'', ``$ \mathit{isbn(0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4)}$'', $p(a)$, $q(b)$ $\dots$ \}
 the atom's function will be called with a ``reduced'' interpretation: \\
-$I= \{ \mathit{isbn(0-19-82183-6)}, \  \mathit{isbn(0-201-99954-4)}\}$
+$I=$\{``$\mathit{isbn(0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6)}$'', ``$ \mathit{isbn(0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4)}$''\}
 
-A parameter of type ``Tuple'' represents a meta category standing for an arbitrary mount of Constant input parameters. This is useful when we have to send multiple constant parameters separately, e.g., for \\
+A parameter of type \emph{tuple} represents a meta category standing for an arbitrary number of constant input parameters. This is useful when we have to send multiple constant parameters separately, e.g., for \\
 \centerline{$\ext{concat}{string1, string2, string3, \dots}{Out}$}. 
 
 Specifying the type of input parameters not only helps to 
 single out the relevant part of the interpretation, but 
 also supports \dlvhex{} in calculating the dependencies 
-within a \hex-program. More details about the Python and 
-C++ plugin implementations are given in the following two 
-subsections.
+within a \hex-program. Plugins can be implemented either in Python or C++, as shown in the following to subsections.
 
 \subsection{Python}
-With \dlvhex{} version 2.4.0 a Python plugin interface was 
+With \dlvhex{} version 2.4.0, a Python plugin interface was 
 introduced, which supports Python scripts that provide 
-functions to realise custom external atoms. For every Python plugin two necessary tasks are:
+functions to realise custom external atoms. For every Python plugin two tasks are to be carried out:
 \begin{itemize}
-\item Write a new Python script which contains a register function and imports the package \dlvhex{}
-\item Write another function for each external atom, and export this function using the $\mathit{register}$ function 
+\item Write a new Python script which contains a register function and imports the package \dlvhex{}.
+\item Write another function for each external atom, and export this function using the $\mathit{register}$ function. 
 \end{itemize}
 The \verb+register+ function has the following form:
 \begin{verbatim} 
 def register():
   dlvhex.addAtom("Atom_Name",(Input_Parameters),Output_Arity) 
 \end{verbatim}
-It adds one entry for each external atom. Each entry is 
-again a tuple of arity 3:
+It containscall of \verb+addAtom+ for each external atom. Each call specifies a tuple of arity 3:
 \begin{itemize}
-\item \verb+Atom_Name+: is the name of the 
-external predicate
-\item \verb+Input_Parameters+: is another 
-tuple of input parameter types. Number of input parameters 
-is not fixed. Input parameter types can be one of the 
+\item \verb+Atom_Name+ is the name of the 
+external predicate.
+\item \verb+Input_Parameters+ is a tuple of arbitrary many input parameter types. Each input parameter type is one of the 
 following: \verb+dlvhex.CONSTANT+, \verb+dlvhex.PREDICATE+ or 
-\verb+dlvhex.TUPLE+ as it is introduced in the previous section. Different input parameters are separated with  
-``,'' sign   
-\item \verb+Output_Arity+: integer value representing the output arity of an atom  
+\verb+dlvhex.TUPLE+, as it is introduced in the previous section.
+\item \verb+Output_Arity+ is an integer value representing the output arity of an atom.  
 \end{itemize}
-Consider instance of the $\mathit{\&concat}$ external atom which we introduced in the previous section. It just takes two strings and outputs their concatenation. The register function then would look like:
+Consider the $\mathit{\&concat}$ external atom which we introduced in the previous section. It takes two strings as input and outputs their concatenation. The register function then would be as follows:
 \begin{verbatim}
 def register():
-  dlvhex.addAtom("concat",(dlvhex.CONSTANT,dlvhex.CONSTANT),1)  
+  dlvhex.addAtom("concat", (dlvhex.CONSTANT, dlvhex.CONSTANT), 1)  
 \end{verbatim}
 Once the external atom is registered successfully, it has 
 to be implemented in the form of another Python function 
 with an appropriate number of input parameters. It has the 
 following form:  
 \begin{verbatim}
-def Atom_Name(Input_Parameter_1,Input_Parameter_2,...)
-  dlvhex.output((Output_Parameter_1,...))
+def Atom_Name(Input_Parameter_1, Input_Parameter_2, ...)
+  dlvhex.output((Output_Parameter_1, ...))
 \end{verbatim}
 
-Implementation of the \verb+concat+ function would look like:
+The implementation of the \verb+concat+ function is as follows:
 \begin{verbatim}
 def concat(a,b)
   # Function body goes here
@@ -1910,7 +1904,7 @@ def concat(a,b)
 \end{verbatim} 
 To get more familiar with Python plugins we are providing three examples as there are three possible input parameter types.
 
-The plugin in Example~\ref{constantAsInput} uses ``constant'' (string) as an input parameter. Plugin is used in the Example~\ref{faceQuery} and it queries all direct friends for the person of interest.
+The plugin in Example~\ref{constantAsInput} uses a constant (string) input parameter. It is used in Example~\ref{faceQuery} to query all direct friends of the person of interest.
 \begin{exmp}
 \label{constantAsInput}
 \begin{verbatim}
@@ -1933,30 +1927,26 @@ The plugin in Example~\ref{constantAsInput} uses ``constant'' (string) as an inp
 \end{exmp}
 
 In the first two lines we have imported two libraries which 
-are required. We have to import ``\verb+dlvhex+'' 
-library for every plugin. The ``\verb+networkx+'' 
-library is needed in this particular example since we are 
-doing some graph operations (i.e. loading graphs from the file, get all successors of the node etc.). 
+are required. We have to import the \verb+dlvhex+ 
+library as for every plugin. The \verb+networkx+ library is needed in this particular example since we are 
+performing graph operations (i.e. loading graphs from the file, get all successors of the node etc.). 
 
-From the lines \verb+3+ to the line \verb+7+ we have written function 
-implementation for the \verb+friendsOf+ external atom. 
-It receives name of the person as string and search for all 
-direct friends of that person in the graph, which is loaded from the file in the line \verb+4+, and stores them to the linked 
-list. All friends discovered, stored in the linked list, are sent to the output as it is specified in the line \verb+7+. 
+Lines \verb+3+ to \verb+7+ implement the \verb+friendsOf+ external atom. 
+It receives the name of the person as string and searches for all 
+direct friends of that person in the graph, which is loaded from the file in line \verb+4+. All discovered friends, are sent to the output as it is specified in line \verb+7+. 
 
-In the last four lines we have registered an external atom 
+Lines \verb+8+ to \verb+11+ register the external atom 
 \verb+friendsOf+ with constant input parameter and 
 single output parameter. 
 \bigskip \\
-Following example uses ``predicate'' as the input parameter 
-for the \verb+&rq+ external atom. Plugin is used in 
-the Example~\ref{swimExample}. External atom is performing 
-web research to check what are the requirements for the location choice selected. It is of the form 
-$\ext{\mathit{rq}}{\mathit{location-choice}}
-{\mathit{required-resource}}$ which intuitively evaluates 
-to true if a given location-choice requires a certain 
-required-resource and represents such resources and their 
-origin (inoutd, or loc) using predicate need. 
+The following example uses a predicate input parameter 
+for the \verb+&rq+ external atom as used in Example~\ref{swimExample}.The external atom is performing 
+a Web search to check the requirements for the selected location. It is of the form 
+$\ext{\mathit{rq}}{\mathit{location\_choice}}
+{\mathit{required\_resource}}$ which intuitively evaluates 
+to true if a given location\_choice requires a certain 
+required\_resource and represents such resources and their 
+origin (inoutd, or loc) using predicate $\mathit{need}$. 
 \begin{exmp}
 \label{predicateAsInput}
 \begin{verbatim}
@@ -1973,21 +1963,18 @@ origin (inoutd, or loc) using predicate need.
 8:            dlvhex.output((io[inp], ))
 
 9:  def register():
-10:   dlvhex.addAtom("rq",(dlvhex.PRDICATE), ),1)
+10:   dlvhex.addAtom("rq", (dlvhex.PRDICATE), ), 1)
 \end{verbatim}
 \end{exmp}
 
-In this example we 
-have a predicate as input parameter. From the line \verb+2+ to 
-the line \verb+8+ we have implementation of the \verb+rq+ function. In 
-the line \verb+5+ we are taking the term of the input predicate as 
-a string value. In the line \verb+6+ we are making sure that we are  
+From line \verb+2+ to line \verb+8+ we implement the \verb+rq+ function. In line \verb+5+ we are taking the term of the input predicate as 
+a string value. In line \verb+6+ we are ensuring that we are  
 working with right predicate. Line \verb+8+ is returning  
-requirement (if there is any) for the location specified by variable 
-\verb+inp+. Last two lines are defining the register 
-function for the \verb+rq+ external atom. We could here receive constants instead of predicate and only register function will be modified. \hex{} program will be affected a lot and may not be always possible to get desired functionality. This is explained in Section~\ref{example1}.  
+the requirements (if any) of the location specified by variable 
+\verb+inp+. Lines \verb+9+ to \verb+10+ are defining the register 
+function for the \verb+rq+ external atom.
 \bigskip \\
-As we said before, there exist a third category called Tuple. It stands for an arbitrary mount of Constant input parameters. The following example presents usage of the Tuple in a plugin. Plugin is used to implement string concatenation.  
+As mentioned above, there exists a third parameter type \emph{tuple}. It stands for an arbitrary number of constant input parameters. The following example presents the usage of a tuple in a plugin used to implement string concatenation for arbitrary many strings.  
 \begin{exmp}
 \label{tupleAsInput}
 \begin{verbatim}
@@ -2001,29 +1988,25 @@ As we said before, there exist a third category called Tuple. It stands for an a
 6:    dlvhex.output((ret, ))
 
 7:  def register():
-8:    dlvhex.addAtom("concat",(dlvhex.TUPLE, ),1)
+8:    dlvhex.addAtom("concat", (dlvhex.TUPLE, ), 1)
 \end{verbatim}
 \end{exmp}
-This plugin receives tuple of the strings, concatenates 
-them and output as a single string value. Function to do 
-this is called ``concat'' and it is implemented from the 
-line \verb+2+ to the line \verb+6+ in the example above. In the line \verb+3+ an 
-empty string is initialized. Inside the for loop input 
-string is appended to the string initialized. This process 
-is continued until all strings from the tuple are not 
-processed. Once all elements in the tuple are processed, 
-the result is sent to the output.  
+This plugin receives a tuple of strings, concatenates 
+them and outputs them as a single string value. The function \verb+concat+ is implemented from line \verb+2+ to \verb+6+. In line \verb+3+, an 
+empty string is initialized. Inside the for loop, the input 
+strings are appended to the string initialized. This process 
+is continued until all strings from the tuple have been processed.  
  
-Methods available for the \dlvhex{} Python module can be found at:\\ \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/}
+A more detailed description of all methods available for the \dlvhex{} Python module can be found at:\\ \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/doc2x/}\\
+\url{group__pythonpluginframework.html}
 \subsection{C++}
 TODO
 
 \section{Command Line options}
 \label{sec:commandline}
-In this section, we briefly describe the meaning of some 
-selected command line options supported by \dlvhex{}. 
+In this section, we briefly describe the meaning of the command line options supported by \dlvhex{}. 
 Calling only \dlvhex{} without any arguments will show all 
-command line options available. For each option, we below indicate whether it requires an argument, and if so, we also describe its meaning. An abstract invocation of \dlvhex{} looks as follows:\\
+command line options available. For each option, we indicate whether it requires an argument, and if so, we also describe its meaning. An abstract invocation of \dlvhex{} looks as follows:\\
 \texttt{dlvhex2 [OPTION] FILENAME [FILENAME ...]} or \texttt{dlvhex2 [OPTION] --.}
 
 \bigskip
@@ -2061,7 +2044,7 @@ The following set of commands is related with Input, Output and  Reasoning optio
 
 \subsection{Performance Tuning Options}
 \begin{center}
-\begin{longtable}{p{0.7cm}  p{2.2cm} p{1cm} p{6.3cm}  } 
+\begin{longtable}{p{0.7cm}  p{2.2cm} p{0.3cm} p{6.3cm}  } 
 %--EXTLEARN
 \multicolumn{4}{p{6cm}}{\texttt{--extlearn[=none,iobehavior,monotonicity,functionality,}} \\
 \multicolumn{3}{l}{\texttt{linearity,neg,user,generalize]}} \\
