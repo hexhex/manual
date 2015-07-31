@@ -1127,7 +1127,7 @@ An \emph{external atom} is of the form \\ \centerline{
 (called \textit{input} and \textit{output} lists, 
 respectively), and \&g $\in$ \textit{G} is an external 
 predicate name. We assume that \&g has fixed lengths 
-\texttt{in($\&g$)} = n and \texttt{out($\&g$)} = m for 
+$in$($\&g$) = n and $out$($\&g$) = m for 
 input and output lists, respectively. Intuitively, an 
 external atom provides a way for deciding the truth value 
 of an output tuple depending on the extension of a set of 
@@ -1141,7 +1141,7 @@ the graph in the graph \textit{edge} from node \textit{a},
 delegating this task to an external computational source.
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{systems} \ (\mathit{dlvhex}). 
+r_1\colon& \mathit{systems} \ (\mathit{dlvhex}). \ 
 \mathit{systems}(\mathit{clasp}). \\  
 r_2\colon& \mathit{sayhello(X)} \leftimpl 
 \ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, 
@@ -1157,45 +1157,32 @@ r_5\colon& \mathit{set3}(X) \leftimpl
 \end{exmp}
 
 There are two different external sources in this program, 
-first one is $\mathit{\&concatenate}$ and second one is 
-$\mathit{\&setdiff}$. First part of the program for each 
+first one is $\mathit{\&concate}$ and second one is 
+$\mathit{\&setdiff}$. The first part of the program for each 
 system concatenates the string \enquote{hello} and a system 
-name using $\mathit{\&concat}$ external source. At output 
-we have the answer set like:\\ 
+name using $\mathit{\&concat}$ external source. As output 
+we have the answer set:\\ 
 \centerline{ \{ $\mathit{sayhello}(\mathit{hellodlvhex}), 
 \mathit{sayhello}(\mathit{helloclasp})$ \}}
-\\In this case $\mathit{concat}$ external source receives 
-constant input parameters and passes them as a 
-\emph{tuple}. It starts with an empty string and 
-concatenate all constants from input sequence to the one 
-string. The final string is returned as output of the 
-external source.   
+\\In this case the $\mathit{concat}$ external source receives 
+constant input parameters. It concatenates all constants from input sequence and outputs the result as a one string.
 
-Second part of the program works with externals source 
-which has predicate input parameters. $\mathit{setdiff}$ 
-has two predicate input parameters. It is important to 
-notice that there is difference between inputs for the 
-$\mathit{concat}$ and $\mathit{setdiff}$ external sources. 
-$\mathit{concat}$ have constant inputs stored in tuple 
-while $\mathit{setdiff}$ has predicates. Second part of the 
-program first defines two different sets and then computes 
-$\mathit{set1}$ minus $\mathit{set2}$ using 
-$\mathit{\&setdiff}$ external source. At the output we 
-have: $\mathit{set3}(a)$ 
+The second part of the program works with an externals source 
+which has two predicate input parameters. It computes $\mathit{set1}$ minus $\mathit{set2}$, i.e., the set of all elements in the extension of $\mathit{set1}$ but not in that of $\mathit{set2}$. 
 
 \section{Examples}
 \label{sec:examples}
-Section~\ref{sec:examples} covers three real life examples  
-which are encoded and solved in the \dlvhex{}. In Section~\ref{example1} we have solved a basic ``swimming 
-problem". In Section~\ref{traveling} we have presented the ``traveling salesperson" problem. As a last example we have the problem in Section~\ref{example3} which shows how we can use \dlvhex{} to plan route of one or multiple agents in the dynamic 
+We now present three real life examples  
+which are encoded and solved by \hex-programs. In Section~\ref{example1} we solve a basic ``swimming 
+problem". In Section~\ref{traveling} we present the ``traveling salesperson" problem. In Section~\ref{example3} how we can use \dlvhex{} to plan routes of one or multiple agents in the dynamic 
 environment controlled by the external atoms.
 
 \subsection{Example 1}
 \label{example1}
-In this example we have presented the program which selects  
+In this example we present a program which selects  
 the best swimming location among all available locations 
-for a swim in Vienna. While selecting location it has to 
-satisfy all constraints given from the user and all swimming location's specifications which are obtained from the Internet using  
+for a swim in Vienna. While selecting a location has to 
+satisfy all constraints given from the user and all swimming location's specifications are obtained from the internet using  
 an external atom.
  
 \subsubsection{Problem Instance}
@@ -1220,7 +1207,7 @@ the water \cite{swim}. Once the problem is defined we can
 proceed with encodings.    
 
 \subsubsection{Problem Encoding}
-\hex{} program to decide swimming location is encoded as 
+A \hex-program used to decide about the swimming location is as 
 follows:
 \begin{exmp}
 \label{swimExample}
@@ -1242,19 +1229,21 @@ r_8\colon& \mathit{need}(loc, C) \leftimpl
 r_9\colon& \leftimpl need(X, money)
 \end{align*}
 \end{exmp}
-The \hex{} program above represents the Alice's reasoning 
-problem. $r_1$ contains a set of facts about possible 
+The \hex{} program above represents Alice's reasoning 
+problem. Rule $r_1$ contains a set of facts about possible 
 swimming locations (where $\mathit{ind}$ and 
 $\mathit{outd}$ are short for indoor and outdoor, 
-respectively). Rule in the $r_2$ chooses indoor vs. outdoor 
+respectively). Rule $r_2$ chooses indoor vs. outdoor 
 swimming locations, and $r_3$ collects requirements that 
 are caused by this choice using the external atom. 
 
 Web research is performed by using an external atom of the 
-form\\ \centerline{$\ext{\mathit{rq}}{\mathit{location\_
-choice}}{\mathit{required\_resources}}$} which intuitively 
-evaluates to true if a given $\mathit{location\_choice}$ 
-requires a certain $\mathit{required\_resource}$ and 
+form 
+\\ \centerline{$\ext{\mathit{rq}}{\mathit{location}$-$
+\mathit{choice}}{\mathit{required}$-$\mathit{resources}}$}
+which intuitively 
+evaluates to true if a given $\mathit{location}$-$\mathit{choice}$ 
+requires a certain $\mathit{required}$-$\mathit{resource}$ and 
 represents such resources  and their origin 
 ($\mathit{inoutd}$ or $\mathit{loc}$) using the predicate 
 $\mathit{need}$. The external atom $\mathit{\&rq}$ has 
@@ -1267,18 +1256,13 @@ $\ext{\mathit{rq}}{\mathit{swim}}{\mathit{money}}$ is true
 if $\mathit{swim(ind)}$ is true because indoor swimming 
 pool charge money for swimming \cite{swim}. 
 
-In the $r_4$ it is decided what is to be visited, indoor or 
-outdoor location. By $r_5$ we ensure that at least one location is selected. Integrity constraint 
-in the $r_6$ removes all answer sets in which there is no selected location to go. Integrity constraint from the $r_7$ ensures that only single location is selected since Alice can not go to the different location at the same time. $r_8$ collects all requirements caused by 
-the choice of $\mathit{goto}$ location. And finally 
-constraint in the $r_9$ states that all answer sets where 
+In $r_4$ it is decided what is to be visited, indoor or 
+outdoor location. By $r_5$ we ensure that at least one location is selected. The integrity constraint $r_6$ removes all answer sets in which there is no selected location to go. Integrity constraint $r_7$ ensures that only single location is selected since Alice can not go to the different location at the same time. Rule $r_8$ collects all requirements caused by 
+the choice of $\mathit{goto}$ location. And finally, the constraint $r_9$ states that all answer sets where 
 Alice has to pay for the swimming are removed.
 
-Important thing to notice here is that an external atom 
-$\mathit{\&rq}$ receives predicate as an input parameter. 
-Using predicates as an input parameter saves a lot of time 
-and makes program more readable and understandable. For 
-instance in $r_6$ if instead of sending a predicate we send 
+An important thing to notice is that an external atom 
+$\mathit{\&rq}$ receives a predicate as an input parameter. If instead of sending a predicate we send 
 constants, $r_6$ should be replaced with:
 \begin{align*}
 r_1\colon& need(loc, C) \leftimpl \ext{rq}{margB}{C}, 
@@ -1290,10 +1274,10 @@ goto(altD).\\
 r_4\colon& need(loc, C) \leftimpl \ext{rq}{gansD}{C}, 
 goto(gansD).\\
 \end{align*}    
-what give us three additional rows which are just 
+where $\&rq$ receive constant input parameter. This gives us three additional rules which are just 
 repetition of the same rule just with different constant 
-terms. Sending predicate as input parameter does this in a 
-single line. However, it is not always the case that we can send constant terms of the predicate instead of predicate itself  as a parameter. Since input parameters of the external atom are different, external atom implementation changes. Implementation details of the plugins are discussed in Section~\ref{sec:externalInterfaces}.
+terms. Sending a predicate as input parameter does this in a 
+single line. However, it is not always the case that we can send constant terms of the predicate instead of predicate itself  as a parameter. Since input parameters of the external atom are of different type, the external atom implementation changes. The implementation details of the plugins are discussed in Section~\ref{sec:externalInterfaces}.
 
 \subsubsection{Problem Solution}
 \hex{}-program from the Example \ref{swimExample} has a 
@@ -1306,13 +1290,13 @@ location(ind,margB),location(ind,amalB),location(outd,altD),
 swim(outd),go,ngoto(gansD),goto(altD),\\
 & need(loc,yogamat) \} 
 \end{align*}
-Under answer set, the external atom $\ext{rq}{goto}
+Under this answer set, the external atom $\ext{rq}{goto}
 {yogamat}$ is true and all others:\\($\ext{rq}{swim}
 {money}, \ext{rq}{goto}{money}, \ext{rq}{swim}{yogamat}, 
-\dots $) are false. Intuitively, answer set tells Alice to 
+\dots $) are false. Intuitively, the answer set tells Alice to 
 take her Yoga mat and go for a swim to Alte Donau (outside) 
 which is free of charge. This is the only answer set which 
-satisfies constraints given.    
+satisfies the given constraints.    
 
 \subsection{Example 2}
 \label{traveling}
