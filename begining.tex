@@ -953,8 +953,8 @@ allows us to formulate several optimization problems in an
 easy and natural way. These weak constraints are adopted 
 from \emph{DLV}. While standard constraints (integrity 
 constraints, strong constraints) always have to be 
-satisfied, weak constraints should be satisfied if it is 
-possible.
+satisfied, weak constraints \emph{should} be satisfied if it is 
+possible, but may be violated if necessary.
 
 
 The answer sets of a program P with a set W of weak 
@@ -973,8 +973,8 @@ Under prioritization, the semantics minimizes the violation
 of the constraints of the highest priority level first; 
 then the lower priority levels are considered one after the 
 other in descending order. Syntactically, weak constraints 
-are specified as follows. \\ \centerline{:$\mathit{Conj}. 
-[\mathit{Weight}:\mathit{Level}]$} \\ where $\mathit{Conj}$ 
+are specified as follows. \\ \centerline{:$\sim$ $\mathit{Conj}. \  
+[\mathit{Weight}\colon\mathit{Level}]$} \\ where $\mathit{Conj}$ 
 is a conjunction of (possibly negated) literals, and both 
 $\mathit{Weight}$ and $\mathit{Level}$ are positive 
 integers. Weights and priority levels are allowed to be 
@@ -1018,22 +1018,20 @@ Best model:
    &\mathit{  out\_tree(d,e)\}} \ \ Cost ([Weight:Level]): <[12:1]>
 \end{align*}
 
-Fact from the $r_1$ of the example above defines root node 
+The fact from $r_1$ of the example above defines the root node 
 of a tree. Nodes and edges are defined in $r_2$ and $r_3$. 
-Rule from the $r_5$ determines is an edge going from node 
-$X$ (node $X$ is already reached) in the minimum spanning 
-tree or out of it. Integrity constraint from $r_6$ ensures 
-that there is no incoming edges to the root node. $r_7$ 
+Rule $r_5$ guesses for each edge from node 
+$X$ to an node $Y$ (node $X$ is already reached) whether it is in the minimum spanning 
+tree or out of it. The integrity constraint $r_6$ ensures 
+that there is no incoming edge to the root node. Rule $r_7$ 
 eliminates all answer sets where there are two outgoing 
-edges going to same node $Y$. In the $r_{8}$ and $r_{9}$ 
-we have rules that are deciding is node reached or not. 
-$r_{10}$ removes all answer sets where there is any node 
-which is not discovered. Last line of the program is weak 
-constraint with weight $C$ and level 1. Weak constraint 
-should be satisfied, but their violation does not kill the 
-model. Aim is to minimize number of violated weak 
-constraints. In our best model there is no weak constraint 
-which is not satisfied and cost is 12.  
+edges going to same node $Y$. In $r_{8}$ and $r_{9}$ 
+we compute all reached nodes and $r_{10}$ removes all answer sets where there is some node 
+which is not reached. Rule $r_{11}$ of the program is a weak 
+constraint with weight $C$ and level 1. The weak constraint 
+should be satisfied, but its violation does not kill the 
+model. The aim is to minimize number of violated weak 
+constraints. In our best model the cost value is 12 because the minimum spanning tree contains edges with a total weight of 12.  
 
 
 Finally, we show an example where both weights and 
@@ -1082,13 +1080,13 @@ This program has two best models:
 
 
 
-In the $r_1$ and $r_2$ we defined employees as a set of the 
-facts. Rows $r_3$, $r_4$ and $r_5$ specify $\mathit{know}$, 
+In $r_1$ and $r_2$ we defined employees as a set of the 
+facts. Rules $r_3$, $r_4$ and $r_5$ specify $\mathit{know}$, 
 $\mathit{same\_skill}$ and $\mathit{married}$ relations 
 between some of employees. Since $\mathit{employee}(X)$ is 
 true, each $\mathit{employee}$ will be assigned either to 
-the project 1 or project 2 what is given in $r_6$. Last 
-three lines of program are weak constraints, this time with 
+the project 1 or project 2 what is given in $r_6$. Rules $r_{7}$,$r_{8}$ and $r_{9}$ 
+are weak constraints, this time with 
 same weights but different levels of priority. Under 
 prioritization, the \dlvhex{} minimizes the violation of 
 the constraints of the highest priority level first; then 
@@ -1098,22 +1096,11 @@ models in our solution.
 
 
 \subsection{Higher-order Atoms}
-Now we introduce the most specific feature of \dlvhex{} 
+Now we introduce the most specific feature of \dlvhex{}, 
 compared to other ASP solvers. \hex{}-programs are 
 nonmonotonic logic programs admitting \emph{high-order 
 atoms}, and we extend the well known answer-set semantics 
-to this class of programs.
-
-Let $C$,$X$, and $G$ be mutually disjoint sets whose 
-elements are called \texttt{constant names, variable 
-names,} and \texttt{external predicate names,} 
-respectively. Unless explicitly specified, elements from 
-\texttt{$X$} are denoted with first letter in upper case, 
-while elements from \texttt{$G$} are prefixe with 
-\enquote{\&}. 
-We note that the constant names serve both as individual 
-and predicate names. Elements from \texttt{$C$} $\cup$ 
-\texttt{$X$} are called \texttt{terms}. \\ \\A high-order 
+to this class of programs. A high-order 
 atom allows to quantify values over predicate names, and to 
 freely exchange predicate symbols with constant symbols, 
 like in the rule\\ \centerline{\\$C(X) \leftarrow 
@@ -1125,9 +1112,7 @@ is the predicate name, and we thus also use the more
 familiar notation $Y_0(Y_1,\dots,Y_n)$. The atom is 
 \textit{ordinary}, if $Y_0$ is a constant. For example, 
 \textit{(x,rdf:type,c),node(X), and D(a,b),} are atoms;the 
-first two are ordinary atoms. To understand concept better 
-we are providing example which show how we can get use of 
-external atoms in ordinary ASP.
+first two are ordinary atoms.
 
 \subsection{External Atoms}
 \label{extatoms}
