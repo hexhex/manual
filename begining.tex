@@ -41,7 +41,7 @@
 \begin{titlepage}
     \centering
     \vfill
-    \includegraphics[scale=1.2]{biglogo_whitebg}
+    \includegraphics[width=1.0\textwidth,natwidth=800,natheight=800]{biglogo_whitebg.png}
     \vfill
     {\bfseries\Large
         User Guide
@@ -50,7 +50,12 @@
     }    
     
 \end{titlepage}
-
+%
+% pdflatex begining.tex 
+% bibtex begining.aux
+% pdflatex begining.tex 
+% pdflatex begining.tex 
+%
 % Abstract part
 \begin{abstract}
 This document provides a user guide for the Answer Set 
@@ -72,6 +77,8 @@ sources. The guide refers to release 2.4.
 
 \section{Introduction} % Section No.1
 \label{sec:intro}
+\cite{ConcreteMath}
+\cite{Simpson}
 The \dlvhex{} system is a logic-programming reasoner for 
 computing the models of so-called \hex{}-programs, which 
 are an extension of \emph{answer-set programs} towards 
@@ -912,7 +919,7 @@ Cartoon Co. spends on salaries.
 \mathit{r_8 \colon \ salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : 
 \mathit{emp(I,N,S)}\} = X.
 \end{align*}
-In $r_8$ except term tuple $S$ we need also $I$ in order to get correct result. Reason for this is that we have two persons with same salaries and aggregate function will give same symbolic sets for both of them. Since one person is missing from the symbolic set we get incorrect result at the end.  
+In $r_8$ except term tuple $S$ we need also an $I$ in order to get correct result. This is because we have two persons with same salaries and aggregate function will return only one element in the symbolic set for both of them. Since one element is missing from the symbolic set we get incorrect result at the end.  
 The symbolic set for the $r_8$ consists of 5 elements:\\ 
 \centerline{$\{ \langle 1250,1 \rangle, \langle 750,2 \rangle, \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}$} 
 \\The 
@@ -2177,10 +2184,12 @@ The following set of commands is related with Input, Output and  Reasoning optio
 \section{Future work}
 \label{sec:future}
 
+\section{References}
+\bibliographystyle{amsplain}
+\bibliography{foo}
 
- \newpage
--\section{References}
--\begin{thebibliography}{1}
+\newpage
+\begin{thebibliography}{1}
 \bibitem{extatoms} Thomas Eiter, Micheal Fink, Thomas 
 Krennwallner, Christoph Redl {\em Conflict-driven ASP 
 Solving with External Sources} 2003   
