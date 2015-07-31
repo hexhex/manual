@@ -1301,20 +1301,16 @@ satisfies the given constraints.
 \subsection{Example 2}
 \label{traveling}
 In this section we consider the well-known travelling 
-salesman problem, where the task is to decide whether there 
+salesperson problem, where the task is to decide whether there 
 is a round trip that visits each node in a graph exactly 
 once and whose accumulated edge costs must not exceed some 
 budget B.
 
 \subsubsection{Problem Instance}
-The Travelling Salesperson Problem describes a salesman who 
-must travel between N cities. The order in which he does so 
-is something he does not care about, as long as he visits 
-each one during his trip, and finishes where he was at 
-first. Each city is connected to other close by cities, or 
-nodes, by airplanes, or by road or railway. Each of those 
-links between the cities has one or more weights (or the 
-cost) attached. The cost describes how "difficult" it is to 
+The travelling salesperson problem describes a salesperson who 
+must travel between N cities. The order is not relevant as long as all cities are visited exactly once and the route is closed. Each of the 
+links between the cities has a weight (or the 
+costs) attached. The costs describe how ``difficult'' it is to 
 traverse this edge on the graph, and may be given, for 
 example, by the cost of an airplane ticket or train ticket, 
 or perhaps by the length of the edge, or time required to 
@@ -1325,7 +1321,7 @@ optimization problem. Among all answer sets \dlvhex{}
 should select best one according to weak constraints 
 concept explained in Section \ref{optimize}. In the 
 classical solver we are able to load only small graphs 
-because it is not feasible to load all graph at once. For 
+because it is not feasible to load a large graph at once. In 
 this example we are using an external atom which is loading 
 graph from the external source edge by edge up to specified 
 depth level what makes it able to solve problems with 
@@ -1366,10 +1362,10 @@ size=1.5em}}
 \end{center}
 \caption{Graph of the cities}
 \end{figure}
-The \hex{}-program for the Travelling salesman problem is 
+The \hex{}-program for the Travelling salesperson problem is 
 encoded as follows:
 \begin{exmp}
-\label{travellingSalesman}
+\label{travellingsalesperson}
 \begin{align*}
 r_1\colon & startingCity(austin).\\
 r_2\colon & budgetB(11).\\
@@ -1410,24 +1406,22 @@ r_{15} \colon & \leftimpl node(Y), \mathit{not} \
 r_{16} \colon & :\sim cycle(X,Y), cost(X,Y,C). [C:1] 
 \end{align*}
 \end{exmp}
-In the $r_1$ we have the fact which specifies the starting 
+In rule $r_1$ we have a fact which specifies the starting 
 city. 
-It is important to notice that in our program starting 
-point for the travelling salesman may change and it is not 
-fixed. Travelling salesman should start his trip from the 
-city specified by the fact from the $r_1$ and also finish 
+It is important to notice that in our program the starting 
+point for the travelling salesperson may change and it is not 
+fixed. The salesperson should start his trip from the 
+city specified by the fact from $r_1$ and also finish 
 his trip there if there is such a cycle which covers all 
-other cities in the graph. $r_2$ is a fact which defines 
-available budget of the travelling salesman, cost of the 
-travelling all path should be within the budget
-available. An atom $\mathit{cityOfDegree(R,D,S,C)}$ keeps 
+other cities in the graph. Rule $r_2$ is a fact which defines the 
+available budget of the salesperson. An atom $\mathit{cityOfDegree(R,D,S,C)}$ keeps 
 track of the cities newly discovered defined as successors 
 nodes $S$ for the root node $R$, their distances from the 
 root node as $D$ and weight of the edge between $R$ and $S$ 
-denoted as $C$. Rule in the $r_3$ defines starting city for 
+denoted as $C$. Rule $r_3$ defines starting city for 
 the path candidate. Rule in the $r_4$ is responsible for 
-generating graph of 
-the cities discovered. It is using external atom 
+generating a graph of 
+the cities discovered. It is using the external atom 
 $\mathit{\&edges}$ to load new cities from the external 
 file and use them in the program. An external atom is of 
 the form $\ext{edges}{F1}{F2,Cost}$ where $\mathit{F1}$ 
@@ -1441,83 +1435,67 @@ means we can go at most three edges far from the root node.
 There are many advantages of using an external atom of this
 type:
 \begin{itemize}
-\item Graph is very large and it is not possible to load it 
+\item The graph may be very large and it is not possible to load it 
 at once as a set of edges specified manually.
-\item We do not know the graph completely (e.g., all 
-facebook users, all cities on the world etc.) and they have 
-to be discovered starting from the initial node specified.
-\item We want to analyze only subgraph of the graph that is 
+\item We do not know the graph completely (e.g., due to limited capabilities of a web service).
+\item We want to analyze only a subgraph of the graph that is 
 reachable from the node specified.
 \end{itemize}    
-In the $r_5$, $r_6$ and $r_7$ program is extracting 
+In $r_5$, $r_6$ and $r_7$ the program is extracting 
 $\mathit{nodes}, \mathit{edges}$ and $\mathit{costs}$ of 
-the edges from the $\mathit{cityOfDegree}$ atoms. After 
-this point we have all graph loaded to the program. 
+the edges from the $\mathit{cityOfDegree}$ atoms. 
 
-The generate rules in $r_8$ and $r_{9}$ assert that every 
+The rules $r_8$ and $r_{9}$ assert that every 
 node must have exactly one outgoing and exactly one 
-incoming edge, respectively, belonging to the cycle. Syntax 
-used in these two lines is described before in Section 
+incoming edge, respectively, belonging to the cycle. The meaning of the two rules is described before in Section 
 \ref{conditions}.
 
-In the $r_{10}$ we have used aggregates (cf. Section 
-\ref{aggregates}) to find sum $X$ of the costs over the 
-$\mathit{cycle(X,Y)}$. In the next row, an atom 
+In $r_{10}$ we use aggregates (cf. Section 
+\ref{aggregates}) to find the sum $X$ of the costs over the 
+$\mathit{cycle(X,Y)}$. In rule $r_{11}$, an atom 
 $\mathit{withinBudget(B,C)}$ is true if term of the 
 $\mathit{costCalculated(C)}$ is less than or equal to the 
-term of $\mathit{budgetB(B)}$ available. Integrity 
-constraint from the row $r_{12}$ ensures that in the answer 
+term of $\mathit{budgetB(B)}$ available. The integrity 
+constraint $r_{12}$ ensures that in the answer 
 set overall sum of the costs for the cycle will be less 
-than or equal to the budget available. Same rules can be applied to limit length travelled or time spent.
+than or equal to the budget available. The same rules can be applied to limit length travelled or time spent.
 
-Rows $r_{13}$ and $r_{14}$, cyclically check whether all 
+Rules $r_{13}$ and $r_{14}$ check whether all 
 nodes 
-are reached by a cycle candidate produced via the rows 
-$r_8$ and $r_9$.  Note that rule in $r_8$ builds on 
+are reached by a cycle candidate produced by the rules 
+$r_8$ and $r_9$.  Note that rule $r_8$ builds on the
 assumption that the cycle starts at city Austin. The second 
 rule in $r_9$ states that, from a reached node $X$, an 
-adjacent node $Y$ can be reached via further edge in the 
+adjacent node $Y$ can be reached via a further edge in the 
 cycle. It make sure that all nodes will be reached with the 
-cycle given \cite{pott}. Integrity constraint in $r_{15}$ 
-eliminates answer sets where all nodes in the subgraph are 
-not reached.
+cycle given \cite{pott}. The integrity constraint $r_{15}$ 
+eliminates answer sets not all nodes in the graph are reached.
 
-In order to minimize cost, we add the following 
+In order to minimize costs, we add the following 
 optimization statement: \\
-\centerline{$:\sim cycle(X,Y), cost(X,Y,C). [C:1].$}
+\centerline{$:\sim cycle(X,Y), cost(X,Y,C). \  [C:1].$}
 Here, edges belonging to the cycle are weighted according 
-to their cost and \dlvhex{} lists optimal answer set.
+to their costs and \dlvhex{} lists optimal answer set only.
 
 \subsubsection{Problem Solution}
-Finally, we explain how the unique minimum cost round trip 
-can be computed. By invoking weak constraint in $r_{16}$ we  
-emphasize that we are looking for the optimal answer set. 
-To find optimal path we need cycle where overall cost 
-computed is minimized. For this example optimal answer set 
+For this example optimal answer set 
 is as follows:
 \begin{align*}
-& \{ cycle(austin,boston), 
+\{&  cycle(austin,boston), 
 cycle(boston,memphis),cycle(detroit,austin), \\
 & cycle(chicago,detroit), 
 cycle(memphis,fresno),cycle(fresno,chicago) \} \\
 & <[11:1]>. \\
 \end{align*}
-Note that we omitted some atoms from the answer to make 
-answer set easier to read and understand. Route which satisfies given constraints is: Austin $\rightarrow$ Boston $\rightarrow$ Memphis $\rightarrow$ Fresno $\rightarrow$ Chicago $\rightarrow$ Detroit $\rightarrow$ Austin.
-From the answer set everything is obvious and it is easy to 
-conclude that there is path starting at Austin and ending 
-there with the minimum cost of 11. 
+Note that we omitted input facts and intermediate results from the answer and show only the atoms specifying the final tour (optimal) to make 
+answer set easier to read. The route which satisfies all given constraints is: Austin $\rightarrow$ Boston $\rightarrow$ Memphis $\rightarrow$ Fresno $\rightarrow$ Chicago $\rightarrow$ Detroit $\rightarrow$ Austin with the minimum cost of 11. 
 
 
 
 
 \subsection{Example 3}
 \label{example3}
-The last example is from the group of ``pathfinding'' problems. Pathfinding or pathing is the plotting of 
-the route between the two points. It searches a 
-graph by starting at one vertex and exploring adjacent 
-nodes until the destination node is reached. In this 
-example we consider pathfinding for a multiple agents.
+The last example is from the group of pathfinding problems and it considers pathfinding for a multiple agents.
  
 \subsubsection{Problem Instance}
 Pathfinding for a single agent is the problem of planning a 
@@ -1547,7 +1525,7 @@ agents collide with
 each other. 
 
 \subsubsection{Problem Encoding}
-The \hex-program for the problem introduced in previous 
+The \hex-program for the problem introduced in the previous 
 subsection is as follows:
 \begin{exmp}
 \label{pathfindingAgent}
@@ -1602,65 +1580,54 @@ r_{18} \colon & \leftimpl path(I, V, U, T, invalid).
 
 In the first part of the program we load the graph using 
 the $\&edges$ external atom. This atom cyclically discovers 
-nodes and edges from the external file. In the $r_4$ we 
+nodes and edges from the external file. In $r_4$ we 
 extract node $Y$ whenever an atom $\mathit{nodeOfDegree(X, 
-V, Y)}$ is true. Similar like in the previous line, in 
-$r_5$ we extract an edge from $X$ to $Y$ if an atom 
+V, Y)}$ is true. Similar as in the previous rule $r_5$ extracts an edge from $X$ to $Y$ if an atom 
 $\mathit{nodeOfDegree(X, V,Y)}$ is true. 
 
-From the $r_6$ to the $r_8$ we have defined set of facts. 
-Facts in $r_6$ represent different agents in the program. 
-Facts in the $r_{7}$ and $r_{8}$ define initial and 
-destination nodes for the agent $I$.  
+From $r_6$ to $r_8$ we define a set of facts. 
+The facts $r_6$ represent different agents in the program. 
+Facts $r_{7}$ and $r_{8}$ define initial and 
+destination nodes for the agents.  
 
-After introducing set of the facts, rule in the $r_{9}$ 
+Rule $r_{9}$ 
 represents that vertex $V$ is free and does not have any 
-obstacle on it. Rules in the lines: $r_{10}$, $r_{11}$ and 
-$r_{12}$ guesses next node to be visited by the agent, from 
-node $U$ to the node $V$. Agent can either visit new node 
+obstacle on it. Rules $r_{10}$, $r_{11}$ and 
+$r_{12}$ guesses the next node to be visited by the agent, from 
+node $U$ to the node $V$. The agent can either visit a new node 
 using an existing edge or stay at the same node and wait. 
-In the $r_{10}$ we set the initial guess and from that 
-point full path to the goal node is to be generated. Rule 
-with the disjunctive head (cf. Section~\ref{disjunction}) 
-in the $r_{11}$ decides either to include the outgoing edge 
+In rule $r_{10}$. Rule $r_{11}$ 
+with a disjunctive head (cf. Section~\ref{disjunction}) decides either to include the outgoing edge 
 from the node $U$ to the path or to omit it from the path. 
 This step is cyclically performed until goal nodes are not 
-reached. Constraint in the $r_{12}$ eliminates all those 
-answer sets in which there is more than one outgoing edge 
-selected at the time $t$ from the node $U$. For each step 
-agent has to select single edge since it cannot be at the 
-two different locations at the same time. Rule in the line 
-$r_{13}$ finds which nodes are visited using the path 
-guessed. Integrity constraint in the $r_{14}$ ensures that 
-an agent $I$ reaches its destination node. We ensure that 
+reached. The constraint $r_{12}$ eliminates all answer sets in which there is more than one outgoing edge 
+selected at some time point from node $U$. Thus, for each step 
+the agent has to select a single edge since it cannot be at the 
+two different locations at the same time. Rule $r_{13}$ computes which nodes are visited using the path 
+guessed. The integrity constraint $r_{14}$ ensures that 
+each agent reaches its destination node. We ensure that 
 agents do not collide with each other using constraint 
 $r_{15}$. We also ensure that agents do not go through 
 obstacles using constraint $r_{16}$. 
 
 We represent path plans by atoms of the form 
 $\mathit{path(I, V, U, T, ValidOrNot)}$ which specify that 
-at time step $T$, agent $I$ moves from the node $V$ to the 
-node $U$. Is that move valid or invalid is determined by 
-the term $\mathit{ValidOrNot}$ from the external atom. Last 
-two lines of the program are checking is the path guessed 
-valid or invalid. Agents can only know what are the edges 
+at time step $T$, agent $I$ moves from a node $V$ to a 
+node $U$. An external atom is used to decide whether that move is valid or invalid. The last 
+two rules $r_{17}$ and $r_{18}$ check if the overall path is valid or invalid. Agents can only know what are the edges 
 available in the graph and make the guess in which 
 direction they should go. Consider that an agent selects 
 some 
 edge but it become unreachable because of some reasons in the meantime. 
-The reasons may be: obstacle from the environment, the 
-corner is to narrow, doors are too small or any change on 
+The reasons may be obstacles in the environment, to narrow corner, too small doors or any change on 
 the graph or on the environment which is not considered as 
-a fact in the program. By introducing this property we have 
-some kind of a dynamic problem. To perform this check we 
-can use only an external source. External source is of the 
-form \ext{check}{U,V,T,I}{ValidOrNot} and it checks is the 
+a fact in the program. By introducing this property we have dynamic problem. To perform this check we 
+can use only an external source. The external source is of the 
+form \ext{check}{U,V,T,I}{ValidOrNot} and checks is the 
 guessed move of the agent $I$ from $U$ to $V$ at time $T$ 
 $\mathit{valid}$ or $\mathit{invalid}$. In the case that 
-any of the moves in the guessed path is invalid whole 
-answer set is removed. If no 
-any invalid moves in the guessed path it means that guessed 
-solution is the answer set of the program.            
+any of the moves in the guessed path is invalid, the whole 
+answer set is eliminated. If no invalid moves are guessed in the path, it means that solution is the answer set of the program.            
 
 \subsubsection{Problem Solution} 
 Let us solve the problem using the following graph:  
@@ -1697,21 +1664,19 @@ size=4em}}
 \draw[edge] (j) to (k);
 \end{tikzpicture}
 \end{center}
-\caption{Simulation of the environment}
+\caption{Simulation of the environment used by agents}
 \end{figure}
-Graph is again loaded from the external file and it is not 
-specified as a set of facts manually. From the facts 
-specified we know that there is an obstacle at the node 
-$\mathit{three}$ so then any answer set with node 
+The graph is again loaded from the external file and not 
+specified as a set of facts. We know that there is an obstacle at the $\mathit{three}$, so any answer set with node 
 $\mathit{three}$ in the path is removed. All other 
 constraints must be satisfied as well. Note that we have 
 omitted most of the atoms in order to emphasize actual 
-solution. In order to see how to filter out answer set and 
+solution (in order to see how to filter out answer set and 
 show only specific atoms at the output refer to the 
-Section~\ref{sec:commandline}. In our answer set we are 
+Section~\ref{sec:commandline}; in our answer set, we are 
 interested only in $\mathit{path}$ atoms since we want to 
 see what is the path from the initial node $U$ to the 
-destination node $V$. One answer set is as follows:
+destination node $V$). One answer set is as follows:
 \\Answer Set 1:
 \begin{align*}
 \{ & path(1,one,two,0,valid), path(1,two,five,1,valid),
@@ -1723,15 +1688,13 @@ path(1,five,eight,3,valid),
 path(2,nine,eleven,3,valid),path(2,eleven,eleven,4,valid) 
 \}
 \end{align*} 
-From the answer set above it is possible to see that 
-$\mathit{agent(1)}$ follows the path:
+Here, $\mathit{agent(1)}$ follows the path:
 one $\rightarrow$ two $\rightarrow$ five $\rightarrow$ five 
 $\rightarrow$ eight $\rightarrow$ ten. At each time 
-instance $t$ an agent chooses either to wait or to move to 
+point an agent chooses either to wait or to move to 
 the another node. At $t=2$ the $\mathit{agent(1)}$ chooses 
-to wait and not to move. Same logic is applied for the 
-$\mathit{agent(2)}$. Just to show different choices 
-possible we are 
+to wait and not to move. The same logic is applied for the 
+$\mathit{agent(2)}$. To show different possible choices we are 
 giving two answer sets more:
 \\Answer Set 2:
 \begin{align*}
@@ -1742,9 +1705,9 @@ giving two answer sets more:
 \\ & 
 path(2,nine,eleven,3,valid),path(2,eleven,eleven,4,valid)\}
 \end{align*}
-In the second answer set path for the first agent did not 
-change. However, second agent changes its path and instead 
-of waiting at $t=0$ on the node four it moves to the node 
+In the second answer set, the path for the first agent did not 
+change. However, the second agent changes its path and instead 
+of waiting at $t=0$ at node four it moves to the node 
 seven.  
 \\Answer Set 3:
 \begin{align*}
@@ -2276,7 +2239,7 @@ Schuler{\em A model building framework for Answer Set
 Programming with external computations} 
 
 \bibitem{wiki} Simple English Wikipedia {\em Traveling 
-salesman problem}
+salesperson problem}
 
 \bibitem{multipleAgents} EsraDerdem and Doga Kisa, and Umut 
 Oztok and Peter Schuller {\em A General Framework for  
