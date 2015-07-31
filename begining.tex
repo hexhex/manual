@@ -77,8 +77,6 @@ sources. The guide refers to release 2.4.
 
 \section{Introduction} % Section No.1
 \label{sec:intro}
-\cite{ConcreteMath}
-\cite{Simpson}
 The \dlvhex{} system is a logic-programming reasoner for 
 computing the models of so-called \hex{}-programs, which 
 are an extension of \emph{answer-set programs} towards 
@@ -87,7 +85,7 @@ enable access to external information, \hex{}-programs
 extend programs with external atoms, which allow for a 
 bidirectional communication between the logic program and 
 external sources of computation (e.g. description logic 
-reasoners and Web resources) \cite{extatoms}. The system is 
+reasoners and Web resources) \cite{conflict}. The system is 
 developed motivated by the need to interoperate with a 
 broad set of external computation sources and the 
 observation, that for meta-reasoning in the context of the 
@@ -2172,7 +2170,6 @@ The following set of commands is related with Input, Output and  Reasoning optio
 & & & Call method "main" in the specified Python script (with dlvhex support) instead of evaluating a program.\\
 \multicolumn{4}{l}{\texttt{--python-arg=ARG}}\\
 & & &Passes arguments to Python (sys.argv) (can be used multiple times).\\
-
 \end{longtable}
 \end{center}
 
@@ -2187,71 +2184,9 @@ The following set of commands is related with Input, Output and  Reasoning optio
 \section{References}
 \bibliographystyle{amsplain}
 \bibliography{foo}
-
-\newpage
-\begin{thebibliography}{1}
-\bibitem{extatoms} Thomas Eiter, Micheal Fink, Thomas 
-Krennwallner, Christoph Redl {\em Conflict-driven ASP 
-Solving with External Sources} 2003   
-  
-\bibitem{ref} Francesco Calimeri, Wolfgang Faber, Martin 
-Gebser, Giovambattista Ianni, Roland Kaminski, Thomas 
-Krennwallner, Nicola leone, Francesco Ricca, Torsten Schaub 
-{\em ASP-Core-2 Input Language} 2013.
-
-\bibitem{licnc} GNU Lesser General Public License. Free 
-Software Foundation, Inc. 
-https://www.gnu.org/copyleft/lesser.html 
-
-\bibitem{onlinedemo}dlvhex. Vienna University of 
-Technology. 
-http://www.kr.tuwien.ac.at/research/systems/dlvhex/demo.php 
-
-\bibitem{git}Software for HEX-Programs. GitHub. 
-https://github.com/hexhex/ 
-
-\bibitem{sourceforge}DLVHEX solver for HEX-programs-  
-Browse Files at SourceForge.net. Sourceforge.net. 
-http://sourceforge.net/projects/dlvhex/files/
-
-\bibitem{prebuilt}KBS-ASP systems. Thomas Krenwallner. 
-http://www.kr.tuwien.ac.at/staff/tkren/deb.html
-
-\bibitem{boost}Boost C++ Libraries. 
-Boost.org.http://www.boost.org/
-
-%\bibliography{foo} 
-%\bibliographystyle{ieeetr}
- 
-\bibitem{hexhex}dlvhex. GitHub. 
-https://github.com/hexhex/core
-
-\bibitem{script}Web location for script
-
-\bibitem{extatoms2}Thomas Eiter, Giovamattista Ianni, Roman 
-Schindlauer and hans Tompits {\em A Uniform Integration of 
-Higher-Order Reasoning and External Evaluations in Answer-
-Set Programming} 
-
-
-\bibitem{pott}Martin Gebser, Roland Kaminski, Benjamin 
-Kaufmann, Marius Lindauer, Max Ostrowski, Javier Romero, 
-Trosten Schaub and Sven Thiele {\em Pottasco User Guide}
-
-\bibitem{dlvum}Robert Bihlmeyer, Wolfgang Faber, Giuseppe 
-Ielpa, Vincezino Lio and Gerald Pfeifer {\em DLV-User 
-Manual} 
-
-\bibitem{swim}Thomas Eiter, Micheal Fink, Giovambattista 
-Ianni, Thomas Krennwallner, Christoph Redl, Peter 
-Schuler{\em A model building framework for Answer Set 
-Programming with external computations} 
-
-\bibitem{wiki} Simple English Wikipedia {\em Traveling 
-salesperson problem}
-
-\bibitem{multipleAgents} EsraDerdem and Doga Kisa, and Umut 
-Oztok and Peter Schuller {\em A General Framework for  
-Pathfinding Problems with Multiple Agents}
-\end{thebibliography} 
+% TO COMPILE
+% pdflatex begining.tex
+% bibtex begining.aux
+% pdflatex begining.tex
+% pdflatex begining.tex
 \end{document}
