@@ -85,7 +85,7 @@ enable access to external information, \hex{}-programs
 extend programs with external atoms, which allow for a 
 bidirectional communication between the logic program and 
 external sources of computation (e.g. description logic 
-reasoners and Web resources) \cite{conflict}. The system is 
+reasoners and Web resources) \cite{efkr2012}. The system is 
 developed motivated by the need to interoperate with a 
 broad set of external computation sources and the 
 observation, that for meta-reasoning in the context of the 
@@ -97,7 +97,7 @@ atoms) with external atoms for software interoperability.
 
 This guide helps beginners to make use of the system and 
 provides a reference of the features of the tool. The language of \hex{}-programs is an extension of disjunctive datalog. It largely 
-implements the ASP-Core-2 Standard \cite{ref} and 
+implements the ASP-Core-2 Standard \cite{cffiklrs2013} and 
 extends it with external and high-order atoms. 
 
 
@@ -783,7 +783,7 @@ $a$ whenever either $c$ is false (whether $b$ holds or not)
 or both $b$ and $c$ are true. Logically, $L_0$ and $L_1$,
 \dots,$L_n$ act as head and body, respectively, which gives 
 $L_0$:$L_1$,\dots,$L_n$ the flavour of a nested implication 
-\cite{pott}.
+\cite{gkklorst2015}.
 
 Together  with variables, conditions allow for specifying 
 collections of expressions within a single rule or 
@@ -843,7 +843,7 @@ instantiation of global variables take precedence over non-
 global ones, that is, the former are instantiated before 
 the latter. As a consequence, variables that occur globally 
 are substituted by terms before a condition is further 
-evaluated \cite{pott}.    
+evaluated \cite{gkklorst2015}.    
 
 \subsection{Aggregates}
 \label{aggregates}
@@ -860,7 +860,7 @@ normally subject to conditions. By comparing an aggregated
 value with given values, we can extract a truth value from 
 an aggregate's evaluation, thus obtaining an aggregate 
 atom. They can occur in the bodies of rule and constraints, 
-possibly negated using negation-as-failure \cite{pott}.
+possibly negated using negation-as-failure \cite{gkklorst2015}.
 
 The form of an \emph{aggregate atom} occuring in a rule 
 body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ 
@@ -1041,7 +1041,7 @@ constraints. In our best model the cost value is 12 because the minimum spanning
 
 Finally, we show an example where both weights and 
 priorities are specified. This example and some others are 
-taken from the DLV-User Manual \cite{dlvum}. Consider the 
+taken from the DLV-User Manual \cite{brfwilvpg2009}. Consider the 
 problem of assigning a given set of employees to two 
 projects. As a minor desideratum, we wish that members of 
 the same group already know each other. Higher level 
@@ -1208,7 +1208,7 @@ Furthermore Alice reads some reviews about swimming
 locations and finds out that she will need her Yoga mat for 
 Alte Donau because the ground is so hard, and she will need 
 goggles for Amalienbad because there is so much chlorine in 
-the water \cite{swim}. Once the problem is defined we can 
+the water \cite{efikrs2015}. Once the problem is defined we can 
 proceed with encodings.    
 
 \subsubsection{Problem Encoding}
@@ -1259,7 +1259,7 @@ $\beta$ is required when swimming is a place in the
 extension of predicate $\alpha$. For example, 
 $\ext{\mathit{rq}}{\mathit{swim}}{\mathit{money}}$ is true 
 if $\mathit{swim(ind)}$ is true because indoor swimming 
-pool charge money for swimming \cite{swim}. 
+pool charge money for swimming \cite{efikrs2015}. 
 
 In $r_4$ it is decided what is to be visited, indoor or 
 outdoor location. By $r_5$ we ensure that at least one location is selected. The integrity constraint $r_6$ removes all answer sets in which there is no selected location to go. Integrity constraint $r_7$ ensures that only single location is selected since Alice can not go to the different location at the same time. Rule $r_8$ collects all requirements caused by 
@@ -1473,7 +1473,7 @@ assumption that the cycle starts at city Austin. The second
 rule in $r_9$ states that, from a reached node $X$, an 
 adjacent node $Y$ can be reached via a further edge in the 
 cycle. It make sure that all nodes will be reached with the 
-cycle given \cite{pott}. The integrity constraint $r_{15}$ 
+cycle given \cite{gkklorst2015}. The integrity constraint $r_{15}$ 
 eliminates answer sets not all nodes in the graph are reached.
 
 In order to minimize costs, we add the following 
@@ -1520,7 +1520,7 @@ to the maximum path length, or the sum of plan lengths.
 These problems are important
 for many real-life applications, such as motion planning, 
 vehicle routing, environmental monitoring, patrolling, 
-computer games \cite{multipleAgents}. We consider the 
+computer games \cite{ekos2013}. We consider the 
 problem 
 where multiple agents need to find paths 
 from their respective starting locations to their goal 
