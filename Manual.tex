@@ -44,12 +44,14 @@
     \includegraphics[width=1.0\textwidth,natwidth=800,natheight=800]{biglogo_whitebg.png}
     \vfill
     {\bfseries\Large
-        {\large User Guide} \\
-        {\small \dlvhex{} 2.4}
+        {\Huge User Guide} \\
+        {\large for}\\
+        {\Large \dlvhex{} 2.4} \\
+		{\Large \today}        
         \vskip4cm
         Mustafa Mehulji\'{c} \vskip1cm Christoph Redl
         \vskip4cm
-        {\large \today}
+        
     }    
     
 \end{titlepage}
@@ -1731,9 +1733,9 @@ path(2,eleven,eleven,3,valid),path(2,eleven,eleven,4,valid)
 
 \section{External Interfaces}
 \label{sec:externalInterfaces}
-This section discusses implementation of external sources in \dlvhex{}. One important design principle was to provide a 
-mechanism to easily add further external atoms without 
-having to recompile the main application. External atoms are introduced in Section~\ref{extatoms}.
+This section discusses the implementation of external sources. One important design principle was to provide a 
+mechanism to easily add further external atoms, as introduce in Section~\ref{extatoms}, without 
+having to recompile the main application.
  
 Formally, an external atom is defined to evaluate to true
 or false, depending on a number of parameters:
@@ -1753,7 +1755,7 @@ where $\mathit{uri}$ stands for a string denoting the RDF-source and X,Y, and Z 
 
 \subsection{Information Flow}
 The interface that is used by \dlvhex{} to access a plugin 
-follows very closely these semantics. For each atom, a 
+follows very closely this semantics. For each atom, a 
 retrieval function has to be implemented, which receives a 
 query object and has to return an an answer-object. The 
 query object carries the input interpretation as well as 
@@ -1762,10 +1764,7 @@ while the answer object is a container for the output
 tuples of the external atom's function.   
 
 \subsection{Types of Input Parameters}
-Theoretically, it is completely up to the atom function how 
-to process the interpretation together with the input 
-constants,
-which are basically only names. In practice however, only 
+In practice, only 
 parts of the interpretation might be needed. Considering 
 this as well as for efficiency reasons, there are three types of input parameters: 
 \begin{itemize}
@@ -1785,12 +1784,12 @@ atom that calculates the overall price of a number of books
 given by their ISBN number:\\
 \centerline{$\ext{overallbookprice}{isbn}{X}$}
 The single input parameter of this atom would be of type 
-``Predicate'', meaning that not the constant itself is 
+\emph{predicate}, meaning that not the constant itself is 
 necessary for the atom's function, but the part of the 
 interpretation with this predicate. So if we have, e.g.,\\ 
-I = \{``$\mathit{isbn(0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6)}$'', ``$ \mathit{isbn(0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4)}$'', $p(a)$, $q(b)$ $\dots$ \}
+I = \{$\mathit{isbn(``0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6")}$, $ \mathit{isbn(``0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4")}$, $p(a)$, $q(b)$ $\dots$ \}
 the atom's function will be called with a ``reduced'' interpretation: \\
-$I=$\{``$\mathit{isbn(0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6)}$'', ``$ \mathit{isbn(0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4)}$''\}
+$I=$\{$\mathit{isbn(``0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6")}$, $ \mathit{isbn(``0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4")}$\}
 
 A parameter of type \emph{tuple} represents a meta category standing for an arbitrary number of constant input parameters. This is useful when we have to send multiple constant parameters separately, e.g., for \\
 \centerline{$\ext{concat}{string1, string2, string3, \dots}{Out}$}. 
@@ -1813,7 +1812,7 @@ The \verb+register+ function has the following form:
 def register():
   dlvhex.addAtom("Atom_Name",(Input_Parameters),Output_Arity) 
 \end{verbatim}
-It containscall of \verb+addAtom+ for each external atom. Each call specifies a tuple of arity 3:
+It contains a call of \verb+addAtom+ for each external atom. Each call specifies a tuple of arity 3:
 \begin{itemize}
 \item \verb+Atom_Name+ is the name of the 
 external predicate.
@@ -1866,21 +1865,21 @@ The plugin in Example~\ref{constantAsInput} uses a constant (string) input param
 \end{verbatim}
 \end{exmp}
 
-In the first two lines we have imported two libraries which 
+In the lines 1 and 2 we have imported two libraries which 
 are required. We have to import the \verb+dlvhex+ 
 library as for every plugin. The \verb+networkx+ library is needed in this particular example since we are 
-performing graph operations (i.e. loading graphs from the file, get all successors of the node etc.). 
+performing graph operations (i.e. loading graphs from the file, get all successors of the node etc). 
 
 Lines \verb+3+ to \verb+7+ implement the \verb+friendsOf+ external atom. 
 It receives the name of the person as string and searches for all 
-direct friends of that person in the graph, which is loaded from the file in line \verb+4+. All discovered friends, are sent to the output as it is specified in line \verb+7+. 
+direct friends of that person in the graph, which is loaded from the file in line \verb+4+. All discovered friends, are output in line \verb+7+. 
 
 Lines \verb+8+ to \verb+11+ register the external atom 
 \verb+friendsOf+ with constant input parameter and 
 single output parameter. 
 \bigskip \\
 The following example uses a predicate input parameter 
-for the \verb+&rq+ external atom as used in Example~\ref{swimExample}.The external atom is performing 
+for the \verb+&rq+ external atom as used in Example~\ref{swimExample}. The external atom is performing 
 a Web search to check the requirements for the selected location. It is of the form 
 $\ext{\mathit{rq}}{\mathit{location\_choice}}
 {\mathit{required\_resource}}$ which intuitively evaluates 
@@ -1893,12 +1892,12 @@ origin (inoutd, or loc) using predicate $\mathit{need}$.
 
 1:  import dlvhex 
 
-2:  def rq(predic)
+2:  def rq(location_chioce)
 3:    for x in dlvhex.getTrueInputAtoms():
 4:      io = {"ind":"money","amalB":"goggles","altD":"yogamat",
               "gansD":"money"}
-5:      inp = x.tuple()[1].value()
-6:        if predic == x.tuple()[0]:
+5:      if location_chioce == x.tuple()[0]:
+6:        inp = x.tuple()[1].value()
 7:          if inp in io:
 8:            dlvhex.output((io[inp], ))
 
@@ -1907,13 +1906,11 @@ origin (inoutd, or loc) using predicate $\mathit{need}$.
 \end{verbatim}
 \end{exmp}
 
-From line \verb+2+ to line \verb+8+ we implement the \verb+rq+ function. In line \verb+5+ we are taking the term of the input predicate as 
-a string value. In line \verb+6+ we are ensuring that we are  
-working with right predicate. Line \verb+8+ is returning  
+From line \verb+2+ to line \verb+8+ we implement the \verb+rq+ function. Line \verb+5+ filters the atoms according to the given predicate. In Line 6 we check if the predicate of the current input atom is equivalent to \texttt{location\_choice}, which specifies the selected location. Line \verb+8+ is returning  
 the requirements (if any) of the location specified by variable 
-\verb+inp+. Lines \verb+9+ to \verb+10+ are defining the register 
+\verb+inp+. Lines \verb+9+ to \verb+10+ define the register 
 function for the \verb+rq+ external atom.
-\bigskip \\
+
 As mentioned above, there exists a third parameter type \emph{tuple}. It stands for an arbitrary number of constant input parameters. The following example presents the usage of a tuple in a plugin used to implement string concatenation for arbitrary many strings.  
 \begin{exmp}
 \label{tupleAsInput}
@@ -1961,15 +1958,15 @@ The following set of commands is related with Input, Output and  Reasoning optio
 \texttt{-f} & \texttt{--filter=foo[,bar[,...]]} && \\
 & & & Only display instances of the specified predicate(s).\\
 & \texttt{--nofacts} && Do not output EDB facts. EDB facts are the facts of the program.  \\
-\texttt{-n} & \texttt{--number=<num>} && Limit number of displayed models to $\langle$num$\rangle$, 0 (default)\\ 
-\texttt{-N} & \texttt{--maxint=<num>} && Set maximum integer (\#maxint in the program takes precedence). \\
+\texttt{-n} & \texttt{--number=<num>} && Limit number of displayed models to $\langle$\texttt{num}$\rangle$, Default value is 0, which means to display all models.\\ 
+\texttt{-N} & \texttt{--maxint=<num>} && Set maximum integer (\# \texttt{maxint} in the program takes precedence). \\
  & \texttt{--weaksafety} && Skip strong safety check.\\
  & \texttt{--strongsafety} && Applies traditional strong safety criteria. \\
   & \texttt{--liberalsafety} && Uses more liberal safety condition than strong safety. \\
   &\texttt{--mlp}&& Use dlvhex$+$mlp solver (modular nonmonotonic logic programs).\\
   & \texttt{--forget} && Forget previous instantiations that are not involved in current computation (mlp setting). \\
   & \texttt{--split} &&Use instantiation splitting techniques.\\
-  & \texttt{--noeval} && Just parse the program, don't evaluate it (only useful with --verbose). \\
+  & \texttt{--noeval} && Parse the program, but do not evaluate it (only useful with \texttt{--verbose}). \\
   & \texttt{--keepnsprefix} && Keep specified namespace-prefixes in the result. \\
   & \texttt{--keepauxpreds} && Keep auxiliary predicates in answer sets. \\
 \end{longtable}
@@ -2197,7 +2194,7 @@ begins with a location, followed by the string error and a short description of 
 
 \newpage
 \bibliographystyle{amsplain}
-\bibliography{foo}
+\bibliography{Manual}
 % TO COMPILE
 % pdflatex begining.tex
 % bibtex begining.aux
