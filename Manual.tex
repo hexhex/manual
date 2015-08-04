@@ -831,15 +831,7 @@ Any variable occurring
 within a condition does not count as a positive occurrence 
 outside the condition in the sense of safety. A variable 
 $X$ in an aggregate-free rule is safe if at least one of 
-the following conditions is satisfied:
-\begin{itemize}
-\item $X$ occurs in a positive standard predicate in the 
-body of the rule;
-\item $X$ occurs in a true negated standard predicate in 
-the body of the rule;
-\item $X$ occurs in the last argument of an arithmetic 
-predicate $A$ and all other arguments of $A$ are safe.
-\end{itemize}
+the safety conditions specified in Section~\ref{safetyCheck} is satisfied.
 Variables occurring in atoms not subject to any conditions 
 are global. Each variable within an atom in front of a 
 condition must be global or have a positive occurrence on 
@@ -1985,7 +1977,6 @@ The following set of commands is related with Input, Output and  Reasoning optio
 %--EXTLEARN
 \multicolumn{4}{p{6cm}}{\texttt{--extlearn[=none,iobehavior,monotonicity,functionality,}} \\
 \multicolumn{3}{l}{\texttt{linearity,neg,user,generalize]}} \\
-%\texttt{--extlearn[=none,iobehavior,monotonicity,functionality,linearity,neg,user,generalize]}
 & & & Learn nogoods from external atom evaluation (only useful with \texttt{--solver=genuineii} or \texttt{--solver=genuinegi)}.\\
 &\texttt{none}:& & Deactivate external learning. \\
 &\texttt{iobehaviour}:& &Apply generic rules to learn input-output behaviour. \\
@@ -2181,17 +2172,119 @@ to inappropriate inputs or command line options. All messages are printed to the
 standard error stream.
 
 \subsection{Syntax Error}
-In this subsection we consider errors emitted during the parsing and checking of logic programs.
+In this section we consider errors emitted during the parsing and checking of logic programs.
 These errors include location informations to ease finding and fixing the problem. Each of the error messages below
-begins with a location, followed by the string error and a short description of the error in standard error stream.
+shows a line in which the error appears, followed by the type of the error and a short description of the error in standard error stream.
+\begin{align*}
+ & \texttt{8 \ iterators \ not \ the \ same!} \\
+ & \texttt{8 \ unparsed \  ``go $\leftimpl$ goto(X)'' }\\
+ & \texttt{8 ----------$\widehat{}$} \\
+ & \\
+ & \texttt{GeneralError: \ Syntax \ Error: \ Could \ not \ parse \ complete \ input!}
+\end{align*}
 
+To correct this error, please investigate the indicated location and check whether
+something looks strange there (like a missing period, an unmatched parenthesis,
+etc.).
 
+\subsection{Plugin related errors}
+In this section we explain exceptions and errors 
+which may occur while working with external atoms 
+which are implemented in the external sources (e.g. Python or C\# file). 
 
+\emph{Exception} related with plugins occurs whenever we try to
+load plugin from the nonexisting file, either from the python or C\# file.
+\begin{align*}
+\texttt{Exception: nonexisting\_file\_name.py : no such file}
+\end{align*}
+$\texttt{nonexisting\_file\_name.py}$ does not exist in the current directory and should be replaced with
+right file which contains implementation for the external atoms used in \hex{}-program.
+
+\emph{Error} related to plugins may occur if we do not provide an external atom specification and implementation 
+in the external file but we use it in \hex{}-program. Error look as below:
+\begin{align*}
+& \texttt{GeneralError: Fatal: did not find plugin atom for predicate}\\ 
+& \texttt{``ext\_atom''}
+\end{align*}  
+From the description above we can see that there is no plugin atom for predicate \texttt{ext\_atom}
+in the source file which is passed as parameter from the command line. Implementation for the predicate 
+\texttt{ext\_atom} should be added to the plugin source file.
+
+Another error related with plugins may be if output arity of an external atom does not 
+match its specification in the source file. The error is given below:
+\begin{align*}
+& \texttt{GeneralError: External Atom \ext{rq}{ind}{C,A} has a wrong} \\
+& \texttt{output arity (should be 1)}
+\end{align*}  
+Output arity of an external atom in the \hex{}-program does not match its specification 
+in plugin source file. Output arity which is registered and which should be used is given in the brackets. 
+
+\subsection{Safety Checking}
+\label{safetyCheck}
+Errors in this section occurs if an input program is not safe.
+\dlvhex{} imposes a safety condition on variables in rules. 
+This guarantees that a rule is logically equivalent to the set of its Herbrand instances.
+
+\subsubsection{Standard, Arithmetic and Comparative Predicates}
+A variable $X$ in an aggregate-free rule is safe if at least one 
+of the following conditions is satisfied:
+\begin{itemize}
+\item $X$ occurs in a positive standard predicate in the 
+body of the rule;
+\item $X$ occurs in a true negated standard predicate in 
+the body of the rule;
+\item $X$ occurs in the last argument of an arithmetic 
+predicate $A$ and all other arguments of $A$ are safe.
+\end{itemize}
+A rule is safe if all its variables are safe.
+\begin{exmp} \textbf{Safe rules and Constraints}
+\begin{align*}
+a(X)& \leftimpl not \ b(X), c(X). \\
+a(X)& \leftimpl X \geq Y, node(X), node(Y).\\
+a(Y)& \leftimpl number(X), \#precc(X,Y). \\
+a(Z)& \leftimpl number(X), \#succ(X,Y),Z=X+Y.\\
+    &\leftimpl number(X), number(Y), \#mod(X,Y,2).\\
+    &\leftimpl a(Y), not \ b(Y), not \ c(Y). 
+\end{align*}
+\end{exmp}
+
+\begin{exmp} \textbf{Unsafe Rules and Constraints}
+\begin{align*}
+a(X) &\vee -a(X). \\
+a(X)&\leftimpl not \ b(X). \\
+a(X)&\leftimpl number(Y), X=Y+Z. \\
+a(X)&\leftimpl number(Y), \#succ(X,Y). \\
+    & \leftimpl not \ number(X), \#succ(X,Y). \\
+    & \leftimpl not \ -b(Y).\\
+    & \leftimpl X \geq Y, node(X). 
+\end{align*}
+\end{exmp}
+
+\subsubsection{Aggregates}
+A variable $X$ appearing in the symbolic set of an aggregate is safe if it does not appear elsewhere outside the aggregate atom and at least one of the following conditions is satisfied:
+\begin{itemize}
+\item $X$ occurs in a positive standard predicate in the symbolic set;
+\item $X$ occurs in a true negated standard predicate in the symbolic set;
+\item $X$ occurs in the last argument of an arithmetic predicate A in the symbolic set and all other arguments of A are safe.
+\end{itemize}
+All other variables (including guards) appearing in an aggregate atom have to be made safe by some other literal of the body.
+\begin{exmp} \textbf{Safe Rules and Constraints}
+\begin{align*}
+a(X) & \leftimpl node(X), \#count\{ V \colon ege(V,X)\} \geq 0. \\
+a(X) & \leftimpl node(X), not \ \#count\{ V \colon edge(v,x)\} = 0\\
+& \leftimpl \#count\{V \colon edge(V,Y), not \ edge(Y,V)\}=X, X\geq2.\\
+& \leftimpl not \ node(X), \#count\{ V \colon edge(V,Y)\}=X\\
+\end{align*}
+\end{exmp}
+
+\begin{exmp} \textbf{Unsafe Rules and Constraints}
+\begin{align*}
+\end{align*}
+\end{exmp}
 
 
 \section{Future work}
 \label{sec:future}
-
 \newpage
 \bibliographystyle{amsplain}
 \bibliography{Manual}
