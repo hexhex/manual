@@ -2176,7 +2176,6 @@ In this section we consider errors emitted during the parsing and checking of lo
 These errors include location informations to ease finding and fixing the problem. Each of the error messages below
 shows a line in which the error appears, followed by the type of the error and a short description of the error in standard error stream.
 \begin{align*}
- & \texttt{8 \ iterators \ not \ the \ same!} \\
  & \texttt{8 \ unparsed \  ``go $\leftimpl$ goto(X)'' }\\
  & \texttt{8 ----------$\widehat{}$} \\
  & \\
@@ -2223,7 +2222,7 @@ in plugin source file. Output arity which is registered and which should be used
 \label{safetyCheck}
 Errors in this section occurs if an input program is not safe.
 \dlvhex{} imposes a safety condition on variables in rules. 
-This guarantees that a rule is logically equivalent to the set of its Herbrand instances.
+This guarantees that a rule is logically equivalent to the set of its Herbrand instances. Error appears if any of the variables used in the \hex{}-program does not hold for the rules given below. Examples and explanations in the following subsections are used from the \cite{brfwilvpg2009}. 
 
 \subsubsection{Standard, Arithmetic and Comparative Predicates}
 A variable $X$ in an aggregate-free rule is safe if at least one 
@@ -2279,10 +2278,68 @@ a(X) & \leftimpl node(X), not \ \#count\{ V \colon edge(v,x)\} = 0\\
 
 \begin{exmp} \textbf{Unsafe Rules and Constraints}
 \begin{align*}
+a(X) & \leftimpl not \ node(X), \#count\{V \colon edge(V,X)\} \geq 0. \\
+a(X) & \leftimpl node(X), \#count\{V \colon edge(V,X)\} \geq Z. \\
+a(X) & \leftimpl node(X), \#count\{V \colon edge(V,Y), not \ edge(V,Y)\} \geq 0. \\
+& \leftimpl \#count\{ V \colon edge(V,Y)\} \geq 0, X > Y. \\
+& \leftimpl not node(X), \#count\{V \colon edge(V,Y)\} > X. 
 \end{align*}
 \end{exmp}
 
+\subsubsection{Arithmetic predicates}
+By evaluating a program with arithmetic predicates it is possible to derive new numeric constants, different from those already occurring in the program. In case of arithmetic rules, this could cause the non-termination of the evaluation so an error message is issued in this case.
+\begin{exmp} \textbf{Non finite domain program}
+\begin{align*}
+& d(0). \\
+& d(Y) \leftimpl d(X), Y=X+1.
+\end{align*}
+\end{exmp}
+To safely evaluate this kind of programs an upper integer limit N has to be specified either on the command-line (c.f Section~\ref{sec:commandline}) or in the program (with \#maxint=N.).
 
+
+\subsubsection{Complex Terms}
+Evaluation of a program might not terminate if a complex term occurs in the head of a recursive rule.
+\begin{exmp} \textbf{Non finite domain program}
+\begin{align*}
+p(0).&\\
+p(f(X)) & \leftimpl q(X).\\
+q(X) & \leftimpl p(X).\\
+\end{align*}
+\end{exmp}
+Some programs can be safely evaluated even if there are complex terms appearing in the head of a rule. This is the case when all arguments of a functional term are restricted to range over a finite domain thanks to the presence of some other atoms in the body.
+\begin{exmp} \textbf{Finite domain program}
+\begin{align*}
+p(0). \ r(0). \\
+p(f(X)) & \leftimpl r(X), q(X). \\
+q(X) & \leftimpl p(X).
+\end{align*}
+\end{exmp}
+When a program is not recognized to have a finite domain and termination thus cannot be guaranteed, an error is issued. 
+
+\subsubsection{Cyclic rules}
+By evaluating a program with external atoms it is possible to derive new numeric constants, different from those already occurring in the program. In case of cyclic rules, this could cause the non-termination of the evaluation and safety condition is violated. An error message is issued in this case. Example for this would be:
+\begin{exmp} \textbf{Non bounded cyclic rule}
+\begin{align*}
+& d(0). \\
+& d(Y) \leftimpl d(X), \ext{increment}{X}{Y}.
+\end{align*}
+\end{exmp}
+Error generated is:
+\begin{align*}
+& \texttt{GeneralError: Syntax Error: Program is not liberally}\\
+& \texttt{domain-expansion safe}
+\end{align*}
+Program given above is not safe because it can run infinitely many times, there is no any bound on an integer number which can be generated from the external atom. 
+
+To solve this safety problem we have to introduce some small changes to the program. Adding another atom in the rule which is completely independent on the newly derived numeric constants makes the rule safe and program is \emph{strongly safe}.
+\begin{exmp} \textbf{Bounded cyclic rule}
+\begin{align*}
+& d(0). \\
+& d(Y) \leftimpl d(X), \ext{increment}{X}{Y}, lim(Y).
+\end{align*}
+\end{exmp}
+
+ 
 \section{Future work}
 \label{sec:future}
 \newpage
