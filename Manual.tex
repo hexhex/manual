@@ -2220,11 +2220,15 @@ in plugin source file. Output arity which is registered and which should be used
 
 \subsection{Safety Checking}
 \label{safetyCheck}
-Errors in this section occurs if an input program is not safe.
-\dlvhex{} imposes a safety condition on variables in rules. 
-This guarantees that a rule is logically equivalent to the set of its Herbrand instances. Error appears if any of the variables used in the \hex{}-program does not hold for the rules given below. Examples and explanations in the following subsections are used from the \cite{brfwilvpg2009}. 
+Errors in this section occurs if an input program is not safe. If any of the variables used in the \hex{}-program does not satisfy safety conditions listed below the program is not safe and error occurs. Examples and explanations in the following subsections are used from the \cite{brfwilvpg2009}. 
 
-\subsubsection{Standard, Arithmetic and Comparative Predicates}
+By evaluating a program with external atoms it is possible to derive new numeric constants, different from those already occurring in the program and this can generate a cycle. In case of cyclic rules, this could cause the non-termination of the evaluation and safety condition is violated. 
+
+\subsubsection{Regular Safety}
+\dlvhex{} imposes a safety condition on variables in rules. 
+This guarantees that a rule is logically equivalent to the set of its Herbrand instances.
+
+\paragraph{Standard, Arithmetic and Comparative Predicates}
 A variable $X$ in an aggregate-free rule is safe if at least one 
 of the following conditions is satisfied:
 \begin{itemize}
@@ -2259,7 +2263,7 @@ a(X)&\leftimpl number(Y), \#succ(X,Y). \\
 \end{align*}
 \end{exmp}
 
-\subsubsection{Aggregates}
+\paragraph{Aggregates}
 A variable $X$ appearing in the symbolic set of an aggregate is safe if it does not appear elsewhere outside the aggregate atom and at least one of the following conditions is satisfied:
 \begin{itemize}
 \item $X$ occurs in a positive standard predicate in the symbolic set;
@@ -2286,7 +2290,7 @@ a(X) & \leftimpl node(X), \#count\{V \colon edge(V,Y), not \ edge(V,Y)\} \geq 0.
 \end{align*}
 \end{exmp}
 
-\subsubsection{Arithmetic predicates}
+\paragraph{Arithmetic predicates}
 By evaluating a program with arithmetic predicates it is possible to derive new numeric constants, different from those already occurring in the program. In case of arithmetic rules, this could cause the non-termination of the evaluation so an error message is issued in this case.
 \begin{exmp} \textbf{Non finite domain program}
 \begin{align*}
@@ -2294,10 +2298,10 @@ By evaluating a program with arithmetic predicates it is possible to derive new 
 & d(Y) \leftimpl d(X), Y=X+1.
 \end{align*}
 \end{exmp}
-To safely evaluate this kind of programs an upper integer limit N has to be specified either on the command-line (c.f Section~\ref{sec:commandline}) or in the program (with \#maxint=N.).
+To safely evaluate this kind of programs an upper integer limit N has to be specified either on the command-line (cf. Section~\ref{sec:commandline}) or in the program (with \#maxint=N.).
 
 
-\subsubsection{Complex Terms}
+\paragraph{Complex Terms}
 Evaluation of a program might not terminate if a complex term occurs in the head of a recursive rule.
 \begin{exmp} \textbf{Non finite domain program}
 \begin{align*}
@@ -2316,30 +2320,53 @@ q(X) & \leftimpl p(X).
 \end{exmp}
 When a program is not recognized to have a finite domain and termination thus cannot be guaranteed, an error is issued. 
 
-\subsubsection{Cyclic rules}
-By evaluating a program with external atoms it is possible to derive new numeric constants, different from those already occurring in the program. In case of cyclic rules, this could cause the non-termination of the evaluation and safety condition is violated. An error message is issued in this case. Example for this would be:
-\begin{exmp} \textbf{Non bounded cyclic rule}
+
+By evaluating a program with external atoms it is possible to derive new numeric constants, different from those already occurring in the program. Rules in which we have an external atom that derives new numeric constants and In case of cyclic rules, this could cause the non-termination of the evaluation and safety condition is violated.
+\subsubsection{Strong Safety}
+Strong domain-expansion safety is overly restrictive, as it also excludes programs that clearly are finitely
+restrictable. In this section we give an overview about the notion and refer to \cite{eite-etal-14a} for details.
+\begin{exmp} \textbf{Consider the following program:}
 \begin{align*}
-& d(0). \\
-& d(Y) \leftimpl d(X), \ext{increment}{X}{Y}.
+& r_1 \colon p(a). \\
+& r_2 \colon q(aa). \\
+& r_3 \colon s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y}. \\
+& r_4 \colon p(X) \leftimpl s(X), q(X).\\
 \end{align*}
 \end{exmp}
-Error generated is:
+It is not \emph{strongly safe} because Y in the cyclic external atom $\ext{concat}{X,a}{Y}$ in $r_3$ does not occur in an
+ordinary body atom that does not depend on 
+\\$\ext{concat}{X,a}{Y}$. When we run program above, with \texttt{--strongsafety} option (cf. Section~\ref{sec:commandline}) enabled, error that is generated looks as follow:
 \begin{align*}
-& \texttt{GeneralError: Syntax Error: Program is not liberally}\\
-& \texttt{domain-expansion safe}
-\end{align*}
-Program given above is not safe because it can run infinitely many times, there is no any bound on an integer number which can be generated from the external atom. 
+& \texttt{GeneralError: Syntax Error: Rule is not strongly safe! Variable}  \\
+& \texttt{Y fails strong safety check in rule s(Y) :- p(X), \ext{concat}{X,a}{Y}.}
+\end{align*} 
+To resolve this error we should add an ordinary body atom that does not depend on output of the external atom.
 
-To solve this safety problem we have to introduce some small changes to the program. Adding another atom in the rule which is completely independent on the newly derived numeric constants makes the rule safe and program is \emph{strongly safe}.
-\begin{exmp} \textbf{Bounded cyclic rule}
+
+However, program above is finitely restrictable as the
+cycle is “broken” by $\mathit{q(X)}$ in $r_4$. Since the program is finitely restrictable it is also \emph{liberally-safe} and this concept is explained in the following section. 
+
+
+\subsubsection{Liberal Safety}
+To overcome unnecessary restrictions of strong safety, liberal domain-expansion safety (lde-safety)
+has been introduced \cite{eite-etal-14a}, which incorporates both syntactic and semantic properties of a program. The
+details of the notion are not necessary for this guide, except that all lde-safe programs have finite groundings
+with the same answer sets; we give here a brief overview.
+
+Unlike strong safety, liberal de-safety is not a property of entire atoms but of attributes, i.e., pairs of
+predicates and argument positions. Intuitively, an attribute is lde-safe, if the number of different terms in
+an answer-set preserving grounding (i.e. a grounding which has the same answer sets if restricted to the
+positive atoms as the original program) is finite. A program is lde-safe, if all its attributes are lde-safe.
+
+Running the program above, with \texttt{--liberalsafety} option (cf. Section~\ref{sec:commandline}) enabled, executes successfully and outputs:
 \begin{align*}
-& d(0). \\
-& d(Y) \leftimpl d(X), \ext{increment}{X}{Y}, lim(Y).
+\{ & 
+\texttt{p(a),q(aa),p(aa),s(aa),s(aaa)}
+\}
 \end{align*}
-\end{exmp}
 
- 
+
+
 \section{Future work}
 \label{sec:future}
 \newpage
