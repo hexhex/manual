@@ -516,6 +516,13 @@ $\mathit{9862}$, $\mathit{c1}$, ''hello''
 (name, salary, ID, location)$
 \\ \text{Predicates:} $\mathit{parent}$ $\mathit{employee}$
 \end{exmp}
+
+Next, (uninterpreted) functions are \emph{complex terms} composed of a name
+(like a constant) and one or more terms as arguments.
+For instance,
+$\mathit{at(john,day(10),X)}$ is a function with three arguments: constant $\mathit{john}$,
+another function $\mathit{day(12})$ with an integer argument, and variable $X$.
+
 \subsection{Normal Programs and Integrity Constraints}
 A \hex{}-program is constructed using \emph{facts, rules 
 and integrity constraints}. 
