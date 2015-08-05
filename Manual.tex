@@ -2342,11 +2342,11 @@ It is not \emph{strongly safe} because Y in the cyclic external atom $\ext{conca
 ordinary body atom that does not depend on 
 \\$\ext{concat}{X,a}{Y}$. When we run program above, with \texttt{--strongsafety} option (cf. Section~\ref{sec:commandline}) enabled, error that is generated looks as follow:
 \begin{align*}
-& \texttt{GeneralError: Syntax Error: Rule is not strongly safe! Variable}  \\
-& \texttt{Y fails strong safety check in rule s(Y) :- p(X), \ext{concat}{X,a}{Y}.}
+& \texttt{GeneralError: Syntax Error: Rule is not strongly safe! }  \\
+& \texttt{Variable Var fails strong safety check in rule Rule.}
 \end{align*} 
-To resolve this error we should add an ordinary body atom that does not depend on output of the external atom.
-
+Along with error message, the affected \texttt{Rule} and a list of all unsafe variable occurrences \texttt{Var} are reported. 
+The first action to take usually consists of checking whether variable \texttt{Var} is actually in the scope of any atom (in the positive body of \texttt{Rule}) that can bind it. Also check for variables that occur in aggregate elements (cf. Section~\ref{aggregates}) or conditional literals (cf. Section~\ref{conditions}), you might have to bind them with additional positive atoms in the conditions. 
 
 However, program above is finitely restrictable as the
 cycle is “broken” by $\mathit{q(X)}$ in $r_4$. Since the program is finitely restrictable it is also \emph{liberally-safe} and this concept is explained in the following section. 
