@@ -2340,7 +2340,7 @@ restrictable. In this section we give an overview about the notion and refer to 
 \end{exmp}
 It is not \emph{strongly safe} because Y in the cyclic external atom $\ext{concat}{X,a}{Y}$ in $r_3$ does not occur in an
 ordinary body atom that does not depend on 
-\\$\ext{concat}{X,a}{Y}$. When we run program above, with \texttt{--strongsafety} option (cf. Section~\ref{sec:commandline}) enabled, error that is generated looks as follow:
+\\$\ext{concat}{X,a}{Y}$. When we run program above, with \texttt{--strongsafety} option enabled (cf. Section~\ref{sec:commandline}), error that is generated looks as follow:
 \begin{align*}
 & \texttt{GeneralError: Syntax Error: Rule is not strongly safe! }  \\
 & \texttt{Variable Var fails strong safety check in rule Rule.}
@@ -2348,27 +2348,24 @@ ordinary body atom that does not depend on
 Along with error message, the affected \texttt{Rule} and a list of all unsafe variable occurrences \texttt{Var} are reported. 
 The first action to take usually consists of checking whether variable \texttt{Var} is actually in the scope of any atom (in the positive body of \texttt{Rule}) that can bind it. Also check for variables that occur in aggregate elements (cf. Section~\ref{aggregates}) or conditional literals (cf. Section~\ref{conditions}), you might have to bind them with additional positive atoms in the conditions. 
 
-However, program above is finitely restrictable as the
-cycle is “broken” by $\mathit{q(X)}$ in $r_4$. Since the program is finitely restrictable it is also \emph{liberally-safe} and this concept is explained in the following section. 
 
 
 \subsubsection{Liberal Safety}
 To overcome unnecessary restrictions of strong safety, liberal domain-expansion safety (lde-safety)
-has been introduced \cite{eite-etal-14a}, which incorporates both syntactic and semantic properties of a program. The
-details of the notion are not necessary for this guide, except that all lde-safe programs have finite groundings
-with the same answer sets; we give here a brief overview.
+has been introduced \cite{eite-etal-14a}, which incorporates both syntactic and semantic properties of a program. All lde-safe programs have finite groundings with the same answer sets.
 
 Unlike strong safety, liberal de-safety is not a property of entire atoms but of attributes, i.e., pairs of
 predicates and argument positions. Intuitively, an attribute is lde-safe, if the number of different terms in
 an answer-set preserving grounding (i.e. a grounding which has the same answer sets if restricted to the
 positive atoms as the original program) is finite. A program is lde-safe, if all its attributes are lde-safe \cite{efikrs2015}.
 
-Program from Example~\ref{strongSafetyExmp} executes successfully with \texttt{--liberalsafety} option (cf. Section~\ref{sec:commandline}) enabled and outputs:
+Since the program from Example~\ref{strongSafetyExmp} is finitely restrictable, the cycle is “broken” by $\mathit{q(X)}$ in $r_4$, it is also \emph{liberally safe}. Program executes successfully with \texttt{--liberalsafety} option enabled (cf. Section~\ref{sec:commandline}) and outputs:
 \begin{align*}
 \{ & 
 \texttt{p(a),q(aa),p(aa),s(aa),s(aaa)}
 \}
 \end{align*}
+The details of the notion are not necessary for this guide, more informations about liberal safety is available at \cite{eite-etal-14a}.
 
 
 
