@@ -32,6 +32,14 @@
 \setcounter{page}{3}
 \newcommand{\dlvhex}{{\sc dlvhex}}
 \newcommand{\hex}{{\sc hex}}
+\newcommand{\dlv}{{\sc dlv}}
+\newcommand{\dlvdb}{{\sc dlvdb}}
+\newcommand{\libdlv}{{\sc libdlv}}
+\newcommand{\libclingo}{{\sc libclingo}}
+\newcommand{\genuineii}{{\sc genuineii}}
+\newcommand{\genuinegi}{{\sc genuinegi}}
+\newcommand{\genuineic}{{\sc genuineic}}
+\newcommand{\genuinegc}{{\sc genuinegc}}
 \setcounter{secnumdepth}{4} % how many sectioning levels to assign numbers to
 \setcounter{tocdepth}{4}    % how many sectioning levels to show in ToC
 
@@ -1221,27 +1229,27 @@ follows:
 \label{swimExample}
 \begin{align*}
 r_1\colon& location(ind, margB). \ location(ind, amalB). \ \\& 
-location(outd, gansD). \ location(outd, altD) \\  
+location(outd, gansD). \ location(outd, altD). \\  
 r_2\colon& swim(ind) \vee swim(outd).\\ 
 r_3\colon& need(inoutd, C) \leftimpl \ext{\mathit{rq}}
 {\mathit{swim}}{\mathit{C}}. \\
 \\
 r_4\colon& goto(X) \vee ngoto(X) \leftimpl swim(P), 
 location(P, X).\\
-r_5\colon& go \leftimpl goto(X)\\
+r_5\colon& go \leftimpl goto(X).\\
 r_6\colon& \leftimpl not \ go. \\
 r_7\colon& \leftimpl goto(X), goto(Y), X \neq Y. \\
 \\
 r_8\colon& \mathit{need}(loc, C) \leftimpl 
 \ext{\mathit{rq}}{\mathit{goto}}{\mathit{C}}. \\ 
-r_9\colon& \leftimpl need(X, money)
+r_9\colon& \leftimpl need(X, money).
 \end{align*}
 \end{exmp}
 The \hex{} program above represents Alice's reasoning 
 problem. Rule $r_1$ contains a set of facts about possible 
 swimming locations (where $\mathit{ind}$ and 
 $\mathit{outd}$ are short for indoor and outdoor, 
-respectively). Rule $r_2$ chooses indoor vs. outdoor 
+respectively). Rule $r_2$ chooses indoor vs.outdoor 
 swimming locations, and $r_3$ collects requirements that 
 are caused by this choice using the external atom. 
 
@@ -1280,7 +1288,7 @@ goto(amalB).\\
 r_3\colon& need(loc, C) \leftimpl \ext{rq}{altD}{C}, 
 goto(altD).\\
 r_4\colon& need(loc, C) \leftimpl \ext{rq}{gansD}{C}, 
-goto(gansD).\\
+goto(gansD).
 \end{align*}    
 where $\&rq$ receive constant input parameter. This gives us three additional rules which are just 
 repetition of the same rule just with different constant 
@@ -1299,7 +1307,7 @@ swim(outd),go,ngoto(gansD),goto(altD),\\
 & need(loc,yogamat) \} 
 \end{align*}
 Under this answer set, the external atom $\ext{rq}{goto}
-{yogamat}$ is true and all others:\\($\ext{rq}{swim}
+{yogamat}$ is true and all others ($\ext{rq}{swim}
 {money}, \ext{rq}{goto}{money}, \ext{rq}{swim}{yogamat}, 
 \dots $) are false. Intuitively, the answer set tells Alice to 
 take her Yoga mat and go for a swim to Alte Donau (outside) 
@@ -1438,8 +1446,7 @@ all successor
 nodes. $\mathit{F2}$ returns all successor nodes of 
 $\mathit{F1}$ and $\mathit{Cost}$ is an integer value which 
 represents weight of the edge between $\mathit{F1}$ and 
-$\mathit{F2}$. $\mathit{DegPlus}$ is here set to be 4 that 
-means we can go at most three edges far from the root node. 
+$\mathit{F2}$. $\mathit{DegPlus}$ is here set to be 4, which means we can go at most three edges far from the root node. 
 There are many advantages of using an external atom of this
 type:
 \begin{itemize}
@@ -1493,7 +1500,7 @@ is as follows:
 cycle(boston,memphis),cycle(detroit,austin), \\
 & cycle(chicago,detroit), 
 cycle(memphis,fresno),cycle(fresno,chicago) \} \\
-& <[11:1]>. \\
+& <[11:1]>.
 \end{align*}
 Note that we omitted input facts and intermediate results from the answer and show only the atoms specifying the final tour (optimal) to make 
 answer set easier to read. The route which satisfies all given constraints is: Austin $\rightarrow$ Boston $\rightarrow$ Memphis $\rightarrow$ Fresno $\rightarrow$ Chicago $\rightarrow$ Detroit $\rightarrow$ Austin with the minimum cost of 11. 
@@ -1604,7 +1611,7 @@ obstacle on it. Rules $r_{10}$, $r_{11}$ and
 $r_{12}$ guesses the next node to be visited by the agent, from 
 node $U$ to the node $V$. The agent can either visit a new node 
 using an existing edge or stay at the same node and wait. 
-In rule $r_{10}$. Rule $r_{11}$ 
+In rule $r_{10}$ initial location for the path is set. Rule $r_{11}$ 
 with a disjunctive head (cf. Section~\ref{disjunction}) decides either to include the outgoing edge 
 from the node $U$ to the path or to omit it from the path. 
 This step is cyclically performed until goal nodes are not 
@@ -1626,10 +1633,10 @@ two rules $r_{17}$ and $r_{18}$ check if the overall path is valid or invalid. A
 available in the graph and make the guess in which 
 direction they should go. Consider that an agent selects 
 some 
-edge but it become unreachable because of some reasons in the meantime. 
-The reasons may be obstacles in the environment, to narrow corner, too small doors or any change on 
+edge but it becomes unusable because of some reasons in the meantime. 
+The reasons may be obstacles in the environment, too narrow corners, too small doors or any change on 
 the graph or on the environment which is not considered as 
-a fact in the program. By introducing this property we have dynamic problem. To perform this check we 
+a fact in the program. By introducing this property we have a dynamic problem. To perform this check we 
 can use only an external source. The external source is of the 
 form \ext{check}{U,V,T,I}{ValidOrNot} and checks is the 
 guessed move of the agent $I$ from $U$ to $V$ at time $T$ 
@@ -1638,7 +1645,7 @@ any of the moves in the guessed path is invalid, the whole
 answer set is eliminated. If no invalid moves are guessed in the path, it means that solution is the answer set of the program.            
 
 \subsubsection{Problem Solution} 
-Let us solve the problem using the following graph:  
+Let us solve the problem using the following graph.  
 \begin{figure}
 \begin{center}
 \begin{tikzpicture}
@@ -1675,7 +1682,7 @@ size=4em}}
 \caption{Simulation of the environment used by agents}
 \end{figure}
 The graph is again loaded from the external file and not 
-specified as a set of facts. We know that there is an obstacle at the $\mathit{three}$, so any answer set with node 
+specified as a set of facts. We know that there is an obstacle at node $\mathit{three}$, so any answer set with node 
 $\mathit{three}$ in the path is removed. All other 
 constraints must be satisfied as well. Note that we have 
 omitted most of the atoms in order to emphasize actual 
@@ -1786,7 +1793,7 @@ The single input parameter of this atom would be of type
 necessary for the atom's function, but the part of the 
 interpretation with this predicate. So if we have, e.g.,\\ 
 I = \{$\mathit{isbn(``0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6")}$, $ \mathit{isbn(``0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4")}$, $p(a)$, $q(b)$ $\dots$ \}
-the atom's function will be called with a ``reduced'' interpretation: \\
+the atom's function will be called with the filtered interpretation: \\
 $I=$\{$\mathit{isbn(``0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6")}$, $ \mathit{isbn(``0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4")}$\}
 
 A parameter of type \emph{tuple} represents a meta category standing for an arbitrary number of constant input parameters. This is useful when we have to send multiple constant parameters separately, e.g., for \\
@@ -1875,7 +1882,7 @@ direct friends of that person in the graph, which is loaded from the file in lin
 Lines \verb+8+ to \verb+11+ register the external atom 
 \verb+friendsOf+ with constant input parameter and 
 single output parameter. 
-\bigskip \\
+
 The following example uses a predicate input parameter 
 for the \verb+&rq+ external atom as used in Example~\ref{swimExample}. The external atom is performing 
 a Web search to check the requirements for the selected location. It is of the form 
@@ -1942,7 +1949,7 @@ TODO
 In this section, we briefly describe the meaning of the command line options supported by \dlvhex{}. 
 Calling only \dlvhex{} without any arguments will show all 
 command line options available. For each option, we indicate whether it requires an argument, and if so, we also describe its meaning. An abstract invocation of \dlvhex{} looks as follows:\\
-\texttt{dlvhex2 [OPTION] FILENAME [FILENAME ...]} or \texttt{dlvhex2 [OPTION] --.}
+\texttt{dlvhex2 [OPTION] FILENAME [FILENAME ...]} or \texttt{dlvhex2 [OPTION] --}
 
 \bigskip
 The following set of commands is related with Input, Output and  Reasoning options and they directly affect the result.
@@ -1961,7 +1968,7 @@ The following set of commands is related with Input, Output and  Reasoning optio
  & \texttt{--weaksafety} && Skip strong safety check.\\
  & \texttt{--strongsafety} && Applies traditional strong safety criteria. \\
   & \texttt{--liberalsafety} && Uses more liberal safety condition than strong safety. \\
-  &\texttt{--mlp}&& Use dlvhex$+$mlp solver (modular nonmonotonic logic programs).\\
+  &\texttt{--mlp}&& Use \dlvhex{}$+$mlp solver (modular nonmonotonic logic programs).\\
   & \texttt{--forget} && Forget previous instantiations that are not involved in current computation (mlp setting). \\
   & \texttt{--split} &&Use instantiation splitting techniques.\\
   & \texttt{--noeval} && Parse the program, but do not evaluate it (only useful with \texttt{--verbose}). \\
@@ -1972,7 +1979,7 @@ The following set of commands is related with Input, Output and  Reasoning optio
 \subsection{Plugin Options}
 \begin{center}
 \begin{tabular}{p{2.2cm}  p{2.5cm} p{0.6cm} p{6.3cm}  } 
- \texttt{-p}&\texttt{--plugindir=DIR}&&Specify additional directory where to look for plugin libraries (additionally to the installation plugin-dir and \$HOME/.dlvhex/plugins). Start with ! to reset the preset plugin paths, e.g., ``!:/lib'' will use only /lib/.
+ \texttt{-p}&\texttt{--plugindir=DIR}&&Specify additional directory where to look for plugin libraries (additionally to the installation plugin-dir and \texttt{\$HOME/.dlvhex/plugins}). Start with \texttt{!} to reset the preset plugin paths, e.g., ``\texttt{!:/lib}'' will use only \texttt{/lib/}.
  \\
 \end{tabular}
 \end{center}
@@ -1992,7 +1999,7 @@ The following set of commands is related with Input, Output and  Reasoning optio
 &\texttt{neg}:& &Learn negative information\\
 &\texttt{user}:& &Apply user-defined rules for nogood learning\\
 &\texttt{generalize}:& &Generalize learned ground nogoods to ground nogoods.\\
-& & & By default all options above except ``generalize'' are enabled.\\
+& & & By default all options above except ``\texttt{generalize}'' are enabled.\\
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{\texttt{--supportsets}}\\
 & & &Exploits support sets for evaluation.\\
@@ -2049,26 +2056,26 @@ The following set of commands is related with Input, Output and  Reasoning optio
 & & & Size of the model queue, i.e. number of models which can be computed in parallel. Default value is 5. The option is only useful for clasp solver.\\
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{\texttt{--solver=S}}\\
-& & & Use S as ASP engine, where S is one of dlv, dlvdb, libdlv, libclingo, genuineii, genuinegi, genuineic, genuinegc (genuineii=(i)nternal grounder and (i)nternal solver; genuinegi=(g)ringo grounder and (i)nternal solver genuineic=(i)nternal grounder and (c)lasp solver; genuinegc=(g)ringo grounder and (c)lasp solver).\\
+& & & Use S as ASP engine, where S is one of \dlv{}, \dlvdb{}, \libdlv{}, \libclingo{}, \genuineii{}, \genuinegi{}, \genuineic{}, \genuinegc{} (\texttt{genuineii}=(i)nternal grounder and (i)nternal solver; \texttt{genuinegi}=(g)ringo grounder and (i)nternal solver \texttt{genuineic}=(i)nternal grounder and (c)lasp solver; \texttt{genuinegc}=(g)ringo grounder and (c)lasp solver).\\
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{\texttt{--claspconfig=C}}\\
-& & & If clasp is used, configure it with C where C is parsed by clasp config parser, or C is one of the predefined strings frumpy, jumpy, handy, crafty, or trendy.\\
+& & & If clasp is used, configure it with \texttt{C} where \texttt{C} is parsed by clasp config parser, or \texttt{C} is one of the predefined strings frumpy, jumpy, handy, crafty, or trendy.\\
 %%%%%%%%%%%%%%%%%%%
--e& \multicolumn{3}{l}{\texttt{--heuristics=H}}\\
-& & & Use H as evaluation heuristics, where H is one of\\
+\texttt{-e}& \multicolumn{3}{l}{\texttt{--heuristics=H}}\\
+& & & Use \texttt{H} as evaluation heuristics, where \texttt{H} is one of\\
 &\texttt{old}:&&Old dlvhex behavior\\
 &\texttt{trivial}:&&Use component graph as eval graph (much overhead)\\
 &\texttt{easy}:&&Simple heuristics, used for LPNMR2011\\
 &\texttt{greedy (default)}:&& Heuristics with advantages for external behaviour learning\\
 &\texttt{monolithic}:&& Put entire program into one unit\\
-&\texttt{manual:<file>} :&&  Read ``collapse'' $\langle$ idxs $\rangle$ share $\langle$idxs$\rangle$ commands from $\langle$file$\rangle$ where component indices $\langle$idx$\rangle$ are from \texttt{--graphviz=comp}\\
-&\texttt{asp:<script>}:&&Use asp program <script> as eval heuristic\\
+&\texttt{manual:<file>:} &&  Read ``collapse'' $\langle$ idxs $\rangle$ share $\langle$idxs$\rangle$ commands from $\langle$file$\rangle$ where component indices $\langle$idx$\rangle$ are from \texttt{--graphviz=comp}\\
+&\texttt{asp:<script>}:&&Use asp program $\langle$\texttt{script}$\rangle$ as eval heuristic\\
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{\texttt{--forcegc}}\\
 & & & Always use the guess and check model generator.\\
 %%%%%%%%%%%%%%%%%%%
--m& \multicolumn{3}{l}{\texttt{--modelbuilder=M}}\\
-& & & Use M as model builder, where M is one of (online,offline).\\
+\texttt{-m}& \multicolumn{3}{l}{\texttt{--modelbuilder=M}}\\
+& & & Use \texttt{M} as model builder, where \texttt{M} is one of (online,offline).\\
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{\texttt{--nocache}}\\
 & & &Do not cache queries to and answers from external atoms.\\
@@ -2085,14 +2092,14 @@ The following set of commands is related with Input, Output and  Reasoning optio
 \begin{longtable}{p{2.2cm}  p{2.5cm} p{0.6cm} p{6.3cm}  }
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{\texttt{--dumpevalplan=F}}\\
-& & & Dump evaluation plan (usable as manual heuristics) to file F.\\
+& & & Dump evaluation plan (usable as manual heuristics) to file \texttt{F}.\\
 %%%%%%%%%%%%%%%%%%%
--v& \multicolumn{3}{l}{\texttt{--verbose[=N]}}\\
-& & & Specify verbose category (if option is used without [=N] then default is 1):\\
+\texttt{-v}& \multicolumn{3}{l}{\texttt{--verbose[=N]}}\\
+& & & Specify verbose category (if option is used without [\texttt{=N}] then default is 1):\\
 &\texttt{1}:&& Program analysis informations (including dot-file)\\
 &\texttt{2}:&& Program modifications by plugins\\
 &\texttt{4}:&& Intermediate model generation info\\
-&\texttt{8}:&& Timing information (only if configured with \texttt{--enable-benchmark})\\
+&\texttt{8}:&& Timing information (only if configured with \texttt{\texttt{--enable-benchmark}})\\
 &&&add values for multiple categories.\\
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{\texttt{--dumpstats}}\\
@@ -2113,7 +2120,7 @@ The following set of commands is related with Input, Output and  Reasoning optio
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{Plugin help for dlvhex-manualevalheuristicsplugin[internal]:}\\
 \multicolumn{4}{l}{\texttt{--manualevalheuristics-enable}}\\
-& & & Enable parsing and processing of '\#evalunit(...).' instructions.\\
+& & & Enable parsing and processing of ``\texttt{\#evalunit(...)}.'' instructions.\\
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{Plugin help for dlvhex-manualevalheuristicsplugin[internal]:}\\
 \multicolumn{4}{l}{\texttt{--query-enable=[true,false]}}\\
