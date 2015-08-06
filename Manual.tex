@@ -2120,7 +2120,7 @@ The following set of commands is related with Input, Output and  Reasoning optio
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{Plugin help for dlvhex-manualevalheuristicsplugin[internal]:}\\
 \multicolumn{4}{l}{\texttt{--manualevalheuristics-enable}}\\
-& & & Enable parsing and processing of ``\texttt{\#evalunit(...)}.'' instructions.\\
+& & & Enable parsing and processing of ``\texttt{\#evalunit(...)}'' instructions.\\
 %%%%%%%%%%%%%%%%%%%
 \multicolumn{4}{l}{Plugin help for dlvhex-manualevalheuristicsplugin[internal]:}\\
 \multicolumn{4}{l}{\texttt{--query-enable=[true,false]}}\\
@@ -2186,24 +2186,23 @@ standard error stream.
 
 \subsection{Syntax Errors}
 In this section we consider errors emitted during the parsing and checking of logic programs.
-These errors include location informations to ease finding and fixing the problem. Each of the error messages below
+These errors include information to ease finding and fixing the problem. Each of the error messages below
 shows a line in which the error appears, followed by the type of the error and a short description of the error in standard error stream.
 \begin{align*}
  & \texttt{8 \ unparsed \  ``go $\leftimpl$ goto(X)'' }\\
  & \texttt{8 ----------$\widehat{}$} \\
- & \texttt{GeneralError: \ Syntax \ Error: \ Could \ not \ parse \ complete \ input!}
+ & \texttt{GeneralError:Syntax \ Error: \ Could \ not \ parse \ complete \ input!}
 \end{align*}
 
-To correct this error, please investigate the indicated location and check whether
-something looks strange there (like a missing period, an unmatched parenthesis,
+To correct this error, please investigate the indicated location and make sure that the input respects the grammar as shown in Section~\ref{sec:inputLang} (like a missing period, an unmatched parenthesis,
 etc.).
 
-\subsection{Plugin related errors}
+\subsection{Plugin-related errors}
 In this section we explain exceptions and errors 
 which may occur while working with external atoms 
 or plugins in which we have implemented desired external atom functionality (e.g. Python or C++ plugin). 
 
-\emph{Exception} occurs whenever we try to
+The following exception occurs whenever we try to
 load plugin from the nonexisting file, either from the Python or C++ file.
 \begin{align*}
 \texttt{Exception: nonexisting\_file\_name.py : no such file}
@@ -2211,34 +2210,30 @@ load plugin from the nonexisting file, either from the Python or C++ file.
 $\texttt{nonexisting\_file\_name.py}$ does not exist in the current directory and should be replaced with
 right file which contains implementation for the external atom(s) used in \hex{}-program.
 
-\emph{Error} occurs if we do not provide an external atom specification and implementation 
+The following error occurs if we do not provide an external atom specification and implementation 
 in the source file but we use it in \hex{}-program. Error looks as below:
 \begin{align*}
 & \texttt{GeneralError: Fatal: did not find plugin atom for predicate}\\ 
-& \texttt{``ext\_atom''}
+& \texttt{"ext\_atom"}
 \end{align*}  
 From the description above we can see that there is no plugin atom for predicate \texttt{ext\_atom}
 in the source file which is passed as parameter from the command line. Implementation for the predicate 
 \texttt{ext\_atom} should be added to the plugin source file.
 
-Another error may be if output arity of an external atom does not 
+Another error occurs if the output arity of an external atom does not 
 match its specification in the source file. The error is given below:
 \begin{align*}
 & \texttt{GeneralError: External Atom \ext{rq}{ind}{C,A} has a wrong} \\
 & \texttt{output arity (should be 1)}
 \end{align*}  
-Output arity of an external atom in the \hex{}-program does not match its specification 
-in plugin source file. Output arity which is registered and which should be used is given in the brackets. 
 
 \subsection{Safety Checking}
 \label{safetyCheck}
-Errors in this section occurs if an input program is not safe. If any of the variables used in the \hex{}-program does not satisfy safety conditions listed below the program is not safe and error occurs. Examples and explanations in the following subsections are used from the \cite{brfwilvpg2009}. 
-
-By evaluating a program with external atoms it is possible to derive new numeric constants, different from those already occurring in the program, and generate a cycle. In case of cyclic rules, this could cause the non-termination of the evaluation and safety condition is violated. 
+If any of the variables used in the \hex{}-program does not satisfy safety conditions listed below, the program is not safe and an error occurs. Examples and explanations in the following subsections are used from the \cite{brfwilvpg2009}. 
 
 \subsubsection{Regular Safety}
 \dlvhex{} imposes a safety condition on variables in rules. 
-This guarantees that a rule is logically equivalent to the set of its Herbrand instances.
+This guarantees that a rule has only finitely many ground instances.
 
 \paragraph{Standard, Arithmetic and Comparative Predicates}
 A variable $X$ in an aggregate-free rule is safe if at least one 
@@ -2310,7 +2305,7 @@ By evaluating a program with arithmetic predicates it is possible to derive new 
 & d(Y) \leftimpl d(X), Y=X+1.
 \end{align*}
 \end{exmp}
-To safely evaluate this kind of programs an upper integer limit N has to be specified either on the command-line (cf. Section~\ref{sec:commandline}) or in the program (with \#maxint=N.).
+To safely evaluate this kind of programs an upper integer limit N has to be specified either on the command-line (cf. Section~\ref{sec:commandline}) or in the program (with \texttt{\#maxint=N.}).
 
 
 \paragraph{Complex Terms}
@@ -2319,7 +2314,7 @@ Evaluation of a program might not terminate if a complex term occurs in the head
 \begin{align*}
 p(0).&\\
 p(f(X)) & \leftimpl q(X).\\
-q(X) & \leftimpl p(X).\\
+q(X) & \leftimpl p(X).
 \end{align*}
 \end{exmp}
 Some programs can be safely evaluated even if there are complex terms appearing in the head of a rule. This is the case when all arguments of a functional term are restricted to range over a finite domain thanks to the presence of some other atoms in the body.
@@ -2333,31 +2328,35 @@ q(X) & \leftimpl p(X).
 When a program is not recognized to have a finite domain and termination thus cannot be guaranteed, an error is issued. 
 
 \subsubsection{Strong Safety}
-Strong domain-expansion safety is overly restrictive, as it also excludes programs that clearly are finitely
-restrictable. In this section we give an overview about the notion and refer to \cite{eite-etal-14a} for details.
+By evaluating a program with external atoms it is possible to derive new numeric constants, different from those already occurring in the program, and generate a cycle over that atom. In case of cyclic rules, this could cause the non-termination of the evaluation and safety condition is violated.
+
+An atom $b=\ext{g}{X}{Y}$ in a rule r of the program is \emph{strongly safe} if either there is no cyclic dependency over $b$   or every variable in $Y$ occurs also in a positive ordinary atom not depending on $b$. A program is safe, if every external atom in a rule is strongly safe. 
+
+
 \begin{exmp} \textbf{Consider the following program:}
 \label{strongSafetyExmp}
 \begin{align*}
 & r_1 \colon p(a). \\
 & r_2 \colon q(aa). \\
 & r_3 \colon s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y}. \\
-& r_4 \colon p(X) \leftimpl s(X), q(X).\\
+& r_4 \colon p(X) \leftimpl s(X), q(X).
 \end{align*}
 \end{exmp}
 It is not \emph{strongly safe} because Y in the cyclic external atom $\ext{concat}{X,a}{Y}$ in $r_3$ does not occur in an
 ordinary body atom that does not depend on 
 \\$\ext{concat}{X,a}{Y}$. When we run program above, with \texttt{--strongsafety} option enabled (cf. Section~\ref{sec:commandline}), error that is generated looks as follow:
 \begin{align*}
-& \texttt{GeneralError: Syntax Error: Rule is not strongly safe! }  \\
-& \texttt{Variable Var fails strong safety check in rule Rule.}
+& \texttt{GeneralError: Syntax Error: [Rule] is not strongly safe! }  \\
+& \texttt{Variable [Var] fails strong safety check in rule Rule.}
 \end{align*} 
-Along with error message, the affected \texttt{Rule} and a list of all unsafe variable occurrences \texttt{Var} are reported. 
-The first action to take usually consists of checking whether variable \texttt{Var} is actually in the scope of any atom (in the positive body of \texttt{Rule}) that can bind it. Also check for variables that occur in aggregate elements (cf. Section~\ref{aggregates}) or conditional literals (cf. Section~\ref{conditions}), you might have to bind them with additional positive atoms in the conditions. 
+Along with error message, the affected \texttt{[Rule]} and a list of all unsafe variable occurrences \texttt{[Var]} are reported. 
+The first action to take usually consists of checking whether variable \texttt{[Var]} is actually in the scope of any atom (in the positive body of \texttt{[Rule]}) that can bind it. Also check for variables that occur in aggregate elements (cf. Section~\ref{aggregates}) or conditional literals (cf. Section~\ref{conditions}), you might have to bind them with additional positive atoms in the conditions. 
 
 
 
 \subsubsection{Liberal Safety}
-To overcome unnecessary restrictions of strong safety, liberal domain-expansion safety (lde-safety)
+Strong domain-expansion safety is overly restrictive, as it also excludes programs that clearly are finitely
+restrictable. To overcome unnecessary restrictions of strong safety, liberal domain-expansion safety (lde-safety)
 has been introduced \cite{eite-etal-14a}, which incorporates both syntactic and semantic properties of a program. All lde-safe programs have finite groundings with the same answer sets.
 
 Unlike strong safety, liberal de-safety is not a property of entire atoms but of attributes, i.e., pairs of
@@ -2371,7 +2370,7 @@ Since the program from Example~\ref{strongSafetyExmp} is finitely restrictable, 
 \texttt{p(a),q(aa),p(aa),s(aa),s(aaa)}
 \}
 \end{align*}
-The details of the notion are not necessary for this guide, more informations about liberal safety is available at \cite{eite-etal-14a}.
+The details of the notion are beyond the cope of this guide, more information about liberal safety is available at \cite{eite-etal-14a}.
 
 
 
