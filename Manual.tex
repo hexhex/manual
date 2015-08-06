@@ -2348,7 +2348,9 @@ ordinary body atom that does not depend on
 \begin{align*}
 & \texttt{GeneralError: Syntax Error: [Rule] is not strongly safe! }  \\
 & \texttt{Variable [Var] fails strong safety check in rule Rule.}
-\end{align*} 
+\end{align*}
+To make $r_3$ strongly safe we could add an ordinary atom which does not depend on $\ext{concat}{X,a}{Y}$. $r_3$ could be modified as follows: \\ \centerline{$s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y},q(Y).$} Adding atom $q(Y)$ makes program strongly safe since $Y$ appears in the body atom which does not depend on $\ext{concat}{X,a}{Y}$.
+ 
 Along with error message, the affected \texttt{[Rule]} and a list of all unsafe variable occurrences \texttt{[Var]} are reported. 
 The first action to take usually consists of checking whether variable \texttt{[Var]} is actually in the scope of any atom (in the positive body of \texttt{[Rule]}) that can bind it. Also check for variables that occur in aggregate elements (cf. Section~\ref{aggregates}) or conditional literals (cf. Section~\ref{conditions}), you might have to bind them with additional positive atoms in the conditions. 
 
