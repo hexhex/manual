@@ -143,15 +143,19 @@ library, Python (version 2.7 or later), bison, scons,
 cmake, automake, autoconf, standard C++ library (version 
 4.8 or later), Curl library (version 4 or later) and 
 libool. Also the Boost library (version 1.55 or later) is 
-required. The latest Boost library version is available at 
+required. 
+
+The latest Boost library version is available at 
 \url{http://www.boost.org/}. After downloading it to the 
 new folder, the following steps should be followed in order 
 to properly install it. After extraction, the folwing 
 commands need to be executed:
 \\ \centerline{\texttt{./bootstrap.sh}}
 \centerline{\texttt{./b2 install --prefix=PREFIX}} In this 
-command \texttt{PREFIX} is the directory where Boost should 
-be installed. After downloading the latest release version of \dlvhex{} by 
+command, \texttt{PREFIX} is the directory where Boost should 
+be installed. 
+
+After downloading the latest release version of \dlvhex{} by 
 executing the following sequence of commands \dlvhex{} will 
 be successfully installed:
 \\ \centerline{\texttt{./configure}} To enable the Python 
@@ -172,7 +176,7 @@ follows:
 \\ \centerline{\texttt{git clone 
 https://github.com/hexhex/core --recursive}} 
 After cloning to the desired directory it is necessary to 
-execute bootstrap.sh script from there by invoking: \\ 
+execute the \texttt{bootstrap.sh} script from there by invoking: \\ 
 \centerline{\texttt{./bootstrap.sh}}. 
 After cloning and bootstrapping, the steps from 
 Section~\ref{sec:steps} (\texttt{configure, make} and 
@@ -180,8 +184,9 @@ Section~\ref{sec:steps} (\texttt{configure, make} and
 complete the installation.
 
 We provide a script which installs \dlvhex{} 
-automatically on your system and can be found at 
+automatically on Ubuntu systems and can be found at 
 \url{https://github.com/hexhex/core/blob/master/scripts/setupdlvhex.sh}.
+
 Once installation is completed, the system can be used from 
 the terminal as follows:\\ 
 \centerline{\texttt{shell\$ dlvhex2 program.hex}} where 
@@ -241,7 +246,7 @@ simulation of social graphs as used e.g. by Facebook.
 
 Consider the situation where a birthday party should be 
 organized and a specific number of friends will be invited. 
-The \emph{person $X$} which organizes the event wants to 
+The \emph{person $X$} who organizes the event wants to 
 call his or her friends and friends of these friends up to 
 some distance from the root node $X$. A \emph{depth 
 constraint} specifies how many edges we can go away from 
@@ -271,7 +276,7 @@ r_2\colon & \mathit{friendOfDegree}(\mathit{P, 0, P})
 \end{align*}
 \begin{align*}
 r_{3}\colon \mathit{friendOfDegree}(\mathit{P, DegPlus, 
-F2}) \leftimpl & \\  
+F2}) \leftimpl 
 & \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
 & \ext{friendsOf}{F1}{F2},\\ 
 & \mathit{DegPlus = Deg + 1}, \\
@@ -287,7 +292,7 @@ r_{5}\colon & \leftimpl   \mathit{not} \ 4 = \mathit{\#count}
 \end{exmp}
 Rule $r_1$ specifies the person who organizes the event 
 and initializes the search. Rule $r_2$ specifies that the initiating person has 
-distance 0 from him or herself. 
+distance 0 from him- or herself. 
 
 
 The main computational part of the program is rule $r_3$ of 
@@ -341,13 +346,13 @@ It ensures that exactly 4 persons are invited to the party.
 It is possible to replace $r_5$ by $r_5 \prime $ which allows for specifying 
 lower and upper bound on the number of persons independently. Rule $r_5 \prime $ can be written as follows:
 \begin{align*}
-r_5 \prime  \colon & 3 \leq \{ invite(P) \ \colon \ friendOfDegree(john,X,P)\} \geq 3.
+r_5 \prime  \colon \leftimpl \ not \ & 3 \leq \{ invite(P) \ \colon \ friendOfDegree(john,X,P)\} \leq 3.
 \end{align*} 
   
 
 \subsection{Problem Solution}
 Now we are ready to solve our \emph{social graph} problem. 
-Consider that we data as specified in the Figure~\ref{fig:socialnetwork}.\\
+Consider that we data as specified in the Figure~\ref{fig:socialnetwork}.
 \begin{figure}
 \begin{center}
 \begin{tikzpicture}
@@ -390,7 +395,6 @@ size=5em}}
 \draw[edge] (h) to (n);
 \draw[edge] (i) to (o);
 \draw[edge] (j) to (p);
-
 \end{tikzpicture}
 \end{center}
 \caption{Social Network Graph}
@@ -404,8 +408,6 @@ where \texttt{program.hex} is \hex-program and
 \texttt{extsource.py} represents the Python file with 
 external source implementation (cf. Section~\ref{sec:externalInterfaces}). The output of the 
 \dlvhex{} is as follows:
-
-
 \begin{align*}
    \{ &\mathit{personOfInterest(john), \ friendOfDegree(john,0,john), }\\
       &\mathit{invite(john), \ friendOfDegree(john,1,mike),}\\ 
@@ -413,11 +415,10 @@ external source implementation (cf. Section~\ref{sec:externalInterfaces}). The o
       & \mathit{invite(mike), \ invite(david), \ invite(charly)}
        \}
  \end{align*}
-Note that order of the atoms and the order of answer sets 
-does not bear any meaning. Single answer set for this 
-problem contain atoms given above. As we specified in the previous 
+Note that the order of the atoms and the order of answer sets 
+does not bear any meaning. As we specified in the previous 
 section, we can travel at most 1 edge far from the root 
-node. Considering the graph given above only $\mathit{John, 
+node. Considering the graph given above only, $\mathit{John, 
 Mike, Charly}$ and $\mathit{David}$ are found since they 
 are at most one edge away from the root node. The next three atoms 
 express who are the new friends discovered and at which 
@@ -425,7 +426,7 @@ depth
 level. For the invitations, it is specified by using 
 aggregates that answer sets must have four distinct 
 $\mathit{invites}$ atoms.
-In single answer set we have four $\mathit{invites}$ atoms 
+In the single answer set we have four $\mathit{invites}$ atoms 
 which are $\mathit{invite(john), 
 invite(mike), invite(david), invite(charly)}$. Note that 
 this is only answer set possible 
@@ -433,15 +434,15 @@ from this program since aggregate constraint is 4 and there
 are only 4 distinct person that are discovered with depth 
 level 1. 
 
-If we just allow depth level to be larger there may be more 
+If we allow the depth level to be larger there may be more 
 answer sets founded due to the fact that more nodes will be 
 discovered. If we decrease minimum number of friends to be 
 invited to the party there may be more than one answer set. 
-Consider the different example where we instead of 4 
-persons want to invite only 3 persons to the party. 
+Consider the different example where instead of 4 
+persons we want to invite only 3 persons to the party. 
 The integrity constraint at $r_5$ will be modified to:
 \begin{align*}
-& r_5 \prime \prime \colon \leftimpl \mathit{ not } \  \mathit{\#count} \{ P : \mathit{invite(P)} \} = 3.
+& r_5 \prime \prime \colon \leftimpl \ \mathit{ not } \  \mathit{\#count} \{ P : \mathit{invite(P)} \} = 3.
 \end{align*} 
  This time we have more than one answer set. Since depth 
  level is still 2 there will be 4 persons discovered again, 
@@ -449,7 +450,7 @@ The integrity constraint at $r_5$ will be modified to:
  three of them and one of them will not be invited. 
  According to this we have 4 answer sets. Two of them are 
  showed bellow:\\
-\textbf{Answer set 1:}\\
+Answer set 1:
 \begin{align*}
    \{ &\mathit{personOfInterest(john), 
       friendOfDegree(john,0,john),}\\
@@ -459,7 +460,7 @@ The integrity constraint at $r_5$ will be modified to:
       friendOfDegree(john,1,charly),}\\
       &\mathit{invite(mike),invite(david)}  \}
  \end{align*}
-\\ \textbf{Answer set 2:}\\
+\\ Answer set 2:
  \begin{align*}
    \{&\mathit{personOfInterest(john), 
    friendOfDegree(john,0,john),} \\
@@ -472,8 +473,8 @@ The integrity constraint at $r_5$ will be modified to:
  This time in answer set we have 
 $\mathit{ninvite(charly)}$ and $\mathit{ninvite(mike)}$ 
 since one friend must be discarded and only three will be 
-invited. One can experiment with \emph{Depth constraint} and 
-\emph{Aggregate constraint} to see how real output and 
+invited. One can experiment with the \emph{depth constraint} and 
+\emph{aggregate atom} to see how the output and 
 answer sets will be affected.    
 
 
@@ -484,13 +485,19 @@ This section provides an overview of the input language of
 
 \subsection{Terms and Atoms}
 The vocabulary consists of terms, constants, variables and 
-external predicates. Terms may be integers, constants, 
+external predicates. Terms may be integers, constants, function terms, 
 strings and variables as well as the \enquote{\_} tokens. 
 Constant names begin with lowercase letters or are strings 
 enclosed in quotation marks and variable names begin with 
 uppercase letters.
 
-While a constant or string represents itself, a variable is 
+Next, (uninterpreted) functions are \emph{complex terms} composed of a name
+(like a constant) and one or more terms as arguments.
+For instance,
+$\mathit{at(peter,at(10),X)}$ is a function with three arguments: constant $\mathit{peter}$,
+another function $\mathit{at(12})$ with an integer argument, and variable $X$ \cite{gkklorst2015}.
+
+While a constant, function term, or string represents itself, a variable is 
 placeholder for all variable-free terms in the language of 
 a logic program. There is a special feature, which is 
 called anonymous variable. The anonymous variable is 
@@ -506,7 +513,6 @@ $\geq$ $0$ is the arity of the predicate atom; a predicate
 atom $p()$ of arity 0 is likewise represented by its 
 predicate name $p$ without parentheses. Classical atoms 
 are: $q$ and -$q$.
-
 \begin{exmp}
 \text{   }
 \\ \text{Constants:} $a$, $1$, $\mathit{a1}$, 
@@ -517,11 +523,6 @@ $\mathit{9862}$, $\mathit{c1}$, ''hello''
 \\ \text{Predicates:} $\mathit{parent}$ $\mathit{employee}$
 \end{exmp}
 
-Next, (uninterpreted) functions are \emph{complex terms} composed of a name
-(like a constant) and one or more terms as arguments.
-For instance,
-$\mathit{at(peter,at(10),X)}$ is a function with three arguments: constant $\mathit{peter}$,
-another function $\mathit{at(12})$ with an integer argument, and variable $X$ \cite{gkklorst2015}.
 
 \subsection{Normal Programs and Integrity Constraints}
 A \hex{}-program is constructed using \emph{facts, rules 
@@ -539,11 +540,11 @@ implication to the left. The left side of a rule is called
 its head, and right side is called its body. The head 
 \texttt{$A_0$} of a rule or a fact is an atom. In the body of a 
 rule or an integrity constraint, every \texttt{$L_j$} for 1 
-$\leq$ j $\leq$ n is a literal of the form \texttt{A} or 
-\texttt{not A}, where \texttt{A} is an atom and the 
-connective \texttt{not} denotes default negation. We say 
-that literal L is positive if it is an atom and negative 
-otherwise. While the head atom \texttt{$A_0$} of the fact 
+$\leq$ j $\leq$ n is a literal of the form $\mathit{A}$ or 
+$\mathit{not \ A}$, where $A$ is an atom and the 
+connective $\mathit{not}$ denotes default negation. We say 
+that literal $L$ is positive if it is an atom and negative 
+otherwise. While the head atom $A_0$ of the fact 
 must unconditionally be true, the intuitive reading of a 
 rule corresponds to an implication: if all positive atoms 
 in the rule body are true and negated atoms are false, then 
@@ -568,7 +569,38 @@ also be true}. Also we can read this as \enquote{from
 $\mathit{joke}$ follows $\mathit{laugh}$}. The single 
 \emph{model} of above program is $\{\mathit{joke}, 
 \mathit{laugh}\}$ since they are the atoms which are true 
-in the program. To explain the concept of \emph{integrity 
+in the program. 
+ 
+Another important feature of \dlvhex{} is \emph{default 
+negation}. Negation is treated as ``negation as failure". 
+In other words: if an atom is not true in some model, then 
+its negation should be considered to be true in that model. 
+With this mechanism we can, for example, define the 
+complementary graph of a given graph. This is the graph 
+which has the same nodes, but of all possible edges, it has 
+exactly those edges which do not exist in the original 
+graph. Note that $\mathit{node}(X)$ and $\mathit{node}(Y)$ 
+need to be included in the body in order to satisfy the 
+following safety requirement for rules: \emph{Variables}, 
+which occur in a negated literal, must also occur in a 
+positive literal in the body.
+\begin{exmp}
+\begin{align*}
+r_1\colon& \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).
+\\
+r_2\colon& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). 
+\\ \\
+r_3\colon& \mathit{comp\_edge}(X, Y) \leftimpl 
+\mathit{node}(X), \mathit{node}(Y), \mathit{ not } \ \mathit{ 
+edge }(X, Y). 
+\end{align*}
+\end{exmp}
+Here, $\mathit{comp\_edge}$ describes the set of edges in 
+the complementary graph. Such an edge must go from one node 
+to another node (possibly the same one), and this edge must 
+not be contained in the original edge set. 
+
+To explain the concept of \emph{integrity 
 constraints} we will consider following example:
 \begin{exmp}
 \label{nodecoloring}
@@ -577,7 +609,6 @@ r_1\colon & \mathit{node}(X) \leftimpl \mathit{edge}(X, Y).
 &\\
 r_2\colon & \mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). 
 & \\
-\\
 r_3\colon & \mathit{colored}(X, r) \leftimpl \mathit{node}(X), not \  colored(X,g),not \ colored(X,b). & \\
 r_4\colon & \mathit{colored}(X, g) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,b). & \\
 r_5\colon & \mathit{colored}(X, b) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,g). & \\
@@ -597,42 +628,12 @@ $X$ and $Y$ are
 variables since they begin with uppercase letter. It says 
 that: \enquote{If $\mathit{edge}(X,Y)$ is true then 
 $\mathit{node(X)}$ is also true}. In the 
-\emph{guessing part} which is from line $3$ to $5$, all possible node color combinations 
+\emph{guessing part} from line $3$ to $5$, all possible node color combinations 
 are generated. Each node may be colored either red, 
 green or black. In the checking part, the integrity constraint 
-delete all color combinations which does not satisfy the 
+deletes all color combinations which does not satisfy the 
 requirement that there may be no edge between two nodes of 
-equal color. 
-
-Another important feature of \dlvhex{} is \emph{default 
-negation}. Negation is treated as ``negation as failure". 
-In other words: if an atom is not true in some model, then 
-its negation should be considered to be true in that model. 
-With this mechanism we can, for example, define the 
-complementary graph of a given graph. This is the graph 
-which has the same nodes, but of all possible edges, it has 
-exactly those edges which do not exist in the original 
-graph. Note that $\mathit{node}(X)$ and $\mathit{node}(Y)$ 
-need to be included in the body in order to satisfy the 
-following safety requirement for rules: \emph{Variables}, 
-which occur in a negated literal, must also occur in a 
-positive literal in the body.
-\begin{exmp}
-\begin{align*}
-r_1\colon& \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).
-\\
-r_2\colon& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). 
-\\
-\\
-r_3\colon& \mathit{comp\_edge}(X, Y) \leftimpl 
-\mathit{node}(X), \mathit{node}(Y), \mathit{ not } \ \mathit{ 
-edge }(X, Y). 
-\end{align*}
-\end{exmp}
-Here, $\mathit{comp\_edge}$ describes the set of edges in 
-the complementary graph. Such an edge must go from one node 
-to another node (possibly the same one), and this edge must 
-not be contained in the original edge set. 
+equal color.
 
 \subsection{Classical Negation}
 \dlvhex{} supports two kinds of negation. Here we will 
@@ -644,7 +645,7 @@ to hold unless atom $A$ is derived to be true. In contrast,
 the classical (or strong) negation of an atom holds only if 
 it can be derived. In other words if there is no evidence 
 that an atom is true, it is considered to be false. 
-Classical negation, indicated by symbol ``-'', is 
+Classical negation, indicated by symbol ``$-$'', is 
 permitted in from of an atoms. The semantic relationship 
 between $A$ and $\mathit{-A}$ is simply that they must not jointly 
 hold.
@@ -684,7 +685,7 @@ negation is stronger than negation as finite failure.
 \subsection{Disjunction}
 \label{disjunction}
 Disjunctive logic programs permit the connective ``$\vee$" 
-between atoms in rule heads. \\
+between atoms in rule heads.
 \begin{center}
 \begin{tabular}{ r l l}
   \text{Fact:} & $A_0$ $\vee$ \dots $\vee$ $A_m$ \\
@@ -741,7 +742,7 @@ r_5\colon& e(X,Y,XX) \leftimpl a(X), b(Y),*(X, Y, XX). \\
 r_6\colon& f(X,Y,XX) \leftimpl a(X), b(Y),/(X, Y, XX).
 \end{align*}
 \end{exmp}
-An atom $+(X,Y,XX)$ is true, iff $XX$ is sum of $X$ and $Y$ (likewise for other operators).
+An atom $+(X,Y,XX)$ is true, iff $XX$ is the sum of $X$ and $Y$ (likewise for other operators).
 The single answer set for the example above is:\\ 
 \centerline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
 \\Alternatively to \emph{prefix notation} one can also use 
@@ -827,9 +828,9 @@ replacing $X$ in $\mathit{available(X)}$ with all ground
 terms $t$ such that $\mathit{person(t)}$ holds, namely, 
 with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition 
 for the rule $r_6$ is contained in the head of the rule. It 
-turns into \emph{disjunction} over all ground instances of 
+turns into a \emph{disjunction} over all ground instances of 
 $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ 
-for which $\mathit{day(t)}$ holds. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with ``;'' sign, the rule would look like:
+for which $\mathit{day(t)}$ holds, i.e., whenever $\mathit{meet}$ holds, one of $\mathit{on(t)}$ for which $\mathit{day(t)}$ is true should hold. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with ``;'' sign, the rule would look like:
 \centerline{\{$\mathit{on}(X);\mathit{travel}(X) : \mathit{day}(X)\} \leftimpl 
 \mathit{meet}.$}
 where for all ground instances of $\mathit{on(X)}$ and $\mathit{travel(X)}$ such that $X$ is is substituted by terms $t$ for which $\mathit{day(t)}$ holds. 
@@ -843,8 +844,7 @@ Variables occurring in atoms not subject to any conditions
 are global. Each variable within an atom in front of a 
 condition must be global or have a positive occurrence on 
 the right hand-side of the condition. During grounding, the 
-instantiation of global variables take precedence over non-
-global ones, that is, the former are instantiated before 
+instantiation of global variables take precedence over non-global ones, that is, the former are instantiated before 
 the latter. As a consequence, variables that occur globally 
 are substituted by terms before a condition is further 
 evaluated \cite{gkklorst2015}.    
@@ -903,17 +903,18 @@ predicate consists of two ground predicates: \\
 \\which are both true w.r.t. the unique model of the whole 
 program, hence \\ \centerline{$ 
 \#count\{over1000(1,1250),over1000(5,1050)\}$} \\returns 2 
-as output of aggregate function and outputs:\\
-$\mathit{emph(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),}$
-\\
-$\mathit{emp(5,tom,1050),over1000(1,1250),over1000(5,1050),over1000nr(2)}$
-\\as a result of the program.
+as output of the aggregate function and outputs:
+\begin{align*}
+\{ & \mathit{emph(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),}\\
+& \mathit{emp(5,tom,1050),over1000(1,1250),over1000(5,1050),over1000nr(2)} \}
+\end{align*}
+as a result of the program.
 The aggregate function $\mathit{\#count}$ returns the 
 cardinality of the symbolic set to which it is applied. We 
 want to count how many employees of the company earn more 
 than 1000. 
 
-Aggregate function $\mathit{\#sum}$ returns the 
+The aggregate function $\mathit{\#sum}$ returns the 
 sum of the first local variable to be aggregated over in 
 the symbolic set. Suppose we want to know how much the 
 Cartoon Co. spends on salaries.
@@ -944,7 +945,8 @@ The aggregate function applied to the given set returns the
 minimum salary among of all the employees, the output thus 
 is:
 {$\mathit{lowest(750)}$}.
-\bigskip \\The aggregate function $\mathit{\#max}$ returns 
+
+The aggregate function $\mathit{\#max}$ returns 
 the maximum value of the first local variable to be 
 aggregated over in the symbolic set. The following program 
 computes the maximum income earned in the company
@@ -1027,7 +1029,7 @@ Best model:
    &\mathit{  out\_tree(d,e)\}} \ \ Cost ([Weight:Level]): <[12:1]>
 \end{align*}
 
-The fact from $r_1$ of the example above defines the root node 
+The fact $r_1$ of the example above defines the root node 
 of a tree. Nodes and edges are defined in $r_2$ and $r_3$. 
 Rule $r_5$ guesses for each edge from node 
 $X$ to an node $Y$ (node $X$ is already reached) whether it is in the minimum spanning 
@@ -1087,17 +1089,15 @@ This program has two best models:
    [6:1],[0:2] \rangle
 \end{align*}
 
-
-
 In $r_1$ and $r_2$ we defined employees as a set of the 
 facts. Rules $r_3$, $r_4$ and $r_5$ specify $\mathit{know}$, 
 $\mathit{same\_skill}$ and $\mathit{married}$ relations 
 between some of employees. Since $\mathit{employee}(X)$ is 
 true, each $\mathit{employee}$ will be assigned either to 
-the project 1 or project 2 what is given in $r_6$. Rules $r_{7}$,$r_{8}$ and $r_{9}$ 
+the project 1 or project 2 what is given in $r_6$. Rules $r_{7}$, $r_{8}$ and $r_{9}$ 
 are weak constraints, this time with 
 same weights but different levels of priority. Under 
-prioritization, the \dlvhex{} minimizes the violation of 
+prioritization, \dlvhex{} minimizes the violation of 
 the constraints of the highest priority level first; then 
 the lower priority levels are considered one after the 
 other in descending order. This time we have two best 
@@ -1105,8 +1105,7 @@ models in our solution.
 
 
 \subsection{Higher-order Atoms}
-Now we introduce the most specific feature of \dlvhex{}, 
-compared to other ASP solvers. \hex{}-programs are 
+\hex{}-programs are 
 nonmonotonic logic programs admitting \emph{high-order 
 atoms}, and we extend the well known answer-set semantics 
 to this class of programs. A high-order 
@@ -1120,7 +1119,7 @@ A \textit{high-order atom} is a tuple ($Y_0, Y_1,
 is the predicate name, and we thus also use the more 
 familiar notation $Y_0(Y_1,\dots,Y_n)$. The atom is 
 \textit{ordinary}, if $Y_0$ is a constant. For example, 
-\textit{(x,rdf:type,c),node(X), and D(a,b),} are atoms;the 
+\textit{(x,rdf:type,c),node(X), and D(a,b),} are atoms; the 
 first two are ordinary atoms.
 
 \subsection{External Atoms}
