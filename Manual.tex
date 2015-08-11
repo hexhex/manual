@@ -26,7 +26,7 @@
   \quad
 }
 
-
+\newcommand{\row}[1]{\sc{#1}}
 
 \begin{document}
 \setcounter{page}{3}
@@ -40,6 +40,7 @@
 \newcommand{\genuinegi}{{\sc genuinegi}}
 \newcommand{\genuineic}{{\sc genuineic}}
 \newcommand{\genuinegc}{{\sc genuinegc}}
+
 \setcounter{secnumdepth}{4} % how many sectioning levels to assign numbers to
 \setcounter{tocdepth}{4}    % how many sectioning levels to show in ToC
 
@@ -130,7 +131,7 @@ locally.
 There are two possibilities to install \dlvhex{} system 
 from source: install the latest stable release of the 
 system or install the latest development version which may 
-not be stable. Both ways are described in following 
+not be stable. Both ways are described in the following 
 sections.  
 
 \paragraph{Latest release version (tarball)}
@@ -140,7 +141,7 @@ project page \url{http://www.kr.tuwien.ac.at/resea} \\
 \url{rch/systems/dlvhex/}. The latest release of the 
 software runs on Linux-based systems, Mac OS X and 
 Microsoft Windows. Installation instructions are given in 
-the {\tt INSTALL} and {\tt README} files of the \dlvhex{} 
+the {\tt INSTALL} and {\tt README} files of \dlvhex{} 
 and plugin source directories. Changes between versions can 
 be found in the {\tt NEWS} files and in detail in the {\tt 
 ChangeLog} file. 
@@ -150,7 +151,7 @@ The system requires the following packages: git, gcc
 library, Python (version 2.7 or later), bison, scons, 
 cmake, automake, autoconf, standard C++ library (version 
 4.8 or later), Curl library (version 4 or later) and 
-libool. Also the Boost library (version 1.55 or later) is 
+libtool. Also the Boost library (version 1.55 or later) is 
 required. 
 
 The latest Boost library version is available at 
@@ -278,7 +279,7 @@ The problem can be modeled as a \hex{}-program as follows:
 \begin{exmp}
 \label{faceQuery}
 \begin{align*}
-r_1\colon & \mathit{personOfInterest}(\mathit{john}). \\
+\row{r_1}\colon & \mathit{personOfInterest}(\mathit{john}). \\
 r_2\colon & \mathit{friendOfDegree}(\mathit{P, 0, P}) 
 \leftimpl  \mathit{personOfInterest}(P).\\
 \end{align*}
@@ -360,7 +361,7 @@ r_5 \prime  \colon \leftimpl \ not \ & 3 \leq \{ invite(P) \ \colon \ friendOfDe
 
 \subsection{Problem Solution}
 Now we are ready to solve our \emph{social graph} problem. 
-Consider that we data as specified in the Figure~\ref{fig:socialnetwork}.
+Consider that we have the data as specified in the Figure~\ref{fig:socialnetwork}.
 \begin{figure}
 \begin{center}
 \begin{tikzpicture}
@@ -437,14 +438,14 @@ $\mathit{invites}$ atoms.
 In the single answer set we have four $\mathit{invites}$ atoms 
 which are $\mathit{invite(john), 
 invite(mike), invite(david), invite(charly)}$. Note that 
-this is only answer set possible 
+this is the only answer set possible 
 from this program since aggregate constraint is 4 and there 
-are only 4 distinct person that are discovered with depth 
+are only 4 distinct persons that are discovered with depth 
 level 1. 
 
 If we allow the depth level to be larger there may be more 
-answer sets founded due to the fact that more nodes will be 
-discovered. If we decrease minimum number of friends to be 
+answer sets found due to the fact that more nodes will be 
+discovered. If we decrease the minimum number of friends to be 
 invited to the party there may be more than one answer set. 
 Consider the different example where instead of 4 
 persons we want to invite only 3 persons to the party. 
@@ -452,12 +453,12 @@ The integrity constraint at $r_5$ will be modified to:
 \begin{align*}
 & r_5 \prime \prime \colon \leftimpl \ \mathit{ not } \  \mathit{\#count} \{ P : \mathit{invite(P)} \} = 3.
 \end{align*} 
- This time we have more than one answer set. Since depth 
+ This time we have more than one answer set. Since the depth 
  level is still 2 there will be 4 persons discovered again, 
- however out of these 4 persons we have to invite only 
+ however, out of these 4 persons we have to invite only 
  three of them and one of them will not be invited. 
  According to this we have 4 answer sets. Two of them are 
- showed bellow:\\
+ shown bellow:\\
 Answer set 1:
 \begin{align*}
    \{ &\mathit{personOfInterest(john), 
@@ -478,7 +479,7 @@ Answer set 1:
    friendOfDegree(john,1,charly),} \\
    &\mathit{invite(david),invite(charly)}\}
  \end{align*}
- This time in answer set we have 
+ This time in the answer set we have 
 $\mathit{ninvite(charly)}$ and $\mathit{ninvite(mike)}$ 
 since one friend must be discarded and only three will be 
 invited. One can experiment with the \emph{depth constraint} and 
@@ -494,7 +495,7 @@ This section provides an overview of the input language of
 \subsection{Terms and Atoms}
 The vocabulary consists of terms, constants, variables and 
 external predicates. Terms may be integers, constants, function terms, 
-strings and variables as well as the \enquote{\_} tokens. 
+strings and variables as well as the \enquote{\_} token. 
 Constant names begin with lowercase letters or are strings 
 enclosed in quotation marks and variable names begin with 
 uppercase letters.
@@ -515,7 +516,7 @@ a new and unique variable, which does not occur anywhere
 else in the same rule. This might be used to specify that 
 an argument can be ignored or does not matter.
 
-An \emph{atom} has form $\mathit{p(t_1,\dots,t_n)}$ where 
+An \emph{atom} has the form $\mathit{p(t_1,\dots,t_n)}$ where 
 $p$ is a predicate name, $t_1,\dots,t_n$ are terms and $n$ 
 $\geq$ $0$ is the arity of the predicate atom; a predicate 
 atom $p()$ of arity 0 is likewise represented by its 
@@ -552,14 +553,14 @@ $\leq$ j $\leq$ n is a literal of the form $\mathit{A}$ or
 $\mathit{not \ A}$, where $A$ is an atom and the 
 connective $\mathit{not}$ denotes default negation. We say 
 that literal $L$ is positive if it is an atom and negative 
-otherwise. While the head atom $A_0$ of the fact 
+otherwise. While the head atom $A_0$ of a fact 
 must unconditionally be true, the intuitive reading of a 
 rule corresponds to an implication: if all positive atoms 
 in the rule body are true and negated atoms are false, then 
 $A_0$ must be true. On the other hand, an integrity 
 constraint is a rule that filters solution candidates, 
 meaning that the literals in its body must not jointly be 
-satisfied. A result of \dlvhex{} computation is called an 
+satisfied. A result of a \dlvhex{} computation is called an 
 \emph{answer set} which is a consistent explanation (model) 
 of the world.
 
@@ -575,7 +576,7 @@ always true. The second line is a \emph{rule} and reads as
 \enquote{If $\mathit{joke}$ is true, $\mathit{laugh}$ must 
 also be true}. Also we can read this as \enquote{from 
 $\mathit{joke}$ follows $\mathit{laugh}$}. The single 
-\emph{model} of above program is $\{\mathit{joke}, 
+\emph{model} of the program above is $\{\mathit{joke}, 
 \mathit{laugh}\}$ since they are the atoms which are true 
 in the program. 
  
@@ -609,7 +610,7 @@ to another node (possibly the same one), and this edge must
 not be contained in the original edge set. 
 
 To explain the concept of \emph{integrity 
-constraints} we will consider following example:
+constraints} we will consider the following example:
 \begin{exmp}
 \label{nodecoloring}
 \begin{align*}
@@ -621,7 +622,7 @@ r_3\colon & \mathit{colored}(X, r) \leftimpl \mathit{node}(X), not \  colored(X,
 r_4\colon & \mathit{colored}(X, g) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,b). & \\
 r_5\colon & \mathit{colored}(X, b) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,g). & \\
 \\
-r_6\colon & \leftimpl \mathit{edge}(X, Y), \mathit(colored)
+r_6\colon & \leftimpl \mathit{edge}(X, Y), \mathit{colored}
 (X, C), \mathit{colored}(Y, C) & \\
 \\
 r_7\colon & \mathit{edge}(2, 4). \  \mathit{edge}(2, 3). \  
@@ -633,19 +634,19 @@ r_9\colon & \mathit{edge}(6, 7). &
 \end{exmp}
 In the first two lines we extract the nodes implicitly given by the edges of the graph.
 $X$ and $Y$ are 
-variables since they begin with uppercase letter. It says 
+variables since they begin with uppercase letters. It says 
 that: \enquote{If $\mathit{edge}(X,Y)$ is true then 
 $\mathit{node(X)}$ is also true}. In the 
 \emph{guessing part} from line $3$ to $5$, all possible node color combinations 
 are generated. Each node may be colored either red, 
 green or black. In the checking part, the integrity constraint 
-deletes all color combinations which does not satisfy the 
+deletes all color combinations which do not satisfy the 
 requirement that there may be no edge between two nodes of 
 equal color.
 
 \subsection{Classical Negation}
 \dlvhex{} supports two kinds of negation. Here we will 
-emphasize difference between explicitly expressing 
+emphasize the difference between explicitly expressing 
 falseness of an atom and having it done by \emph{Closed 
 World Assumption}. The connective $\mathit{not}$ expresses 
 default negation, i.e. a literal $\mathit{not} \ A$ is assumed 
@@ -659,7 +660,7 @@ between $A$ and $\mathit{-A}$ is simply that they must not jointly
 hold.
 
 \begin{exmp} 
-Imagine a situation where agent has to cross a railroad. 
+Imagine a situation where an agent has to cross a railroad. 
 The agent should cross it if there is no train approaching. 
 With this description, one might specify the following 
 program:
@@ -703,7 +704,7 @@ between atoms in rule heads.
 \end{center}
 A \emph{disjunctive head} holds if at least one of its 
 atoms is true. If all body literals $L_1,\dots,L_n$ of the 
-rule specified above are known to be true then head also needs to hold, i.e. one of the atoms in $A_0$ $\vee$ \dots 
+rule specified above are known to be true then the head also needs to hold, i.e. one of the atoms in $A_0$ $\vee$ \dots 
 $\vee$ $A_m$ needs to be true. In a simple disjunctive program 
 $\mathit{a} \vee \mathit{b.}$, we have the two answer sets 
 \{$a$\} and \{$b$\}.
@@ -731,7 +732,7 @@ first rule is called a disjunctive rule which is read as
 \enquote{For sure, either the left or the right arm is broken.} Without being sure which arm is broken \dlvhex{} 
 will evaluate the program and produce the two models 
 $\mathit{\{left\_arm\_broken, can\_write, be\_angry\}}$ and 
-$\mathit{\{right\_arm\_broken\}}$..
+$\mathit{\{right\_arm\_broken\}}$.
 
 \subsection{Built-in Arithmetic Functions}
 Besides integers (constant arithmetic functions), written 
@@ -811,7 +812,7 @@ collections of expressions within a single rule or
 aggregate. This is particularly useful for encoding 
 conjunctions (or disjunctions) over arbitrarily many ground 
 atoms as well as for the compact representation of 
-aggregates. 
+aggregates \cite{gkklorst2015}. 
 \begin{exmp}
 \begin{align*}
 r_1\colon& \mathit{person}(\mathit{jane}). \  \mathit{person}
@@ -830,7 +831,7 @@ r_6\colon& \mathit{on}(X) : \mathit{day}(X) \leftimpl
 \mathit{meet}.
 \end{align*}
 \end{exmp}  
-We have used the conditions in last two lines of the code. 
+Conditions are used in the last two lines of the code. 
 The \emph{conjunction} in the body of rule $r_5$ is obtained by 
 replacing $X$ in $\mathit{available(X)}$ with all ground 
 terms $t$ such that $\mathit{person(t)}$ holds, namely, 
@@ -838,10 +839,10 @@ with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition
 for the rule $r_6$ is contained in the head of the rule. It 
 turns into a \emph{disjunction} over all ground instances of 
 $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ 
-for which $\mathit{day(t)}$ holds, i.e., whenever $\mathit{meet}$ holds, one of $\mathit{on(t)}$ for which $\mathit{day(t)}$ is true should hold. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with ``;'' sign, the rule would look like:
+for which $\mathit{day(t)}$ holds, i.e., whenever $\mathit{meet}$ holds, one of $\mathit{on(t)}$ for which $\mathit{day(t)}$ is true should hold. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with a ``;'' sign, the rule would look like:
 \centerline{\{$\mathit{on}(X);\mathit{travel}(X) : \mathit{day}(X)\} \leftimpl 
 \mathit{meet}.$}
-where for all ground instances of $\mathit{on(X)}$ and $\mathit{travel(X)}$ such that $X$ is is substituted by terms $t$ for which $\mathit{day(t)}$ holds. 
+where for all ground instances of $\mathit{on(X)}$ and $\mathit{travel(X)}$ such that $X$ is substituted by terms $t$ for which $\mathit{day(t)}$ holds. 
 
 Any variable occurring 
 within a condition does not count as a positive occurrence 
@@ -859,7 +860,7 @@ evaluated \cite{gkklorst2015}.
 
 \subsection{Aggregates}
 \label{aggregates}
-Aggregates allow to express properties over set of 
+Aggregates allow to express properties over sets of 
 elements. \hex{}-programs with aggregates often allow clean 
 and concise problem encodings by minimizing the use of 
 auxiliary predicates and recursive programs, and help the 
@@ -871,7 +872,7 @@ aggregate is a function on a set of tuples that are
 normally subject to conditions. By comparing an aggregated 
 value with given values, we can extract a truth value from 
 an aggregate's evaluation, thus obtaining an aggregate 
-atom. They can occur in the bodies of rule and constraints, 
+atom. They can occur in the bodies of rules and constraints, 
 possibly negated using negation-as-failure \cite{gkklorst2015}.
 
 The form of an \emph{aggregate atom} occuring in a rule 
@@ -883,7 +884,7 @@ and literals, respectively. $\alpha$ is the name of some
 function that is applied to the term tupples \texttt{$t_i$} 
 that remain after evaluating the conditions expressed by 
 $L_i$. Finally,  the result of applying $\alpha$ is 
-compared by means of the comparison predicates $\prec_1 or 
+compared by means of the comparison predicates $\prec_1 and 
 \prec_2$ to the terms $s_1$ and $s_2$ respectively. 
 $\mathit{\#count}$, $\mathit{\#sum}$, $\mathit{\#times}$, 
 $\mathit{\#min}$, and $\mathit{\#max}$ are called aggregate 
@@ -892,7 +893,7 @@ five. An aggregate function is applied over a set and
 returns a numeric value. Let $f(S)$ be an aggregate 
 function. A variable, X, is a \emph{local variable} to 
 $f(S)$ if and only if $X$ appears in $S$ and $X$ does not 
-appear in any aggregate function that is outer to $f(S)$.
+appear in any aggregate function that is outside of $f(S)$. 
 \begin{exmp}
 \begin{align*}
 r_1\colon& emp(1,goofie,1250).\\
@@ -913,7 +914,7 @@ program, hence \\ \centerline{$
 \#count\{over1000(1,1250),over1000(5,1050)\}$} \\returns 2 
 as output of the aggregate function and outputs:
 \begin{align*}
-\{ & \mathit{emph(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),}\\
+\{ & \mathit{emp(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),}\\
 & \mathit{emp(5,tom,1050),over1000(1,1250),over1000(5,1050),over1000nr(2)} \}
 \end{align*}
 as a result of the program.
@@ -930,14 +931,14 @@ Cartoon Co. spends on salaries.
 \mathit{r_8 \colon \ salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : 
 \mathit{emp(I,N,S)}\} = X.
 \end{align*}
-In $r_8$ except term tuple $S$ we need also an $I$ in order to get correct result. This is because we have two persons with same salaries and aggregate function will return only one element in the symbolic set for both of them. Since one element is missing from the symbolic set we get incorrect result at the end.  
-The symbolic set for the $r_8$ consists of 5 elements:\\ 
+In $r_8$ except term tuple $S$ we need also an $I$ in order to get the correct result. This is because we have two persons with same salaries and aggregate function will return only one element in the symbolic set for both of them. Since one element is missing from the symbolic set, we get incorrect result at the end.  
+The symbolic set for the rule $r_8$ consists of 5 elements:\\ 
 \centerline{$\{ \langle 1250,1 \rangle, \langle 750,2 \rangle, \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}$} 
 \\The 
 aggregate function applied to the given set returns the sum 
 of the salaries of all the employees, the output thus is: 
 \\ \centerline{
-\{$\mathit{salaryTotal(4700)}$\}}. $\mathit{\#times}$ is 
+\{$\mathit{salaryTotal(4700)}$\}.} $\mathit{\#times}$ is 
 similar to $\mathit{\#sum}$, but computes the product of 
 the first local variable to be aggregated over in the 
 symbolic set. When applied over the empty set, 
@@ -1040,16 +1041,16 @@ Best model:
 The fact $r_1$ of the example above defines the root node 
 of a tree. Nodes and edges are defined in $r_2$ and $r_3$. 
 Rule $r_5$ guesses for each edge from node 
-$X$ to an node $Y$ (node $X$ is already reached) whether it is in the minimum spanning 
+$X$ to a node $Y$ (node $X$ is already reached) whether it is in the minimum spanning 
 tree or out of it. The integrity constraint $r_6$ ensures 
 that there is no incoming edge to the root node. Rule $r_7$ 
 eliminates all answer sets where there are two outgoing 
-edges going to same node $Y$. In $r_{8}$ and $r_{9}$ 
+edges going to the same node $Y$. In $r_{8}$ and $r_{9}$ 
 we compute all reached nodes and $r_{10}$ removes all answer sets where there is some node 
 which is not reached. Rule $r_{11}$ of the program is a weak 
 constraint with weight $C$ and level 1. The weak constraint 
 should be satisfied, but its violation does not kill the 
-model. The aim is to minimize number of violated weak 
+model. The aim is to minimize the number of violated weak 
 constraints. In our best model the cost value is 12 because the minimum spanning tree contains edges with a total weight of 12.  
 
 
@@ -1102,8 +1103,8 @@ facts. Rules $r_3$, $r_4$ and $r_5$ specify $\mathit{know}$,
 $\mathit{same\_skill}$ and $\mathit{married}$ relations 
 between some of employees. Since $\mathit{employee}(X)$ is 
 true, each $\mathit{employee}$ will be assigned either to 
-the project 1 or project 2 what is given in $r_6$. Rules $r_{7}$, $r_{8}$ and $r_{9}$ 
-are weak constraints, this time with 
+the project 1 or project 2 which is given in $r_6$. Rules $r_{7}$, $r_{8}$ and $r_{9}$ 
+are weak constraints, this time with the 
 same weights but different levels of priority. Under 
 prioritization, \dlvhex{} minimizes the violation of 
 the constraints of the highest priority level first; then 
@@ -1153,7 +1154,7 @@ For instance, the rule \\ \centerline{ \textit{$reached(X)
 \\computes the predicate \textit{reached} taking values 
 from the predicate $\&reach$, which computes via 
 \textit{$\&reach[edge,a](X)$} all the reachable nodes in 
-the graph in the graph \textit{edge} from node \textit{a}, 
+the graph \textit{edge} from node \textit{a}, 
 delegating this task to an external computational source.
 \begin{exmp}
 \begin{align*}
@@ -1181,16 +1182,16 @@ we have the answer set:\\
 \centerline{ \{ $\mathit{sayhello}(\mathit{hellodlvhex}), 
 \mathit{sayhello}(\mathit{helloclasp})$ \}}
 \\In this case the $\mathit{concat}$ external source receives 
-constant input parameters. It concatenates all constants from input sequence and outputs the result as a one string.
+constant input parameters. It concatenates all constants from input sequence and outputs the result as one string.
 
-The second part of the program works with an externals source 
+The second part of the program works with an external source 
 which has two predicate input parameters. It computes $\mathit{set1}$ minus $\mathit{set2}$, i.e., the set of all elements in the extension of $\mathit{set1}$ but not in that of $\mathit{set2}$. 
 
 \section{Examples}
 \label{sec:examples}
 We now present three real life examples  
 which are encoded and solved by \hex-programs. In Section~\ref{example1} we solve a basic ``swimming 
-problem". In Section~\ref{traveling} we present the ``traveling salesperson" problem. In Section~\ref{example3} how we can use \dlvhex{} to plan routes of one or multiple agents in the dynamic 
+problem". In Section~\ref{traveling} we present the ``traveling salesperson" problem. In Section~\ref{example3} we show how we can use \dlvhex{} to plan routes of one or multiple agents in the dynamic 
 environment controlled by the external atoms.
 
 \subsection{Example 1}
@@ -1249,7 +1250,7 @@ The \hex{} program above represents Alice's reasoning
 problem. Rule $r_1$ contains a set of facts about possible 
 swimming locations (where $\mathit{ind}$ and 
 $\mathit{outd}$ are short for indoor and outdoor, 
-respectively). Rule $r_2$ chooses indoor vs.outdoor 
+respectively). Rule $r_2$ chooses indoor vs. outdoor 
 swimming locations, and $r_3$ collects requirements that 
 are caused by this choice using the external atom. 
 
@@ -1270,10 +1271,10 @@ $\beta$ is required when swimming is a place in the
 extension of predicate $\alpha$. For example, 
 $\ext{\mathit{rq}}{\mathit{swim}}{\mathit{money}}$ is true 
 if $\mathit{swim(ind)}$ is true because indoor swimming 
-pool charge money for swimming \cite{efikrs2015}. 
+pools charge money for swimming \cite{efikrs2015}. 
 
 In $r_4$ it is decided what is to be visited, indoor or 
-outdoor location. By $r_5$ we ensure that at least one location is selected. The integrity constraint $r_6$ removes all answer sets in which there is no selected location to go. Integrity constraint $r_7$ ensures that only single location is selected since Alice can not go to the different location at the same time. Rule $r_8$ collects all requirements caused by 
+outdoor location. By $r_5$ we ensure that at least one location is selected. The integrity constraint $r_6$ removes all answer sets in which there is no selected location to go. Integrity constraint $r_7$ ensures that only a single location is selected since Alice can not go to different location at the same time. Rule $r_8$ collects all requirements caused by 
 the choice of $\mathit{goto}$ location. And finally, the constraint $r_9$ states that all answer sets where 
 Alice has to pay for the swimming are removed.
 
@@ -1290,8 +1291,8 @@ goto(altD).\\
 r_4\colon& need(loc, C) \leftimpl \ext{rq}{gansD}{C}, 
 goto(gansD).
 \end{align*}    
-where $\&rq$ receive constant input parameter. This gives us three additional rules which are just 
-repetition of the same rule just with different constant 
+where $\&rq$ receives constant input parameters. This gives us three additional rules which are just 
+repetitions of the same rule just with different constant 
 terms. Sending a predicate as input parameter does this in a 
 single line. However, it is not always the case that we can send constant terms of the predicate instead of predicate itself  as a parameter. Since input parameters of the external atom are of different type, the external atom implementation changes. The implementation details of the plugins are discussed in Section~\ref{sec:externalInterfaces}.
 
@@ -1332,14 +1333,14 @@ example, by the cost of an airplane ticket or train ticket,
 or perhaps by the length of the edge, or time required to 
 complete the traversal \cite{wiki}.
 
-This example is interesting for us because it is typical 
+This example is interesting for us because it is a typical 
 optimization problem. Among all answer sets \dlvhex{} 
-should select best one according to weak constraints 
+should select the best one according to the weak constraints 
 concept explained in Section \ref{optimize}. In the 
 classical solver we are able to load only small graphs 
 because it is not feasible to load a large graph at once. In 
 this example we are using an external atom which is loading 
-graph from the external source edge by edge up to specified 
+graph from the external source edge by edge up to a  specified 
 depth level what makes it able to solve problems with 
 extremely large graphs.        
 \subsubsection{Problem encoding}
@@ -1431,11 +1432,11 @@ city specified by the fact from $r_1$ and also finish
 his trip there if there is such a cycle which covers all 
 other cities in the graph. Rule $r_2$ is a fact which defines the 
 available budget of the salesperson. An atom $\mathit{cityOfDegree(R,D,S,C)}$ keeps 
-track of the cities newly discovered defined as successors 
+track of the cities newly discovered defined as successor 
 nodes $S$ for the root node $R$, their distances from the 
-root node as $D$ and weight of the edge between $R$ and $S$ 
-denoted as $C$. Rule $r_3$ defines starting city for 
-the path candidate. Rule in the $r_4$ is responsible for 
+root node as $D$ and the weight of the edge between $R$ and $S$ 
+denoted as $C$. Rule $r_3$ defines the starting city for 
+the path candidate. Rule $r_4$ is responsible for 
 generating a graph of 
 the cities discovered. It is using the external atom 
 $\mathit{\&edges}$ to load new cities from the external 
@@ -1468,7 +1469,7 @@ incoming edge, respectively, belonging to the cycle. The meaning of the two rule
 In $r_{10}$ we use aggregates (cf. Section 
 \ref{aggregates}) to find the sum $X$ of the costs over the 
 $\mathit{cycle(X,Y)}$. In rule $r_{11}$, an atom 
-$\mathit{withinBudget(B,C)}$ is true if term of the 
+$\mathit{withinBudget(B,C)}$ is true if the term of the 
 $\mathit{costCalculated(C)}$ is less than or equal to the 
 term of $\mathit{budgetB(B)}$ available. The integrity 
 constraint $r_{12}$ ensures that in the answer 
@@ -1482,15 +1483,15 @@ $r_8$ and $r_9$.  Note that rule $r_8$ builds on the
 assumption that the cycle starts at city Austin. The second 
 rule in $r_9$ states that, from a reached node $X$, an 
 adjacent node $Y$ can be reached via a further edge in the 
-cycle. It make sure that all nodes will be reached with the 
+cycle. It makes sure that all nodes will be reached with the 
 cycle given \cite{gkklorst2015}. The integrity constraint $r_{15}$ 
-eliminates answer sets not all nodes in the graph are reached.
+eliminates answer sets where not all nodes in the graph are reached.
 
 In order to minimize costs, we add the following 
 optimization statement: \\
 \centerline{$:\sim cycle(X,Y), cost(X,Y,C). \  [C:1].$}
 Here, edges belonging to the cycle are weighted according 
-to their costs and \dlvhex{} lists optimal answer set only.
+to their costs and \dlvhex{} lists optimal answer sets only.
 
 \subsubsection{Problem Solution}
 For this example optimal answer set 
@@ -1510,7 +1511,7 @@ answer set easier to read. The route which satisfies all given constraints is: A
 
 \subsection{Example 3}
 \label{example3}
-The last example is from the group of pathfinding problems and it considers pathfinding for a multiple agents.
+The last example is from the group of pathfinding problems and it considers pathfinding for multiple agents.
  
 \subsubsection{Problem Instance}
 Pathfinding for a single agent is the problem of planning a 
@@ -1611,10 +1612,10 @@ obstacle on it. Rules $r_{10}$, $r_{11}$ and
 $r_{12}$ guesses the next node to be visited by the agent, from 
 node $U$ to the node $V$. The agent can either visit a new node 
 using an existing edge or stay at the same node and wait. 
-In rule $r_{10}$ initial location for the path is set. Rule $r_{11}$ 
+In rule $r_{10}$, the initial location for the path is set. Rule $r_{11}$ 
 with a disjunctive head (cf. Section~\ref{disjunction}) decides either to include the outgoing edge 
 from the node $U$ to the path or to omit it from the path. 
-This step is cyclically performed until goal nodes are not 
+This step is cyclically performed until the goal nodes are not 
 reached. The constraint $r_{12}$ eliminates all answer sets in which there is more than one outgoing edge 
 selected at some time point from node $U$. Thus, for each step 
 the agent has to select a single edge since it cannot be at the 
@@ -1639,7 +1640,7 @@ the graph or on the environment which is not considered as
 a fact in the program. By introducing this property we have a dynamic problem. To perform this check we 
 can use only an external source. The external source is of the 
 form \ext{check}{U,V,T,I}{ValidOrNot} and checks is the 
-guessed move of the agent $I$ from $U$ to $V$ at time $T$ 
+guessed move of the agent $I$ from $U$ to $V$ at time $T$ is 
 $\mathit{valid}$ or $\mathit{invalid}$. In the case that 
 any of the moves in the guessed path is invalid, the whole 
 answer set is eliminated. If no invalid moves are guessed in the path, it means that solution is the answer set of the program.            
@@ -1685,8 +1686,8 @@ The graph is again loaded from the external file and not
 specified as a set of facts. We know that there is an obstacle at node $\mathit{three}$, so any answer set with node 
 $\mathit{three}$ in the path is removed. All other 
 constraints must be satisfied as well. Note that we have 
-omitted most of the atoms in order to emphasize actual 
-solution (in order to see how to filter out answer set and 
+omitted most of the atoms in order to emphasize the actual 
+solution (in order to see how to filter out answer sets and 
 show only specific atoms at the output refer to the 
 Section~\ref{sec:commandline}; in our answer set, we are 
 interested only in $\mathit{path}$ atoms since we want to 
@@ -1739,7 +1740,7 @@ path(2,eleven,eleven,3,valid),path(2,eleven,eleven,4,valid)
 \section{External Interfaces}
 \label{sec:externalInterfaces}
 This section discusses the implementation of external sources. One important design principle was to provide a 
-mechanism to easily add further external atoms, as introduce in Section~\ref{extatoms}, without 
+mechanism to easily add further external atoms, as introduced in Section~\ref{extatoms}, without 
 having to recompile the main application.
  
 Formally, an external atom is defined to evaluate to true
@@ -1762,7 +1763,7 @@ where $\mathit{uri}$ stands for a string denoting the RDF-source and X,Y, and Z 
 The interface that is used by \dlvhex{} to access a plugin 
 follows very closely this semantics. For each atom, a 
 retrieval function has to be implemented, which receives a 
-query object and has to return an an answer-object. The 
+query object and has to return an answer-object. The 
 query object carries the input interpretation as well as 
 the ground input parameters of the external atom call, 
 while the answer object is a container for the output 
@@ -1802,7 +1803,7 @@ A parameter of type \emph{tuple} represents a meta category standing for an arbi
 Specifying the type of input parameters not only helps to 
 single out the relevant part of the interpretation, but 
 also supports \dlvhex{} in calculating the dependencies 
-within a \hex-program. Plugins can be implemented either in Python or C++, as shown in the following to subsections.
+within a \hex-program. Plugins can be implemented either in Python or C++, as shown in the following two subsections.
 
 \subsection{Python}
 With \dlvhex{} version 2.4.0, a Python plugin interface was 
@@ -2203,20 +2204,20 @@ which may occur while working with external atoms
 or plugins in which we have implemented desired external atom functionality (e.g. Python or C++ plugin). 
 
 The following exception occurs whenever we try to
-load plugin from the nonexisting file, either from the Python or C++ file.
+load a plugin from a nonexisting file, either from the Python or C++ file.
 \begin{align*}
 \texttt{Exception: nonexisting\_file\_name.py : no such file}
 \end{align*}
 $\texttt{nonexisting\_file\_name.py}$ does not exist in the current directory and should be replaced with
-right file which contains implementation for the external atom(s) used in \hex{}-program.
+the right file which contains implementation for the external atom(s) used in \hex{}-program.
 
 The following error occurs if we do not provide an external atom specification and implementation 
-in the source file but we use it in \hex{}-program. Error looks as below:
+in the source file but we use it in the \hex{}-program. The error looks as below:
 \begin{align*}
 & \texttt{GeneralError: Fatal: did not find plugin atom for predicate}\\ 
 & \texttt{"ext\_atom"}
 \end{align*}  
-From the description above we can see that there is no plugin atom for predicate \texttt{ext\_atom}
+From the description above we can see that there is no plugin atom for the predicate \texttt{ext\_atom}
 in the source file which is passed as parameter from the command line. Implementation for the predicate 
 \texttt{ext\_atom} should be added to the plugin source file.
 
@@ -2229,7 +2230,7 @@ match its specification in the source file. The error is given below:
 
 \subsection{Safety Checking}
 \label{safetyCheck}
-If any of the variables used in the \hex{}-program does not satisfy safety conditions listed below, the program is not safe and an error occurs. Examples and explanations in the following subsections are used from the \cite{brfwilvpg2009}. 
+If any of the variables used in the \hex{}-program does not satisfy safety conditions listed below, the program is not safe and an error occurs. Examples and explanations in the following subsections are used from \cite{brfwilvpg2009}. 
 
 \subsubsection{Regular Safety}
 \dlvhex{} imposes a safety condition on variables in rules. 
@@ -2328,7 +2329,7 @@ q(X) & \leftimpl p(X).
 When a program is not recognized to have a finite domain and termination thus cannot be guaranteed, an error is issued. 
 
 \subsubsection{Strong Safety}
-By evaluating a program with external atoms it is possible to derive new numeric constants, different from those already occurring in the program, and generate a cycle over that atom. In case of cyclic rules, this could cause the non-termination of the evaluation and safety condition is violated.
+By evaluating a program with external atoms it is possible to derive new numeric constants, different from those already occurring in the program, and generate a cycle over that atom. In case of cyclic rules, this could cause the non-termination of the evaluation and the safety condition is violated.
 
 An atom $b=\ext{g}{X}{Y}$ in a rule r of the program is \emph{strongly safe} if either there is no cyclic dependency over $b$   or every variable in $Y$ occurs also in a positive ordinary atom not depending on $b$. A program is safe, if every external atom in a rule is strongly safe. 
 
@@ -2344,14 +2345,14 @@ An atom $b=\ext{g}{X}{Y}$ in a rule r of the program is \emph{strongly safe} if 
 \end{exmp}
 It is not \emph{strongly safe} because Y in the cyclic external atom $\ext{concat}{X,a}{Y}$ in $r_3$ does not occur in an
 ordinary body atom that does not depend on 
-\\$\ext{concat}{X,a}{Y}$. When we run program above, with \texttt{--strongsafety} option enabled (cf. Section~\ref{sec:commandline}), error that is generated looks as follow:
+\\$\ext{concat}{X,a}{Y}$. When we run the program above, with the \texttt{--strongsafety} option enabled (cf. Section~\ref{sec:commandline}), the error that is generated looks as follow:
 \begin{align*}
 & \texttt{GeneralError: Syntax Error: [Rule] is not strongly safe! }  \\
 & \texttt{Variable [Var] fails strong safety check in rule Rule.}
 \end{align*}
 To make $r_3$ strongly safe we could add an ordinary atom in order to break the cycle. $r_3$ could be modified as follows: \\ \centerline{$s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y},q(Y).$} Adding atom $q(Y)$ makes program strongly safe since $Y$ appears in the body atom which does not depend on $\ext{concat}{X,a}{Y}$.
  
-Along with error message, the affected \texttt{[Rule]} and a list of all unsafe variable occurrences \texttt{[Var]} are reported. 
+Along with the error message, the affected \texttt{[Rule]} and a list of all unsafe variable occurrences \texttt{[Var]} are reported. 
 The first action to take usually consists of checking whether variable \texttt{[Var]} is actually in the scope of any atom (in the positive body of \texttt{[Rule]}) that can bind it. Also check for variables that occur in aggregate elements (cf. Section~\ref{aggregates}) or conditional literals (cf. Section~\ref{conditions}), you might have to bind them with additional positive atoms in the conditions. 
 
 
@@ -2366,7 +2367,7 @@ predicates and argument positions. Intuitively, an attribute is lde-safe, if the
 an answer-set preserving grounding (i.e. a grounding which has the same answer sets if restricted to the
 positive atoms as the original program) is finite. A program is lde-safe, if all its attributes are lde-safe \cite{efikrs2015}.
 
-Since the program from Example~\ref{strongSafetyExmp} is finitely restrictable, the cycle is “broken” by $\mathit{q(X)}$ in $r_4$, it is also \emph{liberally safe}. Program executes successfully with \texttt{--liberalsafety} option enabled (cf. Section~\ref{sec:commandline}) and outputs:
+Since the program from Example~\ref{strongSafetyExmp} is finitely restrictable, the cycle is “broken” by $\mathit{q(X)}$ in $r_4$, it is also \emph{liberally safe}. The program executes successfully with \texttt{--liberalsafety} option enabled (cf. Section~\ref{sec:commandline}) and outputs:
 \begin{align*}
 \{ & 
 \texttt{p(a),q(aa),p(aa),s(aa),s(aaa)}
