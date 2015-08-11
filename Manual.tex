@@ -7,6 +7,7 @@
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{multirow}
+\usepackage{color}
 
 \usepackage{tikz}
 \usetikzlibrary{arrows}
@@ -26,7 +27,10 @@
   \quad
 }
 
-\newcommand{\row}[1]{\sc{#1}}
+\newcommand{\row}[1]{%
+  \ensuremath{\it \color{black} #1 \color{black}}%
+}
+
 
 \begin{document}
 \setcounter{page}{3}
@@ -279,12 +283,12 @@ The problem can be modeled as a \hex{}-program as follows:
 \begin{exmp}
 \label{faceQuery}
 \begin{align*}
-\row{r_1}\colon & \mathit{personOfInterest}(\mathit{john}). \\
-r_2\colon & \mathit{friendOfDegree}(\mathit{P, 0, P}) 
+\row{\row{r_1}}\colon & \mathit{personOfInterest}(\mathit{john}). \\
+\row{r_2}\colon & \mathit{friendOfDegree}(\mathit{P, 0, P}) 
 \leftimpl  \mathit{personOfInterest}(P).\\
 \end{align*}
 \begin{align*}
-r_{3}\colon \mathit{friendOfDegree}(\mathit{P, DegPlus, 
+\row{r_3}\colon \mathit{friendOfDegree}(\mathit{P, DegPlus, 
 F2}) \leftimpl 
 & \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
 & \ext{friendsOf}{F1}{F2},\\ 
@@ -293,18 +297,18 @@ F2}) \leftimpl
 & \mathit{\#int(DegPlus)}, \mathit{\#int(Deg)}.\\
 \end{align*}
 \begin{align*}
-r_{4}\colon & \mathit{invite(P)} \vee \mathit{ninvite(P) 
+\row{r_4}\colon & \mathit{invite(P)} \vee \mathit{ninvite(P) 
 \leftimpl  friendOfDegree(john,X,P), \#int(X).}\\
-r_{5}\colon & \leftimpl   \mathit{not} \ 4 = \mathit{\#count} 
+\row{r_5}\colon & \leftimpl   \mathit{not} \ 4 = \mathit{\#count} 
 \{ P : \mathit{invite(P)} \}. \\
 \end{align*}
 \end{exmp}
-Rule $r_1$ specifies the person who organizes the event 
-and initializes the search. Rule $r_2$ specifies that the initiating person has 
+Rule $\row{\row{r_1}}$ specifies the person who organizes the event 
+and initializes the search. Rule $\row{r_2}$ specifies that the initiating person has 
 distance 0 from him- or herself. 
 
 
-The main computational part of the program is rule $r_3$ of 
+The main computational part of the program is rule $\row{r_3}$ of 
 the program above. It cyclically queries all  friends of 
 already known persons and increments the distance with each 
 derivation. Variables used in these predicates are: 
@@ -345,17 +349,17 @@ greater than to $F1$. The condition
 \end{align*}
 ensures the distance is limited to 2. 
 
-We now move to the part where we handle invitations. Rule $r_4$ guesses all possible 
+We now move to the part where we handle invitations. Rule $\row{r_4}$ guesses all possible 
 persons to be invited or not. Since atom 
 $\mathit{friendOfDegree(john, X, P)}$ is true for person $P$, that person will be either invited or not.
 
 We limit the number of invited persons by using an 
-\emph{integrity constraint} from the $r_5$
+\emph{integrity constraint} from the $\row{r_5}$
 It ensures that exactly 4 persons are invited to the party. 
-It is possible to replace $r_5$ by $r_5 \prime $ which allows for specifying 
-lower and upper bound on the number of persons independently. Rule $r_5 \prime $ can be written as follows:
+It is possible to replace $\row{r_5}$ by $\row{r_5} \prime $ which allows for specifying 
+lower and upper bound on the number of persons independently. Rule $\row{r_5} \prime $ can be written as follows:
 \begin{align*}
-r_5 \prime  \colon \leftimpl \ not \ & 3 \leq \{ invite(P) \ \colon \ friendOfDegree(john,X,P)\} \leq 3.
+\row{r_5} \prime  \colon \leftimpl \ not \ & 3 \leq \{ invite(P) \ \colon \ friendOfDegree(john,X,P)\} \leq 3.
 \end{align*} 
   
 
@@ -449,9 +453,9 @@ discovered. If we decrease the minimum number of friends to be
 invited to the party there may be more than one answer set. 
 Consider the different example where instead of 4 
 persons we want to invite only 3 persons to the party. 
-The integrity constraint at $r_5$ will be modified to:
+The integrity constraint at $\row{r_5}$ will be modified to:
 \begin{align*}
-& r_5 \prime \prime \colon \leftimpl \ \mathit{ not } \  \mathit{\#count} \{ P : \mathit{invite(P)} \} = 3.
+& \row{r_5} \prime \prime \colon \leftimpl \ \mathit{ not } \  \mathit{\#count} \{ P : \mathit{invite(P)} \} = 3.
 \end{align*} 
  This time we have more than one answer set. Since the depth 
  level is still 2 there will be 4 persons discovered again, 
@@ -567,8 +571,8 @@ of the world.
 \begin{exmp} 
 Consider the following logic program:
 \begin{align*}
-r_1\colon\mathit{ joke }.& \\
-r_2\colon\mathit{ laugh } & \leftimpl \mathit{ joke }.
+\row{r_1}\colon\mathit{ joke }.& \\
+\row{r_2}\colon\mathit{ laugh } & \leftimpl \mathit{ joke }.
 \end{align*} 
 \end{exmp}
 The first line here represents an \emph{atom} which is 
@@ -595,11 +599,11 @@ which occur in a negated literal, must also occur in a
 positive literal in the body.
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).
+\row{r_1}\colon& \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).
 \\
-r_2\colon& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). 
+\row{r_2}\colon& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). 
 \\ \\
-r_3\colon& \mathit{comp\_edge}(X, Y) \leftimpl 
+\row{r_3}\colon& \mathit{comp\_edge}(X, Y) \leftimpl 
 \mathit{node}(X), \mathit{node}(Y), \mathit{ not } \ \mathit{ 
 edge }(X, Y). 
 \end{align*}
@@ -614,22 +618,22 @@ constraints} we will consider the following example:
 \begin{exmp}
 \label{nodecoloring}
 \begin{align*}
-r_1\colon & \mathit{node}(X) \leftimpl \mathit{edge}(X, Y). 
+\row{r_1}\colon & \mathit{node}(X) \leftimpl \mathit{edge}(X, Y). 
 &\\
-r_2\colon & \mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). 
+\row{r_2}\colon & \mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). 
 & \\
-r_3\colon & \mathit{colored}(X, r) \leftimpl \mathit{node}(X), not \  colored(X,g),not \ colored(X,b). & \\
-r_4\colon & \mathit{colored}(X, g) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,b). & \\
-r_5\colon & \mathit{colored}(X, b) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,g). & \\
+\row{r_3}\colon & \mathit{colored}(X, r) \leftimpl \mathit{node}(X), not \  colored(X,g),not \ colored(X,b). & \\
+\row{r_4}\colon & \mathit{colored}(X, g) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,b). & \\
+\row{r_5}\colon & \mathit{colored}(X, b) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,g). & \\
 \\
-r_6\colon & \leftimpl \mathit{edge}(X, Y), \mathit{colored}
+\row{r_6}\colon & \leftimpl \mathit{edge}(X, Y), \mathit{colored}
 (X, C), \mathit{colored}(Y, C) & \\
 \\
-r_7\colon & \mathit{edge}(2, 4). \  \mathit{edge}(2, 3). \  
+\row{r_7}\colon & \mathit{edge}(2, 4). \  \mathit{edge}(2, 3). \  
 \mathit{edge}(5, 5). & \\
-r_8\colon & \mathit{edge}(4, 6). \  \mathit{edge}(4, 5). \ 
+\row{r_8}\colon & \mathit{edge}(4, 6). \  \mathit{edge}(4, 5). \ 
 \mathit{edge}(5, 7). & \\
-r_9\colon & \mathit{edge}(6, 7). &
+\row{r_9}\colon & \mathit{edge}(6, 7). &
 \end{align*} 
 \end{exmp}
 In the first two lines we extract the nodes implicitly given by the edges of the graph.
@@ -665,7 +669,7 @@ The agent should cross it if there is no train approaching.
 With this description, one might specify the following 
 program:
 \begin{align*}
- r_1\colon& \mathit{cross\_railroad} \leftimpl \mathit{ not 
+ \row{r_1}\colon& \mathit{cross\_railroad} \leftimpl \mathit{ not 
  } \mathit{ train\_approaches}.
 \end{align*}
 \end{exmp}
@@ -679,7 +683,7 @@ The next program uses so-called true or classical negation.
 Since $\mathit{- train\_approaches}$ is not known to be 
 true, the following program has only an empty model.
 \begin{align*}
-r_1\colon\mathit{cross\_railroad} \leftimpl \mathit{- 
+\row{r_1}\colon\mathit{cross\_railroad} \leftimpl \mathit{- 
 train\_approaches}.
 \end{align*}
 \end{exmp}
@@ -714,11 +718,11 @@ In the Example~\ref{nodecoloring} we could replace lines $3$ to $5$ by a single 
 \\which generates all possible node color combinations 
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{left\_arm\_broken} \vee 
+\row{r_1}\colon& \mathit{left\_arm\_broken} \vee 
 \mathit{right\_arm\_broken}.\\
-r_2\colon& \mathit{can\_write} \leftimpl 
+\row{r_2}\colon& \mathit{can\_write} \leftimpl 
 \mathit{left\_arm\_broken}.\\
-r_3\colon& \mathit{be\_angry} \leftimpl 
+\row{r_3}\colon& \mathit{be\_angry} \leftimpl 
 \mathit{can\_write}.
 \end{align*}
 \end{exmp}
@@ -743,12 +747,12 @@ $-$ (subtraction), $*$ (multiplication), $/$ (integer
 division). 
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{a}(6). \\
-r_2\colon& \mathit{b}(2). \\
-r_3\colon& c(X,Y,XX) \leftimpl a(X), b(Y),+(X, Y, XX). \\
-r_4\colon& d(X,Y,XX) \leftimpl a(X), b(Y),-(X, Y, XX). \\
-r_5\colon& e(X,Y,XX) \leftimpl a(X), b(Y),*(X, Y, XX). \\
-r_6\colon& f(X,Y,XX) \leftimpl a(X), b(Y),/(X, Y, XX).
+\row{r_1}\colon& \mathit{a}(6). \\
+\row{r_2}\colon& \mathit{b}(2). \\
+\row{r_3}\colon& c(X,Y,XX) \leftimpl a(X), b(Y),+(X, Y, XX). \\
+\row{r_4}\colon& d(X,Y,XX) \leftimpl a(X), b(Y),-(X, Y, XX). \\
+\row{r_5}\colon& e(X,Y,XX) \leftimpl a(X), b(Y),*(X, Y, XX). \\
+\row{r_6}\colon& f(X,Y,XX) \leftimpl a(X), b(Y),/(X, Y, XX).
 \end{align*}
 \end{exmp}
 An atom $+(X,Y,XX)$ is true, iff $XX$ is the sum of $X$ and $Y$ (likewise for other operators).
@@ -772,17 +776,17 @@ over all constants. The application of comparison literals
 to integers is illustrated by the following example.
 \begin{exmp}
 \begin{align*}
-r_1\colon& a(1). \\
-r_2\colon& a(2). \\
-r_3\colon& b(1). \\
+\row{r_1}\colon& a(1). \\
+\row{r_2}\colon& a(2). \\
+\row{r_3}\colon& b(1). \\
 \\
-r_4\colon& c(X,Y) \leftimpl a(X), b(Y), X <> Y. \\
-r_5\colon& d(X,Y) \leftimpl a(X), b(Y), X \neq Y. \\
-r_6\colon& e(X,Y) \leftimpl a(X), b(Y), X < Y. \\
-r_7\colon& f(X,Y) \leftimpl a(X), b(Y), X > Y. \\
-r_8\colon& g(X,Y) \leftimpl a(X), b(Y), X \leq Y. \\
-r_{9}\colon& h(X,Y) \leftimpl a(X), b(Y), X \geq Y. \\
-r_{10}\colon& i(X,Y) \leftimpl a(X), b(Y), Y == 1. 
+\row{r_4}\colon& c(X,Y) \leftimpl a(X), b(Y), X <> Y. \\
+\row{r_5}\colon& d(X,Y) \leftimpl a(X), b(Y), X \neq Y. \\
+\row{r_6}\colon& e(X,Y) \leftimpl a(X), b(Y), X < Y. \\
+\row{r_7}\colon& f(X,Y) \leftimpl a(X), b(Y), X > Y. \\
+\row{r_8}\colon& g(X,Y) \leftimpl a(X), b(Y), X \leq Y. \\
+\row{r_9}\colon& h(X,Y) \leftimpl a(X), b(Y), X \geq Y. \\
+\row{r_{10}}\colon& i(X,Y) \leftimpl a(X), b(Y), Y == 1. 
 \end{align*}
 \end{exmp}
 The single answer set for the example above is:
@@ -815,28 +819,28 @@ atoms as well as for the compact representation of
 aggregates \cite{gkklorst2015}. 
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{person}(\mathit{jane}). \  \mathit{person}
+\row{r_1}\colon& \mathit{person}(\mathit{jane}). \  \mathit{person}
 (\mathit{john}).\\
-r_2\colon& \mathit{day}(\mathit{mon}). \ \mathit{day}
+\row{r_2}\colon& \mathit{day}(\mathit{mon}). \ \mathit{day}
 (\mathit{tue}). \ \mathit{day}(\mathit{wed}). \ \mathit{day}
 (\mathit{thu}). \ \mathit{day}(\mathit{fri}). \ \\
-r_3\colon& \mathit{available}(\mathit{jane}) \leftimpl not \  
+\row{r_3}\colon& \mathit{available}(\mathit{jane}) \leftimpl not \  
 \mathit{on}(\mathit{fri}).\\
-r_4\colon& \mathit{available}(\mathit{john}) \leftimpl 
+\row{r_4}\colon& \mathit{available}(\mathit{john}) \leftimpl 
 \mathit{not} \ \mathit{on}(\mathit{mon}), \mathit{not} \ 
 \mathit{on}(\mathit{wed}).\\
-r_5\colon& \mathit{meet} \leftimpl \mathit{available}(X) : 
+\row{r_5}\colon& \mathit{meet} \leftimpl \mathit{available}(X) : 
 \mathit{person}(X).\\
-r_6\colon& \mathit{on}(X) : \mathit{day}(X) \leftimpl 
+\row{r_6}\colon& \mathit{on}(X) : \mathit{day}(X) \leftimpl 
 \mathit{meet}.
 \end{align*}
 \end{exmp}  
 Conditions are used in the last two lines of the code. 
-The \emph{conjunction} in the body of rule $r_5$ is obtained by 
+The \emph{conjunction} in the body of rule $\row{r_5}$ is obtained by 
 replacing $X$ in $\mathit{available(X)}$ with all ground 
 terms $t$ such that $\mathit{person(t)}$ holds, namely, 
 with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition 
-for the rule $r_6$ is contained in the head of the rule. It 
+for the rule $\row{r_6}$ is contained in the head of the rule. It 
 turns into a \emph{disjunction} over all ground instances of 
 $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ 
 for which $\mathit{day(t)}$ holds, i.e., whenever $\mathit{meet}$ holds, one of $\mathit{on(t)}$ for which $\mathit{day(t)}$ is true should hold. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with a ``;'' sign, the rule would look like:
@@ -896,13 +900,13 @@ $f(S)$ if and only if $X$ appears in $S$ and $X$ does not
 appear in any aggregate function that is outside of $f(S)$. 
 \begin{exmp}
 \begin{align*}
-r_1\colon& emp(1,goofie,1250).\\
-r_2\colon& emp(2,willy,750).\\
-r_3\colon& emp(3,woody,750).\\
-r_4\colon& emp(4,jerry,900).\\
-r_5\colon& emp(5,tom,1050). \\
-r_6\colon& over1000(I,S) \leftimpl emp(I,N,S), S > 1000.\\
-r_7\colon& over1000nr(X) \leftimpl \#count\{I : 
+\row{r_1}\colon& emp(1,goofie,1250).\\
+\row{r_2}\colon& emp(2,willy,750).\\
+\row{r_3}\colon& emp(3,woody,750).\\
+\row{r_4}\colon& emp(4,jerry,900).\\
+\row{r_5}\colon& emp(5,tom,1050). \\
+\row{r_6}\colon& over1000(I,S) \leftimpl emp(I,N,S), S > 1000.\\
+\row{r_7}\colon& over1000nr(X) \leftimpl \#count\{I : 
 over1000(I,W)\} = X, \#int(X).
 \end{align*}
 \end{exmp}
@@ -928,11 +932,11 @@ sum of the first local variable to be aggregated over in
 the symbolic set. Suppose we want to know how much the 
 Cartoon Co. spends on salaries.
 \begin{align*}
-\mathit{r_8 \colon \ salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : 
+\mathit{\row{r_8} \colon \ salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : 
 \mathit{emp(I,N,S)}\} = X.
 \end{align*}
-In $r_8$ except term tuple $S$ we need also an $I$ in order to get the correct result. This is because we have two persons with same salaries and aggregate function will return only one element in the symbolic set for both of them. Since one element is missing from the symbolic set, we get incorrect result at the end.  
-The symbolic set for the rule $r_8$ consists of 5 elements:\\ 
+In $\row{r_8}$ except term tuple $S$ we need also an $I$ in order to get the correct result. This is because we have two persons with same salaries and aggregate function will return only one element in the symbolic set for both of them. Since one element is missing from the symbolic set, we get incorrect result at the end.  
+The symbolic set for the rule $\row{r_8}$ consists of 5 elements:\\ 
 \centerline{$\{ \langle 1250,1 \rangle, \langle 750,2 \rangle, \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}$} 
 \\The 
 aggregate function applied to the given set returns the sum 
@@ -1004,29 +1008,29 @@ The following program, computes the minimum spanning trees
 of a weighed directed graph.
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{root}(a). \\
-r_2\colon& \mathit{node}(a). \ \mathit{node}(b). \ 
+\row{r_1}\colon& \mathit{root}(a). \\
+\row{r_2}\colon& \mathit{node}(a). \ \mathit{node}(b). \ 
 \mathit{node}(c). \ \mathit{node}(d). \ \mathit{node}(e). \ \\
-r_3\colon& \mathit{edge}(a,b,4). \ \mathit{edge}(a,c,3). \ 
+\row{r_3}\colon& \mathit{edge}(a,b,4). \ \mathit{edge}(a,c,3). \ 
 \mathit{edge}(c,b,2). \ \mathit{edge}(c,d,3). \ \\
-r_4\colon& \mathit{edge}(b,e,4). \ \mathit{edge}(d,e,5). \ \\
+\row{r_4}\colon& \mathit{edge}(b,e,4). \ \mathit{edge}(d,e,5). \ \\
 \\
-r_5 \colon & \mathit{in\_tree}(X,Y,C) \vee 
+\row{r_5} \colon & \mathit{in\_tree}(X,Y,C) \vee 
 \mathit{out\_tree}(X,Y) \leftimpl \mathit{edge}(X,Y,C), 
 \mathit{reached}(X). \\
-r_6\colon& \leftimpl \mathit{root}(X), \mathit{in\_tree}
+\row{r_6}\colon& \leftimpl \mathit{root}(X), \mathit{in\_tree}
 (\_,X,C).\\
-r_7\colon& \leftimpl \mathit{in\_tree}(X,Y,C), 
+\row{r_7}\colon& \leftimpl \mathit{in\_tree}(X,Y,C), 
 \mathit{in\_tree}(Z,Y,C), X \neq Z. \\
 \\
-r_{8}\colon& \mathit{reached}(X) \leftimpl \mathit{root}
+\row{r_8}\colon& \mathit{reached}(X) \leftimpl \mathit{root}
 (X). \\
-r_{9}\colon& \mathit{reached}(Y) \leftimpl 
+\row{r_9}\colon& \mathit{reached}(Y) \leftimpl 
 \mathit{reached}(X), \mathit{in\_tree}(X,Y,C). \\
-r_{10}\colon& \leftimpl \mathit{node}(X), \mathit{not} \ 
+\row{r_{10}}\colon& \leftimpl \mathit{node}(X), \mathit{not} \ 
 \mathit{reached}(X). \\
 \\
-r_{11}\colon&\mathit{ : \sim in\_tree}(X,Y,C). [C:1]
+\row{r_{11}}\colon&\mathit{ : \sim in\_tree}(X,Y,C). [C:1]
 \end{align*}
 \end{exmp}
 Best model:
@@ -1038,16 +1042,16 @@ Best model:
    &\mathit{  out\_tree(d,e)\}} \ \ Cost ([Weight:Level]): <[12:1]>
 \end{align*}
 
-The fact $r_1$ of the example above defines the root node 
-of a tree. Nodes and edges are defined in $r_2$ and $r_3$. 
-Rule $r_5$ guesses for each edge from node 
+The fact $\row{r_1}$ of the example above defines the root node 
+of a tree. Nodes and edges are defined in $\row{r_2}$ and $\row{r_3}$. 
+Rule $\row{r_5}$ guesses for each edge from node 
 $X$ to a node $Y$ (node $X$ is already reached) whether it is in the minimum spanning 
-tree or out of it. The integrity constraint $r_6$ ensures 
-that there is no incoming edge to the root node. Rule $r_7$ 
+tree or out of it. The integrity constraint $\row{r_6}$ ensures 
+that there is no incoming edge to the root node. Rule $\row{r_7}$ 
 eliminates all answer sets where there are two outgoing 
-edges going to the same node $Y$. In $r_{8}$ and $r_{9}$ 
-we compute all reached nodes and $r_{10}$ removes all answer sets where there is some node 
-which is not reached. Rule $r_{11}$ of the program is a weak 
+edges going to the same node $Y$. In $\row{r_8}$ and $\row{r_9}$ 
+we compute all reached nodes and $\row{r_{10}}$ removes all answer sets where there is some node 
+which is not reached. Rule $\row{r_{11}}$ of the program is a weak 
 constraint with weight $C$ and level 1. The weak constraint 
 should be satisfied, but its violation does not kill the 
 model. The aim is to minimize the number of violated weak 
@@ -1065,22 +1069,22 @@ skills are concerned, and require that people married with
 one another do not work in the same group.
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{employee}(a). \ \mathit{employee}(b). \ 
+\row{r_1}\colon& \mathit{employee}(a). \ \mathit{employee}(b). \ 
 \mathit{employee}(c). \ \mathit{employee(d)}. \ \\
-r_2\colon& \mathit{employee}(e). \\
-r_3\colon& \mathit{know}(a,b). \ \mathit{know}(b,c). \ 
+\row{r_2}\colon& \mathit{employee}(e). \\
+\row{r_3}\colon& \mathit{know}(a,b). \ \mathit{know}(b,c). \ 
 \mathit{know}(c,d). \ \mathit{know}(d,e). \ \\
-r_4\colon& \mathit{same\_skill}(a,b). \\
-r_5\colon& \mathit{married(c,d)}. \\
+\row{r_4}\colon& \mathit{same\_skill}(a,b). \\
+\row{r_5}\colon& \mathit{married(c,d)}. \\
 \\ 
-r_6\colon& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
+\row{r_6}\colon& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
 \leftimpl \mathit{employee}(X).\\
-r_7\colon& : \sim \mathit{member}(X,P), \mathit{member}
+\row{r_7}\colon& : \sim \mathit{member}(X,P), \mathit{member}
 (Y,P), X \neq Y, \mathit{not} \ \mathit{know(X,Y)}.& 
 [1:1] \\
-r_{8}\colon& : \sim  \mathit{member}(X,P), \mathit{member}
+\row{r_8}\colon& : \sim  \mathit{member}(X,P), \mathit{member}
 (Y,P), X \neq Y, \mathit{marrie}d(X,Y). & [1:2]\\
-r_{9}\colon& : \sim member(X,P), member(Y,P), X \neq Y, 
+\row{r_9}\colon& : \sim member(X,P), member(Y,P), X \neq Y, 
 same\_skill(X,Y). & [1:2] 
 \end{align*}
 \end{exmp}
@@ -1098,12 +1102,12 @@ This program has two best models:
    [6:1],[0:2] \rangle
 \end{align*}
 
-In $r_1$ and $r_2$ we defined employees as a set of the 
-facts. Rules $r_3$, $r_4$ and $r_5$ specify $\mathit{know}$, 
+In $\row{r_1}$ and $\row{r_2}$ we defined employees as a set of the 
+facts. Rules $\row{r_3}$, $\row{r_4}$ and $\row{r_5}$ specify $\mathit{know}$, 
 $\mathit{same\_skill}$ and $\mathit{married}$ relations 
 between some of employees. Since $\mathit{employee}(X)$ is 
 true, each $\mathit{employee}$ will be assigned either to 
-the project 1 or project 2 which is given in $r_6$. Rules $r_{7}$, $r_{8}$ and $r_{9}$ 
+the project 1 or project 2 which is given in $\row{r_6}$. Rules $\row{r_7}$, $\row{r_8}$ and $\row{r_9}$ 
 are weak constraints, this time with the 
 same weights but different levels of priority. Under 
 prioritization, \dlvhex{} minimizes the violation of 
@@ -1158,17 +1162,17 @@ the graph \textit{edge} from node \textit{a},
 delegating this task to an external computational source.
 \begin{exmp}
 \begin{align*}
-r_1\colon& \mathit{systems} \ (\mathit{dlvhex}). \ 
+\row{r_1}\colon& \mathit{systems} \ (\mathit{dlvhex}). \ 
 \mathit{systems}(\mathit{clasp}). \\  
-r_2\colon& \mathit{sayhello(X)} \leftimpl 
+\row{r_2}\colon& \mathit{sayhello(X)} \leftimpl 
 \ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, 
 \mathit{systems(Y).}  \\ 
 \\
-r_3\colon& \mathit{set1}(a). \ \mathit{set1}(b). \ 
+\row{r_3}\colon& \mathit{set1}(a). \ \mathit{set1}(b). \ 
 \mathit{set1}(c).\\
-r_4\colon& \mathit{set2}(b). \ \mathit{set2}(c). \ 
+\row{r_4}\colon& \mathit{set2}(b). \ \mathit{set2}(c). \ 
 \mathit{set2}(d).\\
-r_5\colon& \mathit{set3}(X) \leftimpl 
+\row{r_5}\colon& \mathit{set3}(X) \leftimpl 
 \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
 \end{align*}
 \end{exmp}
@@ -1229,29 +1233,29 @@ follows:
 \begin{exmp}
 \label{swimExample}
 \begin{align*}
-r_1\colon& location(ind, margB). \ location(ind, amalB). \ \\& 
+\row{r_1}\colon& location(ind, margB). \ location(ind, amalB). \ \\& 
 location(outd, gansD). \ location(outd, altD). \\  
-r_2\colon& swim(ind) \vee swim(outd).\\ 
-r_3\colon& need(inoutd, C) \leftimpl \ext{\mathit{rq}}
+\row{r_2}\colon& swim(ind) \vee swim(outd).\\ 
+\row{r_3}\colon& need(inoutd, C) \leftimpl \ext{\mathit{rq}}
 {\mathit{swim}}{\mathit{C}}. \\
 \\
-r_4\colon& goto(X) \vee ngoto(X) \leftimpl swim(P), 
+\row{r_4}\colon& goto(X) \vee ngoto(X) \leftimpl swim(P), 
 location(P, X).\\
-r_5\colon& go \leftimpl goto(X).\\
-r_6\colon& \leftimpl not \ go. \\
-r_7\colon& \leftimpl goto(X), goto(Y), X \neq Y. \\
+\row{r_5}\colon& go \leftimpl goto(X).\\
+\row{r_6}\colon& \leftimpl not \ go. \\
+\row{r_7}\colon& \leftimpl goto(X), goto(Y), X \neq Y. \\
 \\
-r_8\colon& \mathit{need}(loc, C) \leftimpl 
+\row{r_8}\colon& \mathit{need}(loc, C) \leftimpl 
 \ext{\mathit{rq}}{\mathit{goto}}{\mathit{C}}. \\ 
-r_9\colon& \leftimpl need(X, money).
+\row{r_9}\colon& \leftimpl need(X, money).
 \end{align*}
 \end{exmp}
 The \hex{} program above represents Alice's reasoning 
-problem. Rule $r_1$ contains a set of facts about possible 
+problem. Rule $\row{r_1}$ contains a set of facts about possible 
 swimming locations (where $\mathit{ind}$ and 
 $\mathit{outd}$ are short for indoor and outdoor, 
-respectively). Rule $r_2$ chooses indoor vs. outdoor 
-swimming locations, and $r_3$ collects requirements that 
+respectively). Rule $\row{r_2}$ chooses indoor vs. outdoor 
+swimming locations, and $\row{r_3}$ collects requirements that 
 are caused by this choice using the external atom. 
 
 Web research is performed by using an external atom of the 
@@ -1273,22 +1277,22 @@ $\ext{\mathit{rq}}{\mathit{swim}}{\mathit{money}}$ is true
 if $\mathit{swim(ind)}$ is true because indoor swimming 
 pools charge money for swimming \cite{efikrs2015}. 
 
-In $r_4$ it is decided what is to be visited, indoor or 
-outdoor location. By $r_5$ we ensure that at least one location is selected. The integrity constraint $r_6$ removes all answer sets in which there is no selected location to go. Integrity constraint $r_7$ ensures that only a single location is selected since Alice can not go to different location at the same time. Rule $r_8$ collects all requirements caused by 
-the choice of $\mathit{goto}$ location. And finally, the constraint $r_9$ states that all answer sets where 
+In $\row{r_4}$ it is decided what is to be visited, indoor or 
+outdoor location. By $\row{r_5}$ we ensure that at least one location is selected. The integrity constraint $\row{r_6}$ removes all answer sets in which there is no selected location to go. Integrity constraint $\row{r_7}$ ensures that only a single location is selected since Alice can not go to different location at the same time. Rule $\row{r_8}$ collects all requirements caused by 
+the choice of $\mathit{goto}$ location. And finally, the constraint $\row{r_9}$ states that all answer sets where 
 Alice has to pay for the swimming are removed.
 
 An important thing to notice is that an external atom 
 $\mathit{\&rq}$ receives a predicate as an input parameter. If instead of sending a predicate we send 
-constants, $r_6$ should be replaced with:
+constants, $\row{r_6}$ should be replaced with:
 \begin{align*}
-r_1\colon& need(loc, C) \leftimpl \ext{rq}{margB}{C}, 
+\row{r_1}\colon& need(loc, C) \leftimpl \ext{rq}{margB}{C}, 
 goto(margB).\\
-r_2\colon& need(loc, C) \leftimpl \ext{rq}{amalB}{C}, 
+\row{r_2}\colon& need(loc, C) \leftimpl \ext{rq}{amalB}{C}, 
 goto(amalB).\\
-r_3\colon& need(loc, C) \leftimpl \ext{rq}{altD}{C}, 
+\row{r_3}\colon& need(loc, C) \leftimpl \ext{rq}{altD}{C}, 
 goto(altD).\\
-r_4\colon& need(loc, C) \leftimpl \ext{rq}{gansD}{C}, 
+\row{r_4}\colon& need(loc, C) \leftimpl \ext{rq}{gansD}{C}, 
 goto(gansD).
 \end{align*}    
 where $\&rq$ receives constant input parameters. This gives us three additional rules which are just 
@@ -1384,59 +1388,59 @@ encoded as follows:
 \begin{exmp}
 \label{travellingsalesperson}
 \begin{align*}
-r_1\colon & startingCity(austin).\\
-r_2\colon & budgetB(11).\\
+\row{r_1}\colon & startingCity(austin).\\
+\row{r_2}\colon & budgetB(11).\\
 \\
-r_3\colon & \mathit{cityOfDegree(P,0,P,0)} \leftimpl 
+\row{r_3}\colon & \mathit{cityOfDegree(P,0,P,0)} \leftimpl 
 \mathit{startingCity(P).} \\
 & \\
-r_4\colon & \mathit{cityOfDegree(F1, DegPlus, F2, Cost)} 
+\row{r_4}\colon & \mathit{cityOfDegree(F1, DegPlus, F2, Cost)} 
 \leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\ 
 &\ext{edges}{F1}{F2, Cost}, \mathit{DegPlus=DegPlus+1}, 
 DegPlus < 4, \\ & \#int(DegPlus), \#int(Deg)), \#int(Cost). 
 \\
-r_5\colon& \mathit{node(Y)} \leftimpl 
+\row{r_5}\colon& \mathit{node(Y)} \leftimpl 
 \mathit{cityOfDgree(X, V, Y, C)}.\\
-r_6\colon& \mathit{edge}(X, Y) \leftimpl 
+\row{r_6}\colon& \mathit{edge}(X, Y) \leftimpl 
 \mathit{cityOfDegree(X, V, Y, C).} \\
-r_7\colon & cost(X,Y,C) \leftimpl cityOfDegree(X, V, Y, C). 
+\row{r_7}\colon & cost(X,Y,C) \leftimpl cityOfDegree(X, V, Y, C). 
 \end{align*}
 \begin{align*}
-r_8 \colon & \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
+\row{r_8} \colon & \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
 node(X). \\
-r_{9} \colon &  \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
+\row{r_9} \colon &  \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
 node(Y). \\
 & \\
-r_{10} \colon & costCalculated(X) \leftimpl \#sum \{C,X,Y : 
+\row{r_{10}} \colon & costCalculated(X) \leftimpl \#sum \{C,X,Y : 
 cycle(X,Y), cost(X,Y,C)\} = X \\
-r_{11} \colon & withinBudget(B,C) \leftimpl budget(B), 
+\row{r_{11}} \colon & withinBudget(B,C) \leftimpl budget(B), 
 costCalculated(C), B \geq C. \\
-r_{12} \colon & \leftimpl  budgetB(B), costCalculated(C), 
+\row{r_{12}} \colon & \leftimpl  budgetB(B), costCalculated(C), 
 \mathit{not} \ \mathit{withinBudget(B,C).} \\
 & \\
-r_{13} \colon & reached(Y) \leftimpl cycle(C, Y), startingCity(C). \\
-r_{14} \colon & reached(Y) \leftimpl cycle(X,Y), 
+\row{\row{r_{13}}} \colon & reached(Y) \leftimpl cycle(C, Y), startingCity(C). \\
+\row{r_{14}} \colon & reached(Y) \leftimpl cycle(X,Y), 
 reached(X). \\
-r_{15} \colon & \leftimpl node(Y), \mathit{not} \ 
+\row{r_{15}} \colon & \leftimpl node(Y), \mathit{not} \ 
 \mathit{reached(Y)}. \\
 & \\
-r_{16} \colon & :\sim cycle(X,Y), cost(X,Y,C). [C:1] 
+\row{r_{16}} \colon & :\sim cycle(X,Y), cost(X,Y,C). [C:1] 
 \end{align*}
 \end{exmp}
-In rule $r_1$ we have a fact which specifies the starting 
+In rule $\row{r_1}$ we have a fact which specifies the starting 
 city. 
 It is important to notice that in our program the starting 
 point for the travelling salesperson may change and it is not 
 fixed. The salesperson should start his trip from the 
-city specified by the fact from $r_1$ and also finish 
+city specified by the fact from $\row{r_1}$ and also finish 
 his trip there if there is such a cycle which covers all 
-other cities in the graph. Rule $r_2$ is a fact which defines the 
+other cities in the graph. Rule $\row{r_2}$ is a fact which defines the 
 available budget of the salesperson. An atom $\mathit{cityOfDegree(R,D,S,C)}$ keeps 
 track of the cities newly discovered defined as successor 
 nodes $S$ for the root node $R$, their distances from the 
 root node as $D$ and the weight of the edge between $R$ and $S$ 
-denoted as $C$. Rule $r_3$ defines the starting city for 
-the path candidate. Rule $r_4$ is responsible for 
+denoted as $C$. Rule $\row{r_3}$ defines the starting city for 
+the path candidate. Rule $\row{r_4}$ is responsible for 
 generating a graph of 
 the cities discovered. It is using the external atom 
 $\mathit{\&edges}$ to load new cities from the external 
@@ -1457,34 +1461,34 @@ at once as a set of edges specified manually.
 \item We want to analyze only a subgraph of the graph that is 
 reachable from the node specified.
 \end{itemize}    
-In $r_5$, $r_6$ and $r_7$ the program is extracting 
+In $\row{r_5}$, $\row{r_6}$ and $\row{r_7}$ the program is extracting 
 $\mathit{nodes}, \mathit{edges}$ and $\mathit{costs}$ of 
 the edges from the $\mathit{cityOfDegree}$ atoms. 
 
-The rules $r_8$ and $r_{9}$ assert that every 
+The rules $\row{r_8}$ and $\row{r_9}$ assert that every 
 node must have exactly one outgoing and exactly one 
 incoming edge, respectively, belonging to the cycle. The meaning of the two rules is described before in Section 
 \ref{conditions}.
 
-In $r_{10}$ we use aggregates (cf. Section 
+In $\row{r_{10}}$ we use aggregates (cf. Section 
 \ref{aggregates}) to find the sum $X$ of the costs over the 
-$\mathit{cycle(X,Y)}$. In rule $r_{11}$, an atom 
+$\mathit{cycle(X,Y)}$. In rule $\row{r_{11}}$, an atom 
 $\mathit{withinBudget(B,C)}$ is true if the term of the 
 $\mathit{costCalculated(C)}$ is less than or equal to the 
 term of $\mathit{budgetB(B)}$ available. The integrity 
-constraint $r_{12}$ ensures that in the answer 
+constraint $\row{r_{12}}$ ensures that in the answer 
 set overall sum of the costs for the cycle will be less 
 than or equal to the budget available. The same rules can be applied to limit length travelled or time spent.
 
-Rules $r_{13}$ and $r_{14}$ check whether all 
+Rules $\row{\row{r_{13}}}$ and $\row{r_{14}}$ check whether all 
 nodes 
 are reached by a cycle candidate produced by the rules 
-$r_8$ and $r_9$.  Note that rule $r_8$ builds on the
+$\row{r_8}$ and $\row{r_9}$.  Note that rule $\row{r_8}$ builds on the
 assumption that the cycle starts at city Austin. The second 
-rule in $r_9$ states that, from a reached node $X$, an 
+rule in $\row{r_9}$ states that, from a reached node $X$, an 
 adjacent node $Y$ can be reached via a further edge in the 
 cycle. It makes sure that all nodes will be reached with the 
-cycle given \cite{gkklorst2015}. The integrity constraint $r_{15}$ 
+cycle given \cite{gkklorst2015}. The integrity constraint $\row{r_{15}}$ 
 eliminates answer sets where not all nodes in the graph are reached.
 
 In order to minimize costs, we add the following 
@@ -1546,91 +1550,91 @@ subsection is as follows:
 \begin{exmp}
 \label{pathfindingAgent}
 \begin{align*}
-r_1 \colon & startingNode(one). \\
-r_2 \colon & nodeOfDegree(P,0,P) \leftimpl startingNode(P). 
+\row{r_1} \colon & startingNode(one). \\
+\row{r_2} \colon & nodeOfDegree(P,0,P) \leftimpl startingNode(P). 
 \\
-r_3 \colon & nodeOfDegree(F1, DegPlus, F2) \leftimpl 
+\row{r_3} \colon & nodeOfDegree(F1, DegPlus, F2) \leftimpl 
 nodeOfDegree(\_, Deg, F1), \\ & \ext{edges}{F1}{F2}, 
 DegPlus=Deg+1, DgPlus <= 5, \#int(DegPlus), \\ &\#int(Deg). 
 \\
-r_4 \colon & node(Y) \leftimpl nodeOfDegre(X, V, Y).  \\
-r_5 \colon & edge(X,Y) \leftimpl nodeOfDegree(X,V,Y).\\
+\row{r_4} \colon & node(Y) \leftimpl nodeOfDegre(X, V, Y).  \\
+\row{r_5} \colon & edge(X,Y) \leftimpl nodeOfDegree(X,V,Y).\\
 \\
-r_6 \colon &  \mathit{agent(1). } \ \mathit{ agent(2). }\\
-r_7 \colon & \mathit{start(1,one).} \ \mathit{ 
+\row{r_6} \colon &  \mathit{agent(1). } \ \mathit{ agent(2). }\\
+\row{r_7} \colon & \mathit{start(1,one).} \ \mathit{ 
 start(2,four).} \\
-r_8 \colon & \mathit{goal(1,ten).} \ \mathit{ 
+\row{r_8} \colon & \mathit{goal(1,ten).} \ \mathit{ 
 goal(2,eleven).} \\
 \\
-r_9 \colon & clear(V) \leftimpl \mathit{node(V)}, V \neq 
+\row{r_9} \colon & clear(V) \leftimpl \mathit{node(V)}, V \neq 
 \mathit{three}\\ 
 \\
-r_{10} \colon & guessPath(I,0,V) \leftimpl start(I,V). \\
-r_{11} \colon &  \mathit{guessPath(I, TPlus, U)} \vee 
+\row{r_{10}} \colon & guessPath(I,0,V) \leftimpl start(I,V). \\
+\row{r_{11}} \colon &  \mathit{guessPath(I, TPlus, U)} \vee 
 \mathit{nguessPath(I, TPlus, U)} \leftimpl 
 \mathit{agent(I)}, \\ &  \mathit{guessPath(I, T, V)},  
 \mathit{edge(U,V)}, \mathit{TPlus=T+1}, 
 \mathit{\#int(TPlus)}, \mathit{\#int(T).}  \\
-r_{12} \colon &  \leftimpl 1 \neq \mathit{\#count\{ U 
+\row{r_{12}} \colon &  \leftimpl 1 \neq \mathit{\#count\{ U 
 \colon guessPath(I, T, U) \}}, \mathit{agent(I)}, 
 \mathit{\#int(T)}.  \\
 \\
-r_{13} \colon &  visit(I, V) \leftimpl guessPath(I,T,V). \\
+\row{\row{r_{13}}} \colon &  visit(I, V) \leftimpl guessPath(I,T,V). \\
 \\
-r_{14} \colon & \leftimpl goal(I, V), \mathit{not} \  
+\row{r_{14}} \colon & \leftimpl goal(I, V), \mathit{not} \  
 \mathit{visit(I, V).} \\
-r_{15} \colon &  \leftimpl guessPath(I, T, V), 
+\row{r_{15}} \colon &  \leftimpl guessPath(I, T, V), 
 path(I^{\prime},T,V), X \leq XP. \\
-r_{16} \colon &  \leftimpl guessPath(I,T,V), \mathit{not} \  
+\row{r_{16}} \colon &  \leftimpl guessPath(I,T,V), \mathit{not} \  
 \mathit{clear(V).}\\
 \\
-r_{17} \colon &  \mathit{path(I,V,U,T,ValidOrNot)} 
+\row{r_{17}} \colon &  \mathit{path(I,V,U,T,ValidOrNot)} 
 \leftimpl \mathit{agent(I)}, \\ & \mathit{guessPath(I, T, 
 V)}, \mathit{guessPath(I, TPlus, U)}, \\ & \ext{check}{U, 
 V, T, I}{ValidOrNot}, \mathit{TPlus=T+1}, \#int(T), 
 \#int(TPlus).  \\
-r_{18} \colon & \leftimpl path(I, V, U, T, invalid). 
+\row{r_{18}} \colon & \leftimpl path(I, V, U, T, invalid). 
 \end{align*}
 \end{exmp}
 
 
 In the first part of the program we load the graph using 
 the $\&edges$ external atom. This atom cyclically discovers 
-nodes and edges from the external file. In $r_4$ we 
+nodes and edges from the external file. In $\row{r_4}$ we 
 extract node $Y$ whenever an atom $\mathit{nodeOfDegree(X, 
-V, Y)}$ is true. Similar as in the previous rule $r_5$ extracts an edge from $X$ to $Y$ if an atom 
+V, Y)}$ is true. Similar as in the previous rule $\row{r_5}$ extracts an edge from $X$ to $Y$ if an atom 
 $\mathit{nodeOfDegree(X, V,Y)}$ is true. 
 
-From $r_6$ to $r_8$ we define a set of facts. 
-The facts $r_6$ represent different agents in the program. 
-Facts $r_{7}$ and $r_{8}$ define initial and 
+From $\row{r_6}$ to $\row{r_8}$ we define a set of facts. 
+The facts $\row{r_6}$ represent different agents in the program. 
+Facts $\row{r_7}$ and $\row{r_8}$ define initial and 
 destination nodes for the agents.  
 
-Rule $r_{9}$ 
+Rule $\row{r_9}$ 
 represents that vertex $V$ is free and does not have any 
-obstacle on it. Rules $r_{10}$, $r_{11}$ and 
-$r_{12}$ guesses the next node to be visited by the agent, from 
+obstacle on it. Rules $\row{r_{10}}$, $\row{r_{11}}$ and 
+$\row{r_{12}}$ guesses the next node to be visited by the agent, from 
 node $U$ to the node $V$. The agent can either visit a new node 
 using an existing edge or stay at the same node and wait. 
-In rule $r_{10}$, the initial location for the path is set. Rule $r_{11}$ 
+In rule $\row{r_{10}}$, the initial location for the path is set. Rule $\row{r_{11}}$ 
 with a disjunctive head (cf. Section~\ref{disjunction}) decides either to include the outgoing edge 
 from the node $U$ to the path or to omit it from the path. 
 This step is cyclically performed until the goal nodes are not 
-reached. The constraint $r_{12}$ eliminates all answer sets in which there is more than one outgoing edge 
+reached. The constraint $\row{r_{12}}$ eliminates all answer sets in which there is more than one outgoing edge 
 selected at some time point from node $U$. Thus, for each step 
 the agent has to select a single edge since it cannot be at the 
-two different locations at the same time. Rule $r_{13}$ computes which nodes are visited using the path 
-guessed. The integrity constraint $r_{14}$ ensures that 
+two different locations at the same time. Rule $\row{\row{r_{13}}}$ computes which nodes are visited using the path 
+guessed. The integrity constraint $\row{r_{14}}$ ensures that 
 each agent reaches its destination node. We ensure that 
 agents do not collide with each other using constraint 
-$r_{15}$. We also ensure that agents do not go through 
-obstacles using constraint $r_{16}$. 
+$\row{r_{15}}$. We also ensure that agents do not go through 
+obstacles using constraint $\row{r_{16}}$. 
 
 We represent path plans by atoms of the form 
 $\mathit{path(I, V, U, T, ValidOrNot)}$ which specify that 
 at time step $T$, agent $I$ moves from a node $V$ to a 
 node $U$. An external atom is used to decide whether that move is valid or invalid. The last 
-two rules $r_{17}$ and $r_{18}$ check if the overall path is valid or invalid. Agents can only know what are the edges 
+two rules $\row{r_{17}}$ and $\row{r_{18}}$ check if the overall path is valid or invalid. Agents can only know what are the edges 
 available in the graph and make the guess in which 
 direction they should go. Consider that an agent selects 
 some 
@@ -2337,20 +2341,20 @@ An atom $b=\ext{g}{X}{Y}$ in a rule r of the program is \emph{strongly safe} if 
 \begin{exmp} \textbf{Consider the following program:}
 \label{strongSafetyExmp}
 \begin{align*}
-& r_1 \colon p(a). \\
-& r_2 \colon q(aa). \\
-& r_3 \colon s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y}. \\
-& r_4 \colon p(X) \leftimpl s(X), q(X).
+& \row{r_1} \colon p(a). \\
+& \row{r_2} \colon q(aa). \\
+& \row{r_3} \colon s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y}. \\
+& \row{r_4} \colon p(X) \leftimpl s(X), q(X).
 \end{align*}
 \end{exmp}
-It is not \emph{strongly safe} because Y in the cyclic external atom $\ext{concat}{X,a}{Y}$ in $r_3$ does not occur in an
+It is not \emph{strongly safe} because Y in the cyclic external atom $\ext{concat}{X,a}{Y}$ in $\row{r_3}$ does not occur in an
 ordinary body atom that does not depend on 
 \\$\ext{concat}{X,a}{Y}$. When we run the program above, with the \texttt{--strongsafety} option enabled (cf. Section~\ref{sec:commandline}), the error that is generated looks as follow:
 \begin{align*}
 & \texttt{GeneralError: Syntax Error: [Rule] is not strongly safe! }  \\
 & \texttt{Variable [Var] fails strong safety check in rule Rule.}
 \end{align*}
-To make $r_3$ strongly safe we could add an ordinary atom in order to break the cycle. $r_3$ could be modified as follows: \\ \centerline{$s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y},q(Y).$} Adding atom $q(Y)$ makes program strongly safe since $Y$ appears in the body atom which does not depend on $\ext{concat}{X,a}{Y}$.
+To make $\row{r_3}$ strongly safe we could add an ordinary atom in order to break the cycle. $\row{r_3}$ could be modified as follows: \\ \centerline{$s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y},q(Y).$} Adding atom $q(Y)$ makes program strongly safe since $Y$ appears in the body atom which does not depend on $\ext{concat}{X,a}{Y}$.
  
 Along with the error message, the affected \texttt{[Rule]} and a list of all unsafe variable occurrences \texttt{[Var]} are reported. 
 The first action to take usually consists of checking whether variable \texttt{[Var]} is actually in the scope of any atom (in the positive body of \texttt{[Rule]}) that can bind it. Also check for variables that occur in aggregate elements (cf. Section~\ref{aggregates}) or conditional literals (cf. Section~\ref{conditions}), you might have to bind them with additional positive atoms in the conditions. 
@@ -2367,7 +2371,7 @@ predicates and argument positions. Intuitively, an attribute is lde-safe, if the
 an answer-set preserving grounding (i.e. a grounding which has the same answer sets if restricted to the
 positive atoms as the original program) is finite. A program is lde-safe, if all its attributes are lde-safe \cite{efikrs2015}.
 
-Since the program from Example~\ref{strongSafetyExmp} is finitely restrictable, the cycle is “broken” by $\mathit{q(X)}$ in $r_4$, it is also \emph{liberally safe}. The program executes successfully with \texttt{--liberalsafety} option enabled (cf. Section~\ref{sec:commandline}) and outputs:
+Since the program from Example~\ref{strongSafetyExmp} is finitely restrictable, the cycle is “broken” by $\mathit{q(X)}$ in $\row{r_4}$, it is also \emph{liberally safe}. The program executes successfully with \texttt{--liberalsafety} option enabled (cf. Section~\ref{sec:commandline}) and outputs:
 \begin{align*}
 \{ & 
 \texttt{p(a),q(aa),p(aa),s(aa),s(aaa)}
