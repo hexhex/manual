@@ -1033,13 +1033,10 @@ Under prioritization, the semantics minimizes the violation
 of the constraints of the highest priority level first; 
 then the lower priority levels are considered one after the 
 other in descending order. Syntactically, weak constraints 
-are specified as follows. \\ \mycenterline{:$\sim$ $\mathit{Conj}. \  
-[\mathit{Weight}\colon\mathit{Level}]$} \\ where $\mathit{Conj}$ 
-is a conjunction of (possibly negated) literals, and both 
-$\mathit{Weight}$ and $\mathit{Level}$ are positive 
-integers. Weights and priority levels are allowed to be 
-variables, provided that these variables also appear in a 
-positive literal in $\mathit{Conj}$.
+are specified as follows. \\ \mycenterline{:$\sim$ $\mathit{b_1,\dots,b_n}. 
+[\mathit{w}$@$\mathit{l},\mathit{t_1,\dots,t_m}]$} where $\mathit{t_1,\dots,t_m}$ 
+are terms and $\mathit{b_1,\dots,b_n}$ are literals for $m \geq 0$  and $n \geq 0$; $w$ and $l$ are terms standing for a \emph{weight} a \emph{level}. Writing the part ``$\mathit{@l}$'' can optionally be ommited if $l=0$; that is, a weak constraint has level 0 unless specified otherwise \cite{cffiklrs2013}.
+
 The following program, computes the minimum spanning trees 
 of a weighed directed graph.
 \begin{exmp}
@@ -1057,7 +1054,7 @@ of a weighed directed graph.
 \rowprefix{r_6}& \leftimpl \mathit{root}(X), \mathit{in\_tree}
 (\_,X,C).\\
 \rowprefix{r_7}& \leftimpl \mathit{in\_tree}(X,Y,C), 
-\mathit{in\_tree}(Z,Y,C), X \neq Z. \\
+\mathit{in\_tree}(Z,Y,C), X \noteq Z. \\
 \\
 \rowprefix{r_8}& \mathit{reached}(X) \leftimpl \mathit{root}
 (X). \\
@@ -1066,7 +1063,7 @@ of a weighed directed graph.
 \rowprefix{r_{10}}& \leftimpl \mathit{node}(X), \nott \thinspace 
 \mathit{reached}(X). \\
 \\
-\rowprefix{r_{11}}&\mathit{ : \sim in\_tree}(X,Y,C). [C:1]
+\rowprefix{r_{11}}&\mathit{ : \sim in\_tree}(X,Y,C). [C@1,X,Y,C]
 \end{align*}
 \end{exmp}
 Best model:
@@ -1116,11 +1113,11 @@ one another do not work in the same group.
 \rowprefix{r_6}& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
 \leftimpl \mathit{employee}(X).\\
 \rowprefix{r_7}& : \sim \mathit{member}(X,P), \mathit{member}
-(Y,P), X \neq Y, \nott \thinspace \mathit{know(X,Y)}.& 
+(Y,P), X \noteq Y, \nott \thinspace \mathit{know(X,Y)}.& 
 [1:1] \\
 \rowprefix{r_8}& : \sim  \mathit{member}(X,P), \mathit{member}
-(Y,P), X \neq Y, \mathit{marrie}d(X,Y). & [1:2]\\
-\rowprefix{r_9}& : \sim member(X,P), member(Y,P), X \neq Y, 
+(Y,P), X \noteq Y, \mathit{marrie}d(X,Y). & [1:2]\\
+\rowprefix{r_9}& : \sim member(X,P), member(Y,P), X \noteq Y, 
 same\_skill(X,Y). & [1:2] 
 \end{align*}
 \end{exmp}
@@ -1279,7 +1276,7 @@ location(outd, gansD). \ location(outd, altD). \\
 location(P, X).\\
 \rowprefix{r_5}& go \leftimpl goto(X).\\
 \rowprefix{r_6}& \leftimpl not \ go. \\
-\rowprefix{r_7}& \leftimpl goto(X), goto(Y), X \neq Y. \\
+\rowprefix{r_7}& \leftimpl goto(X), goto(Y), X \noteq Y. \\
 \\
 \rowprefix{r_8}& \mathit{need}(loc, C) \leftimpl 
 \ext{\mathit{rq}}{\mathit{goto}}{\mathit{C}}. \\ 
@@ -1602,7 +1599,7 @@ start(2,four).} \\
 \rowprefix{r_8} & \mathit{goal(1,ten).} \ \mathit{ 
 goal(2,eleven).} \\
 \\
-\rowprefix{r_9} & clear(V) \leftimpl \mathit{node(V)}, V \neq 
+\rowprefix{r_9} & clear(V) \leftimpl \mathit{node(V)}, V \noteq 
 \mathit{three}\\ 
 \\
 \rowprefix{r_{10}} & guessPath(I,0,V) \leftimpl start(I,V). \\
@@ -1611,7 +1608,7 @@ goal(2,eleven).} \\
 \mathit{agent(I)}, \\ &  \mathit{guessPath(I, T, V)},  
 \mathit{edge(U,V)}, \mathit{TPlus=T+1}, 
 \mathit{\#int(TPlus)}, \mathit{\#int(T).}  \\
-\rowprefix{r_{12}} &  \leftimpl 1 \neq \mathit{\#count\{ U 
+\rowprefix{r_{12}} &  \leftimpl 1 \noteq \mathit{\#count\{ U 
 \colon guessPath(I, T, U) \}}, \mathit{agent(I)}, 
 \mathit{\#int(T)}.  \\
 \\
@@ -3200,7 +3197,7 @@ alternatively can be written as $\mathit{XX=X+Y}$.
 
 \subsection{Built-in Comparison Predicates}
 \dlvhex{} feature a total order among variable-free terms 
-using built-in predicates $==$ (equal), $\neq$ (not equal), 
+using built-in predicates $==$ (equal), $\noteq$ (not equal), 
 $<$ (less than), $\lesseq$ (less than or equal), $>$ (greater 
 than) and $\geeq$ (greater than or equal). All kinds of 
 constants (symbols and integers) may be compared to 
@@ -3456,7 +3453,7 @@ of a weighed directed graph.
 \rowprefix{r_6}& \leftimpl \mathit{root}(X), \mathit{in\_tree}
 (\_,X,C).\\
 \rowprefix{r_7}& \leftimpl \mathit{in\_tree}(X,Y,C), 
-\mathit{in\_tree}(Z,Y,C), X \neq Z. \\
+\mathit{in\_tree}(Z,Y,C), X \noteq Z. \\
 \\
 \rowprefix{r_8}& \mathit{reached}(X) \leftimpl \mathit{root}
 (X). \\
@@ -3515,11 +3512,11 @@ one another do not work in the same group.
 \rowprefix{r_6}& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
 \leftimpl \mathit{employee}(X).\\
 \rowprefix{r_7}& : \sim \mathit{member}(X,P), \mathit{member}
-(Y,P), X \neq Y, \nott \thinspace \mathit{know(X,Y)}.& 
+(Y,P), X \noteq Y, \nott \thinspace \mathit{know(X,Y)}.& 
 [1:1] \\
 \rowprefix{r_8}& : \sim  \mathit{member}(X,P), \mathit{member}
-(Y,P), X \neq Y, \mathit{marrie}d(X,Y). & [1:2]\\
-\rowprefix{r_9}& : \sim member(X,P), member(Y,P), X \neq Y, 
+(Y,P), X \noteq Y, \mathit{marrie}d(X,Y). & [1:2]\\
+\rowprefix{r_9}& : \sim member(X,P), member(Y,P), X \noteq Y, 
 same\_skill(X,Y). & [1:2] 
 \end{align*}
 \end{exmp}
@@ -3678,7 +3675,7 @@ location(outd, gansD). \ location(outd, altD). \\
 location(P, X).\\
 \rowprefix{r_5}& go \leftimpl goto(X).\\
 \rowprefix{r_6}& \leftimpl not \ go. \\
-\rowprefix{r_7}& \leftimpl goto(X), goto(Y), X \neq Y. \\
+\rowprefix{r_7}& \leftimpl goto(X), goto(Y), X \noteq Y. \\
 \\
 \rowprefix{r_8}& \mathit{need}(loc, C) \leftimpl 
 \ext{\mathit{rq}}{\mathit{goto}}{\mathit{C}}. \\ 
@@ -4001,7 +3998,7 @@ start(2,four).} \\
 \rowprefix{r_8} & \mathit{goal(1,ten).} \ \mathit{ 
 goal(2,eleven).} \\
 \\
-\rowprefix{r_9} & clear(V) \leftimpl \mathit{node(V)}, V \neq 
+\rowprefix{r_9} & clear(V) \leftimpl \mathit{node(V)}, V \noteq 
 \mathit{three}\\ 
 \\
 \rowprefix{r_{10}} & guessPath(I,0,V) \leftimpl start(I,V). \\
@@ -4010,7 +4007,7 @@ goal(2,eleven).} \\
 \mathit{agent(I)}, \\ &  \mathit{guessPath(I, T, V)},  
 \mathit{edge(U,V)}, \mathit{TPlus=T+1}, 
 \mathit{\#int(TPlus)}, \mathit{\#int(T).}  \\
-\rowprefix{r_{12}} &  \leftimpl 1 \neq \mathit{\#count\{ U 
+\rowprefix{r_{12}} &  \leftimpl 1 \noteq \mathit{\#count\{ U 
 \colon guessPath(I, T, U) \}}, \mathit{agent(I)}, 
 \mathit{\#int(T)}.  \\
 \\
