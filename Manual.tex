@@ -21,6 +21,7 @@
 \DeclareMathOperator{\noteqq}{<>}
 \DeclareMathOperator{\lesseq}{<=}
 \DeclareMathOperator{\geeq}{>=}
+\newcommand{\examplelink}[1]{\url{upload_location/#1}}
 
 \newcommand\mycenterline[1]{\smallskip \centerline{#1} \smallskip}
 % or \newcommand\mycenterline[1]{\smallskip #1 \smallskip\\}
@@ -326,10 +327,11 @@ F2}) \leftimpl
 \{ P : \mathit{invite(P)} \}. \\
 \end{align*}
 \end{exmp}
+Complete \hex-program, Python plugin and data file can be downloaded from the following location: \examplelink{example_2_1}.
+
 Rule $\row{r_1}$ specifies the person who organizes the event 
 and initializes the search. Rule $\row{r_2}$ specifies that the initiating person has 
 distance 0 from him- or herself. 
-
 
 The main computational part of the program is rule $\row{r_3}$ of 
 the program above. It cyclically queries all  friends of 
@@ -1112,12 +1114,12 @@ one another do not work in the same group.
 \\ 
 \rowprefix{r_6}& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
 \leftimpl \mathit{employee}(X).\\
-\rowprefix{r_7}& : \sim \mathit{member}(X,P), \mathit{member}
+\rowprefix{r_7}& : \sim TODO \mathit{member}(X,P), \mathit{member}
 (Y,P), X \noteq Y, \nott \thinspace \mathit{know(X,Y)}.& 
 [1:1] \\
-\rowprefix{r_8}& : \sim  \mathit{member}(X,P), \mathit{member}
+\rowprefix{r_8}& : \sim TODO  \mathit{member}(X,P), \mathit{member}
 (Y,P), X \noteq Y, \mathit{marrie}d(X,Y). & [1:2]\\
-\rowprefix{r_9}& : \sim member(X,P), member(Y,P), X \noteq Y, 
+\rowprefix{r_9}& : \sim TODO member(X,P), member(Y,P), X \noteq Y, 
 same\_skill(X,Y). & [1:2] 
 \end{align*}
 \end{exmp}
@@ -1209,6 +1211,8 @@ delegating this task to an external computational source.
 \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
 \end{align*}
 \end{exmp}
+Python plugins for the example above can be downloaded from the following location: \examplelink{example_3_14}.
+
 
 There are two different external sources in this program, 
 first one is $\mathit{\&concate}$ and second one is 
@@ -1283,6 +1287,9 @@ location(P, X).\\
 \rowprefix{r_9}& \leftimpl need(X, money).
 \end{align*}
 \end{exmp}
+Complete \hex-program and Python plugin can be downloaded from the following location: \examplelink{example_4_2}.
+
+
 The \hex{} program above represents Alice's reasoning 
 problem. Rule $\row{r_1}$ contains a set of facts about possible 
 swimming locations (where $\mathit{ind}$ and 
@@ -1460,6 +1467,8 @@ reached(X). \\
 \rowprefix{r_{16}} & :\sim cycle(X,Y), cost(X,Y,C). [C:1] 
 \end{align*}
 \end{exmp}
+Complete \hex-program, Python plugin and data file can be downloaded from the following location: \examplelink{example_4_2}.
+
 In rule $\row{r_1}$ we have a fact which specifies the starting 
 city. 
 It is important to notice that in our program the starting 
@@ -1629,7 +1638,7 @@ V, T, I}{ValidOrNot}, \mathit{TPlus=T+1}, \#int(T),
 \rowprefix{r_{18}} & \leftimpl path(I, V, U, T, invalid). 
 \end{align*}
 \end{exmp}
-
+Complete \hex-program, Python plugin and data file can be downloaded from the following location: \examplelink{example_4_3}.
 
 In the first part of the program we load the graph using 
 the $\&edges$ external atom. This atom cyclically discovers 
