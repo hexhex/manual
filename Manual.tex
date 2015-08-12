@@ -1031,10 +1031,10 @@ of a weighed directed graph.
 (X). \\
 \rowprefix{r_9}& \mathit{reached}(Y) \leftimpl 
 \mathit{reached}(X), \mathit{in\_tree}(X,Y,C). \\
-\row{r_{10}}\colon& \leftimpl \mathit{node}(X), \mathit{not} \ 
+\rowprefix{r_{10}}& \leftimpl \mathit{node}(X), \mathit{not} \ 
 \mathit{reached}(X). \\
 \\
-\row{r_{11}}\colon&\mathit{ : \sim in\_tree}(X,Y,C). [C:1]
+\rowprefix{r_{11}}&\mathit{ : \sim in\_tree}(X,Y,C). [C:1]
 \end{align*}
 \end{exmp}
 Best model:
@@ -1415,20 +1415,20 @@ node(X). \\
 \rowprefix{r_9} &  \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
 node(Y). \\
 & \\
-\row{r_{10}} \colon & costCalculated(X) \leftimpl \#sum \{C,X,Y : 
+\rowprefix{r_{10}} & costCalculated(X) \leftimpl \#sum \{C,X,Y : 
 cycle(X,Y), cost(X,Y,C)\} = X \\
-\row{r_{11}} \colon & withinBudget(B,C) \leftimpl budget(B), 
+\rowprefix{r_{11}} & withinBudget(B,C) \leftimpl budget(B), 
 costCalculated(C), B \geq C. \\
-\row{r_{12}} \colon & \leftimpl  budgetB(B), costCalculated(C), 
+\rowprefix{r_{12}} & \leftimpl  budgetB(B), costCalculated(C), 
 \mathit{not} \ \mathit{withinBudget(B,C).} \\
 & \\
-\row{\row{r_{13}}} \colon & reached(Y) \leftimpl cycle(C, Y), startingCity(C). \\
-\row{r_{14}} \colon & reached(Y) \leftimpl cycle(X,Y), 
+\rowprefix{r_{13}} & reached(Y) \leftimpl cycle(C, Y), startingCity(C). \\
+\rowprefix{r_{14}} & reached(Y) \leftimpl cycle(X,Y), 
 reached(X). \\
-\row{r_{15}} \colon & \leftimpl node(Y), \mathit{not} \ 
+\rowprefix{r_{15}} & \leftimpl node(Y), \mathit{not} \ 
 \mathit{reached(Y)}. \\
 & \\
-\row{r_{16}} \colon & :\sim cycle(X,Y), cost(X,Y,C). [C:1] 
+\rowprefix{r_{16}} & :\sim cycle(X,Y), cost(X,Y,C). [C:1] 
 \end{align*}
 \end{exmp}
 In rule $\row{r_1}$ we have a fact which specifies the starting 
@@ -1573,31 +1573,31 @@ goal(2,eleven).} \\
 \rowprefix{r_9} & clear(V) \leftimpl \mathit{node(V)}, V \neq 
 \mathit{three}\\ 
 \\
-\row{r_{10}} \colon & guessPath(I,0,V) \leftimpl start(I,V). \\
-\row{r_{11}} \colon &  \mathit{guessPath(I, TPlus, U)} \vee 
+\rowprefix{r_{10}} & guessPath(I,0,V) \leftimpl start(I,V). \\
+\rowprefix{r_{11}} &  \mathit{guessPath(I, TPlus, U)} \vee 
 \mathit{nguessPath(I, TPlus, U)} \leftimpl 
 \mathit{agent(I)}, \\ &  \mathit{guessPath(I, T, V)},  
 \mathit{edge(U,V)}, \mathit{TPlus=T+1}, 
 \mathit{\#int(TPlus)}, \mathit{\#int(T).}  \\
-\row{r_{12}} \colon &  \leftimpl 1 \neq \mathit{\#count\{ U 
+\rowprefix{r_{12}} &  \leftimpl 1 \neq \mathit{\#count\{ U 
 \colon guessPath(I, T, U) \}}, \mathit{agent(I)}, 
 \mathit{\#int(T)}.  \\
 \\
 \row{\row{r_{13}}} \colon &  visit(I, V) \leftimpl guessPath(I,T,V). \\
 \\
-\row{r_{14}} \colon & \leftimpl goal(I, V), \mathit{not} \  
+\rowprefix{r_{14}} & \leftimpl goal(I, V), \mathit{not} \  
 \mathit{visit(I, V).} \\
-\row{r_{15}} \colon &  \leftimpl guessPath(I, T, V), 
+\rowprefix{r_{15}} &  \leftimpl guessPath(I, T, V), 
 path(I^{\prime},T,V), X \leq XP. \\
-\row{r_{16}} \colon &  \leftimpl guessPath(I,T,V), \mathit{not} \  
+\rowprefix{r_{16}} &  \leftimpl guessPath(I,T,V), \mathit{not} \  
 \mathit{clear(V).}\\
 \\
-\row{r_{17}} \colon &  \mathit{path(I,V,U,T,ValidOrNot)} 
+\rowprefix{r_{17}} &  \mathit{path(I,V,U,T,ValidOrNot)} 
 \leftimpl \mathit{agent(I)}, \\ & \mathit{guessPath(I, T, 
 V)}, \mathit{guessPath(I, TPlus, U)}, \\ & \ext{check}{U, 
 V, T, I}{ValidOrNot}, \mathit{TPlus=T+1}, \#int(T), 
 \#int(TPlus).  \\
-\row{r_{18}} \colon & \leftimpl path(I, V, U, T, invalid). 
+\rowprefix{r_{18}} & \leftimpl path(I, V, U, T, invalid). 
 \end{align*}
 \end{exmp}
 
