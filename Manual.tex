@@ -31,6 +31,10 @@
   \ensuremath{\it \color{black} #1 \color{black}}%
 }
 
+\newcommand{\rowprefix}[1]{%
+  \ensuremath{\color{black}\mathbf{#1{:}}\ }%
+}
+
 
 \begin{document}
 \setcounter{page}{3}
@@ -284,11 +288,11 @@ The problem can be modeled as a \hex{}-program as follows:
 \label{faceQuery}
 \begin{align*}
 \row{\row{r_1}}\colon & \mathit{personOfInterest}(\mathit{john}). \\
-\row{r_2}\colon & \mathit{friendOfDegree}(\mathit{P, 0, P}) 
+\rowprefix{r_2} & \mathit{friendOfDegree}(\mathit{P, 0, P}) 
 \leftimpl  \mathit{personOfInterest}(P).\\
 \end{align*}
 \begin{align*}
-\row{r_3}\colon \mathit{friendOfDegree}(\mathit{P, DegPlus, 
+\rowprefix{r_3} \mathit{friendOfDegree}(\mathit{P, DegPlus, 
 F2}) \leftimpl 
 & \mathit{friendsOfDegree}(\mathit{P,Deg,F1)},\\
 & \ext{friendsOf}{F1}{F2},\\ 
@@ -297,9 +301,9 @@ F2}) \leftimpl
 & \mathit{\#int(DegPlus)}, \mathit{\#int(Deg)}.\\
 \end{align*}
 \begin{align*}
-\row{r_4}\colon & \mathit{invite(P)} \vee \mathit{ninvite(P) 
+\rowprefix{r_4} & \mathit{invite(P)} \vee \mathit{ninvite(P) 
 \leftimpl  friendOfDegree(john,X,P), \#int(X).}\\
-\row{r_5}\colon & \leftimpl   \mathit{not} \ 4 = \mathit{\#count} 
+\rowprefix{r_5} & \leftimpl   \mathit{not} \ 4 = \mathit{\#count} 
 \{ P : \mathit{invite(P)} \}. \\
 \end{align*}
 \end{exmp}
@@ -571,8 +575,8 @@ of the world.
 \begin{exmp} 
 Consider the following logic program:
 \begin{align*}
-\row{r_1}\colon\mathit{ joke }.& \\
-\row{r_2}\colon\mathit{ laugh } & \leftimpl \mathit{ joke }.
+\rowprefix{r_1}\mathit{ joke }.& \\
+\rowprefix{r_2}\mathit{ laugh } & \leftimpl \mathit{ joke }.
 \end{align*} 
 \end{exmp}
 The first line here represents an \emph{atom} which is 
@@ -599,11 +603,11 @@ which occur in a negated literal, must also occur in a
 positive literal in the body.
 \begin{exmp}
 \begin{align*}
-\row{r_1}\colon& \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).
+\rowprefix{r_1}& \mathit{node}(X) \leftimpl \mathit{edge}(X, \_).
 \\
-\row{r_2}\colon& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). 
+\rowprefix{r_2}& \mathit{node}(Y) \leftimpl \mathit{edge}(\_, Y). 
 \\ \\
-\row{r_3}\colon& \mathit{comp\_edge}(X, Y) \leftimpl 
+\rowprefix{r_3}& \mathit{comp\_edge}(X, Y) \leftimpl 
 \mathit{node}(X), \mathit{node}(Y), \mathit{ not } \ \mathit{ 
 edge }(X, Y). 
 \end{align*}
@@ -618,22 +622,22 @@ constraints} we will consider the following example:
 \begin{exmp}
 \label{nodecoloring}
 \begin{align*}
-\row{r_1}\colon & \mathit{node}(X) \leftimpl \mathit{edge}(X, Y). 
+\rowprefix{r_1} & \mathit{node}(X) \leftimpl \mathit{edge}(X, Y). 
 &\\
-\row{r_2}\colon & \mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). 
+\rowprefix{r_2} & \mathit{node}(Y) \leftimpl \mathit{edge}(X, Y). 
 & \\
-\row{r_3}\colon & \mathit{colored}(X, r) \leftimpl \mathit{node}(X), not \  colored(X,g),not \ colored(X,b). & \\
-\row{r_4}\colon & \mathit{colored}(X, g) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,b). & \\
-\row{r_5}\colon & \mathit{colored}(X, b) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,g). & \\
+\rowprefix{r_3} & \mathit{colored}(X, r) \leftimpl \mathit{node}(X), not \  colored(X,g),not \ colored(X,b). & \\
+\rowprefix{r_4} & \mathit{colored}(X, g) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,b). & \\
+\rowprefix{r_5} & \mathit{colored}(X, b) \leftimpl \mathit{node}(X), not \  colored(X,r),not \ colored(X,g). & \\
 \\
-\row{r_6}\colon & \leftimpl \mathit{edge}(X, Y), \mathit{colored}
+\rowprefix{r_6} & \leftimpl \mathit{edge}(X, Y), \mathit{colored}
 (X, C), \mathit{colored}(Y, C) & \\
 \\
-\row{r_7}\colon & \mathit{edge}(2, 4). \  \mathit{edge}(2, 3). \  
+\rowprefix{r_7} & \mathit{edge}(2, 4). \  \mathit{edge}(2, 3). \  
 \mathit{edge}(5, 5). & \\
-\row{r_8}\colon & \mathit{edge}(4, 6). \  \mathit{edge}(4, 5). \ 
+\rowprefix{r_8} & \mathit{edge}(4, 6). \  \mathit{edge}(4, 5). \ 
 \mathit{edge}(5, 7). & \\
-\row{r_9}\colon & \mathit{edge}(6, 7). &
+\rowprefix{r_9} & \mathit{edge}(6, 7). &
 \end{align*} 
 \end{exmp}
 In the first two lines we extract the nodes implicitly given by the edges of the graph.
@@ -669,7 +673,7 @@ The agent should cross it if there is no train approaching.
 With this description, one might specify the following 
 program:
 \begin{align*}
- \row{r_1}\colon& \mathit{cross\_railroad} \leftimpl \mathit{ not 
+ \rowprefix{r_1}& \mathit{cross\_railroad} \leftimpl \mathit{ not 
  } \mathit{ train\_approaches}.
 \end{align*}
 \end{exmp}
@@ -683,7 +687,7 @@ The next program uses so-called true or classical negation.
 Since $\mathit{- train\_approaches}$ is not known to be 
 true, the following program has only an empty model.
 \begin{align*}
-\row{r_1}\colon\mathit{cross\_railroad} \leftimpl \mathit{- 
+\rowprefix{r_1}\mathit{cross\_railroad} \leftimpl \mathit{- 
 train\_approaches}.
 \end{align*}
 \end{exmp}
@@ -718,11 +722,11 @@ In the Example~\ref{nodecoloring} we could replace lines $3$ to $5$ by a single 
 \\which generates all possible node color combinations 
 \begin{exmp}
 \begin{align*}
-\row{r_1}\colon& \mathit{left\_arm\_broken} \vee 
+\rowprefix{r_1}& \mathit{left\_arm\_broken} \vee 
 \mathit{right\_arm\_broken}.\\
-\row{r_2}\colon& \mathit{can\_write} \leftimpl 
+\rowprefix{r_2}& \mathit{can\_write} \leftimpl 
 \mathit{left\_arm\_broken}.\\
-\row{r_3}\colon& \mathit{be\_angry} \leftimpl 
+\rowprefix{r_3}& \mathit{be\_angry} \leftimpl 
 \mathit{can\_write}.
 \end{align*}
 \end{exmp}
@@ -747,12 +751,12 @@ $-$ (subtraction), $*$ (multiplication), $/$ (integer
 division). 
 \begin{exmp}
 \begin{align*}
-\row{r_1}\colon& \mathit{a}(6). \\
-\row{r_2}\colon& \mathit{b}(2). \\
-\row{r_3}\colon& c(X,Y,XX) \leftimpl a(X), b(Y),+(X, Y, XX). \\
-\row{r_4}\colon& d(X,Y,XX) \leftimpl a(X), b(Y),-(X, Y, XX). \\
-\row{r_5}\colon& e(X,Y,XX) \leftimpl a(X), b(Y),*(X, Y, XX). \\
-\row{r_6}\colon& f(X,Y,XX) \leftimpl a(X), b(Y),/(X, Y, XX).
+\rowprefix{r_1}& \mathit{a}(6). \\
+\rowprefix{r_2}& \mathit{b}(2). \\
+\rowprefix{r_3}& c(X,Y,XX) \leftimpl a(X), b(Y),+(X, Y, XX). \\
+\rowprefix{r_4}& d(X,Y,XX) \leftimpl a(X), b(Y),-(X, Y, XX). \\
+\rowprefix{r_5}& e(X,Y,XX) \leftimpl a(X), b(Y),*(X, Y, XX). \\
+\rowprefix{r_6}& f(X,Y,XX) \leftimpl a(X), b(Y),/(X, Y, XX).
 \end{align*}
 \end{exmp}
 An atom $+(X,Y,XX)$ is true, iff $XX$ is the sum of $X$ and $Y$ (likewise for other operators).
@@ -776,17 +780,17 @@ over all constants. The application of comparison literals
 to integers is illustrated by the following example.
 \begin{exmp}
 \begin{align*}
-\row{r_1}\colon& a(1). \\
-\row{r_2}\colon& a(2). \\
-\row{r_3}\colon& b(1). \\
+\rowprefix{r_1}& a(1). \\
+\rowprefix{r_2}& a(2). \\
+\rowprefix{r_3}& b(1). \\
 \\
-\row{r_4}\colon& c(X,Y) \leftimpl a(X), b(Y), X <> Y. \\
-\row{r_5}\colon& d(X,Y) \leftimpl a(X), b(Y), X \neq Y. \\
-\row{r_6}\colon& e(X,Y) \leftimpl a(X), b(Y), X < Y. \\
-\row{r_7}\colon& f(X,Y) \leftimpl a(X), b(Y), X > Y. \\
-\row{r_8}\colon& g(X,Y) \leftimpl a(X), b(Y), X \leq Y. \\
-\row{r_9}\colon& h(X,Y) \leftimpl a(X), b(Y), X \geq Y. \\
-\row{r_{10}}\colon& i(X,Y) \leftimpl a(X), b(Y), Y == 1. 
+\rowprefix{r_4}& c(X,Y) \leftimpl a(X), b(Y), X <> Y. \\
+\rowprefix{r_5}& d(X,Y) \leftimpl a(X), b(Y), X \neq Y. \\
+\rowprefix{r_6}& e(X,Y) \leftimpl a(X), b(Y), X < Y. \\
+\rowprefix{r_7}& f(X,Y) \leftimpl a(X), b(Y), X > Y. \\
+\rowprefix{r_8}& g(X,Y) \leftimpl a(X), b(Y), X \leq Y. \\
+\rowprefix{r_9}& h(X,Y) \leftimpl a(X), b(Y), X \geq Y. \\
+\rowprefix{r_{10}}& i(X,Y) \leftimpl a(X), b(Y), Y == 1. 
 \end{align*}
 \end{exmp}
 The single answer set for the example above is:
@@ -819,19 +823,19 @@ atoms as well as for the compact representation of
 aggregates \cite{gkklorst2015}. 
 \begin{exmp}
 \begin{align*}
-\row{r_1}\colon& \mathit{person}(\mathit{jane}). \  \mathit{person}
+\rowprefix{r_1}& \mathit{person}(\mathit{jane}). \  \mathit{person}
 (\mathit{john}).\\
-\row{r_2}\colon& \mathit{day}(\mathit{mon}). \ \mathit{day}
+\rowprefix{r_2}& \mathit{day}(\mathit{mon}). \ \mathit{day}
 (\mathit{tue}). \ \mathit{day}(\mathit{wed}). \ \mathit{day}
 (\mathit{thu}). \ \mathit{day}(\mathit{fri}). \ \\
-\row{r_3}\colon& \mathit{available}(\mathit{jane}) \leftimpl not \  
+\rowprefix{r_3}& \mathit{available}(\mathit{jane}) \leftimpl not \  
 \mathit{on}(\mathit{fri}).\\
-\row{r_4}\colon& \mathit{available}(\mathit{john}) \leftimpl 
+\rowprefix{r_4}& \mathit{available}(\mathit{john}) \leftimpl 
 \mathit{not} \ \mathit{on}(\mathit{mon}), \mathit{not} \ 
 \mathit{on}(\mathit{wed}).\\
-\row{r_5}\colon& \mathit{meet} \leftimpl \mathit{available}(X) : 
+\rowprefix{r_5}& \mathit{meet} \leftimpl \mathit{available}(X) : 
 \mathit{person}(X).\\
-\row{r_6}\colon& \mathit{on}(X) : \mathit{day}(X) \leftimpl 
+\rowprefix{r_6}& \mathit{on}(X) : \mathit{day}(X) \leftimpl 
 \mathit{meet}.
 \end{align*}
 \end{exmp}  
@@ -900,13 +904,13 @@ $f(S)$ if and only if $X$ appears in $S$ and $X$ does not
 appear in any aggregate function that is outside of $f(S)$. 
 \begin{exmp}
 \begin{align*}
-\row{r_1}\colon& emp(1,goofie,1250).\\
-\row{r_2}\colon& emp(2,willy,750).\\
-\row{r_3}\colon& emp(3,woody,750).\\
-\row{r_4}\colon& emp(4,jerry,900).\\
-\row{r_5}\colon& emp(5,tom,1050). \\
-\row{r_6}\colon& over1000(I,S) \leftimpl emp(I,N,S), S > 1000.\\
-\row{r_7}\colon& over1000nr(X) \leftimpl \#count\{I : 
+\rowprefix{r_1}& emp(1,goofie,1250).\\
+\rowprefix{r_2}& emp(2,willy,750).\\
+\rowprefix{r_3}& emp(3,woody,750).\\
+\rowprefix{r_4}& emp(4,jerry,900).\\
+\rowprefix{r_5}& emp(5,tom,1050). \\
+\rowprefix{r_6}& over1000(I,S) \leftimpl emp(I,N,S), S > 1000.\\
+\rowprefix{r_7}& over1000nr(X) \leftimpl \#count\{I : 
 over1000(I,W)\} = X, \#int(X).
 \end{align*}
 \end{exmp}
@@ -932,7 +936,7 @@ sum of the first local variable to be aggregated over in
 the symbolic set. Suppose we want to know how much the 
 Cartoon Co. spends on salaries.
 \begin{align*}
-\mathit{\row{r_8} \colon \ salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : 
+\mathit{\rowprefix{r_8} \ salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : 
 \mathit{emp(I,N,S)}\} = X.
 \end{align*}
 In $\row{r_8}$ except term tuple $S$ we need also an $I$ in order to get the correct result. This is because we have two persons with same salaries and aggregate function will return only one element in the symbolic set for both of them. Since one element is missing from the symbolic set, we get incorrect result at the end.  
@@ -1008,24 +1012,24 @@ The following program, computes the minimum spanning trees
 of a weighed directed graph.
 \begin{exmp}
 \begin{align*}
-\row{r_1}\colon& \mathit{root}(a). \\
-\row{r_2}\colon& \mathit{node}(a). \ \mathit{node}(b). \ 
+\rowprefix{r_1}& \mathit{root}(a). \\
+\rowprefix{r_2}& \mathit{node}(a). \ \mathit{node}(b). \ 
 \mathit{node}(c). \ \mathit{node}(d). \ \mathit{node}(e). \ \\
-\row{r_3}\colon& \mathit{edge}(a,b,4). \ \mathit{edge}(a,c,3). \ 
+\rowprefix{r_3}& \mathit{edge}(a,b,4). \ \mathit{edge}(a,c,3). \ 
 \mathit{edge}(c,b,2). \ \mathit{edge}(c,d,3). \ \\
-\row{r_4}\colon& \mathit{edge}(b,e,4). \ \mathit{edge}(d,e,5). \ \\
+\rowprefix{r_4}& \mathit{edge}(b,e,4). \ \mathit{edge}(d,e,5). \ \\
 \\
-\row{r_5} \colon & \mathit{in\_tree}(X,Y,C) \vee 
+\rowprefix{r_5} & \mathit{in\_tree}(X,Y,C) \vee 
 \mathit{out\_tree}(X,Y) \leftimpl \mathit{edge}(X,Y,C), 
 \mathit{reached}(X). \\
-\row{r_6}\colon& \leftimpl \mathit{root}(X), \mathit{in\_tree}
+\rowprefix{r_6}& \leftimpl \mathit{root}(X), \mathit{in\_tree}
 (\_,X,C).\\
-\row{r_7}\colon& \leftimpl \mathit{in\_tree}(X,Y,C), 
+\rowprefix{r_7}& \leftimpl \mathit{in\_tree}(X,Y,C), 
 \mathit{in\_tree}(Z,Y,C), X \neq Z. \\
 \\
-\row{r_8}\colon& \mathit{reached}(X) \leftimpl \mathit{root}
+\rowprefix{r_8}& \mathit{reached}(X) \leftimpl \mathit{root}
 (X). \\
-\row{r_9}\colon& \mathit{reached}(Y) \leftimpl 
+\rowprefix{r_9}& \mathit{reached}(Y) \leftimpl 
 \mathit{reached}(X), \mathit{in\_tree}(X,Y,C). \\
 \row{r_{10}}\colon& \leftimpl \mathit{node}(X), \mathit{not} \ 
 \mathit{reached}(X). \\
@@ -1069,22 +1073,22 @@ skills are concerned, and require that people married with
 one another do not work in the same group.
 \begin{exmp}
 \begin{align*}
-\row{r_1}\colon& \mathit{employee}(a). \ \mathit{employee}(b). \ 
+\rowprefix{r_1}& \mathit{employee}(a). \ \mathit{employee}(b). \ 
 \mathit{employee}(c). \ \mathit{employee(d)}. \ \\
-\row{r_2}\colon& \mathit{employee}(e). \\
-\row{r_3}\colon& \mathit{know}(a,b). \ \mathit{know}(b,c). \ 
+\rowprefix{r_2}& \mathit{employee}(e). \\
+\rowprefix{r_3}& \mathit{know}(a,b). \ \mathit{know}(b,c). \ 
 \mathit{know}(c,d). \ \mathit{know}(d,e). \ \\
-\row{r_4}\colon& \mathit{same\_skill}(a,b). \\
-\row{r_5}\colon& \mathit{married(c,d)}. \\
+\rowprefix{r_4}& \mathit{same\_skill}(a,b). \\
+\rowprefix{r_5}& \mathit{married(c,d)}. \\
 \\ 
-\row{r_6}\colon& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
+\rowprefix{r_6}& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
 \leftimpl \mathit{employee}(X).\\
-\row{r_7}\colon& : \sim \mathit{member}(X,P), \mathit{member}
+\rowprefix{r_7}& : \sim \mathit{member}(X,P), \mathit{member}
 (Y,P), X \neq Y, \mathit{not} \ \mathit{know(X,Y)}.& 
 [1:1] \\
-\row{r_8}\colon& : \sim  \mathit{member}(X,P), \mathit{member}
+\rowprefix{r_8}& : \sim  \mathit{member}(X,P), \mathit{member}
 (Y,P), X \neq Y, \mathit{marrie}d(X,Y). & [1:2]\\
-\row{r_9}\colon& : \sim member(X,P), member(Y,P), X \neq Y, 
+\rowprefix{r_9}& : \sim member(X,P), member(Y,P), X \neq Y, 
 same\_skill(X,Y). & [1:2] 
 \end{align*}
 \end{exmp}
@@ -1162,17 +1166,17 @@ the graph \textit{edge} from node \textit{a},
 delegating this task to an external computational source.
 \begin{exmp}
 \begin{align*}
-\row{r_1}\colon& \mathit{systems} \ (\mathit{dlvhex}). \ 
+\rowprefix{r_1}& \mathit{systems} \ (\mathit{dlvhex}). \ 
 \mathit{systems}(\mathit{clasp}). \\  
-\row{r_2}\colon& \mathit{sayhello(X)} \leftimpl 
+\rowprefix{r_2}& \mathit{sayhello(X)} \leftimpl 
 \ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, 
 \mathit{systems(Y).}  \\ 
 \\
-\row{r_3}\colon& \mathit{set1}(a). \ \mathit{set1}(b). \ 
+\rowprefix{r_3}& \mathit{set1}(a). \ \mathit{set1}(b). \ 
 \mathit{set1}(c).\\
-\row{r_4}\colon& \mathit{set2}(b). \ \mathit{set2}(c). \ 
+\rowprefix{r_4}& \mathit{set2}(b). \ \mathit{set2}(c). \ 
 \mathit{set2}(d).\\
-\row{r_5}\colon& \mathit{set3}(X) \leftimpl 
+\rowprefix{r_5}& \mathit{set3}(X) \leftimpl 
 \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
 \end{align*}
 \end{exmp}
@@ -1233,21 +1237,21 @@ follows:
 \begin{exmp}
 \label{swimExample}
 \begin{align*}
-\row{r_1}\colon& location(ind, margB). \ location(ind, amalB). \ \\& 
+\rowprefix{r_1}& location(ind, margB). \ location(ind, amalB). \ \\& 
 location(outd, gansD). \ location(outd, altD). \\  
-\row{r_2}\colon& swim(ind) \vee swim(outd).\\ 
-\row{r_3}\colon& need(inoutd, C) \leftimpl \ext{\mathit{rq}}
+\rowprefix{r_2}& swim(ind) \vee swim(outd).\\ 
+\rowprefix{r_3}& need(inoutd, C) \leftimpl \ext{\mathit{rq}}
 {\mathit{swim}}{\mathit{C}}. \\
 \\
-\row{r_4}\colon& goto(X) \vee ngoto(X) \leftimpl swim(P), 
+\rowprefix{r_4}& goto(X) \vee ngoto(X) \leftimpl swim(P), 
 location(P, X).\\
-\row{r_5}\colon& go \leftimpl goto(X).\\
-\row{r_6}\colon& \leftimpl not \ go. \\
-\row{r_7}\colon& \leftimpl goto(X), goto(Y), X \neq Y. \\
+\rowprefix{r_5}& go \leftimpl goto(X).\\
+\rowprefix{r_6}& \leftimpl not \ go. \\
+\rowprefix{r_7}& \leftimpl goto(X), goto(Y), X \neq Y. \\
 \\
-\row{r_8}\colon& \mathit{need}(loc, C) \leftimpl 
+\rowprefix{r_8}& \mathit{need}(loc, C) \leftimpl 
 \ext{\mathit{rq}}{\mathit{goto}}{\mathit{C}}. \\ 
-\row{r_9}\colon& \leftimpl need(X, money).
+\rowprefix{r_9}& \leftimpl need(X, money).
 \end{align*}
 \end{exmp}
 The \hex{} program above represents Alice's reasoning 
@@ -1286,13 +1290,13 @@ An important thing to notice is that an external atom
 $\mathit{\&rq}$ receives a predicate as an input parameter. If instead of sending a predicate we send 
 constants, $\row{r_6}$ should be replaced with:
 \begin{align*}
-\row{r_1}\colon& need(loc, C) \leftimpl \ext{rq}{margB}{C}, 
+\rowprefix{r_1}& need(loc, C) \leftimpl \ext{rq}{margB}{C}, 
 goto(margB).\\
-\row{r_2}\colon& need(loc, C) \leftimpl \ext{rq}{amalB}{C}, 
+\rowprefix{r_2}& need(loc, C) \leftimpl \ext{rq}{amalB}{C}, 
 goto(amalB).\\
-\row{r_3}\colon& need(loc, C) \leftimpl \ext{rq}{altD}{C}, 
+\rowprefix{r_3}& need(loc, C) \leftimpl \ext{rq}{altD}{C}, 
 goto(altD).\\
-\row{r_4}\colon& need(loc, C) \leftimpl \ext{rq}{gansD}{C}, 
+\rowprefix{r_4}& need(loc, C) \leftimpl \ext{rq}{gansD}{C}, 
 goto(gansD).
 \end{align*}    
 where $\&rq$ receives constant input parameters. This gives us three additional rules which are just 
@@ -1388,27 +1392,27 @@ encoded as follows:
 \begin{exmp}
 \label{travellingsalesperson}
 \begin{align*}
-\row{r_1}\colon & startingCity(austin).\\
-\row{r_2}\colon & budgetB(11).\\
+\rowprefix{r_1} & startingCity(austin).\\
+\rowprefix{r_2} & budgetB(11).\\
 \\
-\row{r_3}\colon & \mathit{cityOfDegree(P,0,P,0)} \leftimpl 
+\rowprefix{r_3} & \mathit{cityOfDegree(P,0,P,0)} \leftimpl 
 \mathit{startingCity(P).} \\
 & \\
-\row{r_4}\colon & \mathit{cityOfDegree(F1, DegPlus, F2, Cost)} 
+\rowprefix{r_4} & \mathit{cityOfDegree(F1, DegPlus, F2, Cost)} 
 \leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\ 
 &\ext{edges}{F1}{F2, Cost}, \mathit{DegPlus=DegPlus+1}, 
 DegPlus < 4, \\ & \#int(DegPlus), \#int(Deg)), \#int(Cost). 
 \\
-\row{r_5}\colon& \mathit{node(Y)} \leftimpl 
+\rowprefix{r_5}& \mathit{node(Y)} \leftimpl 
 \mathit{cityOfDgree(X, V, Y, C)}.\\
-\row{r_6}\colon& \mathit{edge}(X, Y) \leftimpl 
+\rowprefix{r_6}& \mathit{edge}(X, Y) \leftimpl 
 \mathit{cityOfDegree(X, V, Y, C).} \\
-\row{r_7}\colon & cost(X,Y,C) \leftimpl cityOfDegree(X, V, Y, C). 
+\rowprefix{r_7} & cost(X,Y,C) \leftimpl cityOfDegree(X, V, Y, C). 
 \end{align*}
 \begin{align*}
-\row{r_8} \colon & \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
+\rowprefix{r_8} & \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
 node(X). \\
-\row{r_9} \colon &  \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
+\rowprefix{r_9} &  \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
 node(Y). \\
 & \\
 \row{r_{10}} \colon & costCalculated(X) \leftimpl \#sum \{C,X,Y : 
@@ -1550,23 +1554,23 @@ subsection is as follows:
 \begin{exmp}
 \label{pathfindingAgent}
 \begin{align*}
-\row{r_1} \colon & startingNode(one). \\
-\row{r_2} \colon & nodeOfDegree(P,0,P) \leftimpl startingNode(P). 
+\rowprefix{r_1} & startingNode(one). \\
+\rowprefix{r_2} & nodeOfDegree(P,0,P) \leftimpl startingNode(P). 
 \\
-\row{r_3} \colon & nodeOfDegree(F1, DegPlus, F2) \leftimpl 
+\rowprefix{r_3} & nodeOfDegree(F1, DegPlus, F2) \leftimpl 
 nodeOfDegree(\_, Deg, F1), \\ & \ext{edges}{F1}{F2}, 
 DegPlus=Deg+1, DgPlus <= 5, \#int(DegPlus), \\ &\#int(Deg). 
 \\
-\row{r_4} \colon & node(Y) \leftimpl nodeOfDegre(X, V, Y).  \\
-\row{r_5} \colon & edge(X,Y) \leftimpl nodeOfDegree(X,V,Y).\\
+\rowprefix{r_4} & node(Y) \leftimpl nodeOfDegre(X, V, Y).  \\
+\rowprefix{r_5} & edge(X,Y) \leftimpl nodeOfDegree(X,V,Y).\\
 \\
-\row{r_6} \colon &  \mathit{agent(1). } \ \mathit{ agent(2). }\\
-\row{r_7} \colon & \mathit{start(1,one).} \ \mathit{ 
+\rowprefix{r_6} &  \mathit{agent(1). } \ \mathit{ agent(2). }\\
+\rowprefix{r_7} & \mathit{start(1,one).} \ \mathit{ 
 start(2,four).} \\
-\row{r_8} \colon & \mathit{goal(1,ten).} \ \mathit{ 
+\rowprefix{r_8} & \mathit{goal(1,ten).} \ \mathit{ 
 goal(2,eleven).} \\
 \\
-\row{r_9} \colon & clear(V) \leftimpl \mathit{node(V)}, V \neq 
+\rowprefix{r_9} & clear(V) \leftimpl \mathit{node(V)}, V \neq 
 \mathit{three}\\ 
 \\
 \row{r_{10}} \colon & guessPath(I,0,V) \leftimpl start(I,V). \\
@@ -2341,10 +2345,10 @@ An atom $b=\ext{g}{X}{Y}$ in a rule r of the program is \emph{strongly safe} if 
 \begin{exmp} \textbf{Consider the following program:}
 \label{strongSafetyExmp}
 \begin{align*}
-& \row{r_1} \colon p(a). \\
-& \row{r_2} \colon q(aa). \\
-& \row{r_3} \colon s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y}. \\
-& \row{r_4} \colon p(X) \leftimpl s(X), q(X).
+& \rowprefix{r_1} p(a). \\
+& \rowprefix{r_2} q(aa). \\
+& \rowprefix{r_3} s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y}. \\
+& \rowprefix{r_4} p(X) \leftimpl s(X), q(X).
 \end{align*}
 \end{exmp}
 It is not \emph{strongly safe} because Y in the cyclic external atom $\ext{concat}{X,a}{Y}$ in $\row{r_3}$ does not occur in an
