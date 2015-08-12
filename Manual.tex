@@ -22,6 +22,9 @@
 \DeclareMathOperator{\lesseq}{<=}
 \DeclareMathOperator{\geeq}{>=}
 
+\newcommand\mycenterline[1]{\smallskip \centerline{#1} \smallskip}
+% or \newcommand\mycenterline[1]{\smallskip #1 \smallskip\\}
+
 
 \setlength{\tabcolsep}{1.5pt}
 \lstset{
@@ -183,22 +186,22 @@ The latest Boost library version is available at
 new folder, the following steps should be followed in order 
 to properly install it. Commands prefixed with ``\texttt{\$}'' sign are the commands executed from the system shell. Some commands need ``\texttt{\#}'' as prefix to ensure superuser permissions. The following 
 commands need to be executed:
-\\ \centerline{\texttt{\$ \thinspace ./bootstrap.sh}}
-\centerline{\texttt{\$ \thinspace ./b2 install --prefix=PREFIX}} In this 
+\\ \mycenterline{\texttt{\$ \thinspace ./bootstrap.sh}}
+\mycenterline{\texttt{\$ \thinspace ./b2 install --prefix=PREFIX}} In this 
 command, \texttt{PREFIX} is the directory where Boost should 
 be installed. 
 
 After downloading the latest release version of \dlvhex{} by 
 executing the following sequence of commands \dlvhex{} will 
 be successfully installed:
-\\ \centerline{\texttt{\$ \thinspace ./configure}} To enable the Python 
+\\ \mycenterline{\texttt{\$ \thinspace ./configure}} To enable the Python 
 features of \dlvhex{}, \texttt{--enable-python} is to be 
 added as option of \texttt{configure}. Afterwards, the 
 following command builds the system:
-\\ \centerline{\texttt{\$ \thinspace make}} To allow using of multiple 
+\\ \mycenterline{\texttt{\$ \thinspace make}} To allow using of multiple 
 cores one should specify the \texttt{-jN} option to make 
 use of N cores. Finally, the following
-\\ \centerline{\texttt{\$ \thinspace make install}} installs the package 
+\\ \mycenterline{\texttt{\$ \thinspace make install}} installs the package 
 in the location specified with configure.  
    
 \paragraph{Development version (git clone)}
@@ -206,11 +209,11 @@ The source code of \dlvhex{} is hosted on github at
 \url{https://github.com/hexhex/}. To get the latest 
 development version it is necessary to git clone system as 
 follows:
-\\ \centerline{\texttt{\$ \thinspace git clone 
+\\ \mycenterline{\texttt{\$ \thinspace git clone 
 https://github.com/hexhex/core --recursive}} 
 After cloning to the desired directory it is necessary to 
 execute the \texttt{bootstrap.sh} script from there by invoking: \\ 
-\centerline{\texttt{\$ \thinspace ./bootstrap.sh}}. 
+\mycenterline{\texttt{\$ \thinspace ./bootstrap.sh}}. 
 After cloning and bootstrapping, the steps from 
 Section~\ref{sec:steps} (\texttt{configure, make} and 
 \texttt{make install}) are to be followed in order to 
@@ -222,7 +225,7 @@ automatically on Ubuntu systems and can be found at
 
 Once installation is completed, the system can be used from 
 the terminal as follows:\\ 
-\centerline{\texttt{\$ \thinspace dlvhex2 program.hex}} where 
+\mycenterline{\texttt{\$ \thinspace dlvhex2 program.hex}} where 
 \texttt{program.hex} refers to the input program. Various 
 additional command line options are available and explained in Section~\ref{sec:commandline}.    
 
@@ -435,7 +438,7 @@ size=5em}}
 \end{figure}
 To compute the answer sets representing 
 the solution, the following command is to be invoked:
-\\ \centerline{\texttt{\$ dlvhex2 --pythonplugin=extsource.py program.hex}}
+\\ \mycenterline{\texttt{\$ dlvhex2 --pythonplugin=extsource.py program.hex}}
 where \texttt{program.hex} is \hex-program and 
 \texttt{extsource.py} represents the Python file with 
 external source implementation (cf. Section~\ref{sec:externalInterfaces}). The output of the 
@@ -526,8 +529,8 @@ uppercase letters.
 Next, (uninterpreted) functions are \emph{complex terms} composed of a name
 (like a constant) and one or more terms as arguments.
 For instance,
-$\mathit{at(peter,at(10),X)}$ is a function with three arguments: constant $\mathit{peter}$,
-another function $\mathit{at(12})$ with an integer argument, and variable $X$ \cite{gkklorst2015}.
+$\mathit{at(john,t(10),X)}$ is a function with three arguments: constant $\mathit{john}$,
+another function $\mathit{t(12})$ with an integer argument, and variable $X$ \cite{gkklorst2015}.
 
 While a constant, function term, or string represents itself, a variable is 
 placeholder for all variable-free terms in the language of 
@@ -731,7 +734,7 @@ $\mathit{a} \vee \mathit{b.}$, we have the two answer sets
 \{$a$\} and \{$b$\}.
 
 In the Example~\ref{nodecoloring} we could replace lines $3$ to $5$ by a single disjunctive rule as follows:\\
-\centerline{$\mathit{colored(X,r)} \vee \mathit{colored(X,g)} \vee \mathit{colored(X,b)} \leftimpl \mathit{node(X).}$} 
+\mycenterline{$\mathit{colored(X,r)} \vee \mathit{colored(X,g)} \vee \mathit{colored(X,b)} \leftimpl \mathit{node(X).}$} 
 \\which generates all possible node color combinations 
 \begin{exmp}
 \begin{align*}
@@ -778,7 +781,7 @@ division).
 \end{exmp}
 An atom $+(X,Y,XX)$ is true, iff $XX$ is the sum of $X$ and $Y$ (likewise for other operators).
 The single answer set for the example above is:\\ 
-\centerline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
+\mycenterline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
 \\Alternatively to \emph{prefix notation} one can also use 
 \emph{infix notation} to use built-in arithmetic functions 
 in \dlvhex{}. For instance $\mathit{+(X, Y, XX)}$ in \row{r_3} 
@@ -819,7 +822,7 @@ The single answer set for the example above is:
 \subsection{Conditions and Conditional Literals}
 \label{conditions}
 A \emph{conditional literal} is of the form \\ 
-\centerline{$L_0:L_1,\dots,L_n$} where every $\mathit{L_j}$ 
+\mycenterline{$L_0:L_1,\dots,L_n$} where every $\mathit{L_j}$ 
 for $0 \lesseq j \lesseq n$ is a literal, $L_1,\dots,L_n$ is 
 called \emph{condition}, and \enquote{:} resembles 
 mathematical set notation. Whenever $\mathit{n = 0}$, it is 
@@ -863,8 +866,8 @@ with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition
 for the rule $\row{r_6}$ is contained in the head of the rule. It 
 turns into a \emph{disjunction} over all ground instances of 
 $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ 
-for which $\mathit{day(t)}$ holds, i.e., whenever $\mathit{meet}$ holds, one of $\mathit{on(t)}$ for which $\mathit{day(t)}$ is true should hold. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with a ``;'' sign, the rule would look like:
-\centerline{\{$\mathit{on}(X);\mathit{travel}(X) : \mathit{day}(X)\} \leftimpl 
+for which $\mathit{day(t)}$ holds, i.e., whenever $\mathit{meet}$ holds, one of $\mathit{on(t)}$ for which $\mathit{day(t)}$ is true should hold. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with a ``;'' sign, the rule would look like: \\
+\mycenterline{\{$\mathit{on}(X);\mathit{travel}(X) : \mathit{day}(X)\} \leftimpl 
 \mathit{meet}.$}
 where for all ground instances of $\mathit{on(X)}$ and $\mathit{travel(X)}$ such that $X$ is substituted by terms $t$ for which $\mathit{day(t)}$ holds. 
 
@@ -900,9 +903,9 @@ atom. They can occur in the bodies of rules and constraints,
 possibly negated using negation-as-failure \cite{gkklorst2015}.
 
 The form of an \emph{aggregate atom} occuring in a rule 
-body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ 
-t_1:L_1;...;t_n:L_n\} \prec_2 s_2$} 
-\\ Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming 
+body is as follows:\\ \mycenterline{$s_1 \prec_1 \alpha \{ 
+ t_1, \dots, t_n : L_1, \dots, L_n\} \prec_2 s_2$} 
+Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming 
 \emph{aggregate elements}, are non-empty tuples of terms 
 and literals, respectively. $\alpha$ is the name of some 
 function that is applied to the term tupples \texttt{$t_i$} 
@@ -917,7 +920,10 @@ five. An aggregate function is applied over a set and
 returns a numeric value. Let $f(S)$ be an aggregate 
 function. A variable, X, is a \emph{local variable} to 
 $f(S)$ if and only if $X$ appears in $S$ and $X$ does not 
-appear in any aggregate function that is outside of $f(S)$. 
+appear in any aggregate function that is outside of $f(S)$.
+
+One aggregate body can contain multiple symbolic set constructors 
+of form $t_1, \dots, t_n \colon L_1, \ \dots,L_n$ by separating them using ``;'' sign. 
 \begin{exmp}
 \begin{align*}
 \rowprefix{r_1}& emp(1,goofie,1250).\\
@@ -932,9 +938,9 @@ over1000(I,W)\} = X, \#int(X).
 \end{exmp}
 Intuitively the symbolic set appearing in the aggregate 
 predicate consists of two ground predicates: \\ 
-\centerline{$\{\langle 1 \rangle,\langle 5 \rangle\}$}
+\mycenterline{$\{\langle 1 \rangle,\langle 5 \rangle\}$}
 \\which are both true w.r.t. the unique model of the whole 
-program, hence \\ \centerline{$ 
+program, hence \\ \mycenterline{$ 
 \#count\{over1000(1,1250),over1000(5,1050)\}$} \\returns 2 
 as output of the aggregate function and outputs:
 \begin{align*}
@@ -957,12 +963,22 @@ Cartoon Co. spends on salaries.
 \end{align*}
 In $\row{r_8}$ except term tuple $S$ we need also an $I$ in order to get the correct result. This is because we have two persons with same salaries and aggregate function will return only one element in the symbolic set for both of them. Since one element is missing from the symbolic set, we get incorrect result at the end.  
 The symbolic set for the rule $\row{r_8}$ consists of 5 elements:\\ 
-\centerline{$\{ \langle 1250,1 \rangle, \langle 750,2 \rangle, \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}$} 
-\\The 
+\mycenterline{$\{ \langle 1250,1 \rangle, \langle 750,2 \rangle, \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}$} 
+The 
 aggregate function applied to the given set returns the sum 
 of the salaries of all the employees, the output thus is: 
-\\ \centerline{
-\{$\mathit{salaryTotal(4700)}$\}.} $\mathit{\#times}$ is 
+\\ \mycenterline{
+\{$\mathit{salaryTotal(4700)}$\}.} 
+In reference to the previous example where we include term tuple I in order to distinguish employees with same salaries we 
+provide another example where we omit term tuple I  from the aggregate elements. The answer set is affected since
+there are two employees (i.e. Willy and Woody) with same salaries (S) but different identification numbers (I).
+Symbolic set consists of 4 elements this time due to the fact that there cannot be duplicates in the set. Symbolic set looks as follows:
+\\ \mycenterline{$\{ \langle 1250 \rangle, \langle 750 \rangle, \langle 900 \rangle,  \langle 1050 \rangle\}$}
+The total salary thus is:
+\\ \mycenterline{
+\{$\mathit{salaryTotal(3950)}$\}.} 
+ 
+$\mathit{\#times}$ is 
 similar to $\mathit{\#sum}$, but computes the product of 
 the first local variable to be aggregated over in the 
 symbolic set. When applied over the empty set, 
@@ -1017,7 +1033,7 @@ Under prioritization, the semantics minimizes the violation
 of the constraints of the highest priority level first; 
 then the lower priority levels are considered one after the 
 other in descending order. Syntactically, weak constraints 
-are specified as follows. \\ \centerline{:$\sim$ $\mathit{Conj}. \  
+are specified as follows. \\ \mycenterline{:$\sim$ $\mathit{Conj}. \  
 [\mathit{Weight}\colon\mathit{Level}]$} \\ where $\mathit{Conj}$ 
 is a conjunction of (possibly negated) literals, and both 
 $\mathit{Weight}$ and $\mathit{Level}$ are positive 
@@ -1144,7 +1160,7 @@ atoms}, and we extend the well known answer-set semantics
 to this class of programs. A high-order 
 atom allows to quantify values over predicate names, and to 
 freely exchange predicate symbols with constant symbols, 
-like in the rule\\ \centerline{\\$C(X) \leftarrow 
+like in the rule\\ \mycenterline{\\$C(X) \leftarrow 
 \textit{subclassOf(D,C),D(X)}$}
 A \textit{high-order atom} is a tuple ($Y_0, Y_1,
 \dots,Y_n$), where $Y_0, Y_1,\dots,Y_n$ are terms; $ n \ge 
@@ -1162,7 +1178,7 @@ with other sources of computation; this can be used to
 model extensions of ASP.  
 An \emph{external atom} facilitates to determine the truth 
 value of an atom through an external source of computation.
-An \emph{external atom} is of the form \\ \centerline{ 
+An \emph{external atom} is of the form \\ \mycenterline{ 
 \&g[$Y_1,\dots,Y_n$]($X_1,\dots,X_m$),} \\where $Y_1,
 \dots,Y_n$ and $X_1,\dots,X_m$ are the two lists of terms 
 (called \textit{input} and \textit{output} lists, 
@@ -1173,7 +1189,7 @@ input and output lists, respectively. Intuitively, an
 external atom provides a way for deciding the truth value 
 of an output tuple depending on the extension of a set of 
 input predicates.
-For instance, the rule \\ \centerline{ \textit{$reached(X) 
+For instance, the rule \\ \mycenterline{ \textit{$reached(X) 
 \leftarrow \&reach[edge,a](X)$}}
 \\computes the predicate \textit{reached} taking values 
 from the predicate $\&reach$, which computes via 
@@ -1203,7 +1219,7 @@ $\mathit{\&setdiff}$. The first part of the program for each
 system concatenates the string \enquote{hello} and a system 
 name using $\mathit{\&concat}$ external source. As output 
 we have the answer set:\\ 
-\centerline{ \{ $\mathit{sayhello}(\mathit{hellodlvhex}), 
+\mycenterline{ \{ $\mathit{sayhello}(\mathit{hellodlvhex}), 
 \mathit{sayhello}(\mathit{helloclasp})$ \}}
 \\In this case the $\mathit{concat}$ external source receives 
 constant input parameters. It concatenates all constants from input sequence and outputs the result as one string.
@@ -1280,7 +1296,7 @@ are caused by this choice using the external atom.
 
 Web research is performed by using an external atom of the 
 form 
-\\ \centerline{$\ext{\mathit{rq}}{\mathit{location}$-$
+\\ \mycenterline{$\ext{\mathit{rq}}{\mathit{location}$-$
 \mathit{choice}}{\mathit{required}$-$\mathit{resources}}$}
 which intuitively 
 evaluates to true if a given $\mathit{location}$-$\mathit{choice}$ 
@@ -1500,7 +1516,7 @@ constraint $\row{r_{12}}$ ensures that in the answer
 set overall sum of the costs for the cycle will be less 
 than or equal to the budget available. The same rules can be applied to limit length travelled or time spent.
 
-Rules $\row{\row{r_{13}}}$ and $\row{r_{14}}$ check whether all 
+Rules $\row{r_{13}}$ and $\row{r_{14}}$ check whether all 
 nodes 
 are reached by a cycle candidate produced by the rules 
 $\row{r_8}$ and $\row{r_9}$.  Note that rule $\row{r_8}$ builds on the
@@ -1513,7 +1529,7 @@ eliminates answer sets where not all nodes in the graph are reached.
 
 In order to minimize costs, we add the following 
 optimization statement: \\
-\centerline{$:\sim cycle(X,Y), cost(X,Y,C). \  [C:1].$}
+\mycenterline{$:\sim cycle(X,Y), cost(X,Y,C). \  [C:1].$}
 Here, edges belonging to the cycle are weighted according 
 to their costs and \dlvhex{} lists optimal answer sets only.
 
@@ -1599,7 +1615,7 @@ goal(2,eleven).} \\
 \colon guessPath(I, T, U) \}}, \mathit{agent(I)}, 
 \mathit{\#int(T)}.  \\
 \\
-\row{\row{r_{13}}} \colon &  visit(I, V) \leftimpl guessPath(I,T,V). \\
+\rowprefix{r_{13}}&  visit(I, V) \leftimpl guessPath(I,T,V). \\
 \\
 \rowprefix{r_{14}} & \leftimpl goal(I, V), \nott \thinspace  
 \mathit{visit(I, V).} \\
@@ -1780,7 +1796,7 @@ depending on a given interpretation and a list of input
 constants, it returns output tuples for which it is true. For instance, the 
 external atom to import triples from RDF files has the 
 form: \\
-\centerline{$\ext{rdf}{uri}{X,Y,Y}$} 
+\mycenterline{$\ext{rdf}{uri}{X,Y,Y}$} 
 where $\mathit{uri}$ stands for a string denoting the RDF-source and X,Y, and Z are variables that represent an RDF-triples from the specified source.
 
 \subsection{Information Flow}
@@ -1812,7 +1828,7 @@ all atoms in the interpretation with this predicate are
 necessary for the external atom. Let us assume, we have an external 
 atom that calculates the overall price of a number of books 
 given by their ISBN number:\\
-\centerline{$\ext{overallbookprice}{isbn}{X}$}
+\mycenterline{$\ext{overallbookprice}{isbn}{X}$}
 The single input parameter of this atom would be of type 
 \emph{predicate}, meaning that not the constant itself is 
 necessary for the atom's function, but the part of the 
@@ -1822,7 +1838,7 @@ the atom's function will be called with the filtered interpretation: \\
 $I=$\{$\mathit{isbn(``0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6")}$, $ \mathit{isbn(``0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4")}$\}
 
 A parameter of type \emph{tuple} represents a meta category standing for an arbitrary number of constant input parameters. This is useful when we have to send multiple constant parameters separately, e.g., for \\
-\centerline{$\ext{concat}{string1, string2, string3, \dots}{Out}$}. 
+\mycenterline{$\ext{concat}{string1, string2, string3, \dots}{Out}$}. 
 
 Specifying the type of input parameters not only helps to 
 single out the relevant part of the interpretation, but 
@@ -2375,7 +2391,7 @@ ordinary body atom that does not depend on
 & \texttt{GeneralError: Syntax Error: [Rule] is not strongly safe! }  \\
 & \texttt{Variable [Var] fails strong safety check in rule Rule.}
 \end{align*}
-To make $\row{r_3}$ strongly safe we could add an ordinary atom in order to break the cycle. $\row{r_3}$ could be modified as follows: \\ \centerline{$s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y},q(Y).$} Adding atom $q(Y)$ makes program strongly safe since $Y$ appears in the body atom which does not depend on $\ext{concat}{X,a}{Y}$.
+To make $\row{r_3}$ strongly safe we could add an ordinary atom in order to break the cycle. $\row{r_3}$ could be modified as follows: \\ \mycenterline{$s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y},q(Y).$} Adding atom $q(Y)$ makes program strongly safe since $Y$ appears in the body atom which does not depend on $\ext{concat}{X,a}{Y}$.
  
 Along with the error message, the affected \texttt{[Rule]} and a list of all unsafe variable occurrences \texttt{[Var]} are reported. 
 The first action to take usually consists of checking whether variable \texttt{[Var]} is actually in the scope of any atom (in the positive body of \texttt{[Rule]}) that can bind it. Also check for variables that occur in aggregate elements (cf. Section~\ref{aggregates}) or conditional literals (cf. Section~\ref{conditions}), you might have to bind them with additional positive atoms in the conditions. 
@@ -2582,22 +2598,22 @@ The latest Boost library version is available at
 new folder, the following steps should be followed in order 
 to properly install it. After extraction, the folwing 
 commands need to be executed:
-\\ \centerline{\texttt{./bootstrap.sh}}
-\centerline{\texttt{./b2 install --prefix=PREFIX}} In this 
+\\ \mycenterline{\texttt{./bootstrap.sh}}
+\mycenterline{\texttt{./b2 install --prefix=PREFIX}} In this 
 command, \texttt{PREFIX} is the directory where Boost should 
 be installed. 
 
 After downloading the latest release version of \dlvhex{} by 
 executing the following sequence of commands \dlvhex{} will 
 be successfully installed:
-\\ \centerline{\texttt{./configure}} To enable the Python 
+\\ \mycenterline{\texttt{./configure}} To enable the Python 
 features of \dlvhex{}, \texttt{--enable-python} is to be 
 added as option of \texttt{configure}. Afterwards, the 
 following command builds the system:
-\\ \centerline{\texttt{make}} To allow using of multiple 
+\\ \mycenterline{\texttt{make}} To allow using of multiple 
 cores one should specify the \texttt{-jN} option to make 
 use of N cores. Finally, the following
-\\ \centerline{\texttt{make install}} installs the package 
+\\ \mycenterline{\texttt{make install}} installs the package 
 in the location specified with configure.  
    
 \paragraph{Development version (git clone)}
@@ -2605,11 +2621,11 @@ The source code of \dlvhex{} is hosted on github at
 \url{https://github.com/hexhex/}. To get the latest 
 development version it is necessary to git clone system as 
 follows:
-\\ \centerline{\texttt{git clone 
+\\ \mycenterline{\texttt{git clone 
 https://github.com/hexhex/core --recursive}} 
 After cloning to the desired directory it is necessary to 
 execute the \texttt{bootstrap.sh} script from there by invoking: \\ 
-\centerline{\texttt{./bootstrap.sh}}. 
+\mycenterline{\texttt{./bootstrap.sh}}. 
 After cloning and bootstrapping, the steps from 
 Section~\ref{sec:steps} (\texttt{configure, make} and 
 \texttt{make install}) are to be followed in order to 
@@ -2621,7 +2637,7 @@ automatically on Ubuntu systems and can be found at
 
 Once installation is completed, the system can be used from 
 the terminal as follows:\\ 
-\centerline{\texttt{shell\$ dlvhex2 program.hex}} where 
+\mycenterline{\texttt{shell\$ dlvhex2 program.hex}} where 
 \texttt{program.hex} refers to the input program. Various 
 additional command line options are available and explained in Section~\ref{sec:commandline}.    
 
@@ -2834,7 +2850,7 @@ size=5em}}
 \end{figure}
 To compute the answer sets representing 
 the solution, the following command is to be invoked:
-\\ \centerline{\texttt{shell\$ dlvhex2 --
+\\ \mycenterline{\texttt{shell\$ dlvhex2 --
 pythonplugin=extsource.py program.hex}}
 where \texttt{program.hex} is \hex-program and 
 \texttt{extsource.py} represents the Python file with 
@@ -3133,7 +3149,7 @@ $\mathit{a} \vee \mathit{b.}$, we have the two answer sets
 \{$a$\} and \{$b$\}.
 
 In the Example~\ref{nodecoloring} we could replace lines $3$ to $5$ by a single disjunctive rule as follows:\\
-\centerline{$\mathit{colored(X,r)} \vee \mathit{colored(X,g)} \vee \mathit{colored(X,b)} \leftimpl \mathit{node(X).}$} 
+\mycenterline{$\mathit{colored(X,r)} \vee \mathit{colored(X,g)} \vee \mathit{colored(X,b)} \leftimpl \mathit{node(X).}$} 
 \\which generates all possible node color combinations 
 \begin{exmp}
 \begin{align*}
@@ -3176,7 +3192,7 @@ division).
 \end{exmp}
 An atom $+(X,Y,XX)$ is true, iff $XX$ is the sum of $X$ and $Y$ (likewise for other operators).
 The single answer set for the example above is:\\ 
-\centerline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
+\mycenterline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
 \\Alternatively to \emph{prefix notation} one can also use 
 \emph{infix notation} to use built-in arithmetic functions 
 in \dlvhex{}. For instance $\mathit{+(X, Y, XX)}$ 
@@ -3217,7 +3233,7 @@ The single answer set for the example above is:
 \subsection{Conditions and Conditional Literals}
 \label{conditions}
 A \emph{conditional literal} is of the form \\ 
-\centerline{$L_0:L_1,\dots,L_n$} where every $\mathit{L_j}$ 
+\mycenterline{$L_0:L_1,\dots,L_n$} where every $\mathit{L_j}$ 
 for $0 \lesseq j \lesseq n$ is a literal, $L_1,\dots,L_n$ is 
 called \emph{condition}, and \enquote{:} resembles 
 mathematical set notation. Whenever $\mathit{n = 0}$, it is 
@@ -3263,7 +3279,7 @@ for the rule $\row{r_6}$ is contained in the head of the rule. It
 turns into a \emph{disjunction} over all ground instances of 
 $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ 
 for which $\mathit{day(t)}$ holds, i.e., whenever $\mathit{meet}$ holds, one of $\mathit{on(t)}$ for which $\mathit{day(t)}$ is true should hold. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with a ``;'' sign, the rule would look like:
-\centerline{\{$\mathit{on}(X);\mathit{travel}(X) : \mathit{day}(X)\} \leftimpl 
+\mycenterline{\{$\mathit{on}(X);\mathit{travel}(X) : \mathit{day}(X)\} \leftimpl 
 \mathit{meet}.$}
 where for all ground instances of $\mathit{on(X)}$ and $\mathit{travel(X)}$ such that $X$ is substituted by terms $t$ for which $\mathit{day(t)}$ holds. 
 
@@ -3299,7 +3315,7 @@ atom. They can occur in the bodies of rules and constraints,
 possibly negated using negation-as-failure \cite{gkklorst2015}.
 
 The form of an \emph{aggregate atom} occuring in a rule 
-body is as follows:\\ \centerline{$s_1 \prec_1 \alpha \{ 
+body is as follows:\\ \mycenterline{$s_1 \prec_1 \alpha \{ 
 t_1:L_1;...;t_n:L_n\} \prec_2 s_2$} 
 \\ Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming 
 \emph{aggregate elements}, are non-empty tuples of terms 
@@ -3331,9 +3347,9 @@ over1000(I,W)\} = X, \#int(X).
 \end{exmp}
 Intuitively the symbolic set appearing in the aggregate 
 predicate consists of two ground predicates: \\ 
-\centerline{$\{\langle 1 \rangle,\langle 5 \rangle\}$}
+\mycenterline{$\{\langle 1 \rangle,\langle 5 \rangle\}$}
 \\which are both true w.r.t. the unique model of the whole 
-program, hence \\ \centerline{$ 
+program, hence \\ \mycenterline{$ 
 \#count\{over1000(1,1250),over1000(5,1050)\}$} \\returns 2 
 as output of the aggregate function and outputs:
 \begin{align*}
@@ -3356,11 +3372,11 @@ Cartoon Co. spends on salaries.
 \end{align*}
 In $\row{r_8}$ except term tuple $S$ we need also an $I$ in order to get the correct result. This is because we have two persons with same salaries and aggregate function will return only one element in the symbolic set for both of them. Since one element is missing from the symbolic set, we get incorrect result at the end.  
 The symbolic set for the rule $\row{r_8}$ consists of 5 elements:\\ 
-\centerline{$\{ \langle 1250,1 \rangle, \langle 750,2 \rangle, \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}$} 
+\mycenterline{$\{ \langle 1250,1 \rangle, \langle 750,2 \rangle, \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}$} 
 \\The 
 aggregate function applied to the given set returns the sum 
 of the salaries of all the employees, the output thus is: 
-\\ \centerline{
+\\ \mycenterline{
 \{$\mathit{salaryTotal(4700)}$\}.} $\mathit{\#times}$ is 
 similar to $\mathit{\#sum}$, but computes the product of 
 the first local variable to be aggregated over in the 
@@ -3416,7 +3432,7 @@ Under prioritization, the semantics minimizes the violation
 of the constraints of the highest priority level first; 
 then the lower priority levels are considered one after the 
 other in descending order. Syntactically, weak constraints 
-are specified as follows. \\ \centerline{:$\sim$ $\mathit{Conj}. \  
+are specified as follows. \\ \mycenterline{:$\sim$ $\mathit{Conj}. \  
 [\mathit{Weight}\colon\mathit{Level}]$} \\ where $\mathit{Conj}$ 
 is a conjunction of (possibly negated) literals, and both 
 $\mathit{Weight}$ and $\mathit{Level}$ are positive 
@@ -3543,7 +3559,7 @@ atoms}, and we extend the well known answer-set semantics
 to this class of programs. A high-order 
 atom allows to quantify values over predicate names, and to 
 freely exchange predicate symbols with constant symbols, 
-like in the rule\\ \centerline{\\$C(X) \leftarrow 
+like in the rule\\ \mycenterline{\\$C(X) \leftarrow 
 \textit{subclassOf(D,C),D(X)}$}
 A \textit{high-order atom} is a tuple ($Y_0, Y_1,
 \dots,Y_n$), where $Y_0, Y_1,\dots,Y_n$ are terms; $ n \ge 
@@ -3561,7 +3577,7 @@ with other sources of computation; this can be used to
 model extensions of ASP.  
 An \emph{external atom} facilitates to determine the truth 
 value of an atom through an external source of computation.
-An \emph{external atom} is of the form \\ \centerline{ 
+An \emph{external atom} is of the form \\ \mycenterline{ 
 \&g[$Y_1,\dots,Y_n$]($X_1,\dots,X_m$),} \\where $Y_1,
 \dots,Y_n$ and $X_1,\dots,X_m$ are the two lists of terms 
 (called \textit{input} and \textit{output} lists, 
@@ -3572,7 +3588,7 @@ input and output lists, respectively. Intuitively, an
 external atom provides a way for deciding the truth value 
 of an output tuple depending on the extension of a set of 
 input predicates.
-For instance, the rule \\ \centerline{ \textit{$reached(X) 
+For instance, the rule \\ \mycenterline{ \textit{$reached(X) 
 \leftarrow \&reach[edge,a](X)$}}
 \\computes the predicate \textit{reached} taking values 
 from the predicate $\&reach$, which computes via 
@@ -3602,7 +3618,7 @@ $\mathit{\&setdiff}$. The first part of the program for each
 system concatenates the string \enquote{hello} and a system 
 name using $\mathit{\&concat}$ external source. As output 
 we have the answer set:\\ 
-\centerline{ \{ $\mathit{sayhello}(\mathit{hellodlvhex}), 
+\mycenterline{ \{ $\mathit{sayhello}(\mathit{hellodlvhex}), 
 \mathit{sayhello}(\mathit{helloclasp})$ \}}
 \\In this case the $\mathit{concat}$ external source receives 
 constant input parameters. It concatenates all constants from input sequence and outputs the result as one string.
@@ -3679,7 +3695,7 @@ are caused by this choice using the external atom.
 
 Web research is performed by using an external atom of the 
 form 
-\\ \centerline{$\ext{\mathit{rq}}{\mathit{location}$-$
+\\ \mycenterline{$\ext{\mathit{rq}}{\mathit{location}$-$
 \mathit{choice}}{\mathit{required}$-$\mathit{resources}}$}
 which intuitively 
 evaluates to true if a given $\mathit{location}$-$\mathit{choice}$ 
@@ -3912,7 +3928,7 @@ eliminates answer sets where not all nodes in the graph are reached.
 
 In order to minimize costs, we add the following 
 optimization statement: \\
-\centerline{$:\sim cycle(X,Y), cost(X,Y,C). \  [C:1].$}
+\mycenterline{$:\sim cycle(X,Y), cost(X,Y,C). \  [C:1].$}
 Here, edges belonging to the cycle are weighted according 
 to their costs and \dlvhex{} lists optimal answer sets only.
 
@@ -4179,7 +4195,7 @@ depending on a given interpretation and a list of input
 constants, it returns output tuples for which it is true. For instance, the 
 external atom to import triples from RDF files has the 
 form: \\
-\centerline{$\ext{rdf}{uri}{X,Y,Y}$} 
+\mycenterline{$\ext{rdf}{uri}{X,Y,Y}$} 
 where $\mathit{uri}$ stands for a string denoting the RDF-source and X,Y, and Z are variables that represent an RDF-triples from the specified source.
 
 \subsection{Information Flow}
@@ -4211,7 +4227,7 @@ all atoms in the interpretation with this predicate are
 necessary for the external atom. Let us assume, we have an external 
 atom that calculates the overall price of a number of books 
 given by their ISBN number:\\
-\centerline{$\ext{overallbookprice}{isbn}{X}$}
+\mycenterline{$\ext{overallbookprice}{isbn}{X}$}
 The single input parameter of this atom would be of type 
 \emph{predicate}, meaning that not the constant itself is 
 necessary for the atom's function, but the part of the 
@@ -4221,7 +4237,7 @@ the atom's function will be called with the filtered interpretation: \\
 $I=$\{$\mathit{isbn(``0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6")}$, $ \mathit{isbn(``0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4")}$\}
 
 A parameter of type \emph{tuple} represents a meta category standing for an arbitrary number of constant input parameters. This is useful when we have to send multiple constant parameters separately, e.g., for \\
-\centerline{$\ext{concat}{string1, string2, string3, \dots}{Out}$}. 
+\mycenterline{$\ext{concat}{string1, string2, string3, \dots}{Out}$}. 
 
 Specifying the type of input parameters not only helps to 
 single out the relevant part of the interpretation, but 
@@ -4773,7 +4789,7 @@ ordinary body atom that does not depend on
 & \texttt{GeneralError: Syntax Error: [Rule] is not strongly safe! }  \\
 & \texttt{Variable [Var] fails strong safety check in rule Rule.}
 \end{align*}
-To make $\row{r_3}$ strongly safe we could add an ordinary atom in order to break the cycle. $\row{r_3}$ could be modified as follows: \\ \centerline{$s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y},q(Y).$} Adding atom $q(Y)$ makes program strongly safe since $Y$ appears in the body atom which does not depend on $\ext{concat}{X,a}{Y}$.
+To make $\row{r_3}$ strongly safe we could add an ordinary atom in order to break the cycle. $\row{r_3}$ could be modified as follows: \\ \mycenterline{$s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y},q(Y).$} Adding atom $q(Y)$ makes program strongly safe since $Y$ appears in the body atom which does not depend on $\ext{concat}{X,a}{Y}$.
  
 Along with the error message, the affected \texttt{[Rule]} and a list of all unsafe variable occurrences \texttt{[Var]} are reported. 
 The first action to take usually consists of checking whether variable \texttt{[Var]} is actually in the scope of any atom (in the positive body of \texttt{[Rule]}) that can bind it. Also check for variables that occur in aggregate elements (cf. Section~\ref{aggregates}) or conditional literals (cf. Section~\ref{conditions}), you might have to bind them with additional positive atoms in the conditions. 
