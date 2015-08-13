@@ -1114,25 +1114,25 @@ one another do not work in the same group.
 \\ 
 \rowprefix{r_6}& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
 \leftimpl \mathit{employee}(X).\\
-\rowprefix{r_7}& : \sim TODO \mathit{member}(X,P), \mathit{member}
-(Y,P), X \noteq Y, \nott \thinspace \mathit{know(X,Y)}.& 
-[1:1] \\
-\rowprefix{r_8}& : \sim TODO  \mathit{member}(X,P), \mathit{member}
-(Y,P), X \noteq Y, \mathit{marrie}d(X,Y). & [1:2]\\
-\rowprefix{r_9}& : \sim TODO member(X,P), member(Y,P), X \noteq Y, 
-same\_skill(X,Y). & [1:2] 
+\rowprefix{r_7}& :\sim \mathit{member}(X,P), \mathit{member}
+(Y,P), X \noteq Y, \nott \thinspace \mathit{know(X,Y)}. \thinspace [1@1, X,Y,P]\\
+\rowprefix{r_8}& : \sim \mathit{member}(X,P), \mathit{member}
+(Y,P), X \noteq Y, \mathit{marrie}d(X,Y). \thinspace [1@2, X,Y,P]\\
+\rowprefix{r_9}& : \sim member(X,P), member(Y,P), X \noteq Y, 
+same\_skill(X,Y). \thinspace \\ & \hspace{8.92cm} [1@2, X,Y,P] 
 \end{align*}
 \end{exmp}
-This program has two best models:
+This time we have two best 
+models in our solution (program to run with \texttt{--weak-allmodels} option enabled):
 \begin{align*}
-\{ & \mathit{member}(a,p2), \mathit{member}(b,p1), 
-   \mathit{member}(c,p1), \mathit{member}(d,p2), 
-   \mathit{member}(e,p2) \} \\
+\{ & \mathit{member}(b,p2), \mathit{member}(c,p2), 
+   \mathit{member}(a,p1), \mathit{member}(d,p2), 
+   \mathit{member}(e,p1) \} \\
    & \mathit{Cost} [ \mathit{Weight:Level]}):  \langle 
    [6:1],[0:2] \rangle \\ 
-\{ & \mathit{member}(a,p1), \mathit{member}(b,p2), 
-   \mathit{member}(c,p2), \mathit{member}(d,p1), 
-   \mathit{member}(e,p1) \} \\
+\{ & \mathit{member}(a,p2), \mathit{member}(b,p1), 
+   \mathit{member}(c,p1), \mathit{member}(d,p1), 
+   \mathit{member}(e,p2) \} \\
    & \mathit{Cost} ([ \mathit{Weight:Level]}):\langle 
    [6:1],[0:2] \rangle
 \end{align*}
@@ -1143,7 +1143,7 @@ $\mathit{same\_skill}$ and $\mathit{married}$ relations
 between some of employees. Since $\mathit{employee}(X)$ is 
 true, each $\mathit{employee}$ will be assigned either to 
 the project 1 or project 2 which is given in $\row{r_6}$. Rules $\row{r_7}$, $\row{r_8}$ and $\row{r_9}$ 
-are weak constraints, this time with the 
+are weak constraints introduced earlier in this section, this time with the 
 same weights but different levels of priority. Under 
 prioritization, \dlvhex{} minimizes the violation of 
 the constraints of the highest priority level first; then 
@@ -1464,7 +1464,7 @@ reached(X). \\
 \rowprefix{r_{15}} & \leftimpl node(Y), \nott \thinspace 
 \mathit{reached(Y)}. \\
 & \\
-\rowprefix{r_{16}} & :\sim cycle(X,Y), cost(X,Y,C). [C:1] 
+\rowprefix{r_{16}} & :\sim cycle(X,Y), cost(X,Y,C). \ [C@1,X,Y,C] 
 \end{align*}
 \end{exmp}
 Complete \hex-program, Python plugin and data file can be downloaded from the following location: \examplelink{example_4_2}.
@@ -1535,7 +1535,7 @@ eliminates answer sets where not all nodes in the graph are reached.
 
 In order to minimize costs, we add the following 
 optimization statement: \\
-\mycenterline{$:\sim cycle(X,Y), cost(X,Y,C). \  [C:1].$}
+\mycenterline{$:\sim cycle(X,Y), cost(X,Y,C). \  [C@1,X,Y,C].$}
 Here, edges belonging to the cycle are weighted according 
 to their costs and \dlvhex{} lists optimal answer sets only.
 
@@ -3569,7 +3569,7 @@ like in the rule\\ \mycenterline{\\$C(X) \leftarrow
 \textit{subclassOf(D,C),D(X)}$}
 A \textit{high-order atom} is a tuple ($Y_0, Y_1,
 \dots,Y_n$), where $Y_0, Y_1,\dots,Y_n$ are terms; $ n \ge 
-0$ is the \textit{arity} of the atom. Intuiitively, $Y_0$ 
+0$ is the \textit{arity} of the atom. Intuitively, $Y_0$ 
 is the predicate name, and we thus also use the more 
 familiar notation $Y_0(Y_1,\dots,Y_n)$. The atom is 
 \textit{ordinary}, if $Y_0$ is a constant. For example, 
