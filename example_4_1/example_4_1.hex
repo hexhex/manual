@@ -1,0 +1,27 @@
+% Set of facts.
+location(ind, margB).
+location(ind, amalB).
+location(outd, altD).
+location(outd, gansD).
+
+% Disjunctive rule.
+swim(ind) v swim(outd).
+
+% Web research performed using the external atom. 
+% It gives all requirements for the sqim location specified.
+need(inoutd, C) :- &rq[swim](C), swim(X).
+
+% Web research performed using the external atom. 
+goto(X) v ngoto(X) :- swim(P), location(P,X).
+need(loc, C) :- &rq[goto](C), goto(X).
+
+% If goto is true.
+go :- goto(X).
+
+% Integrity constraints.
+:- not go.
+:- goto(X), goto(Y), X!=Y.
+:- need(X, money).
+
+
+

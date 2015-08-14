@@ -1,0 +1,49 @@
+% Starting node to discover graph.
+startingNode(one).
+% Initial node.
+nodeOfDegree(P,0,P) :- startingNode(P).
+% Discovers iteratively all nodes in the source file.
+nodeOfDegree(F1,DegPlus,F2) :- nodeOfDegree(_,Deg,F1), &edges[F1](F2), DegPlus = Deg + 1,DegPlus <= 5 , #int(DegPlus), #int(Deg).
+% Extract all nodes discovered.
+node(Y) :- nodeOfDegree(X,V,Y).
+% Extract all edges discovered.
+edge(X,Y) :- nodeOfDegree(X,V,Y).
+ 
+
+% Agents.
+agent(1). 
+agent(2).  
+
+% Starting nodes for the agents.
+start(1,one). 
+start(2,four). 
+
+% Destination nodes for the agents.
+goal(1,ten). 
+goal(2,eleven). 
+
+% Initially all nodes are clear, except node three.
+clear(V) :- node(V), V!=three.   
+
+% Initial guesses for the paths.
+guessPath(AgentNo, 0, V) :- start(AgentNo, V).
+% Only one agent can visit node X at time T. Other should either wait or visit adjecant node
+guessPath(In, TPlus, U) v nguessPath(In, TPlus, U)  :- guessPath(In, T, V),agent(In), edge(V,U),TPlus=T+1, #int(TPlus), #int(T).
+:- agent(In), #int(T), 1 != #count{U : guessPath(In,T,U)}.
+
+% Define when node is visited.
+visit(AgentNo,V) :- guessPath(AgentNo,T,V).    
+
+% Agent must reach goal node.
+:- goal(AgentNo,V), not visit(AgentNo,V).
+% At time t only one agent can be at node v
+:- guessPath(X,T,V), guessPath(XP,T,V), X<XP.     
+% Agent cannot visit corrupted nodes.
+:- guessPath(AgentNo,T,V), not clear(V). 
+% Remove the answer set if any invalid move in the path
+:- path(In,V,U,T,invalid). 
+
+% In the following rule we check is the chioce selected by the agent valid or not
+% Chioce may be invalid because of obstacles, edge is corrupted, used by another agent etc.
+path(In,V,U,T,ValidOrNot) :- agent(In), guessPath(In, T, V), guessPath(In, TPlus, U), &check[U,V,T,In](ValidOrNot), TPlus=T+1, #int(T), #int(TPlus).
+

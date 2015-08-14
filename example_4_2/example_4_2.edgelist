@@ -1,0 +1,18 @@
+austin boston 2
+austin chicago 3
+austin detroit 1
+boston detroit 2
+boston fresno 4
+boston memphis 2
+chicago detroit 2
+chicago austin 3
+chicago memphis 2
+detroit austin 1
+detroit boston 2
+memphis chicago 2
+memphis detroit 2
+memphis fresno 1
+fresno chicago 3
+fresno memphis 1
+fresno boston 4
+
