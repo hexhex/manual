@@ -1185,7 +1185,7 @@ like in the rule
 %
 A \textit{high-order atom} is a tuple ($Y_0, Y_1,
 \dots,Y_n$), where $Y_0, Y_1,\dots,Y_n$ are terms; $ n \ge 
-0$ is the \textit{arity} of the atom. Intuiitively, $Y_0$ 
+0$ is the \textit{arity} of the atom. Intuitively, $Y_0$ 
 is the predicate name, and we thus also use the more 
 familiar notation $Y_0(Y_1,\dots,Y_n)$. The atom is 
 \textit{ordinary}, if $Y_0$ is a constant. For example, 
@@ -1975,17 +1975,17 @@ origin (inoutd, or loc) using predicate $\mathit{need}$.
 
 1:  import dlvhex 
 
-2:  def rq(location_chioce)
+2:  def rq(location_choice)
 3:    for x in dlvhex.getTrueInputAtoms():
 4:      io = {"ind":"money","amalB":"goggles","altD":"yogamat",
               "gansD":"money"}
-5:      if location_chioce == x.tuple()[0]:
+5:      if location_choice == x.tuple()[0]:
 6:        inp = x.tuple()[1].value()
 7:          if inp in io:
 8:            dlvhex.output((io[inp], ))
 
 9:  def register():
-10:   dlvhex.addAtom("rq", (dlvhex.PRDICATE), ), 1)
+10:   dlvhex.addAtom("rq", (dlvhex.PREDICATE), ), 1)
 \end{verbatim}
 \end{exmp}
 
@@ -2320,7 +2320,7 @@ of the following conditions is satisfied:
 \begin{itemize}
 \item $X$ occurs in a positive standard predicate in the 
 body of the rule;
-\item $X$ occurs in a true negated standard predicate in 
+\item $X$ occurs in a strong negated standard predicate in 
 the body of the rule;
 \item $X$ occurs in the last argument of an arithmetic 
 predicate $A$ and all other arguments of $A$ are safe.
@@ -2359,20 +2359,20 @@ A variable $X$ appearing in the symbolic set of an aggregate is safe if it does 
 All other variables (including guards) appearing in an aggregate atom have to be made safe by some other literal of the body.
 \begin{exmp} \textbf{Safe Rules and Constraints}
 \begin{align*}
-a(X) & \leftimpl node(X), \#count\{ V \colon ege(V,X)\} \geeq 0. \\
-a(X) & \leftimpl node(X), not \ \#count\{ V \colon edge(v,x)\} = 0\\
-& \leftimpl \#count\{V \colon edge(V,Y), not \ edge(Y,V)\}=X, X\geq2.\\
-& \leftimpl not \ node(X), \#count\{ V \colon edge(V,Y)\}=X\\
+a(X) & \leftimpl node(X), \#count\{ V \colon edge(V,X)\} \geeq 0. \\
+a(X) & \leftimpl node(X), \nott \#count\{ V \colon edge(v,x)\} = 0\\
+& \leftimpl \#count\{V \colon edge(V,Y), \nott edge(Y,V)\}=X, X\geq2.\\
+& \leftimpl \nott node(X), \#count\{ V \colon edge(V,Y)\}=X\\
 \end{align*}
 \end{exmp}
 
 \begin{exmp} \textbf{Unsafe Rules and Constraints}
 \begin{align*}
-a(X) & \leftimpl not \ node(X), \#count\{V \colon edge(V,X)\} \geeq 0. \\
+a(X) & \leftimpl \nott node(X), \#count\{V \colon edge(V,X)\} \geeq 0. \\
 a(X) & \leftimpl node(X), \#count\{V \colon edge(V,X)\} \geeq Z. \\
-a(X) & \leftimpl node(X), \#count\{V \colon edge(V,Y), not \ edge(V,Y)\} \geeq 0. \\
+a(X) & \leftimpl node(X), \#count\{V \colon edge(V,Y), \nott edge(V,Y)\} \geeq 0. \\
 & \leftimpl \#count\{ V \colon edge(V,Y)\} \geeq 0, X > Y. \\
-& \leftimpl not node(X), \#count\{V \colon edge(V,Y)\} > X. 
+& \leftimpl \nott node(X), \#count\{V \colon edge(V,Y)\} > X. 
 \end{align*}
 \end{exmp}
 
