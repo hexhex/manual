@@ -657,7 +657,7 @@ constraints} we will consider the following example:
 \rowprefix{r_5} & \mathit{colored}(X, b) \leftimpl \mathit{node}(X), \nott \  colored(X,r), \nott \ colored(X,g). & \\
 \\
 \rowprefix{r_6} & \leftimpl \mathit{edge}(X, Y), \mathit{colored}
-(X, C), \mathit{colored}(Y, C) & \\
+(X, C), \mathit{colored}(Y, C). & \\
 \\
 \rowprefix{r_7} & \mathit{edge}(2, 4). \  \mathit{edge}(2, 3). \  
 \mathit{edge}(5, 5). & \\
@@ -709,7 +709,7 @@ being true is not stated anywhere). This kind of negation
 is called \emph{negation as failure}.
 \begin{exmp}
 The next program uses so-called true or classical negation. 
-Since $\mathit{-train\_approaches}$ is not known to be 
+Since $\mathit{\clasneg train\_approaches}$ is not known to be 
 true, the following program has only an empty model.
 \begin{align*}
 \rowprefix{r_1}\mathit{cross\_railroad} \leftimpl \ \clasneg \mathit{train\_approaches}.
@@ -729,7 +729,7 @@ Disjunctive logic programs permit the connective ``$\vee$"
 between atoms in rule heads.
 \begin{center}
 \begin{tabular}{ r l l}
-  \text{Fact:} & $A_0$ $\vee$ \dots $\vee$ $A_m$ \\
+  \text{Fact:} & $A_0$ $\vee$ \dots $\vee$ $A_m$. \\
   \text{Rule:} & $A_0$ $\vee$ \dots $\vee$ $A_m$ 
   $\leftimpl$ $L_1,\dots,L_n. $ \\
  \end{tabular}
@@ -913,7 +913,7 @@ possibly negated using negation-as-failure \cite{gkklorst2015}.
 
 The form of an \emph{aggregate atom} occuring in a rule 
 body is as follows:\\ \mycenterline{$s_1 \prec_1 \alpha \{ 
- t_1, \dots, t_n : L_1, \dots, L_n\} \prec_2 s_2$} 
+ t_1, \dots, t_n : L_1, \dots, L_m\} \prec_2 s_2$} 
 Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming 
 \emph{aggregate elements}, are non-empty tuples of terms 
 and literals, respectively. $\alpha$ is the name of some 
@@ -932,7 +932,7 @@ $f(S)$ if and only if $X$ appears in $S$ and $X$ does not
 appear in any aggregate function that is outside of $f(S)$.
 
 One aggregate body can contain multiple symbolic set constructors 
-of form $t_1, \dots, t_n \colon L_1, \ \dots,L_n$ by separating them using ``;'' sign. 
+of form $t_1, \dots, t_n \colon L_1, \ \dots,L_m$ by separating them using ``;'' sign. 
 \begin{exmp}
 \begin{align*}
 \rowprefix{r_1}& emp(1,goofie,1250).\\
@@ -1082,6 +1082,7 @@ of a weighed directed graph.
 \rowprefix{r_{11}}&\mathit{ : \sim in\_tree}(X,Y,C). [C@1,X,Y,C]
 \end{align*}
 \end{exmp}
+The complete source code for this example is available at \examplelink{example_3_12}.
 Best model:
 \begin{align*}
 \{ & \mathit{reached(a), out\_tree(a,b), 
@@ -1126,27 +1127,32 @@ one another do not work in the same group.
 \rowprefix{r_4}& \mathit{same\_skill}(a,b). \\
 \rowprefix{r_5}& \mathit{married(c,d)}. \\
 \\ 
-\rowprefix{r_6}& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
+\rowprefix{r_6}& \mathit{mbr}(X,p1) \vee \mathit{mbr}(X,p2) 
 \leftimpl \mathit{employee}(X).\\
-\rowprefix{r_7}& :\sim \mathit{member}(X,P), \mathit{member}
+\rowprefix{r_7}& :\sim \mathit{mbr}(X,P), \mathit{mbr}
 (Y,P), X \noteq Y, \nott \thinspace \mathit{know(X,Y)}. \thinspace [1@1, X,Y,P]\\
-\rowprefix{r_8}& : \sim \mathit{member}(X,P), \mathit{member}
-(Y,P), X \noteq Y, \mathit{marrie}d(X,Y). \thinspace [1@2, X,Y,P]\\
-\rowprefix{r_9}& : \sim member(X,P), member(Y,P), X \noteq Y, 
-same\_skill(X,Y). \thinspace \\ & \hspace{8.92cm} [1@2, X,Y,P] 
+\rowprefix{r_8}& : \sim \mathit{mbr}(X,P), \mathit{mbr}
+(Y,P), X \noteq Y, \mathit{married}(X,Y). \thinspace [1@2, X,Y,P]\\
+\rowprefix{r_9}& : \sim mbr(X,P), mbr(Y,P), X \noteq Y, 
+same\_skill(X,Y). \thinspace [1@2, X,Y,P] 
 \end{align*}
 \end{exmp}
+The complete source code for this example is available at \examplelink{example_3_13}.
+To run the example above following command is to be executed:
+%
+\leftaligned{\texttt{ \$ dlvhex2 \ example\_3\_13.hex \ --weak-allmodels}}
+%
 This time we have two best 
-models in our solution (program to run with \texttt{--weak-allmodels} option enabled):
+models in our solution:
 \begin{align*}
-\{ & \mathit{member}(b,p2), \mathit{member}(c,p2), 
-   \mathit{member}(a,p1), \mathit{member}(d,p2), 
-   \mathit{member}(e,p1) \} \\
+\{ & \mathit{mbr}(b,p2), \mathit{mbr}(c,p2), 
+   \mathit{mbr}(a,p1), \mathit{mbr}(d,p2), 
+   \mathit{mbr}(e,p1) \} \\
    & \mathit{Cost} [ \mathit{Weight:Level]}):  \langle 
    [6:1],[0:2] \rangle \\ 
-\{ & \mathit{member}(a,p2), \mathit{member}(b,p1), 
-   \mathit{member}(c,p1), \mathit{member}(d,p1), 
-   \mathit{member}(e,p2) \} \\
+\{ & \mathit{mbr}(a,p2), \mathit{mbr}(b,p1), 
+   \mathit{mbr}(c,p1), \mathit{mbr}(d,p1), 
+   \mathit{mbr}(e,p2) \} \\
    & \mathit{Cost} ([ \mathit{Weight:Level]}):\langle 
    [6:1],[0:2] \rangle
 \end{align*}
@@ -1460,7 +1466,7 @@ encoded as follows:
 \mathit{startingCity(P).} \\
 & \\
 \rowprefix{r_4} & \mathit{cityOfDegree(F1, DegPlus, F2, Cost)} 
-\leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\ 
+\leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\ \qquad 
 &\ext{edges}{F1}{F2, Cost}, \mathit{DegPlus=DegPlus+1}, 
 DegPlus < 4, \\ & \#int(DegPlus), \#int(Deg)), \#int(Cost). 
 \\
@@ -1477,7 +1483,7 @@ node(X). \\
 node(Y). \\
 & \\
 \rowprefix{r_{10}} & costCalculated(X) \leftimpl \#sum \{C,X,Y : 
-cycle(X,Y), cost(X,Y,C)\} = X \\
+cycle(X,Y), cost(X,Y,C)\} = X. \\
 \rowprefix{r_{11}} & withinBudget(B,C) \leftimpl budget(B), 
 costCalculated(C), B \geeq C. \\
 \rowprefix{r_{12}} & \leftimpl  budgetB(B), costCalculated(C), 
@@ -1621,8 +1627,8 @@ subsection is as follows:
 \rowprefix{r_2} & nodeOfDegree(P,0,P) \leftimpl startingNode(P). 
 \\
 \rowprefix{r_3} & nodeOfDegree(F1, DegPlus, F2) \leftimpl 
-nodeOfDegree(\_, Deg, F1), \\ & \ext{edges}{F1}{F2}, 
-DegPlus=Deg+1, DgPlus <= 5, \#int(DegPlus), \\ &\#int(Deg). 
+nodeOfDegree(\_, Deg, F1), \\ & \qquad \ext{edges}{F1}{F2}, 
+DegPlus=Deg+1, DgPlus <= 5, \#int(DegPlus), \\ & \qquad \#int(Deg). 
 \\
 \rowprefix{r_4} & node(Y) \leftimpl nodeOfDegre(X, V, Y).  \\
 \rowprefix{r_5} & edge(X,Y) \leftimpl nodeOfDegree(X,V,Y).\\
@@ -1637,11 +1643,11 @@ goal(2,eleven).} \\
 \mathit{three}\\ 
 \\
 \rowprefix{r_{10}} & guessPath(I,0,V) \leftimpl start(I,V). \\
-\rowprefix{r_{11}} &  \mathit{guessPath(I, TPlus, U)} \vee 
-\mathit{nguessPath(I, TPlus, U)} \leftimpl 
-\mathit{agent(I)}, \\ &  \mathit{guessPath(I, T, V)},  
-\mathit{edge(U,V)}, \mathit{TPlus=T+1}, 
-\mathit{\#int(TPlus)}, \mathit{\#int(T).}  \\
+\rowprefix{r_{11}} &  \mathit{guessPath(I, TP, U)} \vee 
+\mathit{nguessPath(I, T, U)} \leftimpl 
+\mathit{agent(I)}, \\ & \qquad  \mathit{guessPath(I, T, V)},  
+\mathit{edge(U,V)}, \mathit{TP=T+1}, 
+\mathit{\#int(TP)}, \mathit{\#int(T).}  \\
 \rowprefix{r_{12}} &  \leftimpl 1 \noteq \mathit{\#count\{ U 
 \colon guessPath(I, T, U) \}}, \mathit{agent(I)}, 
 \mathit{\#int(T)}.  \\
@@ -1651,15 +1657,15 @@ goal(2,eleven).} \\
 \rowprefix{r_{14}} & \leftimpl goal(I, V), \nott \thinspace  
 \mathit{visit(I, V).} \\
 \rowprefix{r_{15}} &  \leftimpl guessPath(I, T, V), 
-path(I^{\prime},T,V), X \lesseq XP. \\
+path(IP,T,V), X \lesseq XP. \\
 \rowprefix{r_{16}} &  \leftimpl guessPath(I,T,V), \nott \thinspace  
 \mathit{clear(V).}\\
 \\
 \rowprefix{r_{17}} &  \mathit{path(I,V,U,T,ValidOrNot)} 
-\leftimpl \mathit{agent(I)}, \\ & \mathit{guessPath(I, T, 
-V)}, \mathit{guessPath(I, TPlus, U)}, \\ & \ext{check}{U, 
-V, T, I}{ValidOrNot}, \mathit{TPlus=T+1}, \#int(T), 
-\#int(TPlus).  \\
+\leftimpl \mathit{agent(I)}, \\ & \qquad \mathit{guessPath(I, T, 
+V)}, \mathit{guessPath(I, TP, U)}, \\ & \ext{check}{U, 
+V, T, I}{ValidOrNot}, \mathit{TP=T+1}, \#int(T), 
+\#int(TP).  \\
 \rowprefix{r_{18}} & \leftimpl path(I, V, U, T, invalid). 
 \end{align*}
 \end{exmp}
@@ -3541,27 +3547,27 @@ one another do not work in the same group.
 \rowprefix{r_4}& \mathit{same\_skill}(a,b). \\
 \rowprefix{r_5}& \mathit{married(c,d)}. \\
 \\ 
-\rowprefix{r_6}& \mathit{member}(X,p1) \vee \mathit{member}(X,p2) 
+\rowprefix{r_6}& \mathit{mbr}(X,p1) \vee \mathit{mbr}(X,p2) 
 \leftimpl \mathit{employee}(X).\\
-\rowprefix{r_7}& : \sim \mathit{member}(X,P), \mathit{member}
+\rowprefix{r_7}& : \sim \mathit{mbr}(X,P), \mathit{mbr}
 (Y,P), X \noteq Y, \nott \thinspace \mathit{know(X,Y)}.& 
 [1:1] \\
-\rowprefix{r_8}& : \sim  \mathit{member}(X,P), \mathit{member}
+\rowprefix{r_8}& : \sim  \mathit{mbr}(X,P), \mathit{mbr}
 (Y,P), X \noteq Y, \mathit{marrie}d(X,Y). & [1:2]\\
-\rowprefix{r_9}& : \sim member(X,P), member(Y,P), X \noteq Y, 
+\rowprefix{r_9}& : \sim mbr(X,P), mbr(Y,P), X \noteq Y, 
 same\_skill(X,Y). & [1:2] 
 \end{align*}
 \end{exmp}
 This program has two best models:
 \begin{align*}
-\{ & \mathit{member}(a,p2), \mathit{member}(b,p1), 
-   \mathit{member}(c,p1), \mathit{member}(d,p2), 
-   \mathit{member}(e,p2) \} \\
+\{ & \mathit{mbr}(a,p2), \mathit{mbr}(b,p1), 
+   \mathit{mbr}(c,p1), \mathit{mbr}(d,p2), 
+   \mathit{mbr}(e,p2) \} \\
    & \mathit{Cost} [ \mathit{Weight:Level]}):  \langle 
    [6:1],[0:2] \rangle \\ 
-\{ & \mathit{member}(a,p1), \mathit{member}(b,p2), 
-   \mathit{member}(c,p2), \mathit{member}(d,p1), 
-   \mathit{member}(e,p1) \} \\
+\{ & \mathit{mbr}(a,p1), \mathit{mbr}(b,p2), 
+   \mathit{mbr}(c,p2), \mathit{mbr}(d,p1), 
+   \mathit{mbr}(e,p1) \} \\
    & \mathit{Cost} ([ \mathit{Weight:Level]}):\langle 
    [6:1],[0:2] \rangle
 \end{align*}
@@ -4034,11 +4040,11 @@ goal(2,eleven).} \\
 \mathit{three}\\ 
 \\
 \rowprefix{r_{10}} & guessPath(I,0,V) \leftimpl start(I,V). \\
-\rowprefix{r_{11}} &  \mathit{guessPath(I, TPlus, U)} \vee 
-\mathit{nguessPath(I, TPlus, U)} \leftimpl 
+\rowprefix{r_{11}} &  \mathit{guessPath(I, TP, U)} \vee 
+\mathit{nguessPath(I, TP, U)} \leftimpl 
 \mathit{agent(I)}, \\ &  \mathit{guessPath(I, T, V)},  
-\mathit{edge(U,V)}, \mathit{TPlus=T+1}, 
-\mathit{\#int(TPlus)}, \mathit{\#int(T).}  \\
+\mathit{edge(U,V)}, \mathit{TP=T+1}, 
+\mathit{\#int(TP)}, \mathit{\#int(T).}  \\
 \rowprefix{r_{12}} &  \leftimpl 1 \noteq \mathit{\#count\{ U 
 \colon guessPath(I, T, U) \}}, \mathit{agent(I)}, 
 \mathit{\#int(T)}.  \\
@@ -4048,15 +4054,15 @@ goal(2,eleven).} \\
 \rowprefix{r_{14}} & \leftimpl goal(I, V), \nott \thinspace  
 \mathit{visit(I, V).} \\
 \rowprefix{r_{15}} &  \leftimpl guessPath(I, T, V), 
-path(I^{\prime},T,V), X \lesseq XP. \\
+path(IP,T,V), X \lesseq XP. \\
 \rowprefix{r_{16}} &  \leftimpl guessPath(I,T,V), \nott \thinspace  
 \mathit{clear(V).}\\
 \\
 \rowprefix{r_{17}} &  \mathit{path(I,V,U,T,ValidOrNot)} 
 \leftimpl \mathit{agent(I)}, \\ & \mathit{guessPath(I, T, 
-V)}, \mathit{guessPath(I, TPlus, U)}, \\ & \ext{check}{U, 
-V, T, I}{ValidOrNot}, \mathit{TPlus=T+1}, \#int(T), 
-\#int(TPlus).  \\
+V)}, \mathit{guessPath(I, TP, U)}, \\ & \ext{check}{U, 
+V, T, I}{ValidOrNot}, \mathit{TP=T+1}, \#int(T), 
+\#int(TP).  \\
 \rowprefix{r_{18}} & \leftimpl path(I, V, U, T, invalid). 
 \end{align*}
 \end{exmp}
