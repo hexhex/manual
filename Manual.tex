@@ -23,7 +23,7 @@
 \DeclareMathOperator{\geeq}{>=}
 \newcommand{\examplelink}[1]{\url{upload_location/#1}}
 
-\newcommand\mycenterline[1]{\smallskip \centerline{#1} \smallskip}
+\newcommand\mycenterline[1]{\par\smallskip\centerline{#1} \smallskip}
 %\newcommand\mycenterline[1]{\smallskip #1 \smallskip\\}
 
 
@@ -1159,8 +1159,10 @@ atoms}, and we extend the well known answer-set semantics
 to this class of programs. A high-order 
 atom allows to quantify values over predicate names, and to 
 freely exchange predicate symbols with constant symbols, 
-like in the rule\\ \mycenterline{\\$C(X) \leftarrow 
-\textit{subclassOf(D,C),D(X)}$}
+like in the rule
+%
+\mycenterline{$C(X) \leftarrow \textit{subclassOf(D,C),D(X)}$}
+%
 A \textit{high-order atom} is a tuple ($Y_0, Y_1,
 \dots,Y_n$), where $Y_0, Y_1,\dots,Y_n$ are terms; $ n \ge 
 0$ is the \textit{arity} of the atom. Intuiitively, $Y_0$ 
