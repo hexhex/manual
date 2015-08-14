@@ -24,6 +24,8 @@
 \newcommand{\examplelink}[1]{\url{upload_location/#1}}
 
 \newcommand\mycenterline[1]{\par\smallskip\centerline{#1} \smallskip}
+\newcommand\leftaligned[1]{\par \smallskip #1 \smallskip\\}
+
 %\newcommand\mycenterline[1]{\smallskip #1 \smallskip\\}
 
 
@@ -190,9 +192,9 @@ new folder, the following steps should be followed in order
 to properly install it. Commands prefixed with ``\texttt{\$}'' sign are the commands executed from the system shell. Some commands need ``\texttt{\#}'' as prefix to ensure superuser permissions. The following 
 commands need to be executed:
 %
-\mycenterline{\texttt{\$ \thinspace ./bootstrap.sh}}
+\par \smallskip \texttt{\$ \thinspace ./bootstrap.sh} \smallskip
 %
-\mycenterline{\texttt{\$ \thinspace ./b2 install --prefix=PREFIX}}
+\leftaligned{\texttt{\$ \thinspace ./b2 install --prefix=PREFIX}}
 %
 In this 
 command, \texttt{PREFIX} is the directory where Boost should 
@@ -201,14 +203,14 @@ be installed.
 After downloading the latest release version of \dlvhex{} by 
 executing the following sequence of commands \dlvhex{} will 
 be successfully installed:
-\\ \mycenterline{\texttt{\$ \thinspace ./configure}} To enable the Python 
+\leftaligned{\texttt{\$ \thinspace ./configure}} To enable the Python 
 features of \dlvhex{}, \texttt{--enable-python} is to be 
 added as option of \texttt{configure}. Afterwards, the 
 following command builds the system:
-\\ \mycenterline{\texttt{\$ \thinspace make}} To allow using of multiple 
+\leftaligned{\texttt{\$ \thinspace make}} To allow using of multiple 
 cores one should specify the \texttt{-jN} option to make 
 use of N cores. Finally, the following
-\\ \mycenterline{\texttt{\$ \thinspace make install}} installs the package 
+\leftaligned{\texttt{\$ \thinspace make install}} installs the package 
 in the location specified with configure.  
    
 \paragraph{Development version (git clone)}
@@ -216,11 +218,11 @@ The source code of \dlvhex{} is hosted on github at
 \url{https://github.com/hexhex/}. To get the latest 
 development version it is necessary to git clone system as 
 follows:
-\\ \mycenterline{\texttt{\$ \thinspace git clone 
+\leftaligned{\texttt{\$ \thinspace git clone 
 https://github.com/hexhex/core --recursive}} 
 After cloning to the desired directory it is necessary to 
-execute the \texttt{bootstrap.sh} script from there by invoking: \\ 
-\mycenterline{\texttt{\$ \thinspace ./bootstrap.sh}}. 
+execute the \texttt{bootstrap.sh} script from there by invoking:
+\leftaligned{\texttt{\$ \thinspace ./bootstrap.sh}} 
 After cloning and bootstrapping, the steps from 
 Section~\ref{sec:steps} (\texttt{configure, make} and 
 \texttt{make install}) are to be followed in order to 
@@ -231,8 +233,8 @@ automatically on Ubuntu systems and can be found at
 \url{https://github.com/hexhex/core/blob/master/scripts/setupdlvhex.sh}.
 
 Once installation is completed, the system can be used from 
-the terminal as follows:\\ 
-\mycenterline{\texttt{\$ \thinspace dlvhex2 program.hex}} where 
+the terminal as follows:
+\leftaligned{\texttt{\$ \thinspace dlvhex2 program.hex}} where 
 \texttt{program.hex} refers to the input program. Various 
 additional command line options are available and explained in Section~\ref{sec:commandline}.    
 
@@ -444,7 +446,7 @@ size=5em}}
 \end{figure}
 To compute the answer sets representing 
 the solution, the following command is to be invoked:
-\\ \mycenterline{\texttt{\$ dlvhex2 --pythonplugin=extsource.py program.hex}}
+\leftaligned{\texttt{\$ dlvhex2 --pythonplugin=extsource.py program.hex}}
 where \texttt{program.hex} is \hex-program and 
 \texttt{extsource.py} represents the Python file with 
 external source implementation (cf. Section~\ref{sec:externalInterfaces}). The output of the 
@@ -776,23 +778,23 @@ division).
 \begin{align*}
 &\rowprefix{r_1} \ \mathit{a}(6). \\
 &\rowprefix{r_2} \ \mathit{b}(2). \\
-&\rowprefix{r_3} \ c(X,Y,XX) \leftimpl a(X), b(Y),+(X, Y, XX). \\
-&\rowprefixprime{r_3} c(X,Y,XX) \leftimpl a(X), b(Y),XX=X+Y. \\
-&\rowprefix{r_4}  \ d(X,Y,XX) \leftimpl a(X), b(Y),-(X, Y, XX). \\
-&\rowprefixprime{r_4} c(X,Y,XX) \leftimpl a(X), b(Y),XX=X-Y. \\
-&\rowprefix{r_5} \ e(X,Y,XX) \leftimpl a(X), b(Y),*(X, Y, XX). \\
-&\rowprefixprime{r_5} c(X,Y,XX) \leftimpl a(X), b(Y),XX=X*Y. \\
-&\rowprefix{r_6} \ f(X,Y,XX) \leftimpl a(X), b(Y),/(X, Y, XX). \\
-&\rowprefixprime{r_6} c(X,Y,XX) \leftimpl a(X), b(Y),XX=X/Y. \\
+&\rowprefix{r_3} \ c(X,Y,Z) \leftimpl a(X), b(Y),+(X, Y, Z). \\
+&\rowprefixprime{r_3} c(X,Y,Z) \leftimpl a(X), b(Y),Z=X+Y. \\
+&\rowprefix{r_4}  \ d(X,Y,Z) \leftimpl a(X), b(Y),-(X, Y, Z). \\
+&\rowprefixprime{r_4} d(X,Y,Z) \leftimpl a(X), b(Y),Z=X-Y. \\
+&\rowprefix{r_5} \ e(X,Y,Z) \leftimpl a(X), b(Y),*(X, Y, Z). \\
+&\rowprefixprime{r_5} e(X,Y,Z) \leftimpl a(X), b(Y),Z=X*Y. \\
+&\rowprefix{r_6} \ f(X,Y,Z) \leftimpl a(X), b(Y),/(X, Y, Z). \\
+&\rowprefixprime{r_6} f(X,Y,Z) \leftimpl a(X), b(Y),Z=X/Y. \\
 \end{align*}
 \end{exmp}
-An atom $+(X,Y,XX)$ is true, iff $XX$ is the sum of $X$ and $Y$ (likewise for other operators).
-The single answer set for the example above is:\\ 
+An atom $+(X,Y,Z)$ is true, iff $Z$ is the sum of $X$ and $Y$ (likewise for other operators).
+The single answer set for the example above is:
 \mycenterline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
 Alternatively to \emph{prefix notation} one can also use 
 \emph{infix notation} to use built-in arithmetic functions 
-in \dlvhex{}. For instance $\mathit{+(X, Y, XX)}$ in \row{r_3} 
-alternatively can be written as $\mathit{XX=X+Y}$ in row $\row{r_3}\prime$. 
+in \dlvhex{}. For instance $\mathit{+(X, Y, Z)}$ in \row{r_3} 
+alternatively can be written as $\mathit{Z=X+Y}$ in row $\row{r_3}\prime$. 
 
 \subsection{Built-in Comparison Predicates}
 \dlvhex{} feature a total order among variable-free terms 
@@ -3211,19 +3213,19 @@ division).
 \begin{align*}
 \rowprefix{r_1}& \mathit{a}(6). \\
 \rowprefix{r_2}& \mathit{b}(2). \\
-\rowprefix{r_3}& c(X,Y,XX) \leftimpl a(X), b(Y),+(X, Y, XX). \\
-\rowprefix{r_4}& d(X,Y,XX) \leftimpl a(X), b(Y),-(X, Y, XX). \\
-\rowprefix{r_5}& e(X,Y,XX) \leftimpl a(X), b(Y),*(X, Y, XX). \\
-\rowprefix{r_6}& f(X,Y,XX) \leftimpl a(X), b(Y),/(X, Y, XX).
+\rowprefix{r_3}& c(X,Y,Z) \leftimpl a(X), b(Y),+(X, Y, Z). \\
+\rowprefix{r_4}& d(X,Y,Z) \leftimpl a(X), b(Y),-(X, Y, Z). \\
+\rowprefix{r_5}& e(X,Y,Z) \leftimpl a(X), b(Y),*(X, Y, Z). \\
+\rowprefix{r_6}& f(X,Y,Z) \leftimpl a(X), b(Y),/(X, Y, Z).
 \end{align*}
 \end{exmp}
-An atom $+(X,Y,XX)$ is true, iff $XX$ is the sum of $X$ and $Y$ (likewise for other operators).
+An atom $+(X,Y,Z)$ is true, iff $Z$ is the sum of $X$ and $Y$ (likewise for other operators).
 The single answer set for the example above is:\\ 
 \mycenterline{$\mathit{\{a(6),b(2),e(6,2,12),f(6,2,3),c(6,2,8),d(6,2,4)\}}$.}
 \\Alternatively to \emph{prefix notation} one can also use 
 \emph{infix notation} to use built-in arithmetic functions 
-in \dlvhex{}. For instance $\mathit{+(X, Y, XX)}$ 
-alternatively can be written as $\mathit{XX=X+Y}$. 
+in \dlvhex{}. For instance $\mathit{+(X, Y, Z)}$ 
+alternatively can be written as $\mathit{Z=X+Y}$. 
 
 \subsection{Built-in Comparison Predicates}
 \dlvhex{} feature a total order among variable-free terms 
