@@ -1208,29 +1208,30 @@ where $Y_1,
 \dots,Y_n$ and $X_1,\dots,X_m$ are the two lists of terms 
 (called \textit{input} and \textit{output} lists, 
 respectively), and \&g $\in$ \textit{G} is an external 
-predicate name. We assume that \&g has fixed lengths 
-$in$($\&g$) = n and $out$($\&g$) = m for 
-input and output lists, respectively. Intuitively, an 
+predicate name. We assume that \&g has
+%fixed lengths $in$($\&g$) = n and $out$($\&g$) = m for 
+input and output lists, respectively.%
+fixed input length $n$ and fixed output length $m$. 
+Intuitively, an 
 external atom provides a way for deciding the truth value 
 of an output tuple depending on the extension of a set of 
 input predicates.
 For instance, the rule 
 %
-\mycenterline{ \textit{$reached(X) 
-\leftarrow \&reach[edge,a](X)$}}
+\mycenterline{$reached(X) \leftarrow \&reach[edge,a](X).$}
 %
 computes the predicate \textit{reached} taking values 
-from the predicate $\&reach$, which computes via 
-\textit{$\&reach[edge,a](X)$} all the reachable nodes in 
-the graph \textit{edge} from node \textit{a}, 
-delegating this task to an external computational source.
+from the external predicate $\&reach$, which computes in an external program
+%via \textit{$\&reach[edge,a](X)$} 
+all the reachable nodes $X$ in 
+the graph specified by predicates \textit{edge} starting from node \textit{a}. 
 \begin{exmp}
 \begin{align*}
-\rowprefix{r_1}& \mathit{systems} \ (\mathit{dlvhex}). \ 
-\mathit{systems}(\mathit{clasp}). \\  
+\rowprefix{r_1}& \mathit{system}(\mathit{dlvhex}). \ 
+\mathit{system}(\mathit{clasp}). \\  
 \rowprefix{r_2}& \mathit{sayhello(X)} \leftimpl 
 \ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, 
-\mathit{systems(Y).}  \\ 
+\mathit{system(Y).}  \\ 
 \\
 \rowprefix{r_3}& \mathit{set1}(a). \ \mathit{set1}(b). \ 
 \mathit{set1}(c).\\
