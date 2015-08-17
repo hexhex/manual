@@ -4324,8 +4324,6 @@ def concat(a,b)
 To get more familiar with Python plugins we are providing three examples as there are three possible input parameter types.
 
 The plugin in Example~\ref{constantAsInput} uses a constant (string) input parameter. It is used in Example~\ref{faceQuery} to query all direct friends of the person of interest.
-
-\section{plugin examples}
 \begin{exmp}
 \label{constantAsInput}
 \begin{verbatim}
@@ -4388,6 +4386,7 @@ origin (inoutd, or loc) using predicate $\mathit{need}$.
 \end{verbatim}
 \end{exmp}
 The complete source code for this example is available at: \examplelink{example_5_2}.
+
 
 From line \verb+2+ to line \verb+8+ we implement the \verb+rq+ function. Line \verb+5+ filters the atoms according to the given predicate. In Line 6 we check if the predicate of the current input atom is equivalent to \texttt{location\_choice}, which specifies the selected location. Line \verb+8+ is returning  
 the requirements (if any) of the location specified by variable 
