@@ -1912,6 +1912,7 @@ functions to realise custom external atoms. For every Python plugin two tasks ar
 \end{itemize}
 
 \subsubsection{Registering External Atoms}
+\label{registerExtAtom}
 The \verb+register+ function has the following form:
 \begin{verbatim} 
 def register():
@@ -1936,19 +1937,36 @@ def register():
 Once the external atom is registered successfully, it has 
 to be implemented in the form of another Python function 
 with an appropriate number of input parameters and output parameters specified.
-\paragraph{Parameter Values (Input)} As it is introduced in Section~\ref{inputparamtypes} \dlvhex{} supports three different input types (constant, predicate and tuple). In order to access and use input parameters in Python plugin following statement is to be executed:  
+\paragraph{Parameter Values (Input)} As it is introduced in Section~\ref{inputparamtypes} \dlvhex{} supports three different input types (e.g. constant, predicate and tuple). In order to access and use input parameters in Python plugin following statement is required in the plugin implementation:  
 \begin{verbatim}
 def Atom_Name(Input_Parameter_1, Input_Parameter_2, ...)
 \end{verbatim}
+As there are three different input parameters, each of them is accessed in different way: 
+\begin{itemize}
+\item To access data of type \verb+CONSTANT+ type, for input variable \verb+var+, one should write \verb+var.value()+. More details about implementation is available in Example~\ref{constantAsInput}.
+ 
+\item To access data for input parameter of type \verb+PREDICATE+ type, for each variable \verb+var+ in \verb+dlvhex.getTrueInputAtoms()+, one should write \verb+dlvhex.tuple()[1].value()+. More details about implementation is available in Example~\ref{predicateAsInput}.  
 
+\item To access data for input parameter of type \verb+TUPLE+ type, for each member \verb+x+ of a tuple \verb+t+, one should write \verb+x.value()+. More details about implementation is available in Example~\ref{tupleAsInput}.
+\end{itemize}
 
 \paragraph{Creating Output Tuples}
+An external atom returns output tuple of different sizes. Tuple size is specified in register function with output arity as it is introduced in Section~\ref{registerExtAtom}. The \dlvhex{} command used for output looks as follows: 
 \begin{verbatim}
-dlvhex.output((Output_Parameter_1, ...))
+dlvhex.output((Output_Parameter_1, Output_Parameter_2,...))
 \end{verbatim}
+Command to output single value from the external atom would look like: 
+\begin{verbatim}
+dlvhex.output((item, ))
+\end{verbatim}
+The output command above returns variable of type string in the tuple of size 1 (cf. Example~\ref{constantAsInput}). 
+If we want for instance to return tuple of size 2, output command will be:
+\begin{verbatim}
+dlvhex.output((node, int(j)))
+\end{verbatim}
+As it is obvious the plugin above returns tuples of size 2 (cf. Example~\ref{travellingsalesperson}). One of output types is string and second one is of type integer. 
 
-
-The implementation of the \verb+concat+ function is as follows:
+One small example just to show concept as one part is given bellow. The implementation of the \verb+concat+ function is as follows:
 \begin{verbatim}
 def concat(a,b)
   # Function body goes here
@@ -1980,7 +1998,7 @@ To get more familiar with Python plugins we are providing three examples as ther
 8:  def register():
 9:  prop = dlvhex.ExtSourceProperties()
 10: prop.addFiniteOutputDomain(0)
-11: dlvhex.addAtom("friendsOf", (dlvhex.Constant, ),1,prop)
+11: dlvhex.addAtom("friendsOf", (dlvhex.CONSTANT, ),1,prop)
 \end{verbatim}
 \end{exmp}
 The complete source code for this example is available at \examplelink{example_5_1}.
