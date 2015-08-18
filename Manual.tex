@@ -1939,15 +1939,15 @@ to be implemented in the form of another Python function
 with an appropriate number of input parameters and output parameters specified.
 \paragraph{Parameter Values (Input)} As it is introduced in Section~\ref{inputparamtypes} \dlvhex{} supports three different input types (e.g. constant, predicate and tuple). In order to access and use input parameters in Python plugin following statement is required in the plugin implementation:  
 \begin{verbatim}
-def Atom_Name(Input_Parameter_1, Input_Parameter_2, ...)
+def Atom_Name(Input_Parameter_1, Input_Parameter_2,...)
 \end{verbatim}
 As there are three different input parameters, each of them is accessed in different way: 
 \begin{itemize}
-\item To access data of type \verb+CONSTANT+ type, for input variable \verb+var+, one should write \verb+var.value()+. More details about implementation is available in Example~\ref{constantAsInput}.
+\item To access data of type \verb+CONSTANT+, for input variable \verb+var+, one should write \verb+var.value()+. More details about implementation is available in Example~\ref{constantAsInput}.
  
-\item To access data for input parameter of type \verb+PREDICATE+ type, for each variable \verb+var+ in \verb+dlvhex.getTrueInputAtoms()+, one should write \verb+dlvhex.tuple()[1].value()+. More details about implementation is available in Example~\ref{predicateAsInput}.  
+\item To access data for input parameter of type \verb+PREDICATE+, for each variable \verb+var+ in \verb+dlvhex.getTrueInputAtoms()+, one should write \verb+dlvhex.tuple()[1].value()+. More details about implementation is available in Example~\ref{predicateAsInput}.  
 
-\item To access data for input parameter of type \verb+TUPLE+ type, for each member \verb+x+ of a tuple \verb+t+, one should write \verb+x.value()+. More details about implementation is available in Example~\ref{tupleAsInput}.
+\item To access data for input parameter of type \verb+TUPLE+, for each member \verb+x+ of a tuple \verb+t+, one should write \verb+x.value()+. More details about implementation is available in Example~\ref{tupleAsInput}.
 \end{itemize}
 
 \paragraph{Creating Output Tuples}
@@ -1965,19 +1965,6 @@ If we want for instance to return tuple of size 2, output command will be:
 dlvhex.output((node, int(j)))
 \end{verbatim}
 As it is obvious the plugin above returns tuples of size 2 (cf. Example~\ref{travellingsalesperson}). One of output types is string and second one is of type integer. 
-
-One small example just to show concept as one part is given bellow. The implementation of the \verb+concat+ function is as follows:
-\begin{verbatim}
-def concat(a,b)
-  # Function body goes here
-  dlvhex.output((str, ))
-\end{verbatim} 
-
-\subsubsection{Learning additional constraints}
-TODO
-
-
-
 
 \subsubsection{Python plugin examples}
 To get more familiar with Python plugins we are providing three examples as there are three possible input parameter types. The plugin in Example~\ref{constantAsInput} uses a constant (string) input parameter. It is used in Example~\ref{faceQuery} to query all direct friends of the person of interest.
@@ -2078,6 +2065,10 @@ is continued until all strings from the tuple have been processed.
  
 A more detailed description of all methods available for the \dlvhex{} Python module can be found at:\\ \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/doc2x/}\\
 \url{group__pythonpluginframework.html}
+
+\subsubsection{Learning additional constraints}
+TODO
+
 \subsection{C++}
 TODO
 
