@@ -362,15 +362,15 @@ derivation. Variables used in these predicates are:
 
 \begin{itemize}
 \item $\mathit{F1}$ to represent the person for which we are 
-looking for the successors.
+looking for the successors
 
 \item $\mathit{F2}$ is the variable which holds the successor 
-nodes of $F1$. 
+nodes of $F1$ 
 
-\item $P$ represents the person of interest.
+\item $P$ represents the person of interest
 
 \item $\mathit{Deg}$ and $DegPlus$ are variables used to 
-compute the distance from the root node.
+compute the distance from the root node
 \end{itemize}
 The external atom \ext{friendsOf}{F1}{F2} has one input and 
 one output parameter. For input $\mathit{F1}$, 
@@ -1548,10 +1548,10 @@ There are many advantages of using an external atom of this
 type:
 \begin{itemize}
 \item The graph may be very large and it is not possible to load it 
-at once as a set of edges specified manually.
-\item We do not know the graph completely (e.g., due to limited capabilities of a web service).
+at once as a set of edges specified manually
+\item We do not know the graph completely (e.g., due to limited capabilities of a web service)
 \item We want to analyze only a subgraph of the graph that is 
-reachable from the node specified.
+reachable from the node specified
 \end{itemize}    
 In $\row{r_5}$, $\row{r_6}$ and $\row{r_7}$ the program is extracting 
 $\mathit{nodes}, \mathit{edges}$ and $\mathit{costs}$ of 
@@ -1907,8 +1907,8 @@ With \dlvhex{} version 2.4.0, a Python plugin interface was
 introduced, which supports Python scripts that provide 
 functions to realise custom external atoms. For every Python plugin two tasks are to be carried out:
 \begin{itemize}
-\item Write a new Python script which contains a register function and imports the package \dlvhex{}.
-\item Write another function for each external atom, and export this function using the $\mathit{register}$ function. 
+\item Write a new Python script which contains a register function and imports the package \dlvhex{}
+\item Write another function for each external atom, and export this function using the $\mathit{register}$ function 
 \end{itemize}
 
 \subsubsection{Registering External Atoms}
@@ -1921,11 +1921,11 @@ def register():
 It contains a call of \verb+addAtom+ for each external atom. Each call specifies a tuple of arity 3:
 \begin{itemize}
 \item \verb+Atom_Name+ is the name of the 
-external predicate.
+external predicate
 \item \verb+Input_Parameters+ is a tuple of arbitrary many input parameter types. Each input parameter type is one of the 
 following: \verb+dlvhex.CONSTANT+, \verb+dlvhex.PREDICATE+ or 
-\verb+dlvhex.TUPLE+, as it is introduced in the previous section.
-\item \verb+Output_Arity+ is an integer value representing the output arity of an atom.  
+\verb+dlvhex.TUPLE+, as it is introduced in the previous section
+\item \verb+Output_Arity+ is an integer value representing the output arity of an atom  
 \end{itemize}
 Consider the $\mathit{\&concat}$ external atom which we introduced in the previous section. It takes two strings as input and outputs their concatenation. The register function then would be as follows:
 \begin{verbatim}
@@ -1943,11 +1943,11 @@ def Atom_Name(Input_Parameter_1, Input_Parameter_2,...)
 \end{verbatim}
 As there are three input parameter types, each of them is accessed in different way as showed bellow: 
 \begin{itemize}
-\item To access data for input parameter of type \verb+CONSTANT+, for input variable \verb+var+, one should write \verb+var.value()+. More details about implementation is available in Example~\ref{constantAsInput}.
+\item To access data for input parameter of type \verb+CONSTANT+, for input variable \verb+var+, one should write \verb+var.value()+. More details about implementation is available in Example~\ref{constantAsInput}
  
-\item To access data for input parameter of type \verb+PREDICATE+, for each variable \verb+var+ in \verb+dlvhex.getTrueInputAtoms()+, one should write \verb+dlvhex.tuple()[1].value()+. More details about implementation is available in Example~\ref{predicateAsInput}.  
+\item To access data for input parameter of type \verb+PREDICATE+, for each variable \verb+var+ in \verb+dlvhex.getTrueInputAtoms()+, one should write \verb+dlvhex.tuple()[1].value()+. More details about implementation is available in Example~\ref{predicateAsInput}  
 
-\item To access data for input parameter of type \verb+TUPLE+, for each member \verb+x+ of a tuple \verb+t+, one should write \verb+x.value()+. More details about implementation is available in Example~\ref{tupleAsInput}.
+\item To access data for input parameter of type \verb+TUPLE+, for each member \verb+x+ of a tuple \verb+t+, one should write \verb+x.value()+. More details about implementation is available in Example~\ref{tupleAsInput}
 \end{itemize}
 
 \paragraph{Creating Output Tuples}
@@ -2369,9 +2369,9 @@ A variable $X$ in an aggregate-free rule is safe if at least one
 of the following conditions is satisfied:
 \begin{itemize}
 \item $X$ occurs in a positive standard predicate in the 
-body of the rule;
+body of the rule
 \item $X$ occurs in a strong negated standard predicate in 
-the body of the rule;
+the body of the rule
 \item $X$ occurs in the last argument of an arithmetic 
 predicate $A$ and all other arguments of $A$ are safe.
 \end{itemize}
@@ -2403,9 +2403,9 @@ a(X)&\leftimpl number(Y), \#succ(X,Y). \\
 \paragraph{Aggregates}
 A variable $X$ appearing in the symbolic set of an aggregate is safe if it does not appear elsewhere outside the aggregate atom and at least one of the following conditions is satisfied:
 \begin{itemize}
-\item $X$ occurs in a positive standard predicate in the symbolic set;
-\item $X$ occurs in a true negated standard predicate in the symbolic set;
-\item $X$ occurs in the last argument of an arithmetic predicate A in the symbolic set and all other arguments of A are safe.
+\item $X$ occurs in a positive standard predicate in the symbolic set
+\item $X$ occurs in a true negated standard predicate in the symbolic set
+\item $X$ occurs in the last argument of an arithmetic predicate A in the symbolic set and all other arguments of A are safe
 \end{itemize}
 All other variables (including guards) appearing in an aggregate atom have to be made safe by some other literal of the body.
 \begin{exmp} \textbf{Safe Rules and Constraints}
