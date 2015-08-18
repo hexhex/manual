@@ -1988,6 +1988,8 @@ origin (inoutd, or loc) using predicate $\mathit{need}$.
 10:   dlvhex.addAtom("rq", (dlvhex.PREDICATE), ), 1)
 \end{verbatim}
 \end{exmp}
+The complete source code for this example is available at \examplelink{example_5_2}.
+
 
 From line \verb+2+ to line \verb+8+ we implement the \verb+rq+ function. Line \verb+5+ filters the atoms according to the given predicate. In Line 6 we check if the predicate of the current input atom is equivalent to \texttt{location\_choice}, which specifies the selected location. Line \verb+8+ is returning  
 the requirements (if any) of the location specified by variable 
@@ -2011,6 +2013,8 @@ As mentioned above, there exists a third parameter type \emph{tuple}. It stands 
 8:    dlvhex.addAtom("concat", (dlvhex.TUPLE, ), 1)
 \end{verbatim}
 \end{exmp}
+The complete source code for this example is available at \examplelink{example_5_3}.
+
 This plugin receives a tuple of strings, concatenates 
 them and outputs them as a single string value. The function \verb+concat+ is implemented from line \verb+2+ to \verb+6+. In line \verb+3+, an 
 empty string is initialized. Inside the for loop, the input 
