@@ -203,14 +203,23 @@ be installed.
 After downloading the latest release version of \dlvhex{} by 
 executing the following sequence of commands \dlvhex{} will 
 be successfully installed:
-\leftaligned{\texttt{\$ \thinspace ./configure}} To enable the Python 
+%
+\leftaligned{\texttt{\$ \thinspace ./configure}} 
+%
+To enable the Python 
 features of \dlvhex{}, \texttt{--enable-python} is to be 
 added as option of \texttt{configure}. Afterwards, the 
 following command builds the system:
-\leftaligned{\texttt{\$ \thinspace make}} To allow using of multiple 
+%
+\leftaligned{\texttt{\$ \thinspace make}} 
+%
+To allow using of multiple 
 cores one should specify the \texttt{-jN} option to make 
 use of N cores. Finally, the following
-\leftaligned{\texttt{\$ \thinspace make install}} installs the package 
+%
+\leftaligned{\texttt{\$ \thinspace make install}}
+%
+installs the package 
 in the location specified with configure.  
    
 \paragraph{Development version (git clone)}
@@ -218,11 +227,16 @@ The source code of \dlvhex{} is hosted on github at
 \url{https://github.com/hexhex/}. To get the latest 
 development version it is necessary to git clone system as 
 follows:
-\leftaligned{\texttt{\$ \thinspace git clone 
+%
+\leftaligned{\texttt{\$ \thinspace
+%
+git clone 
 https://github.com/hexhex/core --recursive}} 
 After cloning to the desired directory it is necessary to 
 execute the \texttt{bootstrap.sh} script from there by invoking:
+%
 \leftaligned{\texttt{\$ \thinspace ./bootstrap.sh}} 
+%
 After cloning and bootstrapping, the steps from 
 Section~\ref{sec:steps} (\texttt{configure, make} and 
 \texttt{make install}) are to be followed in order to 
@@ -234,8 +248,10 @@ automatically on Ubuntu systems and can be found at
 
 Once installation is completed, the system can be used from 
 the terminal as follows:
-\leftaligned{\texttt{\$ \thinspace dlvhex2 program.hex}} where 
-\texttt{program.hex} refers to the input program. Various 
+%
+\leftaligned{\texttt{\$ \thinspace dlvhex2 program.hex}} 
+%
+where \texttt{program.hex} refers to the input program. Various 
 additional command line options are available and explained in Section~\ref{sec:commandline}.    
 
 \subsubsection{Pre-built binaries}
@@ -333,7 +349,7 @@ F2}) \leftimpl
 \{ P : \mathit{invite(P)} \}. \\
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_2_1}.
+The complete source code for this example is available at \examplelink{example_2_1}.
 
 Rule $\row{r_1}$ specifies the person who organizes the event 
 and initializes the search. Rule $\row{r_2}$ specifies that the initiating person has 
@@ -446,7 +462,9 @@ size=5em}}
 \end{figure}
 To compute the answer sets representing 
 the solution, the following command is to be invoked:
+%
 \leftaligned{\texttt{\$ dlvhex2 --pythonplugin=extsource.py program.hex}}
+%
 where \texttt{program.hex} is \hex-program and 
 \texttt{extsource.py} represents the Python file with 
 external source implementation (cf. Section~\ref{sec:externalInterfaces}). The output of the 
@@ -1082,7 +1100,8 @@ of a weighed directed graph.
 \rowprefix{r_{11}}&\mathit{ : \sim in\_tree}(X,Y,C). [C@1,X,Y,C]
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_3_12}.
+The complete source code for this example is available at \examplelink{example_3_12}.
+
 Best model:
 \begin{align*}
 \{ & \mathit{reached(a), out\_tree(a,b), 
@@ -1137,7 +1156,8 @@ one another do not work in the same group.
 same\_skill(X,Y). \thinspace [1@2, X,Y,P] 
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_3_13}.
+The complete source code for this example is available at \examplelink{example_3_13}.
+
 To run the example above following command is to be executed:
 %
 \leftaligned{\texttt{ \$ dlvhex2 \ example\_3\_13.hex \ --weak-allmodels}}
@@ -1241,8 +1261,7 @@ the graph specified by predicates \textit{edge} starting from node \textit{a}.
 \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_3_14}.
-
+The complete source code for this example is available at \examplelink{example_3_14}.
 
 There are two different external sources in this program, 
 first one is $\mathit{\&concate}$ and second one is 
@@ -1319,8 +1338,7 @@ location(P, X).\\
 \rowprefix{r_9}& \leftimpl need(X, money).
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_4_2}.
-
+The complete source code for this example is available at \examplelink{example_4_2}.
 
 The \hex{} program above represents Alice's reasoning 
 problem. Rule $\row{r_1}$ contains a set of facts about possible 
@@ -1467,9 +1485,9 @@ encoded as follows:
 \mathit{startingCity(P).} \\
 & \\
 \rowprefix{r_4} & \mathit{cityOfDegree(F1, DegPlus, F2, Cost)} 
-\leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\ \qquad 
-&\ext{edges}{F1}{F2, Cost}, \mathit{DegPlus=DegPlus+1}, 
-DegPlus < 4, \\ & \#int(DegPlus), \#int(Deg)), \#int(Cost). 
+\leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\
+& \qquad \ext{edges}{F1}{F2, Cost}, \mathit{DegPlus=DegPlus+1}, 
+DegPlus < 4, \\ & \qquad \#int(DegPlus), \#int(Deg)), \#int(Cost). 
 \\
 \rowprefix{r_5}& \mathit{node(Y)} \leftimpl 
 \mathit{cityOfDgree(X, V, Y, C)}.\\
@@ -1499,7 +1517,7 @@ reached(X). \\
 \rowprefix{r_{16}} & :\sim cycle(X,Y), cost(X,Y,C). \ [C@1,X,Y,C] 
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_4_2}.
+The complete source code for this example is available at \examplelink{example_4_2}.
 
 In rule $\row{r_1}$ we have a fact which specifies the starting 
 city. 
@@ -1664,13 +1682,13 @@ path(IP,T,V), X \lesseq XP. \\
 \\
 \rowprefix{r_{17}} &  \mathit{path(I,V,U,T,ValidOrNot)} 
 \leftimpl \mathit{agent(I)}, \\ & \qquad \mathit{guessPath(I, T, 
-V)}, \mathit{guessPath(I, TP, U)}, \\ & \ext{check}{U, 
+V)}, \mathit{guessPath(I, TP, U)}, \\ & \qquad \ext{check}{U, 
 V, T, I}{ValidOrNot}, \mathit{TP=T+1}, \#int(T), 
 \#int(TP).  \\
 \rowprefix{r_{18}} & \leftimpl path(I, V, U, T, invalid). 
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_4_3}.
+The complete source code for this example is available at \examplelink{example_4_3}.
 
 In the first part of the program we load the graph using 
 the $\&edges$ external atom. This atom cyclically discovers 
@@ -1948,6 +1966,8 @@ The plugin in Example~\ref{constantAsInput} uses a constant (string) input param
 11: dlvhex.addAtom("friendsOf", (dlvhex.Constant, ),1,prop)
 \end{verbatim}
 \end{exmp}
+The complete source code for this example is available at \examplelink{example_5_1}.
+
 
 In the lines 1 and 2 we have imported two libraries which 
 are required. We have to import the \verb+dlvhex+ 
@@ -1989,6 +2009,7 @@ origin (inoutd, or loc) using predicate $\mathit{need}$.
 10:   dlvhex.addAtom("rq", (dlvhex.PREDICATE), ), 1)
 \end{verbatim}
 \end{exmp}
+The complete source code for this example is available at \examplelink{example_5_2}.
 
 From line \verb+2+ to line \verb+8+ we implement the \verb+rq+ function. Line \verb+5+ filters the atoms according to the given predicate. In Line 6 we check if the predicate of the current input atom is equivalent to \texttt{location\_choice}, which specifies the selected location. Line \verb+8+ is returning  
 the requirements (if any) of the location specified by variable 
@@ -2012,6 +2033,8 @@ As mentioned above, there exists a third parameter type \emph{tuple}. It stands 
 8:    dlvhex.addAtom("concat", (dlvhex.TUPLE, ), 1)
 \end{verbatim}
 \end{exmp}
+The complete source code for this example is available at \examplelink{example_5_3}.
+
 This plugin receives a tuple of strings, concatenates 
 them and outputs them as a single string value. The function \verb+concat+ is implemented from line \verb+2+ to \verb+6+. In line \verb+3+, an 
 empty string is initialized. Inside the for loop, the input 
@@ -2454,10 +2477,6 @@ Since the program from Example~\ref{strongSafetyExmp} is finitely restrictable, 
 \end{align*}
 The details of the notion are beyond the cope of this guide, more information about liberal safety is available at \cite{eite-etal-14a}.
 
-
-
-
-
 \newpage
 \bibliographystyle{amsplain}
 \bibliography{Manual}
@@ -2467,243 +2486,9 @@ The details of the notion are beyond the cope of this guide, more information ab
 % pdflatex begining.tex
 % pdflatex begining.tex
 \end{document}
-\documentclass[a4paper, titlepage]{article}
-\usepackage{graphicx}
-\usepackage{url}
-\usepackage{hyperref}
-\usepackage{listings}
-\usepackage{amsmath}
-\usepackage{array}
-\usepackage{longtable}
-\usepackage{multirow}
-\usepackage{color}
-
-\usepackage{tikz}
-\usetikzlibrary{arrows}
-
-\usepackage{csquotes}
-\newcommand{\ext}[3]{\ensuremath{\&{#1}[#2](#3)}}
-\DeclareMathOperator{\leftimpl}{:-}
-\setlength{\tabcolsep}{1.5pt}
-\lstset{
-    literate={~} {$\sim$}{1}
-}
-
-\newcounter{examplecounter}
-\newenvironment{example}{\begin{quote}%
-    \refstepcounter{examplecounter}%-
-  \textbf{Example \arabic{examplecounter}}%
-  \quad
-}
-
-\newcommand{\row}[1]{%
-  \ensuremath{\it \color{black} #1 \color{black}}%
-}
-
-\newcommand{\rowprefix}[1]{%
-  \ensuremath{\color{black}\mathbf{#1{:}}\ }%
-}
 
 
-\begin{document}
-\setcounter{page}{3}
-\newcommand{\dlvhex}{{\sc dlvhex}}
-\newcommand{\hex}{{\sc hex}}
-\newcommand{\dlv}{{\sc dlv}}
-\newcommand{\dlvdb}{{\sc dlvdb}}
-\newcommand{\libdlv}{{\sc libdlv}}
-\newcommand{\libclingo}{{\sc libclingo}}
-\newcommand{\genuineii}{{\sc genuineii}}
-\newcommand{\genuinegi}{{\sc genuinegi}}
-\newcommand{\genuineic}{{\sc genuineic}}
-\newcommand{\genuinegc}{{\sc genuinegc}}
-
-\setcounter{secnumdepth}{4} % how many sectioning levels to assign numbers to
-\setcounter{tocdepth}{4}    % how many sectioning levels to show in ToC
-
-\newtheorem{exmp}{Example}[section]
-
-
-\begin{titlepage}
-    \centering
-    \vfill
-    \includegraphics[width=1.0\textwidth,natwidth=800,natheight=800]{biglogo_whitebg.png}
-    \vfill
-    {\bfseries\Large
-        {\Huge User Guide} \\
-        {\Large \dlvhex{} 2.4} \\
-        \vskip0.5cm
-	    {\Large \today}        
-        \vskip4cm
-        Mustafa Mehulji\'{c} \vskip1cm Christoph Redl
-        \vskip4cm
-        
-    }    
-    
-\end{titlepage}
-%
-% pdflatex begining.tex 
-% bibtex begining.aux
-% pdflatex begining.tex 
-% pdflatex begining.tex 
-%
-% Abstract part
-\begin{abstract}
-This document provides a user guide for the Answer Set 
-Programming (ASP) system called \dlvhex{} developed at 
-Vienna University of Technology. ASP is a declarative 
-problem solving paradigm, rooted in logic programming and 
-nonmonotonic reasoning, which has been gaining increasing 
-attention during the last years. The \dlvhex{} system is a 
-reasoner for computing the models of so-called \hex{}-programs, which are an extension of \emph{answer-set 
-programs} towards integration of \emph{external computation 
-sources}. This guide aims at enabling users of this system 
-to interoperate with a broad set of external computation 
-sources. The guide refers to release 2.4.     
-\end{abstract}
-
-% Generates table of contents
-\tableofcontents
-\newpage
-
-\section{Introduction} % Section No.1
-\label{sec:intro}
-The \dlvhex{} system is a logic-programming reasoner for 
-computing the models of so-called \hex{}-programs, which 
-are an extension of \emph{answer-set programs} towards 
-integration of \emph{external computation sources}. To 
-enable access to external information, \hex{}-programs 
-extend programs with external atoms, which allow for a 
-bidirectional communication between the logic program and 
-external sources of computation (e.g. description logic 
-reasoners and Web resources) \cite{efkr2012}. The system is 
-developed motivated by the need to interoperate with a 
-broad set of external computation sources and the 
-observation, that for meta-reasoning in the context of the 
-Semantic Web, no adequate support is available in ASP to 
-date. To overcome this, \hex{}-programs have been 
-introduced, which support higher-order logic programs 
-(which accommodate meta-reasoning through higher-order 
-atoms) with external atoms for software interoperability.
-
-This guide helps beginners to make use of the system and 
-provides a reference of the features of the tool. The language of \hex{}-programs is an extension of disjunctive datalog. It largely 
-implements the ASP-Core-2 Standard \cite{cffiklrs2013} and 
-extends it with external and high-order atoms. 
-
-
-\subsection{Download and Installation}
-\dlvhex{} is written in the C++ programming-language
-and published under the GNU Lesser General 
-Public License \cite{licnc}. 
-In this section we provide an overview of the 
-download and installation process. For a quick overview, 
-some examples and the possibility to evaluate 
-\hex{}-programs directly in the browser, the online demo at 
-\url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/demo.php} 
-is provided. However the system can also be installed 
-locally. 
-
-\subsubsection{Building from source}
-There are two possibilities to install \dlvhex{} system 
-from source: install the latest stable release of the 
-system or install the latest development version which may 
-not be stable. Both ways are described in the following 
-sections.  
-
-\paragraph{Latest release version (tarball)}
-\label{sec:steps}
-Packages (tarballs) of \dlvhex{} can be downloaded from the 
-project page \url{http://www.kr.tuwien.ac.at/resea} \\ 
-\url{rch/systems/dlvhex/}. The latest release of the 
-software runs on Linux-based systems, Mac OS X and 
-Microsoft Windows. Installation instructions are given in 
-the {\tt INSTALL} and {\tt README} files of \dlvhex{} 
-and plugin source directories. Changes between versions can 
-be found in the {\tt NEWS} files and in detail in the {\tt 
-ChangeLog} file. 
-
-The system requires the following packages: git, gcc 
-(version 4.8 or later), g++ (version 4.8 or later), BZ2 
-library, Python (version 2.7 or later), bison, scons, 
-cmake, automake, autoconf, standard C++ library (version 
-4.8 or later), Curl library (version 4 or later) and 
-libtool. Also the Boost library (version 1.55 or later) is 
-required. 
-
-The latest Boost library version is available at 
-\url{http://www.boost.org/}. After downloading it to the 
-new folder, the following steps should be followed in order 
-to properly install it. After extraction, the folwing 
-commands need to be executed:
-\\ \mycenterline{\texttt{./bootstrap.sh}}
-\mycenterline{\texttt{./b2 install --prefix=PREFIX}} In this 
-command, \texttt{PREFIX} is the directory where Boost should 
-be installed. 
-
-After downloading the latest release version of \dlvhex{} by 
-executing the following sequence of commands \dlvhex{} will 
-be successfully installed:
-\\ \mycenterline{\texttt{./configure}} To enable the Python 
-features of \dlvhex{}, \texttt{--enable-python} is to be 
-added as option of \texttt{configure}. Afterwards, the 
-following command builds the system:
-\\ \mycenterline{\texttt{make}} To allow using of multiple 
-cores one should specify the \texttt{-jN} option to make 
-use of N cores. Finally, the following
-\\ \mycenterline{\texttt{make install}} installs the package 
-in the location specified with configure.  
-   
-\paragraph{Development version (git clone)}
-The source code of \dlvhex{} is hosted on github at 
-\url{https://github.com/hexhex/}. To get the latest 
-development version it is necessary to git clone system as 
-follows:
-\\ \mycenterline{\texttt{git clone 
-https://github.com/hexhex/core --recursive}} 
-After cloning to the desired directory it is necessary to 
-execute the \texttt{bootstrap.sh} script from there by invoking: \\ 
-\mycenterline{\texttt{./bootstrap.sh}}. 
-After cloning and bootstrapping, the steps from 
-Section~\ref{sec:steps} (\texttt{configure, make} and 
-\texttt{make install}) are to be followed in order to 
-complete the installation.
-
-We provide a script which installs \dlvhex{} 
-automatically on Ubuntu systems and can be found at 
-\url{https://github.com/hexhex/core/blob/master/scripts/setupdlvhex.sh}.
-
-Once installation is completed, the system can be used from 
-the terminal as follows:\\ 
-\mycenterline{\texttt{shell\$ dlvhex2 program.hex}} where 
-\texttt{program.hex} refers to the input program. Various 
-additional command line options are available and explained in Section~\ref{sec:commandline}.    
-
-\subsubsection{Pre-built binaries}
-We provide pre-built binaries of \dlvhex{} for some 
-systems. For details see our website 
-\url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/}. 
-
-\subsection{Outline}
-This guide is organized as follows. Section~\ref{sec:quick} 
-provides an introductory example which will be used to 
-explain the problem instance, the encoding and its 
-solution. Section~\ref{sec:inputLang} is focused on the input 
-language of the \dlvhex{}. In Section~\ref{sec:examples} we 
-introduce three real life problems which can be solved 
-using our system. Section~\ref{sec:externalInterfaces} is 
-focused on the description of external interfaces which are 
-written in C++ or Python. Input-related warnings and errors 
-are described into more details in 
-Section~\ref{sec:inputRelatedWarnings}. 
-
-\section{Quickstart} % Section No.2
-\label{sec:quick}
-As an introductory example, we consider a \emph{social 
-graph} as used in social networks. Beginning from a 
-simplified scenario, we stepwise extend it to present 
-various features of \dlvhex{}.
-
+<<<<<<< HEAD
 \subsection{Problem Instance}
 A \emph{social graph} is a graph that represents 
 interconnections among people, groups 
