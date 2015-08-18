@@ -333,7 +333,7 @@ F2}) \leftimpl
 \{ P : \mathit{invite(P)} \}. \\
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_2_1}.
+The complete source code for this example is available at \examplelink{example_2_1}.
 
 Rule $\row{r_1}$ specifies the person who organizes the event 
 and initializes the search. Rule $\row{r_2}$ specifies that the initiating person has 
@@ -1082,7 +1082,7 @@ of a weighed directed graph.
 \rowprefix{r_{11}}&\mathit{ : \sim in\_tree}(X,Y,C). [C@1,X,Y,C]
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_3_12}.
+The complete source code for this example is available at \examplelink{example_3_12}.
 Best model:
 \begin{align*}
 \{ & \mathit{reached(a), out\_tree(a,b), 
@@ -1137,8 +1137,8 @@ one another do not work in the same group.
 same\_skill(X,Y). \thinspace [1@2, X,Y,P] 
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_3_13}.
-To run the example above following command is to be executed:
+The complete source code for this example is available at \examplelink{example_3_13}.
+\\To run the example above following command is to be executed:
 %
 \leftaligned{\texttt{ \$ dlvhex2 \ example\_3\_13.hex \ --weak-allmodels}}
 %
@@ -1240,7 +1240,7 @@ delegating this task to an external computational source.
 \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_3_14}.
+The complete source code for this example is available at \examplelink{example_3_14}.
 
 
 There are two different external sources in this program, 
@@ -1318,7 +1318,7 @@ location(P, X).\\
 \rowprefix{r_9}& \leftimpl need(X, money).
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_4_2}.
+The complete source code for this example is available at \examplelink{example_4_2}.
 
 
 The \hex{} program above represents Alice's reasoning 
@@ -1466,9 +1466,9 @@ encoded as follows:
 \mathit{startingCity(P).} \\
 & \\
 \rowprefix{r_4} & \mathit{cityOfDegree(F1, DegPlus, F2, Cost)} 
-\leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\ \qquad 
-&\ext{edges}{F1}{F2, Cost}, \mathit{DegPlus=DegPlus+1}, 
-DegPlus < 4, \\ & \#int(DegPlus), \#int(Deg)), \#int(Cost). 
+\leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\
+& \qquad \ext{edges}{F1}{F2, Cost}, \mathit{DegPlus=DegPlus+1}, 
+DegPlus < 4, \\ & \qquad \#int(DegPlus), \#int(Deg)), \#int(Cost). 
 \\
 \rowprefix{r_5}& \mathit{node(Y)} \leftimpl 
 \mathit{cityOfDgree(X, V, Y, C)}.\\
@@ -1498,7 +1498,7 @@ reached(X). \\
 \rowprefix{r_{16}} & :\sim cycle(X,Y), cost(X,Y,C). \ [C@1,X,Y,C] 
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_4_2}.
+The complete source code for this example is available at \examplelink{example_4_2}.
 
 In rule $\row{r_1}$ we have a fact which specifies the starting 
 city. 
@@ -1663,13 +1663,13 @@ path(IP,T,V), X \lesseq XP. \\
 \\
 \rowprefix{r_{17}} &  \mathit{path(I,V,U,T,ValidOrNot)} 
 \leftimpl \mathit{agent(I)}, \\ & \qquad \mathit{guessPath(I, T, 
-V)}, \mathit{guessPath(I, TP, U)}, \\ & \ext{check}{U, 
+V)}, \mathit{guessPath(I, TP, U)}, \\ & \qquad \ext{check}{U, 
 V, T, I}{ValidOrNot}, \mathit{TP=T+1}, \#int(T), 
 \#int(TP).  \\
 \rowprefix{r_{18}} & \leftimpl path(I, V, U, T, invalid). 
 \end{align*}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_4_3}.
+The complete source code for this example is available at \examplelink{example_4_3}.
 
 In the first part of the program we load the graph using 
 the $\&edges$ external atom. This atom cyclically discovers 
@@ -4389,7 +4389,7 @@ origin (inoutd, or loc) using predicate $\mathit{need}$.
 10:   dlvhex.addAtom("rq", (dlvhex.PRDICATE), ), 1)
 \end{verbatim}
 \end{exmp}
-The complete source code for this example is available at: \examplelink{example_5_2}.
+The complete source code for this example is available at \examplelink{example_5_2}.
 
 From line \verb+2+ to line \verb+8+ we implement the \verb+rq+ function. Line \verb+5+ filters the atoms according to the given predicate. In Line 6 we check if the predicate of the current input atom is equivalent to \texttt{location\_choice}, which specifies the selected location. Line \verb+8+ is returning  
 the requirements (if any) of the location specified by variable 
