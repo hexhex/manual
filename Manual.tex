@@ -1866,6 +1866,7 @@ while the answer object is a container for the output
 tuples of the external atom's function.   
 
 \subsection{Types of Input Parameters}
+\label{inputparamtypes}
 In practice, only 
 parts of the interpretation might be needed. Considering 
 this as well as for efficiency reasons, there are three types of input parameters: 
@@ -1902,13 +1903,6 @@ also supports \dlvhex{} in calculating the dependencies
 within a \hex-program. Plugins can be implemented either in Python or C++, as shown in the following two subsections.
 
 \subsection{Python}
-\subsubsection{Registering External Atoms}
-\subsubsection{Implementing Semantics of External Atoms}
-\paragraph{Parameter Values (Input)}
-\paragraph{Creating Output Tuples}
-\subsubsection{Learning additional constraints}
-TODO
-
 With \dlvhex{} version 2.4.0, a Python plugin interface was 
 introduced, which supports Python scripts that provide 
 functions to realise custom external atoms. For every Python plugin two tasks are to be carried out:
@@ -1916,6 +1910,8 @@ functions to realise custom external atoms. For every Python plugin two tasks ar
 \item Write a new Python script which contains a register function and imports the package \dlvhex{}.
 \item Write another function for each external atom, and export this function using the $\mathit{register}$ function. 
 \end{itemize}
+
+\subsubsection{Registering External Atoms}
 The \verb+register+ function has the following form:
 \begin{verbatim} 
 def register():
@@ -1935,14 +1931,22 @@ Consider the $\mathit{\&concat}$ external atom which we introduced in the previo
 def register():
   dlvhex.addAtom("concat", (dlvhex.CONSTANT, dlvhex.CONSTANT), 1)  
 \end{verbatim}
+
+\subsubsection{Implementing Semantics of External Atoms}
 Once the external atom is registered successfully, it has 
 to be implemented in the form of another Python function 
-with an appropriate number of input parameters. It has the 
-following form:  
+with an appropriate number of input parameters and output parameters specified.
+\paragraph{Parameter Values (Input)} As it is introduced in Section~\ref{inputparamtypes} \dlvhex{} supports three different input types (constant, predicate and tuple). In order to access and use input parameters in Python plugin following statement is to be executed:  
 \begin{verbatim}
 def Atom_Name(Input_Parameter_1, Input_Parameter_2, ...)
-  dlvhex.output((Output_Parameter_1, ...))
 \end{verbatim}
+
+
+\paragraph{Creating Output Tuples}
+\begin{verbatim}
+dlvhex.output((Output_Parameter_1, ...))
+\end{verbatim}
+
 
 The implementation of the \verb+concat+ function is as follows:
 \begin{verbatim}
@@ -1950,9 +1954,15 @@ def concat(a,b)
   # Function body goes here
   dlvhex.output((str, ))
 \end{verbatim} 
-To get more familiar with Python plugins we are providing three examples as there are three possible input parameter types.
 
-The plugin in Example~\ref{constantAsInput} uses a constant (string) input parameter. It is used in Example~\ref{faceQuery} to query all direct friends of the person of interest.
+\subsubsection{Learning additional constraints}
+TODO
+
+
+
+
+\subsubsection{Python plugin examples}
+To get more familiar with Python plugins we are providing three examples as there are three possible input parameter types. The plugin in Example~\ref{constantAsInput} uses a constant (string) input parameter. It is used in Example~\ref{faceQuery} to query all direct friends of the person of interest.
 \begin{exmp}
 \label{constantAsInput}
 \begin{verbatim}
