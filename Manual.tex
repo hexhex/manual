@@ -759,7 +759,7 @@ $\vee$ $A_m$ needs to be true. In a simple disjunctive program
 $\mathit{a} \vee \mathit{b.}$, we have the two answer sets 
 \{$a$\} and \{$b$\}.
 
-In the Example~\ref{nodecoloring} we could replace lines $3$ to $5$ by a single disjunctive rule as follows:\\
+In the Example~\ref{nodecoloring} we could replace lines $3$ to $5$ by a single disjunctive rule as follows:
 \mycenterline{$\mathit{colored(X,r)} \vee \mathit{colored(X,g)} \vee \mathit{colored(X,b)} \leftimpl \mathit{node(X).}$} 
 %
 which generates all possible node color combinations 
@@ -848,7 +848,7 @@ The single answer set for the example above is:
 
 \subsection{Conditions and Conditional Literals}
 \label{conditions}
-A \emph{conditional literal} is of the form \\ 
+A \emph{conditional literal} is of the form 
 \mycenterline{$L_0:L_1,\dots,L_n$} where every $\mathit{L_j}$ 
 for $0 \lesseq j \lesseq n$ is a literal, $L_1,\dots,L_n$ is 
 called \emph{condition}, and \enquote{:} resembles 
@@ -893,7 +893,7 @@ with $\mathit{t=jane}$ and $\mathit{t=john}$. The condition
 for the rule $\row{r_6}$ is contained in the head of the rule. It 
 turns into a \emph{disjunction} over all ground instances of 
 $\mathit{on(X)}$ such that $X$ is substituted by terms $t$ 
-for which $\mathit{day(t)}$ holds, i.e., whenever $\mathit{meet}$ holds, one of $\mathit{on(t)}$ for which $\mathit{day(t)}$ is true should hold. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with a ``;'' sign, the rule would look like: \\
+for which $\mathit{day(t)}$ holds, i.e., whenever $\mathit{meet}$ holds, one of $\mathit{on(t)}$ for which $\mathit{day(t)}$ is true should hold. Consider that except $\mathit{on(X)}$ we have also an atom $\mathit{travel(X)}$. These two atoms are separated with a ``;'' sign, the rule would look like:
 \mycenterline{\{$\mathit{on}(X);\mathit{travel}(X) : \mathit{day}(X)\} \leftimpl 
 \mathit{meet}.$}
 where for all ground instances of $\mathit{on(X)}$ and $\mathit{travel(X)}$ such that $X$ is substituted by terms $t$ for which $\mathit{day(t)}$ holds. 
@@ -930,7 +930,7 @@ atom. They can occur in the bodies of rules and constraints,
 possibly negated using negation-as-failure \cite{gkklorst2015}.
 
 The form of an \emph{aggregate atom} occuring in a rule 
-body is as follows:\\ \mycenterline{$s_1 \prec_1 \alpha \{ 
+body is as follows: \mycenterline{$s_1 \prec_1 \alpha \{ 
  t_1, \dots, t_n : L_1, \dots, L_m\} \prec_2 s_2$} 
 Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming 
 \emph{aggregate elements}, are non-empty tuples of terms 
@@ -964,7 +964,7 @@ over1000(I,W)\} = X, \#int(X).
 \end{align*}
 \end{exmp}
 Intuitively the symbolic set appearing in the aggregate 
-predicate consists of two ground predicates: \\ 
+predicate consists of two ground predicates:
 \mycenterline{$\{\langle 1 \rangle,\langle 5 \rangle\}$}
 which are both true w.r.t. the unique model of the whole 
 program, hence
@@ -993,20 +993,20 @@ Cartoon Co. spends on salaries.
 \mathit{emp(I,N,S)}\} = X.
 \end{align*}
 In $\row{r_8}$ except term tuple $S$ we need also an $I$ in order to get the correct result. This is because we have two persons with same salaries and aggregate function will return only one element in the symbolic set for both of them. Since one element is missing from the symbolic set, we get incorrect result at the end.  
-The symbolic set for the rule $\row{r_8}$ consists of 5 elements:\\ 
+The symbolic set for the rule $\row{r_8}$ consists of 5 elements: 
 \mycenterline{$\{ \langle 1250,1 \rangle, \langle 750,2 \rangle, \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}$} 
 The 
 aggregate function applied to the given set returns the sum 
 of the salaries of all the employees, the output thus is: 
-\\ \mycenterline{
+\mycenterline{
 \{$\mathit{salaryTotal(4700)}$\}.} 
 In reference to the previous example where we include term tuple I in order to distinguish employees with same salaries we 
 provide another example where we omit term tuple I  from the aggregate elements. The answer set is affected since
 there are two employees (i.e. Willy and Woody) with same salaries (S) but different identification numbers (I).
 Symbolic set consists of 4 elements this time due to the fact that there cannot be duplicates in the set. Symbolic set looks as follows:
-\\ \mycenterline{$\{ \langle 1250 \rangle, \langle 750 \rangle, \langle 900 \rangle,  \langle 1050 \rangle\}$}
+\mycenterline{$\{ \langle 1250 \rangle, \langle 750 \rangle, \langle 900 \rangle,  \langle 1050 \rangle\}$}
 The total salary thus is:
-\\ \mycenterline{
+\mycenterline{
 \{$\mathit{salaryTotal(3950)}$\}.} 
  
 $\mathit{\#times}$ is 
@@ -1021,6 +1021,7 @@ aggregated over in the symbolic set. The following rule then returns the lowest 
 \begin{align*}
 & lowest(X) \leftimpl \#min\{S : emp(I,N,S)\} = X.
 \end{align*}
+
 The aggregate function applied to the given set returns the 
 minimum salary among of all the employees, the output thus 
 is:
@@ -1034,6 +1035,7 @@ computes the maximum income earned in the company
 & \mathit{highest}(X) \leftimpl \mathit{\#max}\{S : 
 \mathit{emp}(I,N,S)\} = X.
 \end{align*}
+
 and it outputs $\{highest(1250)\}$ as a highest income in 
 the company.
 
@@ -1066,9 +1068,9 @@ then the lower priority levels are considered one after the
 other in descending order. Syntactically, weak constraints 
 are specified as follows.
 %
-\mycenterline{:$\sim$ $\mathit{b_1,\dots,b_n}. 
+\mycenterline{:$\sim$ $\mathit{b_1,\dots,b_n}.[\mathit{w}$@$\mathit{l},\mathit{t_1,\dots,t_m}]$} 
 %
-[\mathit{w}$@$\mathit{l},\mathit{t_1,\dots,t_m}]$} where $\mathit{t_1,\dots,t_m}$ 
+where $\mathit{t_1,\dots,t_m}$ 
 are terms and $\mathit{b_1,\dots,b_n}$ are literals for $m \geq 0$  and $n \geq 0$; $w$ and $l$ are terms standing for a \emph{weight} a \emph{level}. Writing the part ``$\mathit{@l}$'' can optionally be ommited if $l=0$; that is, a weak constraint has level 0 unless specified otherwise \cite{cffiklrs2013}.
 
 The following program, computes the minimum spanning trees 
@@ -1350,7 +1352,7 @@ are caused by this choice using the external atom.
 
 Web research is performed by using an external atom of the 
 form 
-\\ \mycenterline{$\ext{\mathit{rq}}{\mathit{location}$-$
+\mycenterline{$\ext{\mathit{rq}}{\mathit{location}$-$
 \mathit{choice}}{\mathit{required}$-$\mathit{resources}}$}
 which intuitively 
 evaluates to true if a given $\mathit{location}$-$\mathit{choice}$ 
@@ -1584,7 +1586,7 @@ cycle given \cite{gkklorst2015}. The integrity constraint $\row{r_{15}}$
 eliminates answer sets where not all nodes in the graph are reached.
 
 In order to minimize costs, we add the following 
-optimization statement: \\
+optimization statement:
 \mycenterline{$:\sim cycle(X,Y), cost(X,Y,C). \  [C@1,X,Y,C].$}
 Here, edges belonging to the cycle are weighted according 
 to their costs and \dlvhex{} lists optimal answer sets only.
@@ -1851,7 +1853,7 @@ external atom not as being boolean, but rather functional:
 depending on a given interpretation and a list of input 
 constants, it returns output tuples for which it is true. For instance, the 
 external atom to import triples from RDF files has the 
-form: \\
+form:
 \mycenterline{$\ext{rdf}{uri}{X,Y,Y}$} 
 where $\mathit{uri}$ stands for a string denoting the RDF-source and X,Y, and Z are variables that represent an RDF-triples from the specified source.
 
@@ -1884,7 +1886,7 @@ A parameter is of type \emph{predicate} means that
 all atoms in the interpretation with this predicate are 
 necessary for the external atom. Let us assume, we have an external 
 atom that calculates the overall price of a number of books 
-given by their ISBN number:\\
+given by their ISBN number:
 \mycenterline{$\ext{overallbookprice}{isbn}{X}$}
 The single input parameter of this atom would be of type 
 \emph{predicate}, meaning that not the constant itself is 
@@ -1894,7 +1896,7 @@ I = \{$\mathit{isbn(``0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6")}$, $ \math
 the atom's function will be called with the filtered interpretation: \\
 $I=$\{$\mathit{isbn(``0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6")}$, $ \mathit{isbn(``0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4")}$\}
 
-A parameter of type \emph{tuple} represents a meta category standing for an arbitrary number of constant input parameters. This is useful when we have to send multiple constant parameters separately, e.g., for \\
+A parameter of type \emph{tuple} represents a meta category standing for an arbitrary number of constant input parameters. This is useful when we have to send multiple constant parameters separately, e.g., for
 \mycenterline{$\ext{concat}{string1, string2, string3, \dots}{Out}$}. 
 
 Specifying the type of input parameters not only helps to 
@@ -2007,8 +2009,11 @@ single output parameter.
 The following example uses a predicate input parameter 
 for the \verb+&rq+ external atom as used in Example~\ref{swimExample}. The external atom is performing 
 a Web search to check the requirements for the selected location. It is of the form 
-$\ext{\mathit{rq}}{\mathit{location\_choice}}
-{\mathit{required\_resource}}$ which intuitively evaluates 
+%
+\mycenterline{$\ext{\mathit{rq}}{\mathit{location\_choice}}
+{\mathit{required\_resource}}$}
+% 
+which intuitively evaluates 
 to true if a given location\_choice requires a certain 
 required\_resource and represents such resources and their 
 origin (inoutd, or loc) using predicate $\mathit{need}$. 
@@ -2479,7 +2484,7 @@ ordinary body atom that does not depend on
 & \texttt{GeneralError: Syntax Error: [Rule] is not strongly safe! }  \\
 & \texttt{Variable [Var] fails strong safety check in rule Rule.}
 \end{align*}
-To make $\row{r_3}$ strongly safe we could add an ordinary atom in order to break the cycle. $\row{r_3}$ could be modified as follows: \\ \mycenterline{$s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y},q(Y).$} Adding atom $q(Y)$ makes program strongly safe since $Y$ appears in the body atom which does not depend on $\ext{concat}{X,a}{Y}$.
+To make $\row{r_3}$ strongly safe we could add an ordinary atom in order to break the cycle. $\row{r_3}$ could be modified as follows:\mycenterline{$s(Y) \leftimpl p(X), \ext{concat}{X,a}{Y},q(Y).$} Adding atom $q(Y)$ makes program strongly safe since $Y$ appears in the body atom which does not depend on $\ext{concat}{X,a}{Y}$.
  
 Along with the error message, the affected \texttt{[Rule]} and a list of all unsafe variable occurrences \texttt{[Var]} are reported. 
 The first action to take usually consists of checking whether variable \texttt{[Var]} is actually in the scope of any atom (in the positive body of \texttt{[Rule]}) that can bind it. Also check for variables that occur in aggregate elements (cf. Section~\ref{aggregates}) or conditional literals (cf. Section~\ref{conditions}), you might have to bind them with additional positive atoms in the conditions. 
