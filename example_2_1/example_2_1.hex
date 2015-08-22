@@ -10,14 +10,14 @@ friendOfDegree(P,0,P) :- personOfInterest(P).
 friendOfDegree(P,DegPlus,F2) :- friendOfDegree(P,Deg,F1), &friendsOfDegree[F1](F2), DegPlus = Deg + 1,DegPlus < 2, #int(DegPlus), #int(Deg).
 
 % This guesses for each person if he/she is invited or not.
-invite(P) v ninvite(P) :- friendOfDegree(john,X,P), #int(X).
+invite(P) v ninvite(P) :- friendOfDegree(J,X,P), #int(X).
 
 % Integrity constraint to limit the number of invited persons.
 % Number of distinct persons called to the party must be 3.
 % Double negation is neccessary in order to make this work
 :-  not 3 = #count { P : invite(P) }. 
 
-% It is possible to write last two statements in more compact way
-% 3 <= { invite(P) : friendOfDegree(john,X,P) } <= 3.
+% It is possible to write last two rules in a more compact way:
+% 3 <= { invite(P) : friendOfDegree(J,X,P) } <= 3.
 
 
