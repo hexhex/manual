@@ -7,6 +7,7 @@
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{multirow}
+\usepackage{paralist}
 \usepackage{color}
 
 \usepackage{tikz}
@@ -15,6 +16,7 @@
 \usepackage{csquotes}
 
 \newcommand{\mi}[1]{\mathit{#1}}
+\newcommand{\amp}[1]{\ensuremath{\&{\mathit{#1}}}}
 \newcommand{\ext}[3]{\ensuremath{\&{\mathit{#1}}[#2](#3)}}
 \DeclareMathOperator{\leftimpl}{:-}
 \DeclareMathOperator{\clasneg}{-}
@@ -1906,93 +1908,147 @@ having to recompile the main application.
  
 Formally, an external atom is defined to evaluate to true
 or false, depending on a number of parameters:
-\begin{itemize}
+\begin{compactitem}
 \item An interpretation (a set of atoms)
 \item A list of input constants
 \item A list of output constants
-\end{itemize}  
+\end{compactitem}  
 However, it is more intuitive and convenient to think of an 
 external atom not as being boolean, but rather functional:
 depending on a given interpretation and a list of input 
 constants, it returns output tuples for which it is true. For instance, the 
 external atom to import triples from RDF files has the 
 form:
-\mycenterline{$\ext{rdf}{uri}{X,Y,Y}$} 
-where $\mathit{uri}$ stands for a string denoting the RDF-source and X,Y, and Z are variables that represent an RDF-triples from the specified source.
+\mycenterline{$\ext{rdf}{\mi{Uri}}{X,Y,Z}$} 
+\noindent
+where $\mathit{Uri}$ stands for a string denoting the RDF-source and X, Y, and Z are variables that represent an RDF-triple $(X,Y,Z)$ from the specified source.
 
 \subsection{Information Flow}
 The interface that is used by \dlvhex{} to access a plugin 
-follows very closely this semantics. For each atom, a 
-retrieval function has to be implemented, which receives a 
-query object and has to return an answer-object. The 
-query object carries the input interpretation as well as 
-the ground input parameters of the external atom call, 
-while the answer object is a container for the output 
-tuples of the external atom's function.   
+follows very closely the previously described ``function'' semantics.
+For each predicate (e.g., for $\amp{rdf}$),
+a retrieval function has to be implemented.
+This function receives a query object and returns an answer object.
+The function is always called with ground input parameters.
+The query object carries the ground input parameters
+and the input interpretation, 
+while the answer object is a container for the ground output 
+tuples.
 
 \subsection{Types of Input Parameters}
 \label{inputparamtypes}
-In practice, only 
-parts of the interpretation might be needed. Considering 
-this as well as for efficiency reasons, there are three types of input parameters: 
-\begin{itemize}
+
+Previously we said that the semantic function of an external atom
+may use the complete interpretation for its computation.
+For practial and for efficiency reasons,
+often only small parts of the interpretation are used.
+
+This leads to three types of input parameters: 
+\begin{compactitem}
 \item Constant parameters
 \item Predicate parameters
 \item Tuples
-\end{itemize}
+\end{compactitem}
 
 A parameter of type \emph{constant} is not related to the 
 interpretation at all, like in the previous example of the 
-RDF-atom where we have strings as a constant input to the external atom. 
+RDF-atom where we have a string as a constant input to the external atom. 
 
-A parameter is of type \emph{predicate} means that 
-all atoms in the interpretation with this predicate are 
-necessary for the external atom. Let us assume, we have an external 
+A parameter is of type \emph{predicate} indicates that 
+all atoms with this predicate in the interpretation are 
+relevant for the semantic evaluation of the external atom.
+%
+%
+As an example, assume an external 
 atom that calculates the overall price of a number of books 
 given by their ISBN number:
 \mycenterline{$\ext{overallbookprice}{isbn}{X}$}
 The single input parameter of this atom would be of type 
 \emph{predicate}, meaning that not the constant itself is 
-necessary for the atom's function, but the part of the 
-interpretation with this predicate. So if we have, e.g.,\\ 
-I = \{$\mathit{isbn(``0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6")}$, $ \mathit{isbn(``0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4")}$, $p(a)$, $q(b)$ $\dots$ \}
-the atom's function will be called with the filtered interpretation: \\
-$I=$\{$\mathit{isbn(``0}$-$\mathit{19}$-$\mathit{82183}$-$\mathit{6")}$, $ \mathit{isbn(``0}$-$\mathit{201}$-$\mathit{99954}$-$\mathit{4")}$\}
+used by the atom's function,
+but all atoms $\mi{isbn}(Y) \in I$ with this predicate.
+Assume the current answer set candidate $I$ is
+\mycenterline{$I = \{ \mi{isbn}(\textit{``0-19-82183-6''})$,
+  $\mi{isbn}(\textit{``0-201-99954-4''})$, $p(a)$, $q(b) \dots\}$}
+\noindent
+then the function implementing $\amp{overallbookprice}$
+will be called with the following filtered interpretation:
+\mycenterline{$I = \{ \mi{isbn}(\textit{``0-19-82183-6''})$,
+  $\mi{isbn}(\textit{``0-201-99954-4''}) \}$}
+\noindent
+where only atoms with predicate $\mi{isbn}$ remain.
 
-A parameter of type \emph{tuple} represents a meta category standing for an arbitrary number of constant input parameters. This is useful when we have to send multiple constant parameters separately, e.g., for
+A parameter of type \emph{tuple} stands for
+an arbitrary number of constant input parameters.
+This is, e.g., useful for string operations like concatenation
 \mycenterline{$\ext{concat}{string1, string2, string3, \dots}{Out}$}
+\noindent
+where the atom is true for the output constant
+which is the concatenation of all input strings.
+(Note that for this functionality the interpretation is irrelevant
+and the function implementing $\amp{concat}$ will receive $I=\emptyset$.)
 
 Specifying the type of input parameters not only helps to 
 single out the relevant part of the interpretation, but 
 also supports \dlvhex{} in calculating the dependencies 
 within a \hex-program. Plugins can be implemented either in Python or C++, as shown in the following two subsections.
 
-\subsection{Python}
+\subsection{Implementing External Atoms in Python}
 With \dlvhex{} version 2.4.0, a Python plugin interface was 
 introduced, which supports Python scripts that provide 
-functions to realise custom external atoms. For every Python plugin two tasks are to be carried out:
-\begin{itemize}
-\item Write a new Python script which contains a register function and imports the package \dlvhex{}
-\item Write another function for each external atom, and export this function using the $\mathit{register}$ function 
-\end{itemize}
+functions to realise custom external atoms.
+For every Python plugin two tasks are to be carried out:
+\begin{compactitem}
+\item
+  Write a script that starts with \verb|import dlvhex|
+  and implements a \verb|register| function
+  that registers all external atoms.
+\item
+  For each external atom, write an evaluation function
+  that has the same name as the atom.
+\end{compactitem}
 
 \subsubsection{Registering External Atoms}
 \label{registerExtAtom}
+%
 The \verb+register+ function has the following form:
+%
 \begin{verbatim} 
 def register():
   dlvhex.addAtom("Atom_Name",(Input_Parameters),Output_Arity) 
 \end{verbatim}
-It contains a call of \verb+addAtom+ for each external atom. Each call specifies a tuple of arity 3:
-\begin{itemize}
-\item \verb+Atom_Name+ is the name of the 
-external predicate
-\item \verb+Input_Parameters+ is a tuple of arbitrary many input parameter types. Each input parameter type is one of the 
-following: \verb+dlvhex.CONSTANT+, \verb+dlvhex.PREDICATE+ or 
-\verb+dlvhex.TUPLE+, as it is introduced in the previous section
-\item \verb+Output_Arity+ is an integer value representing the output arity of an atom  
-\end{itemize}
-Consider the $\mathit{\&concat}$ external atom which we introduced in the previous section. It takes two strings as input and outputs their concatenation. The register function then would be as follows:
+%
+It contains a call of \verb+addAtom+ for each external atom.
+Each call specifies three parameters:
+%
+\begin{compactitem}
+\item
+  \verb+Atom_Name+ is the name of the external predicate;
+\item
+  \verb+(Input_Parameters)+ is a tuple of
+  arbitrarily many input parameter \emph{types}.
+  Each type is one of \verb+dlvhex.CONSTANT+, \verb+dlvhex.PREDICATE+, or 
+  \verb+dlvhex.TUPLE+,
+  corresponding to the concepts introduced in the previous section;
+\item
+  \verb+Output_Arity+ is an integer value
+  representing the output arity of an atom.
+\end{compactitem}
+%
+Consider the $\mathit{\&concat}$ external atom
+introduced in the previous section.
+It takes an arbitrary number of strings as input
+and outputs their concatenation.
+Hence the input type is \verb|dlvhex.TUPLE|
+and the register function is as follows.%
+\footnote{Note the extra ``,'': the Python syntax for creating a tuple
+with a single element is \texttt{(a,)}.}
+\begin{verbatim}
+def register():
+  dlvhex.addAtom("concat", (dlvhex.TUPLE,), 1)  
+\end{verbatim}
+If we assume that $\amp{concat}$ only accepts two strings,
+the register function would be as follows.
 \begin{verbatim}
 def register():
   dlvhex.addAtom("concat", (dlvhex.CONSTANT, dlvhex.CONSTANT), 1)  
