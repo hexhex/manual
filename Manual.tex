@@ -2055,107 +2055,178 @@ def register():
 \end{verbatim}
 
 \subsubsection{Implementing Semantics of External Atoms}
-Once the external atom is registered successfully, it has 
-to be implemented in the form of another Python function 
-with an appropriate number of input parameters and output parameters specified.
-\paragraph{Parameter Values (Input)} As it is introduced in Section~\ref{inputparamtypes} \dlvhex{} supports three different input types (e.g. constant, predicate and tuple). In order to access data for input parameters, Python plugin requires following command:  
+Once an external atom is registered,
+it has to be implemented in the form of another Python function 
+with an appropriate number of input parameters and output parameters.
+\paragraph{Parameter Values (Input)}
+As introduced in Section~\ref{inputparamtypes}
+\dlvhex{} supports three different input types
+(constant, predicate, and tuple).
+The Python function implementing the external atom
+requires one parameter for each element of the tuple given in \verb|addAtom|.
+In general an external atom implementation looks as follows.
 \begin{verbatim}
-def Atom_Name(Input_Parameter_1, Input_Parameter_2,...)
+def Atom_Name(Input_Parameter_1, Input_Parameter_2,...):
+  Implementation ...
 \end{verbatim}
-As there are three input parameter types, each of them is accessed in different way as showed bellow: 
-\begin{itemize}
-\item To access data for input parameter of type \verb+CONSTANT+, for input variable \verb+var+, one should write \verb+var.value()+. More details about implementation is available in Example~\ref{constantAsInput}
- 
-\item To access data for input parameter of type \verb+PREDICATE+, for each variable \verb+var+ in \verb+dlvhex.getTrueInputAtoms()+, one should write \verb+dlvhex.tuple()[1].value()+. More details about implementation is available in Example~\ref{predicateAsInput}  
-
-\item To access data for input parameter of type \verb+TUPLE+, for each member \verb+x+ of a tuple \verb+t+, one should write \verb+x.value()+. More details about implementation is available in Example~\ref{tupleAsInput}
-\end{itemize}
+Each of the input parameter types is accessed in different way: 
+\begin{compactitem}
+\item
+  To access data for input parameters of type \verb+CONSTANT+,
+  if the parameter variable is called \verb+var+
+  one obtains its value by writing \verb+var.value()+.
+  %
+  Example~\ref{constantAsInput} shows how to use a \verb+CONSTANT+ parameter.
+\item
+  To access data for input parameters of type \verb+PREDICATE+,
+  if the parameter variable is \verb+var+
+  then \verb+var.value()+ will just give the predicate given as argument.
+  Method \verb+dlvhex.getTrueInputAtoms()+ provides a collection
+  of all atoms of relevant predicates that are true in the current candidate.
+  Using \verb+for atm in dlvhex.getTrueInputAtoms():+
+  it is possible to enumerate these atoms.
+  An atom \verb+atm+, for example $\mi{edge}(\mi{one},\mi{four})$
+  corresponds to a tuple $(\mi{edge},\mi{one},\mi{four})$
+  that can be obtained via \verb+atm.tuple()+.
+  In this tuple, the value of each element again can be obtained
+  using the method \verb+.value()+.
+  %
+  Example~\ref{predicateAsInput} shows how to use a \verb+PREDICATE+ parameter.
+\item
+  To access data for input parameters of type \verb+TUPLE+,
+  if the parameter variable is \verb+var+ then
+  this variable will obtain a tuple corresponding with the ground input tuple.
+  For each member \verb+x+ of that tuple \verb+var+
+  we obtain its value using \verb+x.value()+.
+  %
+  Example~\ref{tupleAsInput} shows an implementation for \verb|&concat|
+  using a \verb+TUPLE+ parameter.
+\end{compactitem}
+%
+The object returned by the \verb+.value()+ method
+is of type \verb|int| or \verb|str|.%
+\footnote{The class providing the method \texttt{.value()}
+  is of type \texttt{dlvhex.ID}, which is a data structure
+  that holds the internal ID of an atom/constant/term within \dlvhex.}
 
 \paragraph{Creating Output Tuples}
-An external atom returns output tuple of different sizes. Tuple size is specified in register function (cf. Section~\ref{registerExtAtom}). The \dlvhex{} command used for output looks as follows: 
+An external atom returns output tuples corresponding to the arity
+specified in the register function (cf. Section~\ref{registerExtAtom}).
+The \dlvhex{} command used for output looks as follows: 
 \begin{verbatim}
 dlvhex.output((Output_Parameter_1, Output_Parameter_2,...))
 \end{verbatim}
-Command to output single value from the external atom would look like: 
+Command to output a tuple containing a single value
+stored in variable \verb|item| looks as follows.
 \begin{verbatim}
-dlvhex.output((item, ))
+dlvhex.output((item,))
 \end{verbatim}
-The output command above returns variable of type string in the tuple of size 1 (cf. Example~\ref{constantAsInput}). 
-If we want for instance to return tuple of size 2, output command will be:
+The output command above returns a constant in a tuple of size one
+(cf. Example~\ref{constantAsInput}). 
+If we want for instance to return a tuple of size two
+containing an integer as second element,
+the output command will be as follows.
 \begin{verbatim}
 dlvhex.output((node, int(j)))
 \end{verbatim}
-As it is obvious the plugin above returns tuple of size 2 (cf. Example~\ref{travellingsalesperson}). One of output types is string and second one is of type integer. 
+See also Example~\ref{travellingsalesperson}.
+Note that the output type of the first element
+can be integer, constant, or string,
+depending on what is stored in \verb|node|.
+% PS TODO perhaps we should explain these types (42 vs 'foo' vs '"foo"') and their problems/features/error messages, e.g., 'Foo' will make an error as it cannot be stored as constant, on the contrary '"Foo"' will be stored as string. Also '42' cannot be stored as constant, we either need to use integer 42 or string '"42"'.
 
-\subsubsection{Python plugin examples}
-To get more familiar with Python plugins we are providing three examples as there are three possible input parameter types. The plugin in Example~\ref{constantAsInput} uses a constant (string) input parameter. It is used in Example~\ref{faceQuery} to query all direct friends of the person of interest.
-\begin{exmp}
+\subsubsection{Examples}
+In the following we provide three examples,
+corresponding to the previously explained input parameter types.
+
+\smallskip
+The following Example~\ref{constantAsInput}
+uses a constant (string) input parameter.
+This plugin is used in Example~\ref{faceQuery}
+to query all direct friends of the person of interest.
+\begin{exmp}[\exampledownloadlink%
+  {example_5_1/example_5_1.py}{download example\_5\_1.py}]
 \label{constantAsInput}
 \begin{verbatim}
 
-1:  import dlvhex
-2:  import networkx as nx
-
-3:  def friendsOf(personOfInterest):
-4:    g = nx.read_weighted_edgelist("test.edgelist",nodetype=str,
+ 1: import dlvhex
+ 2: import networkx as nx
+ 
+ 3: def friendsOf(personOfInterest):
+ 4:   g = nx.read_weighted_edgelist("test.edgelist",nodetype=str,
                                     create_using=nx.DiGraph())
-5:    friendList = g.successors(personOfInterest.value())
-6:    for item in friendList:
-7:      dlvhex.output((item, ))
-
-8:  def register():
-9:  prop = dlvhex.ExtSourceProperties()
-10: prop.addFiniteOutputDomain(0)
-11: dlvhex.addAtom("friendsOf", (dlvhex.CONSTANT, ),1,prop)
+ 5:   friendList = g.successors(personOfInterest.value())
+ 6:   for item in friendList:
+ 7:     dlvhex.output((item, ))
+ 
+ 8: def register():
+ 9:   prop = dlvhex.ExtSourceProperties()
+10:   prop.addFiniteOutputDomain(0)
+11:   dlvhex.addAtom("friendsOf", (dlvhex.CONSTANT, ),1,prop)
 \end{verbatim}
 \end{exmp}
 The complete source code for this example is available at \examplelink{example_5_1}.
+% TODO PS there is only python code here, where is the usage of this plugin? we should also put some .hex file there or just point to another example if this plugin source code is also present in another example directory.
 
+Lines 1 and 2 import two libraries:
+every \dlvhex{}-plugin must import \verb+dlvhex+;
+and the \verb+networkx+ library is needed in this particular example
+for comfortable graph operations 
+(loading a graph from a file, getting successors of a node). 
 
-In the lines 1 and 2 we have imported two libraries which 
-are required. We have to import the \verb+dlvhex+ 
-library as for every plugin. The \verb+networkx+ library is needed in this particular example since we are 
-performing graph operations (i.e. loading graphs from the file, get all successors of the node etc). 
+Lines 3--7 implement the external atom \verb+&friendsOf+ 
+which receives the name of a person as string,
+loads a graph from disk in line 4,
+and returns all direct friends of the person in the graph in line 7.
 
-Lines \verb+3+ to \verb+7+ implement the \verb+friendsOf+ external atom. 
-It receives the name of the person as string and searches for all 
-direct friends of that person in the graph, which is loaded from the file in line \verb+4+. All discovered friends, are output in line \verb+7+. 
+Lines 8--11 register \verb+&friendsOf+
+with a single constant input parameter and a single output parameter,
+and a futher parameter \verb+prop+
+which provides meta-information about the atom (required for liberal safety).%
+\footnote{Advanced Topic:
+in this case we provide the meta-information that only finitely many friends
+can be discovered this way, i.e., that the graph is finite.}
 
-Lines \verb+8+ to \verb+11+ register the external atom 
-\verb+friendsOf+ with constant input parameter and 
-single output parameter. 
+\smallskip
+The following Example~\ref{predicateAsInput}
+uses a predicate input parameter for the external atom \verb+&rq+
+as required in Example~\ref{swimExample}.
+This external atom is performing 
+a Web search to check requirements
+for a selected swimming location.
+In the \hex{} program the external atom is of the form 
 
-The following example uses a predicate input parameter 
-for the \verb+&rq+ external atom as used in Example~\ref{swimExample}. The external atom is performing 
-a Web search to check the requirements for the selected location. It is of the form 
-%
 \mycenterline{$\ext{\mathit{rq}}{\mathit{location\_choice}}
 {\mathit{required\_resource}}$}
-% 
+
+\noindent
 which intuitively evaluates 
-to true if a given location\_choice requires a certain 
-required\_resource and represents such resources and their 
-origin (inoutd, or loc) using predicate $\mathit{need}$. 
-\begin{exmp}
+to true whenever a given $\mi{location\_choice}$ requires a certain 
+$\mi{required\_resource}$.
+%and represents such resources and their 
+%origin (inoutd, or loc) using predicate $\mathit{need}$. 
+\begin{exmp}[\exampledownloadlink%
+  {example_5_2/example_5_2.py}{download example\_5\_2.py}]
 \label{predicateAsInput}
 \begin{verbatim}
 
-1:  import dlvhex 
-
-2:  def rq(location_choice)
-3:    for x in dlvhex.getTrueInputAtoms():
-4:      io = {"ind":"money","amalB":"goggles","altD":"yogamat",
+ 1: import dlvhex 
+ 
+ 2: def rq(location_choice)
+ 3:   for x in dlvhex.getTrueInputAtoms():
+ 4:     io = {"ind":"money","amalB":"goggles","altD":"yogamat",
               "gansD":"money"}
-5:      if location_choice == x.tuple()[0]:
-6:        inp = x.tuple()[1].value()
-7:          if inp in io:
-8:            dlvhex.output((io[inp], ))
-
-9:  def register():
-10:   dlvhex.addAtom("rq", (dlvhex.PREDICATE), ), 1)
+ 5:     if location_choice == x.tuple()[0]:
+ 6:       inp = x.tuple()[1].value()
+ 7:         if inp in io:
+ 8:           dlvhex.output( (io[inp],) )
+ 
+ 9: def register():
+10:   dlvhex.addAtom("rq", (dlvhex.PREDICATE,), 1)
 \end{verbatim}
 \end{exmp}
-The complete source code for this example is available at \examplelink{example_5_2}.
+The complete source code for this example
+is available at \examplelink{example_5_2}.
 
 From line \verb+2+ to line \verb+8+ we implement the \verb+rq+ function. Line \verb+5+ filters the atoms according to the given predicate. In Line 6 we check if the predicate of the current input atom is equivalent to \texttt{location\_choice}, which specifies the selected location. Line \verb+8+ is returning  
 the requirements (if any) of the location specified by variable 
