@@ -1999,14 +1999,15 @@ within a \hex-program. Plugins can be implemented either in Python or C++, as sh
 With \dlvhex{} version 2.4.0, a Python plugin interface was 
 introduced, which supports Python scripts that provide 
 functions to realise custom external atoms.
-For every Python plugin two tasks are to be carried out:
+
+A Python plugin is a script that starts with
+\verb|import dlvhex| and contains the following functions:
 \begin{compactitem}
 \item
-  Write a script that starts with \verb|import dlvhex|
-  and implements a \verb|register| function
-  that registers all external atoms.
+  a \verb|register| function
+  that registers all external atoms, and
 \item
-  For each external atom, write an evaluation function
+  for each external atom an evaluation function
   that has the same name as the atom.
 \end{compactitem}
 
@@ -2121,7 +2122,7 @@ dlvhex.output((Output_Parameter_1, Output_Parameter_2,...))
 Command to output a tuple containing a single value
 stored in variable \verb|item| looks as follows.
 \begin{verbatim}
-dlvhex.output((item,))
+dlvhex.output( (item,) )
 \end{verbatim}
 The output command above returns a constant in a tuple of size one
 (cf. Example~\ref{constantAsInput}). 
@@ -2129,7 +2130,7 @@ If we want for instance to return a tuple of size two
 containing an integer as second element,
 the output command will be as follows.
 \begin{verbatim}
-dlvhex.output((node, int(j)))
+dlvhex.output( (node, int(j)) )
 \end{verbatim}
 See also Example~\ref{travellingsalesperson}.
 Note that the output type of the first element
@@ -2141,16 +2142,13 @@ depending on what is stored in \verb|node|.
 In the following we provide three examples,
 corresponding to the previously explained input parameter types.
 
-\smallskip
-The following Example~\ref{constantAsInput}
-uses a constant (string) input parameter.
-This plugin is used in Example~\ref{faceQuery}
-to query all direct friends of the person of interest.
 \begin{exmp}[\exampledownloadlink%
   {example_5_1/example_5_1.py}{download example\_5\_1.py}]
 \label{constantAsInput}
+This Example uses a constant (string) input parameter.
+This plugin is used in Example~\ref{faceQuery}
+to query all direct friends of the person of interest.
 \begin{verbatim}
-
  1: import dlvhex
  2: import networkx as nx
  
@@ -2167,6 +2165,7 @@ to query all direct friends of the person of interest.
 11:   dlvhex.addAtom("friendsOf", (dlvhex.CONSTANT, ),1,prop)
 \end{verbatim}
 \end{exmp}
+
 The complete source code for this example is available at \examplelink{example_5_1}.
 % TODO PS there is only python code here, where is the usage of this plugin? we should also put some .hex file there or just point to another example if this plugin source code is also present in another example directory.
 
@@ -2189,9 +2188,11 @@ which provides meta-information about the atom (required for liberal safety).%
 in this case we provide the meta-information that only finitely many friends
 can be discovered this way, i.e., that the graph is finite.}
 
-\smallskip
-The following Example~\ref{predicateAsInput}
-uses a predicate input parameter for the external atom \verb+&rq+
+\begin{exmp}[\exampledownloadlink%
+  {example_5_2/example_5_2.py}{download example\_5\_2.py}]
+\label{predicateAsInput}
+This example uses a predicate input parameter
+for the external atom \verb+&rq+
 as required in Example~\ref{swimExample}.
 This external atom is performing 
 a Web search to check requirements
@@ -2207,11 +2208,10 @@ to true whenever a given $\mi{location\_choice}$ requires a certain
 $\mi{required\_resource}$.
 %and represents such resources and their 
 %origin (inoutd, or loc) using predicate $\mathit{need}$. 
-\begin{exmp}[\exampledownloadlink%
-  {example_5_2/example_5_2.py}{download example\_5\_2.py}]
-\label{predicateAsInput}
-\begin{verbatim}
 
+The sourcecode of this plugin is as follows.
+
+\begin{verbatim}
  1: import dlvhex 
  
  2: def rq(location_choice)
@@ -2227,44 +2227,71 @@ $\mi{required\_resource}$.
 10:   dlvhex.addAtom("rq", (dlvhex.PREDICATE,), 1)
 \end{verbatim}
 \end{exmp}
+
 The complete source code for this example
 is available at \examplelink{example_5_2}.
+% TODO PS there is only python code here, where is the usage of this plugin? we should also put some .hex file there or just point to another example if this plugin source code is also present in another example directory.
 
-From line \verb+2+ to line \verb+8+ we implement the \verb+rq+ function. Line \verb+5+ filters the atoms according to the given predicate. In Line 6 we check if the predicate of the current input atom is equivalent to \texttt{location\_choice}, which specifies the selected location. Line \verb+8+ is returning  
-the requirements (if any) of the location specified by variable 
-\verb+inp+. Lines \verb+9+ to \verb+10+ define the register 
-function for the \verb+rq+ external atom.
+From line 2--8 we implement the \verb+rq+ function.
+In line 5 we check if the predicate of the current input atom
+is equivalent to the value of \texttt{location\_choice},
+which specifies the predicate of interest.
+Line 6 extracts the actual location from the atom,
+line 7 checks if we know some requirement
+and if so line 8 returns that requirements.
+Lines 9--10 register the external atom \verb+&rq+.
 
-As mentioned above, there exists a third parameter type \emph{tuple}. It stands for an arbitrary number of constant input parameters. The following example presents the usage of a tuple in a plugin used to implement string concatenation for arbitrary many strings.  
-\begin{exmp}
+For example, if $\mi{rq}(\mi{amalB})$ is true
+in the answer set candidate,
+then one of the \verb|for| loop iterations will contain
+in \verb|x| the ID of the atom $\mi{rq}(\mi{amalB})$.
+Then \verb|x.tuple()| is a tuple
+of IDs of constants $\mi{rq}$ and $\mi{amalB}$.
+Using the method \verb|.value()|
+we obtain the strings of these IDs:
+\verb|x.tuple()[0].value() = 'rq'|
+and \verb|inp = x.tuple()[1].value() = 'amalB'|.
+Accordingly the \verb|if| condition in line 7 is true
+and line 8 returns \verb|('goggles',)|.
+This means that the external atom
+$\ext{rq}{\mi{location\_choice}}{\mi{goggles}}$ is true.
+
+\begin{exmp}[\exampledownloadlink%
+  {example_5_3/example_5_3.py}{download example\_5\_3.py}]
 \label{tupleAsInput}
+The third example demonstrates parameter type \verb|dlvhex.TUPLE|
+which stands for an arbitrary number of constant input parameters.
+As an example where this is useful we show string concatenation.
 \begin{verbatim}
+1: import dlvhex
 
-1:  import dlvhex
+2: def concat(tup):
+3:   ret=""
+4:   for x in tup:
+5:     ret = ret + x.value()
+6:   dlvhex.output((ret, ))
 
-2:  def concat(tup):
-3:    ret=" "
-4:    for x in tup:
-5:      ret = ret + x.value()
-6:    dlvhex.output((ret, ))
-
-7:  def register():
-8:    dlvhex.addAtom("concat", (dlvhex.TUPLE, ), 1)
+7: def register():
+8:   dlvhex.addAtom("concat", (dlvhex.TUPLE,), 1)
 \end{verbatim}
 \end{exmp}
 The complete source code for this example is available at \examplelink{example_5_3}.
+% TODO PS there is only python code here, where is the usage of this plugin? we should also put some .hex file there or just point to another example if this plugin source code is also present in another example directory.
 
-This plugin receives a tuple of strings, concatenates 
-them and outputs them as a single string value. The function \verb+concat+ is implemented from line \verb+2+ to \verb+6+. In line \verb+3+, an 
-empty string is initialized. Inside the for loop, the input 
-strings are appended to the string initialized. This process 
-is continued until all strings from the tuple have been processed.  
- 
-A more detailed description of all methods available for the \dlvhex{} Python module can be found at:\\ \url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/doc2x/}\\
-\url{group__pythonpluginframework.html}
+This external atom receives a tuple of strings,
+concatenates them and outputs them as a single string value.
+Line 3 initializes an empty string variable \verb|ret|,
+the loop appends input strings to \verb|ret|
+and line 6 outputs one tuple with the result.
 
 \subsubsection{Learning additional constraints}
 TODO
+
+\subsubsection{Further Information}
+
+More information about methods in the \dlvhex{}
+Python API is available online at
+\url{http://www.kr.tuwien.ac.at/research/systems/dlvhex/doc2x/group__pythonpluginframework.html}.
 
 \subsection{C++}
 TODO
