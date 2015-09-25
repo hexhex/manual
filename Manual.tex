@@ -20,6 +20,7 @@
 \newcommand{\amp}[1]{\ensuremath{\&{\mathit{#1}}}}
 \newcommand{\ext}[3]{\ensuremath{\&{\mathit{#1}}[#2](#3)}}
 \DeclareMathOperator{\leftimpl}{:-}
+\DeclareMathOperator{\weakimpl}{:\sim}
 \DeclareMathOperator{\clasneg}{\text{-}}
 \DeclareMathOperator{\nott}{\mathit{not}}
 \DeclareMathOperator{\noteq}{!=}
@@ -34,21 +35,21 @@
 \newcommand{\exampledownloadlink}[2]{\href{https://github.com/hexhex/manual/raw/master/#1}{#2}}
 
 \newcommand\mycenterline[1]{\par\smallskip\centerline{#1} \smallskip}
-\newcommand\leftaligned[1]{\par \smallskip #1 \smallskip \par}
+\newcommand\leftaligned[1]{\par \smallskip \noindent \qquad #1 \smallskip \par}
 
 %\newcommand\mycenterline[1]{\smallskip #1 \smallskip\\}
+
+% for commenting out stuff
+\newcommand\nop[1]{}
 
 
 \setlength{\tabcolsep}{1.5pt}
 \lstset{
-    literate={~} {$\sim$}{1}
-}
-
-\newcounter{examplecounter}
-\newenvironment{example}{\begin{quote}%
-    \refstepcounter{examplecounter}%-
-  \textbf{Example \arabic{examplecounter}}%
-  \quad
+    literate={~} {$\sim$}{1},
+    basicstyle=\footnotesize,
+    language=Python,
+    showstringspaces=false,
+    frame=single
 }
 
 \newcommand{\row}[1]{%
@@ -72,6 +73,8 @@
 \begin{document}
 \setcounter{page}{3}
 \newcommand{\dlvhex}{{\sc dlvhex}}
+\newcommand{\clasp}{{\sf Clasp}}
+\newcommand{\gringo}{{\sf Gringo}}
 \newcommand{\hex}{{\sc hex}}
 \newcommand{\dlv}{{\sc dlv}}
 \newcommand{\dlvdb}{{\sc dlvdb}}
@@ -85,8 +88,11 @@
 \setcounter{secnumdepth}{4} % how many sectioning levels to assign numbers to
 \setcounter{tocdepth}{4}    % how many sectioning levels to show in ToC
 
+
 \theoremstyle{definition}
-\newtheorem{exmp}{Example}[section]
+\newtheorem{exmpl}{Example}[section]
+% add \qed to mark end of example
+\newenvironment{exmp}{\begin{exmpl}}{\qed\end{exmpl}}
 
 
 \begin{titlepage}
