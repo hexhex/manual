@@ -150,7 +150,7 @@ sources}. This guide aims at explaining the syntax
 of \hex{}-programs and the usage of the \dlvhex{} solver
 to enable users 
 to interoperate with a broad set of external computation 
-sources. The guide refers to release 2.4.     
+sources. The guide refers to version 2.4 and higher.
 \end{abstract}
 
 
@@ -1174,14 +1174,14 @@ consider the simplified rule
   \mathit{\rowprefix{r_8'} \ salaryTotal(X)} \leftimpl
     \mathit{\#sum}\{S : \mathit{emp(I,N,S)}\} = X.
 \end{align*}
-without $I$: the symbolic set with \row{r_8'} looks as follows:
+without $I$: the symbolic set with \row{r_8'} looks as follows.
 \begin{align*}
   \{ \langle 1250 \rangle, \langle 750 \rangle,
   \langle 900 \rangle,  \langle 1050 \rangle\}
 \end{align*}
-as it contains only one element for both employees with salary $750$.
-Since one element is missing from the symbolic set,
-we get the incorrect result $\mathit{salaryTotal(3950)}$ at the end.  
+It contains only one element for both employees with salary $750$,
+therefore
+we obtain the incorrect result $\mathit{salaryTotal(3950)}$.  
 \end{exmp}
  
 The aggregate function $\mathit{\#times}$ computes the product of 
