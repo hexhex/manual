@@ -1,0 +1,6 @@
+system(dlvhex). system(clasp).
+sayhello(X) :- &concat[hello, Y](X), system(Y).
+set1(a). set1(b). set1(c). set1(d).
+set2(b). set2(d).
+set3(X) :- &setdiff[set1, set2](X).
+pairs(X, Y) :- &sortandmap[sayhello, set3](X, Y).
