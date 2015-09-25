@@ -810,7 +810,7 @@ In contrast,
 the classical (or strong) negation of an atom holds only if 
 it can be derived. In other words if there is no evidence 
 that an atom is true, it is considered to be false. 
-Classical negation \enquote{\clasneg} is 
+Classical negation \enquote{$\clasneg$} is 
 permitted in from of an atom. The semantic relationship 
 between $A$ and $\clasneg\mathit{A}$ is simply that they must not jointly 
 hold.
@@ -1086,136 +1086,152 @@ aggregate is a function on a set of tuples that are
 normally subject to conditions. By comparing an aggregated 
 value with given values, we can extract a truth value from 
 an aggregate's evaluation, thus obtaining an aggregate 
-atom. They can occur in the bodies of rules and constraints, 
+atom.
+Aggregates can occur in the bodies of rules and constraints, 
 possibly negated using negation-as-failure \cite{gkklorst2015}.
-
-The form of an \emph{aggregate atom} occuring in a rule 
-body is as follows: \mycenterline{$s_1 \prec_1 \alpha \{ 
- t_1, \dots, t_n : L_1, \dots, L_m\} \prec_2 s_2$} 
-Here, all $\mathit{t_i}$ and $\mathit{L_i}$, forming 
-\emph{aggregate elements}, are non-empty tuples of terms 
-and literals, respectively. $\alpha$ is the name of some 
-function that is applied to the term tupples \texttt{$t_i$} 
-that remain after evaluating the conditions expressed by 
-$L_i$. Finally,  the result of applying $\alpha$ is 
-compared by means of the comparison predicates $\prec_1 and 
-\prec_2$ to the terms $s_1$ and $s_2$ respectively. 
-$\mathit{\#count}$, $\mathit{\#sum}$, $\mathit{\#times}$, 
-$\mathit{\#min}$, and $\mathit{\#max}$ are called aggregate 
-functions, and \dlvhex{} currently supports exactly these 
-five. An aggregate function is applied over a set and 
-returns a numeric value. Let $f(S)$ be an aggregate 
-function. A variable, X, is a \emph{local variable} to 
-$f(S)$ if and only if $X$ appears in $S$ and $X$ does not 
-appear in any aggregate function that is outside of $f(S)$.
-
-One aggregate body can contain multiple symbolic set constructors 
-of form $t_1, \dots, t_n \colon L_1, \ \dots,L_m$ by separating them using ``;'' sign. 
-\begin{exmp}
+%
+The form of an \emph{aggregate atom} is as follows:
 \begin{align*}
-\rowprefix{r_1}& emp(1,goofie,1250).\\
-\rowprefix{r_2}& emp(2,willy,750).\\
-\rowprefix{r_3}& emp(3,woody,750).\\
-\rowprefix{r_4}& emp(4,jerry,900).\\
-\rowprefix{r_5}& emp(5,tom,1050). \\
-\rowprefix{r_6}& over1000(I,S) \leftimpl emp(I,N,S), S > 1000.\\
-\rowprefix{r_7}& over1000nr(X) \leftimpl \#count\{I : 
-over1000(I,W)\} = X, \#int(X).
+s_1 \prec_1 \alpha \{ t_1, \dots, t_n : L_1, \dots, L_m\} \prec_2 s_2
+\end{align*}
+where $\mathit{t_i}$ are terms,
+$\mathit{L_i}$ are literals,
+$\alpha$ is a function that evaluates the numerical value of the aggregate,
+and $\prec_1$/$\prec_2$ are comparison predicates 
+that compare the resulting value with the terms $s_1$/$s_2$. 
+%
+An aggregate is true if the comparison is true
+with respect to evaluating $\alpha$ on those tuples $t_1,\ldots,t_n$
+for which $L_1,\ldots,L_m$ in the aggregate body is true.
+
+Supported aggregate functions $\alpha$ are
+$\mathit{\#count}$, $\mathit{\#sum}$, $\mathit{\#times}$, 
+$\mathit{\#min}$, and $\mathit{\#max}$.
+% PS: let's only explain on an example, there is the potassco guide
+%An aggregate function is applied over a set and 
+%returns a numeric value. Let $f(S)$ be an aggregate 
+%function. A variable, X, is a \emph{local variable} to 
+%$f(S)$ if and only if $X$ appears in $S$ and $X$ does not 
+%appear in any aggregate function that is outside of $f(S)$.
+
+\begin{exmp}
+Consider the following program
+where we want to count how many employees of the company
+earn more than 1000. 
+\begin{align*}
+\rowprefix{r_1}& \mi{emp(1,goofie,1250)}.\\
+\rowprefix{r_2}& \mi{emp(2,willy,750)}.\\
+\rowprefix{r_3}& \mi{emp(3,woody,750)}.\\
+\rowprefix{r_4}& \mi{emp(4,jerry,900)}.\\
+\rowprefix{r_5}& \mi{emp(5,tom,1050)}. \\
+\rowprefix{r_6}& \mi{over1000}(I,S) \leftimpl \mi{emp}(I,N,S), S > 1000.\\
+\rowprefix{r_7}& \mi{over1000nr}(X) \leftimpl
+  \mi{\#count}\{I : \mi{over1000}(I,W)\} = X, \mi{\#int}(X).
+\end{align*}
+Intuitively the aggregate is expanded into
+\begin{align*}
+\#count\{over1000(1,1250),over1000(5,1050)\}
+\end{align*}
+and the (symbolic) set of tuples $I$
+appearing in the aggregate looks as follows:
+\begin{align*}
+\{\langle 1 \rangle,\langle 5 \rangle\}.
+\end{align*}
+The aggregate function $\mathit{\#count}$ returns the 
+cardinality of the symbolic set to which it is applied,
+in this case it returns $2$.
+
+As a result this program has the following unique answer set.
+\begin{align*}
+\{ & \mathit{emp(1,goofie,1250),emp(2,willy,750),emp(3,woody,750),}\\
+   & \mathit{emp(4,jerry,900),emp(5,tom,1050),}\\
+   & \mathit{over1000(1,1250),over1000(5,1050),over1000nr(2)} \}
 \end{align*}
 \end{exmp}
-Intuitively the symbolic set appearing in the aggregate 
-predicate consists of two ground predicates:
-\mycenterline{$\{\langle 1 \rangle,\langle 5 \rangle\}$}
-which are both true w.r.t. the unique model of the whole 
-program, hence
-%
-\mycenterline{$ 
-\#count\{over1000(1,1250),over1000(5,1050)\}$}
-%
-returns 2 
-as output of the aggregate function and outputs:
-\begin{align*}
-\{ & \mathit{emp(1,goofie,1250),emp(2,willy,700),emp(3,woody,750),emp(4,jerry,900),}\\
-& \mathit{emp(5,tom,1050),over1000(1,1250),over1000(5,1050),over1000nr(2)} \}
-\end{align*}
-as a result of the program.
-The aggregate function $\mathit{\#count}$ returns the 
-cardinality of the symbolic set to which it is applied. We 
-want to count how many employees of the company earn more 
-than 1000. 
 
-The aggregate function $\mathit{\#sum}$ returns the 
-sum of the first local variable to be aggregated over in 
-the symbolic set. Suppose we want to know how much the 
-Cartoon Co. spends on salaries.
+Aggregate functions get as input the set of tuples from the aggregate
+and they operate on the first item of these tuples.
+\begin{exmp}
+Suppose we want to know how much the company spends on salaries,
+then we can use the following rule.
 \begin{align*}
-\mathit{\rowprefix{r_8} \ salaryTotal(X)} \leftimpl \mathit{\#sum}\{S,I : 
-\mathit{emp(I,N,S)}\} = X.
+  \mathit{\rowprefix{r_8} \ salaryTotal(X)} \leftimpl
+    \mathit{\#sum}\{S,I : \mathit{emp(I,N,S)}\} = X.
 \end{align*}
-In $\row{r_8}$ except term tuple $S$ we need also an $I$ in order to get the correct result. This is because we have two persons with same salaries and aggregate function will return only one element in the symbolic set for both of them. Since one element is missing from the symbolic set, we get incorrect result at the end.  
 The symbolic set for the rule $\row{r_8}$ consists of 5 elements: 
-\mycenterline{$\{ \langle 1250,1 \rangle, \langle 750,2 \rangle, \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}$} 
-The 
-aggregate function applied to the given set returns the sum 
-of the salaries of all the employees, the output thus is: 
-\mycenterline{
-\{$\mathit{salaryTotal(4700)}$\}.} 
-In reference to the previous example where we include term tuple I in order to distinguish employees with same salaries we 
-provide another example where we omit term tuple I  from the aggregate elements. The answer set is affected since
-there are two employees (i.e. Willy and Woody) with same salaries (S) but different identification numbers (I).
-Symbolic set consists of 4 elements this time due to the fact that there cannot be duplicates in the set. Symbolic set looks as follows:
-\mycenterline{$\{ \langle 1250 \rangle, \langle 750 \rangle, \langle 900 \rangle,  \langle 1050 \rangle\}$}
-The total salary thus is:
-\mycenterline{
-\{$\mathit{salaryTotal(3950)}$\}.} 
+\begin{align*}
+  \{ & \langle 1250,1 \rangle, \langle 750,2 \rangle,
+    \langle 750,3 \rangle, \langle 900,4 \rangle, \langle 1050,5 \rangle\}.
+\end{align*}
+The $\mi{\#sum}$ function returns
+the sum over the first elements of all tuples in the set,
+therefore the answer set contains the fact $\mathit{salaryTotal(4700)}$.
+
+Note that the first term in the tuple is the salary $S$,
+but we need also the second term $I$ in order to get the correct result:
+consider the simplified rule
+\begin{align*}
+  \mathit{\rowprefix{r_8'} \ salaryTotal(X)} \leftimpl
+    \mathit{\#sum}\{S : \mathit{emp(I,N,S)}\} = X.
+\end{align*}
+without $I$: the symbolic set with \row{r_8'} looks as follows:
+\begin{align*}
+  \{ \langle 1250 \rangle, \langle 750 \rangle,
+  \langle 900 \rangle,  \langle 1050 \rangle\}
+\end{align*}
+as it contains only one element for both employees with salary $750$.
+Since one element is missing from the symbolic set,
+we get the incorrect result $\mathit{salaryTotal(3950)}$ at the end.  
+\end{exmp}
  
-$\mathit{\#times}$ is 
-similar to $\mathit{\#sum}$, but computes the product of 
-the first local variable to be aggregated over in the 
-symbolic set. When applied over the empty set, 
+The aggregate function $\mathit{\#times}$ computes the product of 
+the first values of tuples in the symbolic set.
+When applied over the empty set, 
 $\mathit{\#times}$ returns 1.
-
-The aggregate function $\mathit{\#min}$ returns 
-the minimum value of the first local variable to be 
-aggregated over in the symbolic set. The following rule then returns the lowest income among all employees.
-\begin{align*}
-& lowest(X) \leftimpl \#min\{S : emp(I,N,S)\} = X.
-\end{align*}
-
-The aggregate function applied to the given set returns the 
-minimum salary among of all the employees, the output thus 
-is:
-{$\mathit{lowest(750)}$}.
-
-The aggregate function $\mathit{\#max}$ returns 
-the maximum value of the first local variable to be 
-aggregated over in the symbolic set. The following program 
-computes the maximum income earned in the company
-\begin{align*}
-& \mathit{highest}(X) \leftimpl \mathit{\#max}\{S : 
-\mathit{emp}(I,N,S)\} = X.
-\end{align*}
-
-and it outputs $\{highest(1250)\}$ as a highest income in 
-the company.
+%
+The aggregate function $\mathit{\#min}$ (resp., $\mi{\#max}$) returns 
+the minimum (resp., maximum) value
+of the first values of tuples in the symbolic set.
+%
+%PS: imho we already have enough examples
+%The following rule then returns the lowest income among all employees.
+%\begin{align*}
+%& lowest(X) \leftimpl \#min\{S : emp(I,N,S)\} = X.
+%\end{align*}
+%
+%The aggregate function applied to the given set returns the 
+%minimum salary among of all the employees, the output thus 
+%is:
+%{$\mathit{lowest(750)}$}.
+%
+%The following program 
+%computes the maximum income earned in the company
+%\begin{align*}
+%& \mathit{highest}(X) \leftimpl \mathit{\#max}\{S : 
+%\mathit{emp}(I,N,S)\} = X.
+%\end{align*}
+%
+%and it outputs $\{highest(1250)\}$ as a highest income in 
+%the company.
+%
+Note that one aggregate body can contain multiple symbolic set constructors 
+of form $t_1, \dots, t_n \colon L_1, \ \dots,L_m$
+by separating them using \enquote{;}. 
 
 \subsection{Optimization}
 \label{optimize}
 Introducing \emph{weak constraints} into \hex-programs 
 allows us to formulate several optimization problems in an 
-easy and natural way. These weak constraints are adopted 
-from \emph{DLV}. While standard constraints (integrity 
+easy and natural way.
+%These weak constraints have been adopted 
+%from \emph{DLV}.
+While standard constraints (integrity 
 constraints, strong constraints) always have to be 
-satisfied, weak constraints \emph{should} be satisfied if it is 
-possible, but may be violated if necessary.
-
-
-The answer sets of a program P with a set W of weak 
-constraints are those answer sets of P which minimize the 
-violation of weak constraints respecting their weights and 
-levels. They are called best models of (P,W). Note that a 
-program may have several best models.
-
+satisfied, weak constraints can be satisfied
+\emph{at a cost}
+and the answer sets of a program $P$ with a set $W$ of weak 
+constraints are those answer sets of $P$ which minimize the 
+cost of violated weak constraints.
 
 Weak constraints can be weighted according to their 
 importance (the higher the weight, the more important the 
@@ -1225,54 +1241,48 @@ constraints. Weak constraints can also be prioritized.
 Under prioritization, the semantics minimizes the violation 
 of the constraints of the highest priority level first; 
 then the lower priority levels are considered one after the 
-other in descending order. Syntactically, weak constraints 
-are specified as follows.
-%
-\mycenterline{:$\sim$ $\mathit{b_1,\dots,b_n}.[\mathit{w}$@$\mathit{l},\mathit{t_1,\dots,t_m}]$} 
-%
-where $\mathit{t_1,\dots,t_m}$ 
-are terms and $\mathit{b_1,\dots,b_n}$ are literals for $m \geq 0$  and $n \geq 0$; $w$ and $l$ are terms standing for a \emph{weight} a \emph{level}. Writing the part ``$\mathit{@l}$'' can optionally be ommited if $l=0$; that is, a weak constraint has level 0 unless specified otherwise \cite{cffiklrs2013}.
+other in descending order.
 
-The following program, computes the minimum spanning trees 
-of a weighed directed graph.
+Weak constraints 
+are specified as follows.
+\begin{align*}
+\weakimpl \mathit{b_1,\dots,b_n}.
+\quad [\mathit{w}@\mathit{l},\mathit{t_1,\dots,t_m}] 
+\end{align*}
+As in aggregates,
+$\mathit{t_1,\dots,t_m}$, $m \gts 0$, are terms that specify a symbolic set
+over which the cost of constraint violations is computed.
+%
+As in a normal rule, $\mathit{b_1,\dots,b_n}$, $n \gts 0$,
+are literals,
+and $w$ and $l$ are terms standing for a \emph{weight} and a \emph{level}.
+%
+If omitted, the level defaults to 0.
+%Writing the part ``$\mathit{@l}$'' can optionally be ommited if $l=0$; that is, a weak constraint has level 0 unless specified otherwise \cite{cffiklrs2013}.
+
 \begin{exmp}
+Consider we want to compute the minimum spanning trees 
+of a weighed directed graph.
 \begin{align*}
 \rowprefix{r_1}& \mathit{root}(a). \\
 \rowprefix{r_2}& \mathit{node}(a). \ \mathit{node}(b). \ 
-\mathit{node}(c). \ \mathit{node}(d). \ \mathit{node}(e). \ \\
+  \mathit{node}(c). \ \mathit{node}(d). \ \mathit{node}(e). \ \\
 \rowprefix{r_3}& \mathit{edge}(a,b,4). \ \mathit{edge}(a,c,3). \ 
-\mathit{edge}(c,b,2). \ \mathit{edge}(c,d,3). \ \\
-\rowprefix{r_4}& \mathit{edge}(b,e,4). \ \mathit{edge}(d,e,5). \ \\
-\\
+  \mathit{edge}(c,b,2). \ \mathit{edge}(c,d,3). \ \\
+\rowprefix{r_4}& \mathit{edge}(b,e,4). \ \mathit{edge}(d,e,5). \ \\[1ex]
 \rowprefix{r_5} & \mathit{in\_tree}(X,Y,C) \vee 
-\mathit{out\_tree}(X,Y) \leftimpl \mathit{edge}(X,Y,C), 
-\mathit{reached}(X). \\
-\rowprefix{r_6}& \leftimpl \mathit{root}(X), \mathit{in\_tree}
-(\_,X,C).\\
+  \mathit{out\_tree}(X,Y) \leftimpl \mathit{edge}(X,Y,C), 
+  \mathit{reached}(X). \\
+\rowprefix{r_6}& \leftimpl \mathit{root}(X), \mathit{in\_tree} (\_,X,C).\\
 \rowprefix{r_7}& \leftimpl \mathit{in\_tree}(X,Y,C), 
-\mathit{in\_tree}(Z,Y,C), X \noteq Z. \\
-\\
-\rowprefix{r_8}& \mathit{reached}(X) \leftimpl \mathit{root}
-(X). \\
+  \mathit{in\_tree}(Z,Y,C), X \noteq Z. \\[1ex]
+\rowprefix{r_8}& \mathit{reached}(X) \leftimpl \mathit{root} (X). \\
 \rowprefix{r_9}& \mathit{reached}(Y) \leftimpl 
-\mathit{reached}(X), \mathit{in\_tree}(X,Y,C). \\
+  \mathit{reached}(X), \mathit{in\_tree}(X,Y,C). \\
 \rowprefix{r_{10}}& \leftimpl \mathit{node}(X), \nott \thinspace 
-\mathit{reached}(X). \\
-\\
+  \mathit{reached}(X). \\[1ex]
 \rowprefix{r_{11}}&\mathit{ : \sim in\_tree}(X,Y,C). [C@1,X,Y,C]
 \end{align*}
-\end{exmp}
-The complete source code for this example is available at \examplelink{example_3_12}.
-
-Best model:
-\begin{align*}
-\{ & \mathit{reached(a), out\_tree(a,b), 
-   in\_tree(a,c,3), reached(b), reached(c),}\\ 
-   & \mathit{in\_tree(b,e,4), in\_tree(c,b,2), in\_tree(c,d,3), 
-   reached(e), reached(d),}\\ 
-   &\mathit{  out\_tree(d,e)\}} \ \ Cost ([Weight:Level]): <[12:1]>
-\end{align*}
-
 The fact $\row{r_1}$ of the example above defines the root node 
 of a tree. Nodes and edges are defined in $\row{r_2}$ and $\row{r_3}$. 
 Rule $\row{r_5}$ guesses for each edge from node 
@@ -1282,13 +1292,41 @@ that there is no incoming edge to the root node. Rule $\row{r_7}$
 eliminates all answer sets where there are two outgoing 
 edges going to the same node $Y$. In $\row{r_8}$ and $\row{r_9}$ 
 we compute all reached nodes and $\row{r_{10}}$ removes all answer sets where there is some node 
-which is not reached. Rule $\row{r_{11}}$ of the program is a weak 
-constraint with weight $C$ and level 1. The weak constraint 
-should be satisfied, but its violation does not kill the 
-model. The aim is to minimize the number of violated weak 
-constraints. In our best model the cost value is 12 because the minimum spanning tree contains edges with a total weight of 12.  
+which is not reached.
 
+Rule $\row{r_{11}}$ is a weak 
+constraint with weight $C$ and level 1.
+Intuitively this constraint says that using an edge
+has a cost corresponding to the weight of the edge.
+As a consequence, minimizing cost of the answer set
+will find a tree starting at the root node
+reaching all nodes with minimal cost,
+i.e., a minimal spanning tree.
 
+The best answer set has cost 12 at level 1 and is as follows
+(omitting facts).
+\begin{align*}
+\{ & \mi{reached(a), reached(b), reached(c), reached(d), reached(e)}, \\
+   & \mi{out\_tree(a,b), out\_tree(d,e)}, \\
+   & \mi{in\_tree(a,c,3), in\_tree(b,e,4), in\_tree(c,b,2), in\_tree(c,d,3)}\} 
+   % \ \ Cost ([Weight:Level]): <[12:1]>
+\end{align*}
+The complete source code for this example is available at
+\exampledownloadlink{example_3_opti/example_3_opti.hex}{example\_3\_opti.hex}.
+%The source code for this example is available at \examplelink{example_3_opti}.
+
+To obtain all optimal answer sets execute the following command.
+\leftaligned{\texttt{ \$ dlvhex2 \ example\_3\_opti.hex}}
+
+To obtain all answer sets, even non-optimal ones execute the following.
+%
+\leftaligned{\texttt{ \$ dlvhex2 \ example\_3\_opti.hex \ --weak-allmodels}}
+\end{exmp}
+
+More examples can be found in the DLV-User Manual \cite{brfwilvpg2009}.
+
+\nop
+{
 Finally, we show an example where both weights and 
 priorities are specified. This example and some others are 
 taken from the DLV-User Manual \cite{brfwilvpg2009}. Consider the 
@@ -1352,94 +1390,172 @@ the constraints of the highest priority level first; then
 the lower priority levels are considered one after the 
 other in descending order. This time we have two best 
 models in our solution.     
-
+}
 
 \subsection{Higher-order Atoms}
-\hex{}-programs are 
-nonmonotonic logic programs admitting \emph{high-order 
-atoms}, and we extend the well known answer-set semantics 
-to this class of programs. A high-order 
-atom allows to quantify values over predicate names, and to 
+\hex{}-programs are non-monotonic logic programs
+admitting \emph{high-order atoms},
+which are atoms containing a variable predicate symbol
+(instead of a constant).
+A high-order atom allows to quantify values over predicate names, and to 
 freely exchange predicate symbols with constant symbols, 
 like in the rule
 %
 \mycenterline{$C(X) \leftarrow \textit{subclassOf(D,C),D(X)}$}
 %
-A \textit{high-order atom} is a tuple ($Y_0, Y_1,
-\dots,Y_n$), where $Y_0, Y_1,\dots,Y_n$ are terms; $ n \ge 
-0$ is the \textit{arity} of the atom. Intuitively, $Y_0$ 
-is the predicate name, and we thus also use the more 
+where $C(X)$ and $D(X)$ are high-order atoms.
+%
+An atom can be seen as a tuple ($Y_0, Y_1, \dots,Y_n$),
+where $Y_0, Y_1,\dots,Y_n$ are terms
+and $ n \ge 0$ is the \textit{arity} of the atom.
+Intuitively, $Y_0$ is the predicate name, and we thus also use the more 
 familiar notation $Y_0(Y_1,\dots,Y_n)$. The atom is 
-\textit{ordinary}, if $Y_0$ is a constant. For example, 
-\textit{(x,rdf:type,c),node(X), and D(a,b),} are atoms; the 
+\textit{ordinary}, if $Y_0$ is a constant,
+it is \textit{high-order} if $Y_0$ is a variable.
+
+For example, 
+$(x,rdf:type,c)$, $node(X)$, and $D(a,b)$, are atoms; the 
 first two are ordinary atoms.
+
+%High-order atoms are internally represented as normal atoms
+%with an additional predicate symbol.
 
 \subsection{External Atoms}
 \label{extatoms}
+External atoms are the central feature
+that distinguishes \hex-programs from normal ASP programs.
+
 Through external atoms, \hex{}-programs can communicate 
-with other sources of computation; this can be used to 
-model extensions of ASP.  
-An \emph{external atom} facilitates to determine the truth 
-value of an atom through an external source of computation.
+with other sources of computation;
+this can be used to model part of a program outside of ASP
+(e.g., parts that cannot be modeled in ASP
+such as 3D simulations or Description Logic reasoning)
+or to import knowledge into ASP
+(e.g., from Semantic Web triplestores or from databases).
+
 An \emph{external atom} is of the form
-%
-\mycenterline{ 
-\&g[$Y_1,\dots,Y_n$]($X_1,\dots,X_m$),}
-%
+\begin{align*}
+\&g[Y_1,\dots,Y_n](X_1,\dots,X_m),
+\end{align*}
 where $Y_1,
 \dots,Y_n$ and $X_1,\dots,X_m$ are the two lists of terms 
 (called \textit{input} and \textit{output} lists, 
-respectively), and \&g $\in$ \textit{G} is an external 
-predicate name. We assume that \&g has
-%fixed lengths $in$($\&g$) = n and $out$($\&g$) = m for 
-input and output lists, respectively.%
-fixed input length $n$ and fixed output length $m$. 
+respectively), and $\&g$ is an external 
+predicate name.
+
 Intuitively, an 
 external atom provides a way for deciding the truth value 
-of an output tuple depending on the extension of a set of 
-input predicates.
+of an output tuple depending on the input tuple
+and depending on the truth of input predicates in the answer set.
+%
+An external atom can have three kinds of inputs:
+\emph{predicate input} provides the truth values
+of all atoms of a predicate to the computation,
+while \emph{constant input}
+only provides the constant symbol to the computation.
+%
+The third input type is \emph{tuple input}
+which allows an arbitrary amount of constant inputs as arguments.
+%
+The type of an input must be specified when
+implementing the external computation in the \dlvhex{} API
+(see Section~\ref{sec:externalInterfaces}).
+
+\begin{exmp}
 For instance, the rule 
-%
-\mycenterline{$reached(X) \leftarrow \&reach[edge,a](X).$}
-%
-computes the predicate \textit{reached} taking values 
-from the external predicate $\&reach$, which computes in an external program
+\begin{align*}
+  reached(X) \leftarrow \&reach[edge,a](X).
+\end{align*}
+defines the predicate \textit{reached}
+and takes values from the external predicate $\&reach$,
+which computes in an external program
 %via \textit{$\&reach[edge,a](X)$} 
 all the reachable nodes $X$ in 
 the graph specified by predicates \textit{edge} starting from node \textit{a}. 
-\begin{exmp}
-\begin{align*}
-\rowprefix{r_1}& \mathit{system}(\mathit{dlvhex}). \ 
-\mathit{system}(\mathit{clasp}). \\  
-\rowprefix{r_2}& \mathit{sayhello(X)} \leftimpl 
-\ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, 
-\mathit{system(Y).}  \\ 
-\\
-\rowprefix{r_3}& \mathit{set1}(a). \ \mathit{set1}(b). \ 
-\mathit{set1}(c).\\
-\rowprefix{r_4}& \mathit{set2}(b). \ \mathit{set2}(c). \ 
-\mathit{set2}(d).\\
-\rowprefix{r_5}& \mathit{set3}(X) \leftimpl 
-\ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}. 
-\end{align*}
+%
+Here we assume $\&reach$ takes a predicate as first input
+and a constant as second input.
+%
+Then $edge$ is a predicate input:
+the computation of $\&reach$ depends on the truth values
+of predicate $edge$ in the answer set.
+%
+On the other hand, $a$ is a constant input:
+the computation of $\&reach$ only uses the symbol $a$.
 \end{exmp}
-The complete source code for this example is available at \examplelink{example_3_14}.
-
-There are two different external sources in this program, 
-first one is $\mathit{\&concate}$ and second one is 
-$\mathit{\&setdiff}$. The first part of the program for each 
-system concatenates the string \enquote{hello} and a system 
-name using $\mathit{\&concat}$ external source. As output 
-we have the answer set:
 %
-\mycenterline{ \{ $\mathit{sayhello}(\mathit{hellodlvhex}), 
-\mathit{sayhello}(\mathit{helloclasp})$ \}}
-%
-In this case the $\mathit{concat}$ external source receives 
-constant input parameters. It concatenates all constants from input sequence and outputs the result as one string.
+Note that because we used a predicate input in the previous example,
+the above example can define reachability in a graph
+that is part of a guessed in an answer set.
+This is a feature unique to \dlvhex{}:
+it cannot be emulated by externals in \gringo{}
+(which have to be computed during grounding,
+while \dlvhex{} computes external atoms during both grounding and solving).
 
-The second part of the program works with an external source 
-which has two predicate input parameters. It computes $\mathit{set1}$ minus $\mathit{set2}$, i.e., the set of all elements in the extension of $\mathit{set1}$ but not in that of $\mathit{set2}$. 
+In the next example we give a full program with external atoms
+including their implementation.
+\begin{exmp}
+The following program concatenates strings specified
+by the $\mi{system}$ predicate,
+computes a set difference,
+and then associates items in the resulting set
+and the strings in a unique mapping.
+\begin{align*}
+  \rowprefix{r_1}& \mathit{system}(\mathit{dlvhex}). \ 
+    \mathit{system}(\mathit{clasp}). \\  
+  \rowprefix{r_2}& \mathit{sayhello(X)} \leftimpl 
+    \ext{\mathit{concat}}{\mathit{hello, Y}}{\mathit{X}}, 
+    \mathit{system(Y).}  \\[1ex] 
+  \rowprefix{r_3}& \mathit{set1}(a). \ \mathit{set1}(b). \ 
+    \mathit{set1}(c).\\
+  \rowprefix{r_4}& \mathit{set2}(b). \ \mathit{set2}(c). \ 
+    \mathit{set2}(d).\\
+  \rowprefix{r_5}& \mathit{set3}(X) \leftimpl 
+    \ext{\mathit{setdiff}}{\mathit{set1, set2}}{\mathit{X}}.  \\[1ex]
+  \rowprefix{r_6}& \mathit{pairs}(X,Y) \leftimpl 
+    \ext{\mathit{sortandmap}}{\mathit{sayhello,set3}}{X,Y}.
+\end{align*}
+\row{r_2} concatenates strings to produce messages in $\mi{sayhello}(X)$,
+\row{r_5} computes a set difference in $\mi{set3}(X)$,
+and \row{r_6} produces a unique mapping between hello messages
+and the set difference.
+
+There are three different external sources in this program, 
+$\mathit{\&concat}$ has a tuple input and one output
+and computes as output the concatenation of all inputs,
+$\mathit{\&setdiff}$ uses two predicate inputs and also has one output
+and computes as output the set difference of constants
+in the first and the second input,
+finally $\mathit{\&sortandmap}$ has two predicate inputs and two outputs
+and computes a sorted one-to-one mapping between constants
+in first and second inputs.
+
+These external sources are implemented in the following Python plugin:
+
+\lstinputlisting{example_3_stringset/example_3_stringset.py}
+
+\noindent
+Answer sets of the above program are obtained by invoking
+
+\leftaligned{\texttt{\$ dlvhex2 --pythonplugin=example\_3\_stringset.py \textbackslash \\
+\hphantom{\qquad \$ dlvhex2 }example\_3\_stringset.hex}}
+
+\noindent
+We obtain the following answer set.
+\begin{align*}
+  \{ & \mi{system(dlvhex),system(clasp),set1(a),set1(b),set1(c),set1(d),} \\
+  & \mi{set2(b),set2(d),set3(a),set3(c),sayhello(hellodlvhex),sayhello(helloclasp),} \\
+  & \mi{pairs(hellodlvhex,a),pairs(helloclasp,c)} \}
+\end{align*}
+%
+Note that we use this example demonstration purposes,
+in practice set difference can easier be realized using rules.
+%
+The complete source code for this example is available at
+\examplelink{example_3_stringset}
+(\exampledownloadlink{example_3_stringset/example_3_stringset.hex}{example\_3\_stringset.hex} and
+\exampledownloadlink{example_3_stringset/example_3_stringset.py}{example\_3\_stringset.py}).
+\end{exmp}
 
 \section{Examples}
 \label{sec:examples}
