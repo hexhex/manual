@@ -1566,7 +1566,7 @@ We now present three real life examples
 which are encoded and solved by \hex-programs.
 In Section~\ref{sec:swimming} we solve a basic problem
 about choosing a proper swimming location \cite{efikrs2015}.
-In Section~\ref{traveling} we solve the traveling salesperson problem.
+In Section~\ref{sec:traveling} we solve the traveling salesperson problem.
 In Section~\ref{example3} we show how we can use \dlvhex{}
 to plan routes of one or multiple agents in the dynamic 
 environment controlled by the external atoms.
@@ -1586,7 +1586,7 @@ The complete source code for this example is available at
 and 
 \exampledownloadlink{example_4_swim/example_4_swim.py}{example\_4\_swim.py}).
 
-\subsubsection{Problem Instance}
+\subsubsection{Problem}
 Imagine Alice wants to go for a swim in Vienna. She knows 
 two indoor pools called Margarethenbad and Amalienbad 
 (represented by $\mathit{margB}$ and $\mathit{amalB}$, 
@@ -1609,7 +1609,7 @@ the water.
 The problem we will solve with \hex\ is
 to find a suitable swimming location for Alice.
 
-\subsubsection{Problem Encoding}
+\subsubsection{Encoding}
 
 A \hex-program used to select
 an appropriate swimming location is as follows.
@@ -1668,13 +1668,8 @@ $\ext{\mathit{rq}}{\mathit{swim}}{\mathit{money}}$ is true
 if $\mathit{swim(ind)}$ is true because indoor swimming 
 pools charge money for swimming. 
 
-
-The external atom $\&rq$ can realized in Python as follows.
-
-\lstinputlisting{example_4_swim/example_4_swim.py}
-
-Note that the implementation details of plugins
-are discussed in Section~\ref{sec:externalInterfaces}.
+The implementation of the external atom $\&rq$ in Python
+is discussed in Example~\ref{ex:swimplugin} on page~\pageref{ex:swimplugin}.
 
 \subsubsection{Problem Solution}
 
@@ -1717,16 +1712,16 @@ where $\&rq'$ is implemented differently from $\&rq$.
 This will result in a larger grounding
 (the extensions of $swim$ and $goto$ are expanded into rules).
 
-\subsection{Example 2}
-\label{traveling}
-In this section we consider the well-known travelling 
+\subsection{Traveling Salesperson Example}
+\label{sec:traveling}
+In this section we consider the well-known traveling 
 salesperson problem, where the task is to decide whether there 
 is a round trip that visits each node in a graph exactly 
 once and whose accumulated edge costs must not exceed some 
-budget B.
+budget $B$.
 
-\subsubsection{Problem Instance}
-The travelling salesperson problem describes a salesperson who 
+\subsubsection{Problem}
+The traveling salesperson problem describes a salesperson who 
 must travel between N cities. The order is not relevant as long as all cities are visited exactly once and the route is closed. Each of the 
 links between the cities has a weight (or the 
 costs) attached. The costs describe how ``difficult'' it is to 
@@ -1738,36 +1733,46 @@ complete the traversal \cite{wiki}.
 This example is interesting for us because it is a typical 
 optimization problem. Among all answer sets \dlvhex{} 
 should select the best one according to the weak constraints 
-concept explained in Section \ref{optimize}. In the 
+concept explained in Section~\ref{optimize}. In the 
 classical solver we are able to load only small graphs 
-because it is not feasible to load a large graph at once. In 
-this example we are using an external atom which is loading 
-graph from the external source edge by edge up to a  specified 
+because it is not feasible to load large graphs completely into memory.
+In this example we are using an external atom which is loading 
+a graph from the external source edge by edge up to a specified 
 depth level what makes it able to solve problems with 
-extremely large graphs.        
-\subsubsection{Problem encoding}
-\begin{figure}
-\begin{center}
-\begin{tikzpicture}
+extremely large graphs by considering only the part of the graph
+that is relevant for solving the problem. 
+
+The source code for this example is available at
+\examplelink{example_4_travel}
+(\exampledownloadlink{example_4_travel/example_4_travel.hex}{example\_4\_travel.hex},
+\exampledownloadlink{example_4_travel/example_4_travel.py}{example\_4\_travel.py},
+and
+\exampledownloadlink{example_4_travel/example_4_travel.graph}{example\_4\_travel.graph}).
+
+\subsubsection{Encoding}
+
+\begin{figure}%
+\begin{center}%
+\begin{tikzpicture}%
 \tikzset{vertex/.style = {shape=circle,draw,minimum 
 size=1.5em}}
 \tikzset{edge/.style = {->,> = latex'}}
 % vertices
 \node[vertex] (a) at  (0,0) {$\mathit{Chicago}$};
-\node[vertex] (b) at  (4,-6) {$\mathit{Detroit}$};
+\node[vertex] (b) at  (4,-5) {$\mathit{Detroit}$};
 \node[vertex] (c) at  (8,0) {$\mathit{Memphis}$};
-\node[vertex] (d) at  (8,-3) {$\mathit{Boston}$};
-\node[vertex] (a1) at (0,-3) {$\mathit{Austin}$};
+\node[vertex] (d) at  (6,-3) {$\mathit{Boston}$};
+\node[vertex] (a1) at (2,-3) {$\mathit{Austin}$};
 \node[vertex] (a2) at (4,-1.5) {$\mathit{Fresno}$};
 %edges
-\draw[edge] (a) to [bend right=80pt] node [auto] {2} (b);
+\draw[edge] (a) to [bend right=45] node [auto] {2} (b);
 \draw[edge] (a) to (a1);
 \draw[edge] (a) to node [auto] {2} (c);
 \draw[edge] (b) to (d);
 \draw[edge] (b) to node [auto] {1} (a1);
 \draw[edge] (c) to (a);
 \draw[edge] (c) to node [auto] {1} (a2);
-\draw[edge] (c) to [bend left=80pt] node [auto] {2}(b);
+\draw[edge] (c) to [bend left=45] node [auto] {2}(b);
 \draw[edge] (d) to node [auto] {2} (c);
 \draw[edge] (d) to node [auto] {4} (a2);
 \draw[edge] (d) to node [auto] {2} (b);
@@ -1777,147 +1782,186 @@ size=1.5em}}
 \draw[edge] (a2) to node [auto,near start] {3} (a);
 \draw[edge] (a2) to (c);
 \draw[edge] (a2) to (d);
-\end{tikzpicture}
-\end{center}
-\caption{Graph of the cities}
+\end{tikzpicture}%
+\end{center}%
+\caption{Graph of cities for the Traveling salesperson example.}
+\label{fig:travelcities}
 \end{figure}
-The \hex{}-program for the Travelling salesperson problem is 
-encoded as follows:
-\begin{exmp}
-\label{travellingsalesperson}
+
+The \hex{}-program for this problem is as follows.
 \begin{align*}
 \rowprefix{r_1} & startingCity(austin).\\
-\rowprefix{r_2} & budgetB(11).\\
-\\
-\rowprefix{r_3} & \mathit{cityOfDegree(P,0,P,0)} \leftimpl 
-\mathit{startingCity(P).} \\
-& \\
+\rowprefix{r_2} & budgetB(11).\\[1ex]
+\rowprefix{r_3} & \mathit{cityOfDegree(P,0,P,0)}
+  \leftimpl \mathit{startingCity(P).} \\[1ex]
 \rowprefix{r_4} & \mathit{cityOfDegree(F1, DegPlus, F2, Cost)} 
-\leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\
-& \qquad \ext{edges}{F1}{F2, Cost}, \mathit{DegPlus=DegPlus+1}, 
-DegPlus < 4, \\ & \qquad \#int(DegPlus), \#int(Deg)), \#int(Cost). 
-\\
+  \leftimpl \mathit{cityOfDegree(\_, Deg, F1, \_)}, \\
+  &\qquad\ext{edges}{F1}{F2, Cost}, \mathit{DegPlus=DegPlus+1},
+    DegPlus < 4, \\
+  & \qquad \#int(DegPlus), \#int(Deg)), \#int(Cost).\\
 \rowprefix{r_5}& \mathit{node(Y)} \leftimpl 
-\mathit{cityOfDgree(X, V, Y, C)}.\\
+  \mathit{cityOfDegree(X, V, Y, C)}.\\
 \rowprefix{r_6}& \mathit{edge}(X, Y) \leftimpl 
-\mathit{cityOfDegree(X, V, Y, C).} \\
-\rowprefix{r_7} & cost(X,Y,C) \leftimpl cityOfDegree(X, V, Y, C). 
-\end{align*}
-\begin{align*}
+  \mathit{cityOfDegree(X, V, Y, C).} \\
+\rowprefix{r_7} & cost(X,Y,C) \leftimpl \mi{cityOfDegree}(X, V, Y, C).  \\
 \rowprefix{r_8} & \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
-node(X). \\
+  node(X). \\
 \rowprefix{r_9} &  \{ cycle(X,Y) : edge(X,Y) \} = 1 \leftimpl 
-node(Y). \\
-& \\
+  node(Y). \\[1ex]
 \rowprefix{r_{10}} & costCalculated(X) \leftimpl \#sum \{C,X,Y : 
-cycle(X,Y), cost(X,Y,C)\} = X. \\
+  cycle(X,Y), cost(X,Y,C)\} = X. \\
 \rowprefix{r_{11}} & withinBudget(B,C) \leftimpl budget(B), 
-costCalculated(C), B \geeq C. \\
+  costCalculated(C), B \geeq C. \\
 \rowprefix{r_{12}} & \leftimpl  budgetB(B), costCalculated(C), 
-\nott \thinspace \mathit{withinBudget(B,C).} \\
-& \\
-\rowprefix{r_{13}} & reached(Y) \leftimpl cycle(C, Y), startingCity(C). \\
+  \nott \thinspace \mathit{withinBudget(B,C).} \\[1ex]
+\rowprefix{r_{13}} & reached(Y) \leftimpl cycle(\mi{Start}, Y), \mi{startingCity}(\mi{Start}). \\
 \rowprefix{r_{14}} & reached(Y) \leftimpl cycle(X,Y), 
-reached(X). \\
+  reached(X). \\
 \rowprefix{r_{15}} & \leftimpl node(Y), \nott \thinspace 
-\mathit{reached(Y)}. \\
-& \\
+  \mathit{reached(Y)}. \\[1ex]
 \rowprefix{r_{16}} & :\sim cycle(X,Y), cost(X,Y,C). \ [C@1,X,Y,C] 
 \end{align*}
-\end{exmp}
-The complete source code for this example is available at \examplelink{example_4_2}.
 
-In rule $\row{r_1}$ we have a fact which specifies the starting 
-city. 
-It is important to notice that in our program the starting 
-point for the travelling salesperson may change and it is not 
-fixed. The salesperson should start his trip from the 
-city specified by the fact from $\row{r_1}$ and also finish 
-his trip there if there is such a cycle which covers all 
-other cities in the graph. Rule $\row{r_2}$ is a fact which defines the 
-available budget of the salesperson. An atom $\mathit{cityOfDegree(R,D,S,C)}$ keeps 
+Fact $\row{r_1}$ specifies the starting city,
+i.e., the city where the salesperson starts and finishes the trip.
+Fact $\row{r_2}$ defines the available budget of the salesperson.
+
+The predicate $\mathit{cityOfDegree}(R,D,S,C)$ keeps 
 track of the cities newly discovered defined as successor 
 nodes $S$ for the root node $R$, their distances from the 
 root node as $D$ and the weight of the edge between $R$ and $S$ 
-denoted as $C$. Rule $\row{r_3}$ defines the starting city for 
-the path candidate. Rule $\row{r_4}$ is responsible for 
-generating a graph of 
-the cities discovered. It is using the external atom 
+denoted as $C$.
+Rule $\row{r_3}$ defines the starting city for discovered cities,
+rule $\row{r_4}$ defines a graph of the discovered cities
+using the external atom 
 $\mathit{\&edges}$ to load new cities from the external 
-file and use them in the program. An external atom is of 
-the form $\ext{edges}{F1}{F2,Cost}$ where $\mathit{F1}$ 
-represents the predecessor node for which we are finding 
-all successor 
-nodes. $\mathit{F2}$ returns all successor nodes of 
-$\mathit{F1}$ and $\mathit{Cost}$ is an integer value which 
-represents weight of the edge between $\mathit{F1}$ and 
-$\mathit{F2}$. $\mathit{DegPlus}$ is here set to be 4, which means we can go at most three edges far from the root node. 
-There are many advantages of using an external atom of this
-type:
-\begin{itemize}
-\item The graph may be very large and it is not possible to load it 
-at once as a set of edges specified manually
-\item We do not know the graph completely (e.g., due to limited capabilities of a web service)
-\item We want to analyze only a subgraph of the graph that is 
-reachable from the node specified
-\end{itemize}    
+file and use them in the program.
+
+The external atom is of 
+the form $\ext{edges}{File,F_1}{F_2,Cost}$
+where $\mi{File}$ is the file to load the graph from,
+and $\mathit{F_1}$ represents the node
+for which we want to know all successor nodes.
+The external atom semantics function
+returns all pairs $(F_2,\mi{Cost})$
+such that $F_2$ is successor node of $F_1$
+and the edge has weight $\mathit{Cost}$.
+$\mathit{DegPlus}$ is limited to be less than 4,
+which means we can go at most three edges far from the root node. 
+%
+There are several potential advantages
+of using an external atom of this type:%
+\begin{inparaenum}[(i)]
+\item
+  the graph may be very large and it is not possible to load it 
+  at once as a set of edges specified manually,
+\item
+  we do not know the graph completely
+  (e.g., due to limited capabilities of a web service), or
+\item
+  we want to analyze only a subgraph of the graph that is 
+  reachable from the specified node.
+\end{inparaenum}
+
 In $\row{r_5}$, $\row{r_6}$ and $\row{r_7}$ the program is extracting 
 $\mathit{nodes}, \mathit{edges}$ and $\mathit{costs}$ of 
 the edges from the $\mathit{cityOfDegree}$ atoms. 
-
-The rules $\row{r_8}$ and $\row{r_9}$ assert that every 
+%
+Rules $\row{r_8}$ and $\row{r_9}$ assert that every 
 node must have exactly one outgoing and exactly one 
-incoming edge, respectively, belonging to the cycle. The meaning of the two rules is described before in Section 
-\ref{conditions}.
+incoming edge, respectively, belonging to the cycle.
+The syntax used in these rules is described in Section~\ref{conditions}.
 
-In $\row{r_{10}}$ we use aggregates (cf. Section 
-\ref{aggregates}) to find the sum $X$ of the costs over the 
+In $\row{r_{10}}$ we use aggregates (cf.\ Section~\ref{aggregates})
+to find the sum $X$ of the costs over the 
 $\mathit{cycle(X,Y)}$. In rule $\row{r_{11}}$, an atom 
 $\mathit{withinBudget(B,C)}$ is true if the term of the 
 $\mathit{costCalculated(C)}$ is less than or equal to the 
-term of $\mathit{budgetB(B)}$ available. The integrity 
-constraint $\row{r_{12}}$ ensures that in the answer 
+term of $\mathit{budgetB(B)}$ available.
+The integrity constraint $\row{r_{12}}$ ensures that in the answer 
 set overall sum of the costs for the cycle will be less 
-than or equal to the budget available. The same rules can be applied to limit length travelled or time spent.
+than or equal to the budget available.
+The same rules can be applied to limit length traveled or time spent.
 
-Rules $\row{r_{13}}$ and $\row{r_{14}}$ check whether all 
-nodes 
-are reached by a cycle candidate produced by the rules 
-$\row{r_8}$ and $\row{r_9}$.  Note that rule $\row{r_8}$ builds on the
-assumption that the cycle starts at city Austin. The second 
-rule in $\row{r_9}$ states that, from a reached node $X$, an 
-adjacent node $Y$ can be reached via a further edge in the 
-cycle. It makes sure that all nodes will be reached with the 
-cycle given \cite{gkklorst2015}. The integrity constraint $\row{r_{15}}$ 
-eliminates answer sets where not all nodes in the graph are reached.
+Rules $\row{r_{13}}$ and $\row{r_{14}}$
+define reachability of nodes, startin from the initial node
+and using cycle candidates produced by the rules 
+$\row{r_8}$ and $\row{r_9}$.
+%
+The integrity constraint $\row{r_{15}}$ 
+eliminates answer sets where some nodes are not reached
+\cite{gkklorst2015}.
+% PS: why do we cite this here? is the example from their user guide?
 
-In order to minimize costs, we add the following 
-optimization statement:
-\mycenterline{$:\sim cycle(X,Y), cost(X,Y,C). \  [C@1,X,Y,C].$}
+In order to minimize costs, we add the weak constraint
+\row{r_16}.
 Here, edges belonging to the cycle are weighted according 
 to their costs and \dlvhex{} lists optimal answer sets only.
+For weak constraint syntax see Section~\ref{optimize}.
+
+\subsubsection{Plugin}
+
+The external atom $\&edge$ can realized in Python as follows.
+
+\lstinputlisting{example_4_travel/example_4_travel.py}
+
+This plugin uses the {\tt networkx} Python module
+for comfortable processing of graphs stored in plain text files.
+%
+The plugin loads the graph, retrieves successor nodes
+and returns them as output tuples.
+Note that this code is for demonstrational purposes only,
+a more efficient implementation is certainly possible.
+%
+The \enquote{finite output domain} property tells
+\dlvhex{} that the instantiation of the external atom will be finite.
+
+Details of the Python plugin API
+are given in Section~\ref{sec:externalInterfaces}.
+
+The encoding and plugin load the graph from the file
+\exampledownloadlink{example_4_travel/example_4_travel.graph}{example\_4\_travel.graph}.
+The file describes the directed weighted graph
+shown in Figure \ref{fig:travelcities};
+the first lines of that file as follows.
+
+\lstinputlisting[language=,lastline=5]{example_4_travel/example_4_travel.graph}
 
 \subsubsection{Problem Solution}
-For this example optimal answer set 
-is as follows:
+
+To obtain all optimal answer sets of the above program,
+and display only the cycle predicate (which contains the solution)
+execute the following command.
+
+\leftaligned{\texttt{\$ dlvhex2 example\_4\_travel.hex --filter=cycle \textbackslash \\
+\hphantom{\quad \$ dlvhex2 }--pythonplugin=example\_4\_travel.py}}
+
+\noindent
+The \dlvhex\ solver gives a single optimal answer set as output.
 \begin{align*}
-\{&  cycle(austin,boston), 
-cycle(boston,memphis),cycle(detroit,austin), \\
-& cycle(chicago,detroit), 
-cycle(memphis,fresno),cycle(fresno,chicago) \} \\
-& <[11:1]>.
+\{ & cycle(austin,boston), cycle(boston,memphis),cycle(detroit,austin), \\
+   & cycle(chicago,detroit), cycle(memphis,fresno),cycle(fresno,chicago) \} \\
+   & <[11:1]>.
 \end{align*}
-Note that we omitted input facts and intermediate results from the answer and show only the atoms specifying the final tour (optimal) to make 
-answer set easier to read. The route which satisfies all given constraints is: Austin $\rightarrow$ Boston $\rightarrow$ Memphis $\rightarrow$ Fresno $\rightarrow$ Chicago $\rightarrow$ Detroit $\rightarrow$ Austin with the minimum cost of 11. 
+Note that only the $\mi{cycle}$ predicate is visible
+due to the {\tt --filter} commandline option.
+This makes the answer set easier to read.
+The cheapest route which satisfies all given constraints is:
+\smallskip
 
+\centerline{%
+Austin $\rightarrow$ Boston $\rightarrow$ Memphis $\rightarrow$ Fresno $\rightarrow$ Chicago $\rightarrow$ Detroit $\rightarrow$ Austin%
+}
+\smallskip
 
-
+\noindent
+with the minimum cost of 11. 
 
 \subsection{Example 3}
 \label{example3}
 The last example is from the group of pathfinding problems and it considers pathfinding for multiple agents.
  
-\subsubsection{Problem Instance}
+\subsubsection{Instance}
 Pathfinding for a single agent is the problem of planning a 
 route from an initial
 location to a goal location in an environment, going around 
@@ -1944,7 +1988,7 @@ paths do not collide with static obstacles and that no two
 agents collide with 
 each other. 
 
-\subsubsection{Problem Encoding}
+\subsubsection{Encoding}
 The \hex-program for the problem introduced in the previous 
 subsection is as follows:
 \begin{exmp}
@@ -2255,10 +2299,10 @@ A Python plugin is a script that starts with
 %
 The \verb+register+ function has the following form:
 %
-\begin{verbatim} 
+\begin{lstlisting} 
 def register():
   dlvhex.addAtom("Atom_Name",(Input_Parameters),Output_Arity) 
-\end{verbatim}
+\end{lstlisting}
 %
 It contains a call of \verb+addAtom+ for each external atom.
 Each call specifies three parameters:
@@ -2285,16 +2329,16 @@ Hence the input type is \verb|dlvhex.TUPLE|
 and the register function is as follows.%
 \footnote{Note the extra ``,'': the Python syntax for creating a tuple
 with a single element is \texttt{(a,)}.}
-\begin{verbatim}
+\begin{lstlisting}
 def register():
   dlvhex.addAtom("concat", (dlvhex.TUPLE,), 1)  
-\end{verbatim}
+\end{lstlisting}
 If we assume that $\amp{concat}$ only accepts two strings,
 the register function would be as follows.
-\begin{verbatim}
+\begin{lstlisting}
 def register():
   dlvhex.addAtom("concat", (dlvhex.CONSTANT, dlvhex.CONSTANT), 1)  
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Implementing Semantics of External Atoms}
 Once an external atom is registered,
@@ -2307,10 +2351,10 @@ As introduced in Section~\ref{inputparamtypes}
 The Python function implementing the external atom
 requires one parameter for each element of the tuple given in \verb|addAtom|.
 In general an external atom implementation looks as follows.
-\begin{verbatim}
+\begin{lstlisting}
 def Atom_Name(Input_Parameter_1, Input_Parameter_2,...):
   Implementation ...
-\end{verbatim}
+\end{lstlisting}
 Each of the input parameter types is accessed in different way: 
 \begin{compactitem}
 \item
@@ -2333,7 +2377,7 @@ Each of the input parameter types is accessed in different way:
   In this tuple, the value of each element again can be obtained
   using the method \verb+.value()+.
   %
-  Example~\ref{predicateAsInput} shows how to use a \verb+PREDICATE+ parameter.
+  Example~\ref{ex:swimplugin} shows how to use a \verb+PREDICATE+ parameter.
 \item
   To access data for input parameters of type \verb+TUPLE+,
   if the parameter variable is \verb+var+ then
@@ -2355,23 +2399,23 @@ is of type \verb|int| or \verb|str|.%
 An external atom returns output tuples corresponding to the arity
 specified in the register function (cf. Section~\ref{registerExtAtom}).
 The \dlvhex{} command used for output looks as follows: 
-\begin{verbatim}
+\begin{lstlisting}
 dlvhex.output((Output_Parameter_1, Output_Parameter_2,...))
-\end{verbatim}
+\end{lstlisting}
 Command to output a tuple containing a single value
 stored in variable \verb|item| looks as follows.
-\begin{verbatim}
+\begin{lstlisting}
 dlvhex.output( (item,) )
-\end{verbatim}
+\end{lstlisting}
 The output command above returns a constant in a tuple of size one
 (cf. Example~\ref{constantAsInput}). 
 If we want for instance to return a tuple of size two
 containing an integer as second element,
 the output command will be as follows.
-\begin{verbatim}
+\begin{lstlisting}
 dlvhex.output( (node, int(j)) )
-\end{verbatim}
-See also Example~\ref{travellingsalesperson}.
+\end{lstlisting}
+See also the example in Section~\ref{sec:traveling}.
 Note that the output type of the first element
 can be integer, constant, or string,
 depending on what is stored in \verb|node|.
@@ -2387,54 +2431,48 @@ corresponding to the previously explained input parameter types.
 This Example uses a constant (string) input parameter.
 This plugin is used in Example~\ref{faceQuery}
 to query all direct friends of the person of interest.
-\begin{verbatim}
- 1: import dlvhex
- 2: import networkx as nx
- 
- 3: def friendsOf(personOfInterest):
- 4:   g = nx.read_weighted_edgelist("test.edgelist",nodetype=str,
-                                    create_using=nx.DiGraph())
- 5:   friendList = g.successors(personOfInterest.value())
- 6:   for item in friendList:
- 7:     dlvhex.output((item, ))
- 
- 8: def register():
- 9:   prop = dlvhex.ExtSourceProperties()
-10:   prop.addFiniteOutputDomain(0)
-11:   dlvhex.addAtom("friendsOf", (dlvhex.CONSTANT, ),1,prop)
-\end{verbatim}
-\end{exmp}
 
-The complete source code for this example is available at \examplelink{example_5_1}.
+\lstinputlisting[numbers=left]{example_5_1/example_5_1.py}
+
+The complete source code for this example is available at
+\examplelink{example_5_1}.
 % TODO PS there is only python code here, where is the usage of this plugin? we should also put some .hex file there or just point to another example if this plugin source code is also present in another example directory.
 
-Lines 1 and 2 import two libraries:
+Lines 1 and 3 import two libraries:
 every \dlvhex{}-plugin must import \verb+dlvhex+;
 and the \verb+networkx+ library is needed in this particular example
 for comfortable graph operations 
 (loading a graph from a file, getting successors of a node). 
 
-Lines 3--7 implement the external atom \verb+&friendsOf+ 
+Lines 9--17 implement the external atom \verb+&friendsOf+ 
 which receives the name of a person as string,
-loads a graph from disk in line 4,
-and returns all direct friends of the person in the graph in line 7.
+loads a graph from disk in line 11,
+and returns all direct friends of the person in the graph in line 17.
 
-Lines 8--11 register \verb+&friendsOf+
+Lines 20--23 register \verb+&friendsOf+
 with a single constant input parameter and a single output parameter,
 and a futher parameter \verb+prop+
 which provides meta-information about the atom (required for liberal safety).%
 \footnote{Advanced Topic:
 in this case we provide the meta-information that only finitely many friends
 can be discovered this way, i.e., that the graph is finite.}
+\end{exmp}
 
 \begin{exmp}[\exampledownloadlink%
-  {example_5_2/example_5_2.py}{download example\_5\_2.py}]
-\label{predicateAsInput}
+  {example_4_swim/example_4_swim.py}{download example\_4\_swim.py}]
+\label{ex:swimplugin}
+This example shows the Python plugin for external atom $\&rq$
+from the Swimming Example.
+See Section~\ref{sec:swimming} for details of the corresponding program
+how to run it.
+
+The source code of the plugin is as follows.
+
+\lstinputlisting[numbers=left]{example_4_swim/example_4_swim.py}
+
 This example uses a predicate input parameter
-for the external atom \verb+&rq+
-as required in Section~\ref{sec:swimming}.
-This external atom is performing 
-a Web search to check requirements
+for the external atom \verb+&rq+.
+This external atom checks requirements
 for a selected swimming location.
 In the \hex{} program the external atom is of the form 
 
@@ -2448,52 +2486,30 @@ $\mi{required\_resource}$.
 %and represents such resources and their 
 %origin (inoutd, or loc) using predicate $\mathit{need}$. 
 
-The sourcecode of this plugin is as follows.
+From line 7--12 we implement the \verb+rq+ function.
+Line 9 extracts the location from the atom,
+line 10 checks if the predicate of the current input atom
+is equivalent to the value of \texttt{location\_choice}
+(which specifies the predicate of interest),
+line 11 checks if we know some requirement
+and if so line 12 returns that requirements.
+Lines 15--16 register the external atom \verb+&rq+.
 
-\begin{verbatim}
- 1: import dlvhex 
- 
- 2: def rq(location_choice)
- 3:   for x in dlvhex.getTrueInputAtoms():
- 4:     io = {"ind":"money","amalB":"goggles","altD":"yogamat",
-              "gansD":"money"}
- 5:     if location_choice == x.tuple()[0]:
- 6:       inp = x.tuple()[1].value()
- 7:         if inp in io:
- 8:           dlvhex.output( (io[inp],) )
- 
- 9: def register():
-10:   dlvhex.addAtom("rq", (dlvhex.PREDICATE,), 1)
-\end{verbatim}
-\end{exmp}
-
-The complete source code for this example
-is available at \examplelink{example_5_2}.
-% TODO PS there is only python code here, where is the usage of this plugin? we should also put some .hex file there or just point to another example if this plugin source code is also present in another example directory.
-
-From line 2--8 we implement the \verb+rq+ function.
-In line 5 we check if the predicate of the current input atom
-is equivalent to the value of \texttt{location\_choice},
-which specifies the predicate of interest.
-Line 6 extracts the actual location from the atom,
-line 7 checks if we know some requirement
-and if so line 8 returns that requirements.
-Lines 9--10 register the external atom \verb+&rq+.
-
-For example, if $\mi{rq}(\mi{amalB})$ is true
+For example, if $\mi{goto}(\mi{amalB})$ is true
 in the answer set candidate,
 then one of the \verb|for| loop iterations will contain
-in \verb|x| the ID of the atom $\mi{rq}(\mi{amalB})$.
+in \verb|x| the ID of the atom $\mi{goto}(\mi{amalB})$.
 Then \verb|x.tuple()| is a tuple
-of IDs of constants $\mi{rq}$ and $\mi{amalB}$.
+of IDs of constants $\mi{goto}$ and $\mi{amalB}$.
 Using the method \verb|.value()|
 we obtain the strings of these IDs:
-\verb|x.tuple()[0].value() = 'rq'|
+\verb|x.tuple()[0].value() = 'goto'|
 and \verb|inp = x.tuple()[1].value() = 'amalB'|.
-Accordingly the \verb|if| condition in line 7 is true
-and line 8 returns \verb|('goggles',)|.
+Accordingly the \verb|if| condition in line 10 is true
+and line 12 returns \verb|('goggles',)|.
 This means that the external atom
-$\ext{rq}{\mi{location\_choice}}{\mi{goggles}}$ is true.
+$\ext{rq}{goto}{\mi{goggles}}$ is true.
+\end{exmp}
 
 \begin{exmp}[\exampledownloadlink%
   {example_5_3/example_5_3.py}{download example\_5\_3.py}]
@@ -2501,27 +2517,17 @@ $\ext{rq}{\mi{location\_choice}}{\mi{goggles}}$ is true.
 The third example demonstrates parameter type \verb|dlvhex.TUPLE|
 which stands for an arbitrary number of constant input parameters.
 As an example where this is useful we show string concatenation.
-\begin{verbatim}
-1: import dlvhex
-
-2: def concat(tup):
-3:   ret=""
-4:   for x in tup:
-5:     ret = ret + x.value()
-6:   dlvhex.output((ret, ))
-
-7: def register():
-8:   dlvhex.addAtom("concat", (dlvhex.TUPLE,), 1)
-\end{verbatim}
-\end{exmp}
+\lstinputlisting[numbers=left]{example_5_3/example_5_3.py}
 The complete source code for this example is available at \examplelink{example_5_3}.
 % TODO PS there is only python code here, where is the usage of this plugin? we should also put some .hex file there or just point to another example if this plugin source code is also present in another example directory.
+% TODO perhaps eliminate example_5_3 and explain example_3_stringset instead
 
 This external atom receives a tuple of strings,
 concatenates them and outputs them as a single string value.
-Line 3 initializes an empty string variable \verb|ret|,
+Line 7 initializes an empty string variable \verb|ret|,
 the loop appends input strings to \verb|ret|
-and line 6 outputs one tuple with the result.
+and line 12 outputs one tuple with the result.
+\end{exmp}
 
 \subsubsection{Learning additional constraints}
 
