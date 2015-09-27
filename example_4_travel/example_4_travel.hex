@@ -1,0 +1,36 @@
+% Instance
+startingCity(austin).
+budgetB(11).
+
+% Encoding
+
+% Initialize with degree 0
+cityOfDegree(P,0,P,0) :- startingCity(P).
+% Discovers the map up to degree 4.
+cityOfDegree(F1,DegPlus,F2,Cost) :- cityOfDegree(_,Deg,F1,_),
+  &edges["example_4_travel.graph", F1](F2,Cost), #int(Deg), 
+  DegPlus = Deg + 1, DegPlus < 4 , #int(DegPlus), #int(Cost).
+
+% Project cityOfDegree to discovered nodes, edges, weights.
+node(Y) :- cityOfDegree(X,V,Y,C).
+edge(X,Y) :- cityOfDegree(X,V,Y,C).
+cost(X,Y,C) :- cityOfDegree(X,V,Y,C).
+
+% For each node, guess which (exactly one) edge to take.
+{ cycle(X,Y) : edge(X,Y) } = 1 :- node(X). % outgoing edge
+{ cycle(X,Y) : edge(X,Y) } = 1 :- node(Y). % incoming edge
+
+% Define reached nodes.
+reached(Y) :- cycle(Start,Y), startingCity(Start).
+reached(Y) :- cycle(X,Y), reached(X).
+
+:- node(Y), not reached(Y).  % Require we reach all nodes.
+
+% Define costs for the tour.
+costCalculated(X) :- X = #sum{C,X,Y : cycle(X,Y),cost(X,Y,C) }.
+
+% Require that cost is lower or equal to budget B.
+:- budgetB(B), costCalculated(C), not B >= C.
+
+% Find best answer set according to the edge costs.
+:~ cycle(X,Y), cost(X,Y,C). [C@1,X,Y,C]
