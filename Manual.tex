@@ -1561,76 +1561,96 @@ The complete source code for this example is available at
 \section{Examples}
 \label{sec:examples}
 We now present three real life examples  
-which are encoded and solved by \hex-programs. In Section~\ref{example1} we solve a basic ``swimming 
-problem". In Section~\ref{traveling} we present the ``traveling salesperson" problem. In Section~\ref{example3} we show how we can use \dlvhex{} to plan routes of one or multiple agents in the dynamic 
+which are encoded and solved by \hex-programs.
+In Section~\ref{sec:swimming} we solve a basic problem
+about choosing a proper swimming location \cite{efikrs2015}.
+In Section~\ref{traveling} we solve the traveling salesperson problem.
+In Section~\ref{example3} we show how we can use \dlvhex{}
+to plan routes of one or multiple agents in the dynamic 
 environment controlled by the external atoms.
 
-\subsection{Example 1}
-\label{example1}
+\subsection{Swimming Example}
+\label{sec:swimming}
 In this example we present a program which selects  
-the best swimming location among all available locations 
-for a swim in Vienna. While selecting a location has to 
-satisfy all constraints given from the user and all swimming location's specifications are obtained from the internet using  
-an external atom.
- 
+the best swimming location among some available choices 
+for a swim in Vienna. Selecting a location has to 
+satisfy all constraints given from the user,
+and properties of swimming locations are imported from external
+using an external atom.
+
+The complete source code for this example is available at
+\examplelink{example_4_swim}
+(\exampledownloadlink{example_4_swim/example_4_swim.hex}{example\_4\_swim.hex}
+and 
+\exampledownloadlink{example_4_swim/example_4_swim.py}{example\_4\_swim.py}).
+
 \subsubsection{Problem Instance}
 Imagine Alice wants to go for a swim in Vienna. She knows 
 two indoor pools called Margarethenbad and Amalienbad 
 (represented by $\mathit{margB}$ and $\mathit{amalB}$, 
 respectively), and she knows that outdoor swimming is 
 possible in the river Danube at two locations called 
-Gansehaufel and Alte Donau (denoted $\mathit{gansD}$ and 
+G\"anseh\"aufel and Alte Donau (denoted $\mathit{gansD}$ and 
 $\mathit{altD}$, respectively). She looks up on the Web 
 whether she needs to pay an entrance fee, and what 
 additional equipment she needs. Finally she has the 
 contraint that she does not want to pay for swimming. 
 Assume Alice finds out that indoor pools in general have an 
 admission fee, and that one also
-has to pay at Gansehaufel, but not at Alte Donau. 
+has to pay at G\"anseh\"aufel, but not at Alte Donau. 
 Furthermore Alice reads some reviews about swimming 
 locations and finds out that she will need her Yoga mat for 
 Alte Donau because the ground is so hard, and she will need 
 goggles for Amalienbad because there is so much chlorine in 
-the water \cite{efikrs2015}. Once the problem is defined we can 
-proceed with encodings.    
+the water.
+
+The problem we will solve with \hex\ is
+to find a suitable swimming location for Alice.
 
 \subsubsection{Problem Encoding}
-A \hex-program used to decide about the swimming location is as 
-follows:
-\begin{exmp}
-\label{swimExample}
+
+A \hex-program used to select
+an appropriate swimming location is as follows.
+
+% PS: TODO put encoding and python plugin and commandline into figure on a single page
 \begin{align*}
 \rowprefix{r_1}& location(ind, margB). \ location(ind, amalB). \ \\& 
 location(outd, gansD). \ location(outd, altD). \\  
 \rowprefix{r_2}& swim(ind) \vee swim(outd).\\ 
 \rowprefix{r_3}& need(inoutd, C) \leftimpl \ext{\mathit{rq}}
-{\mathit{swim}}{\mathit{C}}. \\
-\\
+{\mathit{swim}}{\mathit{C}}. \\[1ex]
 \rowprefix{r_4}& goto(X) \vee ngoto(X) \leftimpl swim(P), 
 location(P, X).\\
 \rowprefix{r_5}& go \leftimpl goto(X).\\
 \rowprefix{r_6}& \leftimpl not \ go. \\
-\rowprefix{r_7}& \leftimpl goto(X), goto(Y), X \noteq Y. \\
-\\
+\rowprefix{r_7}& \leftimpl goto(X), goto(Y), X \noteq Y. \\[1ex]
 \rowprefix{r_8}& \mathit{need}(loc, C) \leftimpl 
 \ext{\mathit{rq}}{\mathit{goto}}{\mathit{C}}. \\ 
 \rowprefix{r_9}& \leftimpl need(X, money).
 \end{align*}
-\end{exmp}
-The complete source code for this example is available at \examplelink{example_4_2}.
 
-The \hex{} program above represents Alice's reasoning 
+This program above represents Alice's reasoning 
 problem. Rule $\row{r_1}$ contains a set of facts about possible 
 swimming locations (where $\mathit{ind}$ and 
 $\mathit{outd}$ are short for indoor and outdoor, 
-respectively). Rule $\row{r_2}$ chooses indoor vs. outdoor 
+respectively). Rule $\row{r_2}$ chooses indoor vs.\ outdoor 
 swimming locations, and $\row{r_3}$ collects requirements that 
 are caused by this choice using the external atom. 
+%
+In $\row{r_4}$ it is decided whether to visit indoor or outdoor locations.
+By $\row{r_5}$ we define $go$ if at least one location is selected,
+and $\row{r_6}$ removes answer set candidates where no location is selected.
+Constraint $\row{r_7}$ ensures that only a single location is selected.
+Rule $\row{r_8}$ collects all requirements caused by 
+the choice of $\mathit{goto}$ location.
+Finally $\row{r_9}$ states that all candidate solutions where 
+Alice has to pay are removed.
 
-Web research is performed by using an external atom of the 
-form 
-\mycenterline{$\ext{\mathit{rq}}{\mathit{location}$-$
-\mathit{choice}}{\mathit{required}$-$\mathit{resources}}$}
+Resources are obtained from the external atom of the form
+\begin{align*}
+  \ext{\mathit{rq}}{\mathit{location}\text{-}\mathit{choice}}%
+  {\mathit{required}\text{-}\mathit{resources}}
+\end{align*}
 which intuitively 
 evaluates to true if a given $\mathit{location}$-$\mathit{choice}$ 
 requires a certain $\mathit{required}$-$\mathit{resource}$ and 
@@ -1644,49 +1664,56 @@ $\beta$ is required when swimming is a place in the
 extension of predicate $\alpha$. For example, 
 $\ext{\mathit{rq}}{\mathit{swim}}{\mathit{money}}$ is true 
 if $\mathit{swim(ind)}$ is true because indoor swimming 
-pools charge money for swimming \cite{efikrs2015}. 
+pools charge money for swimming. 
 
-In $\row{r_4}$ it is decided what is to be visited, indoor or 
-outdoor location. By $\row{r_5}$ we ensure that at least one location is selected. The integrity constraint $\row{r_6}$ removes all answer sets in which there is no selected location to go. Integrity constraint $\row{r_7}$ ensures that only a single location is selected since Alice can not go to different location at the same time. Rule $\row{r_8}$ collects all requirements caused by 
-the choice of $\mathit{goto}$ location. And finally, the constraint $\row{r_9}$ states that all answer sets where 
-Alice has to pay for the swimming are removed.
 
-An important thing to notice is that an external atom 
-$\mathit{\&rq}$ receives a predicate as an input parameter. If instead of sending a predicate we send 
-constants, $\row{r_6}$ should be replaced with:
-\begin{align*}
-\rowprefix{r_1}& need(loc, C) \leftimpl \ext{rq}{margB}{C}, 
-goto(margB).\\
-\rowprefix{r_2}& need(loc, C) \leftimpl \ext{rq}{amalB}{C}, 
-goto(amalB).\\
-\rowprefix{r_3}& need(loc, C) \leftimpl \ext{rq}{altD}{C}, 
-goto(altD).\\
-\rowprefix{r_4}& need(loc, C) \leftimpl \ext{rq}{gansD}{C}, 
-goto(gansD).
-\end{align*}    
-where $\&rq$ receives constant input parameters. This gives us three additional rules which are just 
-repetitions of the same rule just with different constant 
-terms. Sending a predicate as input parameter does this in a 
-single line. However, it is not always the case that we can send constant terms of the predicate instead of predicate itself  as a parameter. Since input parameters of the external atom are of different type, the external atom implementation changes. The implementation details of the plugins are discussed in Section~\ref{sec:externalInterfaces}.
+The external atom $\&rq$ can realized in Python as follows.
+
+\lstinputlisting{example_4_swim/example_4_swim.py}
+
+Note that the implementation details of plugins
+are discussed in Section~\ref{sec:externalInterfaces}.
 
 \subsubsection{Problem Solution}
-\hex{}-program from the Example \ref{swimExample} has a 
-single answer set:
+
+To obtain all answer sets of the above program,
+execute the following command.
+
+\leftaligned{\texttt{\$ dlvhex2 --pythonplugin=example\_4\_swim.py example\_4\_swim.hex}}
+
+\noindent
+The \dlvhex\ solver gives the following single answer set as output.
 \begin{align*}
-\{ & 
-location(ind,margB),location(ind,amalB),location(outd,altD), 
-\\
-& location(outd,gansD), 
-swim(outd),go,ngoto(gansD),goto(altD),\\
-& need(loc,yogamat) \} 
+\{ & location(ind,margB),location(ind,amalB),location(outd,altD), \\
+   & location(outd,gansD), swim(outd),go,ngoto(gansD),goto(altD),\\
+   & need(loc,yogamat) \} 
 \end{align*}
-Under this answer set, the external atom $\ext{rq}{goto}
-{yogamat}$ is true and all others ($\ext{rq}{swim}
-{money}, \ext{rq}{goto}{money}, \ext{rq}{swim}{yogamat}, 
-\dots $) are false. Intuitively, the answer set tells Alice to 
+
+Under this answer set, the external atom
+$\ext{rq}{goto}{yogamat}$ is true and all others
+(e.g., $\ext{rq}{swim}{money}$, $\ext{rq}{goto}{money}$)
+are false.
+
+Intuitively, the answer set tells Alice to 
 take her Yoga mat and go for a swim to Alte Donau (outside) 
 which is free of charge. This is the only answer set which 
 satisfies the given constraints.    
+
+\subsubsection{Additional Remarks}
+
+In this example, the external atom 
+$\mathit{\&rq}$ uses a predicate as an input parameter.
+If we want to use a constant input
+instead of a predicate then
+\row{r_3} and \row{r_8} should be replaced with
+\begin{align*}
+\rowprefix{r_3'}& need(inoutd, C) \leftimpl \ext{rq'}{Swim}{C}, swim(Swim). \\
+\rowprefix{r_8'}& need(loc, C) \leftimpl \ext{rq'}{Goto}{C}, goto(Goto).
+\end{align*}    
+where $\&rq'$ is implemented differently from $\&rq$.
+
+This will result in a larger grounding
+(the extensions of $swim$ and $goto$ are expanded into rules).
 
 \subsection{Example 2}
 \label{traveling}
@@ -2403,7 +2430,7 @@ can be discovered this way, i.e., that the graph is finite.}
 \label{predicateAsInput}
 This example uses a predicate input parameter
 for the external atom \verb+&rq+
-as required in Example~\ref{swimExample}.
+as required in Section~\ref{sec:swimming}.
 This external atom is performing 
 a Web search to check requirements
 for a selected swimming location.

@@ -1,0 +1,21 @@
+% Known locations for indoor and outdoor.
+location(ind, margB).  location(ind, amalB).
+location(outd, altD).  location(outd, gansD).
+
+% Go swimming indoor or outdoor.
+swim(ind) v swim(outd).
+% External atom provides resources for the location in predicate swim.
+need(inoutd, C) :- &rq[swim](C), swim(X).
+
+% given indoor/outdoor choice, choose concrete place.
+goto(X) v ngoto(X) :- swim(P), location(P,X).
+% External atom provides resources for the location in predicate goto.
+need(loc, C) :- &rq[goto](C), goto(X).
+
+% We must go somewhere.
+go :- goto(X).
+:- not go.
+% We can only go to one location.
+:- goto(X), goto(Y), X < Y.
+% We do not want to spend money.
+:- need(X, money).
