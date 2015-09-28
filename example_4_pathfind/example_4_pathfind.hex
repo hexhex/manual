@@ -1,0 +1,47 @@
+% Starting node to discover graph.
+startingNode(one).
+% Initial node.
+nodeOfDegree(P,0,P) :- startingNode(P).
+% Discovers iteratively all nodes in the source file.
+nodeOfDegree(F1,DegPlus,F2) :-
+  nodeOfDegree(_,Deg,F1), &edges[F1](F2), DegPlus=Deg+1, #int(DegPlus).
+% Extract all nodes discovered.
+node(Y) :- nodeOfDegree(X,V,Y).
+% Extract all edges discovered.
+edge(X,Y) :- nodeOfDegree(X,V,Y).
+
+% Agents.
+agent(1). 
+agent(2).  
+
+% Starting nodes for the agents.
+start(1,one). 
+start(2,four). 
+
+% Destination nodes for the agents.
+goal(1,ten). 
+goal(2,eleven). 
+
+% All nodes are clear, except node three.
+clear(V) :- node(V), V != three.   
+
+% Starting point of agent path.
+path(AgentNo, 0, V) :- start(AgentNo, V).
+% agent can move along edge
+{ path(In,TPlus,U) : edge(V,U) } :-
+    path(In,T,V), TPlus=T+1, #int(TPlus).
+% each time, the agent cannot be in more than one place
+:- agent(In), #int(T), 1 < #count{U : path(In,T,U)}.
+
+% Define when node is visited.
+visit(AgentNo,V) :- path(AgentNo,T,V).    
+
+% Agent must visit goal node.
+:- goal(AgentNo,V), not visit(AgentNo,V).
+% At time t only one agent can be at node v
+:- path(X,T,V), path(XP,T,V), X<XP.     
+% Agent can only visit clear nodes.
+:- path(AgentNo,T,V), not clear(V). 
+
+% We check externally if the path is valid.
+:- path(In,T,V), path(In,TPlus,U), TPlus=T+1, not &check[In,V,U]().

@@ -1567,7 +1567,7 @@ which are encoded and solved by \hex-programs.
 In Section~\ref{sec:swimming} we solve a basic problem
 about choosing a proper swimming location \cite{efikrs2015}.
 In Section~\ref{sec:traveling} we solve the traveling salesperson problem.
-In Section~\ref{example3} we show how we can use \dlvhex{}
+In Section~\ref{sec:pathfinding} we show how we can use \dlvhex{}
 to plan routes of one or multiple agents in the dynamic 
 environment controlled by the external atoms.
 
@@ -1900,8 +1900,9 @@ to their costs and \dlvhex{} lists optimal answer sets only.
 For weak constraint syntax see Section~\ref{optimize}.
 
 \subsubsection{Plugin}
+\label{sec:travelplugin}
 
-The external atom $\&edge$ can realized in Python as follows.
+The external atom $\&edge$ can be realized in Python as follows.
 
 \lstinputlisting{example_4_travel/example_4_travel.py}
 
@@ -1957,11 +1958,12 @@ Austin $\rightarrow$ Boston $\rightarrow$ Memphis $\rightarrow$ Fresno $\rightar
 \noindent
 with the minimum cost of 11. 
 
-\subsection{Example 3}
-\label{example3}
-The last example is from the group of pathfinding problems and it considers pathfinding for multiple agents.
+\subsection{Pathfinding Example}
+\label{sec:pathfinding}
+The last example is from the group of planning problems
+and it considers pathfinding for multiple agents.
  
-\subsubsection{Instance}
+\subsubsection{Problem}
 Pathfinding for a single agent is the problem of planning a 
 route from an initial
 location to a goal location in an environment, going around 
@@ -1979,127 +1981,119 @@ to the maximum path length, or the sum of plan lengths.
 These problems are important
 for many real-life applications, such as motion planning, 
 vehicle routing, environmental monitoring, patrolling, 
-computer games \cite{ekos2013}. We consider the 
-problem 
+computer games \cite{ekos2013}.
+An ASP formulation for this problem
 where multiple agents need to find paths 
 from their respective starting locations to their goal 
 locations, ensuring that 
 paths do not collide with static obstacles and that no two 
 agents collide with 
-each other. 
+each other was described in \cite{ekos2013}.
+We extend this formulation by importing the graph
+using an external atom to consider only parts of a 
+(potentially very large) graph.
+
+The full source code for this example
+is available at \examplelink{example_4_pathfind}
+(\exampledownloadlink{example_4_pathfind/example_4_pathfind.hex}{example\_4\_pathfind.hex},
+\exampledownloadlink{example_4_pathfind/example_4_pathfind.py}{example\_4\_pathfind.py},
+and
+\exampledownloadlink{example_4_pathfind/example_4_pathfind.graph}{example\_4\_pathfind.graph}).
 
 \subsubsection{Encoding}
-The \hex-program for the problem introduced in the previous 
-subsection is as follows:
-\begin{exmp}
-\label{pathfindingAgent}
+We can encode this problem
+in the following \hex-program.
 \begin{align*}
-\rowprefix{r_1} & startingNode(one). \\
-\rowprefix{r_2} & nodeOfDegree(P,0,P) \leftimpl startingNode(P). 
-\\
-\rowprefix{r_3} & nodeOfDegree(F1, DegPlus, F2) \leftimpl 
-nodeOfDegree(\_, Deg, F1), \\ & \qquad \ext{edges}{F1}{F2}, 
-DegPlus=Deg+1, DgPlus <= 5, \#int(DegPlus), \\ & \qquad \#int(Deg). 
-\\
-\rowprefix{r_4} & node(Y) \leftimpl nodeOfDegre(X, V, Y).  \\
-\rowprefix{r_5} & edge(X,Y) \leftimpl nodeOfDegree(X,V,Y).\\
-\\
-\rowprefix{r_6} &  \mathit{agent(1). } \ \mathit{ agent(2). }\\
-\rowprefix{r_7} & \mathit{start(1,one).} \ \mathit{ 
-start(2,four).} \\
-\rowprefix{r_8} & \mathit{goal(1,ten).} \ \mathit{ 
-goal(2,eleven).} \\
-\\
-\rowprefix{r_9} & clear(V) \leftimpl \mathit{node(V)}, V \noteq 
-\mathit{three}\\ 
-\\
-\rowprefix{r_{10}} & guessPath(I,0,V) \leftimpl start(I,V). \\
-\rowprefix{r_{11}} &  \mathit{guessPath(I, TP, U)} \vee 
-\mathit{nguessPath(I, T, U)} \leftimpl 
-\mathit{agent(I)}, \\ & \qquad  \mathit{guessPath(I, T, V)},  
-\mathit{edge(U,V)}, \mathit{TP=T+1}, 
-\mathit{\#int(TP)}, \mathit{\#int(T).}  \\
-\rowprefix{r_{12}} &  \leftimpl 1 \noteq \mathit{\#count\{ U 
-\colon guessPath(I, T, U) \}}, \mathit{agent(I)}, 
-\mathit{\#int(T)}.  \\
-\\
-\rowprefix{r_{13}}&  visit(I, V) \leftimpl guessPath(I,T,V). \\
-\\
-\rowprefix{r_{14}} & \leftimpl goal(I, V), \nott \thinspace  
-\mathit{visit(I, V).} \\
-\rowprefix{r_{15}} &  \leftimpl guessPath(I, T, V), 
-path(IP,T,V), X \lesseq XP. \\
-\rowprefix{r_{16}} &  \leftimpl guessPath(I,T,V), \nott \thinspace  
-\mathit{clear(V).}\\
-\\
-\rowprefix{r_{17}} &  \mathit{path(I,V,U,T,ValidOrNot)} 
-\leftimpl \mathit{agent(I)}, \\ & \qquad \mathit{guessPath(I, T, 
-V)}, \mathit{guessPath(I, TP, U)}, \\ & \qquad \ext{check}{U, 
-V, T, I}{ValidOrNot}, \mathit{TP=T+1}, \#int(T), 
-\#int(TP).  \\
-\rowprefix{r_{18}} & \leftimpl path(I, V, U, T, invalid). 
+\rowprefix{r_1} & \mi{startingNode}(one). \\
+\rowprefix{r_2} & \mi{nodeOfDegree}(P,0,P) \leftimpl \mi{startingNode}(P).  \\
+\rowprefix{r_3} & \mi{nodeOfDegree}(F1, DegPlus, F2)
+    \leftimpl \mi{nodeOfDegree}(\_, Deg, F1), \\
+  & \qquad \ext{edges}{F1}{F2}, DegPlus=Deg+1, \#int(DegPlus).  \\
+\rowprefix{r_4} & node(Y) \leftimpl \mi{nodeOfDegree}(X, V, Y).  \\
+\rowprefix{r_5} & edge(X,Y) \leftimpl \mi{nodeOfDegree}(X,V,Y).\\[1ex]
+\rowprefix{r_6} & \mathit{agent(1). } \ \mathit{agent(2).}\\
+\rowprefix{r_7} & \mathit{start(1,one).} \ \mathit{start(2,four).} \\
+\rowprefix{r_8} & \mathit{goal(1,ten).} \ \mathit{goal(2,eleven).} \\[1ex]
+\rowprefix{r_9} & clear(V) \leftimpl
+  \mathit{node(V)}, V \noteq \mathit{three} \\[1ex]
+\rowprefix{r_{10}} & \mi{path}(I,0,V) \leftimpl start(I,V). \\
+\rowprefix{r_{11}} & \{ \mi{path(I,TP,U)} \colon \mi{edge(U,V)} \}
+  \leftimpl \\
+  &\qquad \mathit{agent(I)}, \mathit{path(I,T,V)},
+    \mathit{TP=T+1}, \mathit{\#int(TP)}. \\
+\rowprefix{r_{12}} &
+  \leftimpl \mathit{agent(I)}, \mathit{\#int(T)},
+    1 < \mathit{\#count\{ U \colon \mi{path}(I, T, U) \}}. \\[1ex]
+\rowprefix{r_{13}} & visit(I, V) \leftimpl \mi{path}(I,T,V). \\[1ex]
+\rowprefix{r_{14}} &
+  \leftimpl goal(I, V), \nott \thinspace  \mathit{visit(I, V).} \\
+\rowprefix{r_{15}} &
+  \leftimpl \mi{path}(I, T, V), \mi{path}(IP,T,V), X \lesseq XP. \\
+\rowprefix{r_{16}} &
+  \leftimpl \mi{path}(I,T,V), \nott \thinspace  \mathit{clear(V).}\\[1ex]
+\rowprefix{r_{17}} & \leftimpl \mi{path(I,T,V)}, \mi{path(I,TP,U)},
+  \mi{TP=T+1}, \nott \ext{check}{I,U,V}{}.
 \end{align*}
-\end{exmp}
-The complete source code for this example is available at \examplelink{example_4_3}.
+%
+In $\row{r_2}$--$\row{r_5}$ we load part of the graph using 
+the $\&edges$ external atom
+which discovers nodes and edges from the external file,
+limited by the maximum integer value.
+%
+In $\row{r_6}$--$\row{r_8}$
+we represent agents and their start and goal positions.
+%
+Rule $\row{r_9}$ represents that all vertices
+except \enquote{$three$} are obstacle-free.
 
-In the first part of the program we load the graph using 
-the $\&edges$ external atom. This atom cyclically discovers 
-nodes and edges from the external file. In $\row{r_4}$ we 
-extract node $Y$ whenever an atom $\mathit{nodeOfDegree(X, 
-V, Y)}$ is true. Similar as in the previous rule $\row{r_5}$ extracts an edge from $X$ to $Y$ if an atom 
-$\mathit{nodeOfDegree(X, V,Y)}$ is true. 
-
-From $\row{r_6}$ to $\row{r_8}$ we define a set of facts. 
-The facts $\row{r_6}$ represent different agents in the program. 
-Facts $\row{r_7}$ and $\row{r_8}$ define initial and 
-destination nodes for the agents.  
-
-Rule $\row{r_9}$ 
-represents that vertex $V$ is free and does not have any 
-obstacle on it. Rules $\row{r_{10}}$, $\row{r_{11}}$ and 
-$\row{r_{12}}$ guesses the next node to be visited by the agent, from 
-node $U$ to the node $V$. The agent can either visit a new node 
-using an existing edge or stay at the same node and wait. 
-In rule $\row{r_{10}}$, the initial location for the path is set. Rule $\row{r_{11}}$ 
-with a disjunctive head (cf. Section~\ref{disjunction}) decides either to include the outgoing edge 
-from the node $U$ to the path or to omit it from the path. 
-This step is cyclically performed until the goal nodes are not 
-reached. The constraint $\row{r_{12}}$ eliminates all answer sets in which there is more than one outgoing edge 
-selected at some time point from node $U$. Thus, for each step 
-the agent has to select a single edge since it cannot be at the 
-two different locations at the same time. Rule $\row{\row{r_{13}}}$ computes which nodes are visited using the path 
-guessed. The integrity constraint $\row{r_{14}}$ ensures that 
+Rules $\row{r_{10}}$ and $\row{r_{11}}$
+guess a path for each agent,
+where the agent can visit a new node using an edge,
+or do nothing.
+%
+Constraint $\row{r_{12}}$ eliminates all answer set candidates
+in which there is more than one vertex visited by a single agent at one time
+(no agent can be at two different locations at the same time).
+%
+Rule $\row{r_{13}}$ defines which nodes are visited, using the path.
+Constraint $\row{r_{14}}$ ensures that
 each agent reaches its destination node. We ensure that 
 agents do not collide with each other using constraint 
 $\row{r_{15}}$. We also ensure that agents do not go through 
 obstacles using constraint $\row{r_{16}}$. 
 
-We represent path plans by atoms of the form 
-$\mathit{path(I, V, U, T, ValidOrNot)}$ which specify that 
-at time step $T$, agent $I$ moves from a node $V$ to a 
-node $U$. An external atom is used to decide whether that move is valid or invalid. The last 
-two rules $\row{r_{17}}$ and $\row{r_{18}}$ check if the overall path is valid or invalid. Agents can only know what are the edges 
-available in the graph and make the guess in which 
-direction they should go. Consider that an agent selects 
-some 
-edge but it becomes unusable because of some reasons in the meantime. 
-The reasons may be obstacles in the environment, too narrow corners, too small doors or any change on 
-the graph or on the environment which is not considered as 
-a fact in the program. By introducing this property we have a dynamic problem. To perform this check we 
-can use only an external source. The external source is of the 
-form \ext{check}{U,V,T,I}{ValidOrNot} and checks is the 
-guessed move of the agent $I$ from $U$ to $V$ at time $T$ is 
-$\mathit{valid}$ or $\mathit{invalid}$. In the case that 
-any of the moves in the guessed path is invalid, the whole 
-answer set is eliminated. If no invalid moves are guessed in the path, it means that solution is the answer set of the program.            
+Constraint $\row{r_{17}}$
+represents an external check of the form $\mi{\&check[I,U,V]()}$ which checks
+if agent $I$ is able to move from node $U$ to node $V$.
+The external atom decides whether that move is valid or invalid,
+for example because in the abstract representation of the graph
+certain combinations of properties of agents and edges
+(that can prevent successful movement)
+are not represented,
+e.g., narrow corners, or doors that are too small for certain agents.
+
+Note that by using an external check we
+can make the planning problem more abstract
+by creating a sound (efficient) encoding
+and making it complete using the external check.
+
+\subsubsection{Plugin} 
+
+The external atoms $\&edge$ and $\&check$ are realized in Python as follows.
+
+\lstinputlisting{example_4_pathfind/example_4_pathfind.py}
+
+\noindent
+See Section~\ref{sec:travelplugin}
+for an explanation of a similar plugin
+and Section~\ref{sec:externalInterfaces} for the Python API.
 
 \subsubsection{Problem Solution} 
-Let us solve the problem using the following graph.  
+
 \begin{figure}
 \begin{center}
-\begin{tikzpicture}
-\tikzset{vertex/.style = {shape=circle,draw,minimum 
-size=4em}}
+\begin{tikzpicture}[yscale=0.5]
+\tikzset{vertex/.style = {shape=circle,draw,minimum size=3.5em}}
 \tikzset{edge/.style = {->,> = latex'}}
 % vertices
 \node[vertex] (a) at  (0,3) {$\mathit{one}$};
@@ -2129,61 +2123,58 @@ size=4em}}
 \end{tikzpicture}
 \end{center}
 \caption{Simulation of the environment used by agents}
+\label{fig:pathfinding}
 \end{figure}
+
+Assume we solve the problem using the graph in Figure~\ref{fig:pathfinding}.
 The graph is again loaded from the external file and not 
-specified as a set of facts. We know that there is an obstacle at node $\mathit{three}$, so any answer set with node 
-$\mathit{three}$ in the path is removed. All other 
-constraints must be satisfied as well. Note that we have 
-omitted most of the atoms in order to emphasize the actual 
-solution (in order to see how to filter out answer sets and 
-show only specific atoms at the output refer to the 
-Section~\ref{sec:commandline}; in our answer set, we are 
-interested only in $\mathit{path}$ atoms since we want to 
-see what is the path from the initial node $U$ to the 
-destination node $V$). One answer set is as follows:
-\\Answer Set 1:
+specified as a set of facts.
+We know that there is an obstacle at node $\mathit{three}$, so any answer set with node 
+$\mathit{three}$ in the path is removed.
+
+To obtain all answer sets of the above program,
+and display only the path predicate (which contains the solution)
+execute the following command.
+
+\leftaligned{\texttt{\$ dlvhex2 example\_4\_pathfind.hex --filter=path --maxint=4 \textbackslash \\
+\hphantom{\quad \$ dlvhex2 }--pythonplugin=example\_4\_pathfind.py --heuristics=old}}
+
+\noindent
+Note that here we also specify the maximum integer number.
+If we do not do this, \dlvhex{} uses the largest integer in the program
+which is in this case $2$, hence without {\tt --maxint} no solution is found.
+We also specify an evaluation heuristics for performance reasons.
+% TODO PS check why this is so slow with default heuristics
+
+The answer sets of this program are as follows:
 \begin{align*}
-\{ & path(1,one,two,0,valid), path(1,two,five,1,valid),
-\\ & path(1,five,five,2,valid), path(2,four,four,0,valid),
-\\ & path(2,four,seven,1,valid), 
-path(1,five,eight,3,valid),
-\\ & path(2,seven,nine,2,valid), path(1,eight,ten,4,valid),
-\\ & 
-path(2,nine,eleven,3,valid),path(2,eleven,eleven,4,valid) 
-\}
+ \{ & path(1,0,one),path(2,0,four),path(1,1,four),path(2,1,seven), \\
+ & path(1,2,seven),path(2,2,nine),path(1,3,nine),path(2,3,eleven), \\
+ & path(1,4,ten) \}
 \end{align*} 
-Here, $\mathit{agent(1)}$ follows the path:
-one $\rightarrow$ two $\rightarrow$ five $\rightarrow$ five 
-$\rightarrow$ eight $\rightarrow$ ten. At each time 
-point an agent chooses either to wait or to move to 
-the another node. At $t=2$ the $\mathit{agent(1)}$ chooses 
-to wait and not to move. The same logic is applied for the 
-$\mathit{agent(2)}$. To show different possible choices we are 
-giving two answer sets more:
-\\Answer Set 2:
-\begin{align*}
-\{ & path(1,one,two,0,valid),path(1,two,five,1,valid),
-\\ & path(1,five,five,2,valid),path(2,four,seven,0,valid),
-\\ & path(1,five,eight,3,valid),path(2,seven,nine,1,valid),
-\\ & path(2,nine,nine,2,valid),path(1,eight,ten,4,valid),
-\\ & 
-path(2,nine,eleven,3,valid),path(2,eleven,eleven,4,valid)\}
-\end{align*}
-In the second answer set, the path for the first agent did not 
-change. However, the second agent changes its path and instead 
-of waiting at $t=0$ at node four it moves to the node 
-seven.  
-\\Answer Set 3:
-\begin{align*}
-\{ & path(1,one,four,0,valid), path(1,four,seven,1,valid),
-\\ & path(1,seven,nine,2,valid), path(2,four,seven,0,valid),
-\\ & path(2,seven,nine,1,valid), 
-path(1,nine,ten,3,valid),
-\\ & path(2,nine,eleven,2,valid), path(1,ten,ten,4,valid),
-\\ & 
-path(2,eleven,eleven,3,valid),path(2,eleven,eleven,4,valid) 
-\}
-\end{align*} 
+This means that agent $1$ follows the path
+\smallskip
+
+\centerline{%
+  one $\rightarrow$ four $\rightarrow$ seven
+  $\rightarrow$ nine $\rightarrow$ ten}
+\smallskip
+  
+\noindent
+and at each time agent $2$ follows
+\smallskip
+
+\centerline{%
+  four $\rightarrow$ seven
+  $\rightarrow$ nine $\rightarrow$ eleven}
+\smallskip
+
+\noindent
+and does not perform a last step.
+
+As the external check excludes the path via $two$
+and the internal knowledge exludes paths via $three$
+there is only one answer set.
 
 \section{External Interfaces}
 \label{sec:externalInterfaces}
