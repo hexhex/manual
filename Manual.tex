@@ -2429,13 +2429,13 @@ The complete source code for this example is available at
 \examplelink{example_5_1}.
 % TODO PS there is only python code here, where is the usage of this plugin? we should also put some .hex file there or just point to another example if this plugin source code is also present in another example directory.
 
-Lines 1 and 3 import two libraries:
+Lines 1--2 import two libraries:
 every \dlvhex{}-plugin must import \verb+dlvhex+;
 and the \verb+networkx+ library is needed in this particular example
 for comfortable graph operations 
 (loading a graph from a file, getting successors of a node). 
 
-Lines 9--17 implement the external atom \verb+&friendsOf+ 
+Lines 8--17 implement the external atom \verb+&friendsOf+ 
 which receives the name of a person as string,
 loads a graph from disk in line 11,
 and returns all direct friends of the person in the graph in line 17.
