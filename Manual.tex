@@ -1328,6 +1328,8 @@ To obtain all answer sets, even non-optimal ones execute the following.
 
 More examples can be found in the DLV-User Manual \cite{brfwilvpg2009}.
 
+\dlvhex{} supports two evaluation algorithms for weak constraints. The way they work has some implications on the runtime performance as well as memory characteristics. The default algorithm usually performs better, but may consume more memory. If the evaluation fails because of a memory shortage, one can try and rerun \dlvhex{} with the parameter \texttt{--heuristics=monolithic}. With this parameter, the second algorithm is used, which consumes less memory.
+
 \nop
 {
 Finally, we show an example where both weights and 
