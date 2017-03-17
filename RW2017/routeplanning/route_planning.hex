@@ -1,0 +1,43 @@
+destination("Stephansplatz").
+destination("Taubstummengasse").
+destination("Volkstheater").
+
+restaurant("Museumsquartier").
+
+sequence(0,"Volkstheater").
+
+sequence(I, L) v nsequence(I, L) :- destination(L), #int(I), #int(C), I < C, C = #count{ N : destination(N) }.
+
+:- sequence(I1, L), sequence(I2, L), I1 != I2.
+:- sequence(I, L1), sequence(I, L2), L1 != L2.
+
+haveSequence(L) :- sequence(I, L).
+:- destination(L), not haveSequence(L).
+
+haveLocation(I) :- sequence(I, L).
+:- sequence(I, L), I1 < I, #int(I1), not haveLocation(I1).
+
+
+path(L1,L2,X,Y,C,T) :- sequence(N,L1), sequence(Next,L2), Next = N + 1, &route["vienna_transport.graph",L1,L2](X,Y,C,T).
+
+pathLength(L) :- L = #count{ L1,L2,X,Y : path(L1,L2,X,Y,C,T) }, #int(L).
+
+tripTmp(0, X, L2, X, Y, C, T) :- sequence(0, X), path(X, L2, X, Y, C, T).
+tripTmp(S, L1, L2, Y, Z, C2, T2) :- tripTmp(P, L1, L2, X, Y, C, T), path(L1, L2, Y, Z, C2, T2), S = P + 1, #int(S), pathLength(L), S <= L.
+tripTmp(S, Y, L3, Y, Z, C2, T2) :- tripTmp(P, L1, Y, X, Y, C, T), path(Y, L3, Y, Z, C2, T2), S = P + 1, #int(S), pathLength(L), S <= L.
+
+trip(S, X, Y, C, T) :- tripTmp(S, L1, L2, X, Y, C, T).
+
+
+
+
+needRestaurant v notNeedRestaurant.
+needRestaurant :- &needRestaurant[trip, 3]().
+notNeedRestaurant :- not &needRestaurant[trip, 3]().
+
+chooseRestaurant(R) v nchooseRestaurant(R) :- needRestaurant, restaurant(R).
+:- needRestaurant, chooseRestaurant(R1), chooseRestaurant(R2), R1 != R2.
+chosen :- needRestaurant, chooseRestaurant(R).
+:- needRestaurant, not chosen.
+
+destination(R) :- needRestaurant, chooseRestaurant(R).
