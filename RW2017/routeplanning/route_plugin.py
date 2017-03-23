@@ -1,5 +1,7 @@
 import dlvhex
 import networkx as nx
+import urllib as ul
+import json
 
 def route(graph,start,end):
 
@@ -15,22 +17,6 @@ def route(graph,start,end):
 				transport = edge[2]['label']
 
 		dlvhex.output(('"' + shortestPath[i] + '"','"' + shortestPath[i+1] + '"',int(costs),'"' + transport + '"'))
-
-
-
-def register():
-	prop = dlvhex.ExtSourceProperties()
-	prop.addFiniteOutputDomain(0)
-	prop.addFiniteOutputDomain(1)
-	prop.addFiniteOutputDomain(2)
-	prop.addFiniteOutputDomain(3)
-	dlvhex.addAtom("route", (dlvhex.CONSTANT, dlvhex.CONSTANT, dlvhex.CONSTANT ), 4, prop)
-
-	prop = dlvhex.ExtSourceProperties()
-	prop.addMonotonicInputPredicate(0)
-	prop.setProvidesPartialAnswer(True)
-	dlvhex.addAtom("needRestaurant", (dlvhex.PREDICATE, dlvhex.CONSTANT ), 0, prop)
-
 
 def needRestaurant(trip,limit):
 	tripLength = 0
@@ -49,3 +35,38 @@ def needRestaurant(trip,limit):
 
 	if maxTripLength > int(limit.value()):
 		dlvhex.outputUnknown(())
+
+
+def getJSON(url,fields):
+	jsonurl = ul.urlopen(url.value()[1:-1])
+	data = json.loads(jsonurl.read())
+
+	for field in fields:
+		if field.value()[1:-1].isdigit():
+			data = data[int(field.value()[1:-1])]
+		else:
+			data = data[field.value()[1:-1]]
+
+	dlvhex.output(('"' + str(data) + '"', ))
+
+def register():
+	prop = dlvhex.ExtSourceProperties()
+	prop.addFiniteOutputDomain(0)
+	prop.addFiniteOutputDomain(1)
+	prop.addFiniteOutputDomain(2)
+	prop.addFiniteOutputDomain(3)
+	dlvhex.addAtom("route", (dlvhex.CONSTANT, dlvhex.CONSTANT, dlvhex.CONSTANT ), 4, prop)
+
+	prop = dlvhex.ExtSourceProperties()
+	prop.addMonotonicInputPredicate(0)
+	prop.setProvidesPartialAnswer(True)
+	dlvhex.addAtom("needRestaurant", (dlvhex.PREDICATE, dlvhex.CONSTANT ), 0, prop)
+
+	prop = dlvhex.ExtSourceProperties()
+	prop.setFunctional(True)
+	dlvhex.addAtom("getJSON", (dlvhex.CONSTANT, dlvhex.TUPLE ), 1, prop)
+
+
+
+
+

@@ -2,9 +2,8 @@ destination("Stephansplatz").
 destination("Taubstummengasse").
 destination("Volkstheater").
 
-restaurant("Museumsquartier").
-
 sequence(0,"Volkstheater").
+
 
 sequence(I, L) v nsequence(I, L) :- destination(L), #int(I), #int(C), I < C, C = #count{ N : destination(N) }.
 
@@ -29,15 +28,21 @@ tripTmp(S, Y, L3, Y, Z, C2, T2) :- tripTmp(P, L1, Y, X, Y, C, T), path(Y, L3, Y,
 trip(S, X, Y, C, T) :- tripTmp(S, L1, L2, X, Y, C, T).
 
 
-
-
 needRestaurant v notNeedRestaurant.
 needRestaurant :- &needRestaurant[trip, 3]().
 notNeedRestaurant :- not &needRestaurant[trip, 3]().
 
-chooseRestaurant(R) v nchooseRestaurant(R) :- needRestaurant, restaurant(R).
-:- needRestaurant, chooseRestaurant(R1), chooseRestaurant(R2), R1 != R2.
-chosen :- needRestaurant, chooseRestaurant(R).
+chooseRestaurant(R,L) v nchooseRestaurant(R,L) :- needRestaurant, restaurant(R,L).
+:- needRestaurant, chooseRestaurant(R1,L1), chooseRestaurant(R2,L2), R1 != R2.
+chosen :- needRestaurant, chooseRestaurant(R,L).
 :- needRestaurant, not chosen.
 
-destination(R) :- needRestaurant, chooseRestaurant(R).
+destination(L) :- needRestaurant, chooseRestaurant(R,L).
+
+
+weather(X) :- &getJSON["http://api.openweathermap.org/data/2.5/weather?q=Vienna&apikey=b192233186f2e17f77fd4c4094489b16","weather","0","main"](X).
+
+restaurant(R,L) :- &rDL["restaurants.owl",a,b,c,d,"closeTo"](R,L), &cDL["restaurants.owl",a,b,c,d,"IndoorRestaurant"](R), weather("Rain").
+
+restaurant(R,L) :- &rDL["restaurants.owl",a,b,c,d,"closeTo"](R,L), &cDL["restaurants.owl",a,b,c,d,"-IndoorRestaurant"](R), not weather("Rain").
+

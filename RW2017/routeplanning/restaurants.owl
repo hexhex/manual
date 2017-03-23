@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/ontologies/2017/2/restaurants#"
+     xml:base="http://www.semanticweb.org/ontologies/2017/2/restaurants"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:restaurants="http://www.semanticweb.org/ontologies/2017/2/restaurants#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#closeTo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#closeTo"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#BeerGarden -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#BeerGarden">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Restaurant"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#IndoorRestaurant"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#IndoorRestaurant -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#IndoorRestaurant">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Restaurant"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Wuerstelstand"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#Location -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#Location"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#Restaurant -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#Restaurant">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#closeTo"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Location"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#Wuerstelstand -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#Wuerstelstand">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Restaurant"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#Karlsplatz -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#Karlsplatz">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Location"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#Museumsquartier -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#Museumsquartier">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Location"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#Praterstern -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#Praterstern">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Location"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#beergarden1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#beergarden1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#BeerGarden"/>
+        <closeTo rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Praterstern"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#indoorrestaurant1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#indoorrestaurant1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#IndoorRestaurant"/>
+        <closeTo rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Museumsquartier"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2017/2/restaurants#wuerstelstand1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/2017/2/restaurants#wuerstelstand1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Wuerstelstand"/>
+        <closeTo rdf:resource="http://www.semanticweb.org/ontologies/2017/2/restaurants#Karlsplatz"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi -->
+
