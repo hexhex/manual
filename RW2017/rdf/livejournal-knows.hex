@@ -1,0 +1,10 @@
+%explore("http://bardcat.livejournal.com/data/foaf").
+%explore("http://slimequeen.livejournal.com/data/foaf").
+
+triple(S,P,O) :- &rdf[What](S,P,O), explore(What).
+
+knows(Nick1,Nick2) :- triple(ID1,"http://xmlns.com/foaf/0.1/knows",ID2), Nick1 < Nick2,
+                      triple(ID1,"http://xmlns.com/foaf/0.1/nick",Nick1),
+                      triple(ID2,"http://xmlns.com/foaf/0.1/nick",Nick2).
+
+
