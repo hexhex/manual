@@ -17,6 +17,14 @@ def escape(v):
   #sys.stderr.write(s+'\n')
   return s
 
+def concat(strs):
+  needquote = any(['"' in s for s in strs])
+  unquoted = [s.strip('"') for s in strs]
+  result = ''.join(unquoted)
+  if needquote:
+    result = '"'+result+'"'
+  dlvhex.output((result,))
+
 def rdf(url):
   '''
   input: URL
@@ -38,6 +46,9 @@ def register():
 	prop.addFiniteOutputDomain(1)
 	prop.addFiniteOutputDomain(2)
 	dlvhex.addAtom("rdf", (dlvhex.CONSTANT,), 3, prop)
+	prop = dlvhex.ExtSourceProperties()
+	prop.addFiniteOutputDomain(0)
+	dlvhex.addAtom("concat", (dlvhex.TUPLE,), 1, prop)
 
 def testrdflib():
   URL = 'http://njh.me/foaf.rdf'
