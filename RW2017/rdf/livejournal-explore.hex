@@ -1,0 +1,21 @@
+
+%explore("http://slimequeen.livejournal.com/data/foaf").
+%steps(2).
+
+explore("http://bardcat.livejournal.com/data/foaf").
+steps(2).
+
+%explore("http://everville340.livejournal.com/data/foaf").
+%steps(2).
+
+explore_upto(What,Steps) :- explore(What), steps(Steps).
+
+triple_at(S,P,O,Steps) :- &rdf[What](S,P,O), explore_upto(What,Steps), Steps > 1.
+
+explore_upto(NickLink,Steps2) :- Steps2 = Steps - 1,
+  triple_at(ID,"http://xmlns.com/foaf/0.1/nick",Nick,Steps),
+  triple_at(ID,"http://www.w3.org/2000/01/rdf-schema#seeAlso",NickLink,Steps).
+
+found(Nick) :- triple_at(ID,"http://xmlns.com/foaf/0.1/nick",Nick,S).
+
+
