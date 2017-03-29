@@ -1,3 +1,4 @@
+# set TEST=True to test rdflib without HEX
 TEST=False
 
 if not TEST:
