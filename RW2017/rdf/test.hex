@@ -1,0 +1,4 @@
+interesting("http://njh.me/foaf.rdf").
+
+triple(S,P,O) :- &rdf[U](S,P,O), interesting(U).
+
