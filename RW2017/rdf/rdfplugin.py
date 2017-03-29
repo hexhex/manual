@@ -4,6 +4,18 @@ TEST=False
 if not TEST:
   import dlvhex
 import rdflib
+import sys
+
+def escape(v):
+  # dlvhex does not process UTF8
+  #if isinstance(v,unicode):
+  #  raise Exception("found unicode "+repr(v))
+  s = str(v)
+  if '\\' in s or '"' in s:
+    raise Exception("escape issue: "+repr(v))
+  s = '"'+s+'"'
+  #sys.stderr.write(s+'\n')
+  return s
 
 def rdf(url):
   '''
@@ -12,9 +24,13 @@ def rdf(url):
   '''
   g = rdflib.Graph()
   g.parse(url.value().strip('"'))
-  for s, o, p in g.triples((None,None,None)):
-    #print repr([s, o, p])
-    dlvhex.output(tuple([ '"'+str(v)+'"' for v in [s, o, p]]))
+  for triple in g.triples((None,None,None)):
+    #sys.stderr.write(repr(triple)+'\n')
+    try:
+      dlvhex.output(tuple([ escape(v) for v in triple]))
+    except:
+      # ignore failures in conversion
+      pass
 
 def register():
 	prop = dlvhex.ExtSourceProperties()
