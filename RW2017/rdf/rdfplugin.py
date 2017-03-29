@@ -31,14 +31,21 @@ def rdf(url):
   outputs: S P O of all RDF triples found at URL
   '''
   g = rdflib.Graph()
-  g.parse(url.value().strip('"'))
+  uri = url.value().strip('"')
+  sys.stderr.write("retrieving "+uri+"\n")
+  g.parse(uri)
+  triplecount = 0
+  badcount = 0
   for triple in g.triples((None,None,None)):
     #sys.stderr.write(repr(triple)+'\n')
     try:
       dlvhex.output(tuple([ escape(v) for v in triple]))
+      triplecount += 1
     except:
       # ignore failures in conversion
+      badcount += 1
       pass
+  sys.stderr.write('returned {} triples and ignored {} triples\n'.format(triplecount, badcount))
 
 def register():
 	prop = dlvhex.ExtSourceProperties()
