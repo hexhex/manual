@@ -33,7 +33,7 @@ def needRestaurant(trip,limit):
 	if tripLength > int(limit.value()):
 		dlvhex.output(())
 
-	if maxTripLength > int(limit.value()):
+	if tripLength <= int(limit.value()) and maxTripLength > int(limit.value()):
 		dlvhex.outputUnknown(())
 
 
