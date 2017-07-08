@@ -43,7 +43,11 @@ destination(L) :- needRestaurant, chooseRestaurant(R,L).
 
 weather(X) :- &getJSON["http://api.openweathermap.org/data/2.5/weather?q=Vienna&apikey=b192233186f2e17f77fd4c4094489b16","weather","0","main"](X).
 
-restaurant(R,L) :- &rDL["restaurants.owl",a,b,c,d,"closeTo"](R,L), &cDL["restaurants.owl",a,b,c,d,"IndoorRestaurant"](R), weather("Rain").
+restaurant(R,L) :- indoorRestaurant(R,L), weather("Rain").
 
-restaurant(R,L) :- &rDL["restaurants.owl",a,b,c,d,"closeTo"](R,L), &cDL["restaurants.owl",a,b,c,d,"-IndoorRestaurant"](R), not weather("Rain").
+restaurant(R,L) :- outdoorRestaurant(R,L), not weather("Rain").
+
+outdoorRestaurant("beergarden1","Praterstern").
+outdoorRestaurant("wuerstelstand1","Karlsplatz").
+indoorRestaurant("indoorrestaurant1","Museumsquartier").
 
