@@ -64,7 +64,7 @@ def testrdflib():
   g = rdflib.Graph()
   g.parse(URL)
   for s, o, p in g.triples((None,None,None)):
-    print repr([s, o, p])
+    print(repr([s, o, p]))
 
 if TEST:
   testrdflib()
